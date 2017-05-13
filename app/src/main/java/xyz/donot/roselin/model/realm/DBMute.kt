@@ -1,4 +1,5 @@
-package xyz.donot.quetzal.model.realm
+package xyz.donot.roselin.model.realm
+
 
 import io.realm.RealmObject
 import io.realm.annotations.RealmClass

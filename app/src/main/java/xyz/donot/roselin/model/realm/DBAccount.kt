@@ -1,4 +1,4 @@
-package xyz.donot.quetzal.model.realm
+package xyz.donot.roselin.model.realm
 
 
 
