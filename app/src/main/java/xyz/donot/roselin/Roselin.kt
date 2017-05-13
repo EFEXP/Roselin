@@ -1,0 +1,40 @@
+package xyz.donot.roselin
+
+import android.app.Application
+import android.app.UiModeManager
+import android.preference.PreferenceManager
+import android.support.v7.app.AppCompatDelegate
+import com.crashlytics.android.Crashlytics
+import com.twitter.sdk.android.Twitter
+import io.fabric.sdk.android.Fabric
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import xyz.donot.quetzal.model.realm.MyRealmMigration
+import java.io.FileNotFoundException
+
+
+class Roselin : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        Realm.init(this)
+        Fabric.with(this, Crashlytics())
+        val config= RealmConfiguration.Builder().schemaVersion(0L)
+                .migration(MyRealmMigration())
+                .build()
+        try {
+            Realm.migrateRealm(config, MyRealmMigration())
+        }
+        catch(e: FileNotFoundException){}
+        Realm.setDefaultConfiguration(config)
+
+
+        val design=  when(PreferenceManager.getDefaultSharedPreferences(this).getString("night_mode","auto")){
+            "black"->{ AppCompatDelegate.MODE_NIGHT_YES}
+            "white"->{AppCompatDelegate.MODE_NIGHT_NO}
+            "auto"->{AppCompatDelegate.MODE_NIGHT_AUTO}
+            else->{AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM}
+        }
+        AppCompatDelegate.setDefaultNightMode(design)
+        (getSystemService(UI_MODE_SERVICE)as UiModeManager).nightMode = UiModeManager.MODE_NIGHT_AUTO
+    }
+}
