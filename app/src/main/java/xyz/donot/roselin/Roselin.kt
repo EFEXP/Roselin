@@ -6,6 +6,7 @@ import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatDelegate
 import com.crashlytics.android.Crashlytics
 import com.twitter.sdk.android.Twitter
+import com.twitter.sdk.android.core.TwitterAuthConfig
 import io.fabric.sdk.android.Fabric
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -14,10 +15,16 @@ import java.io.FileNotFoundException
 
 
 class Roselin : Application() {
+    private val TWITTER_KEY = "TeiKvNzEh3M4uBEIbu3akEtWE"
+    private val TWITTER_SECRET = "9d31gTjgCekP5l947bPhVGe3BLIJ6ZrqG9zVDRVXSLWnBdzEUM"
+
     override fun onCreate() {
         super.onCreate()
         Realm.init(this)
-        Fabric.with(this, Crashlytics())
+        val authConfig = TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET)
+        Fabric.with(this, Twitter(authConfig), Crashlytics())
+
+
         val config= RealmConfiguration.Builder().schemaVersion(0L)
                 .migration(MyRealmMigration())
                 .build()
@@ -37,4 +44,5 @@ class Roselin : Application() {
         AppCompatDelegate.setDefaultNightMode(design)
         (getSystemService(UI_MODE_SERVICE)as UiModeManager).nightMode = UiModeManager.MODE_NIGHT_AUTO
     }
+
 }
