@@ -10,7 +10,7 @@ import com.twitter.sdk.android.core.TwitterAuthConfig
 import io.fabric.sdk.android.Fabric
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import xyz.donot.quetzal.model.realm.MyRealmMigration
+import xyz.donot.roselin.model.realm.MyRealmMigration
 import java.io.FileNotFoundException
 
 

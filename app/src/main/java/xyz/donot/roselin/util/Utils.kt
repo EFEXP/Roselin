@@ -2,7 +2,7 @@ package xyz.donot.roselin.util
 
 import io.realm.Realm
 import twitter4j.Twitter
-import xyz.donot.quetzal.model.realm.DBAccount
+import xyz.donot.roselin.model.realm.DBAccount
 import xyz.donot.roselin.util.extraUtils.logi
 
 import java.io.*

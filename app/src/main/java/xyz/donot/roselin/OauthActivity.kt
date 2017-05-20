@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.content_oauth.*
 import twitter4j.Twitter
 import twitter4j.TwitterFactory
 import twitter4j.auth.AccessToken
-import xyz.donot.quetzal.model.realm.DBAccount
+import xyz.donot.roselin.model.realm.DBAccount
 import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getSerialized
 
@@ -52,7 +52,6 @@ class OauthActivity : AppCompatActivity() {
 
       }
 crash.setOnClickListener { throw RuntimeException("Force") }
-
     }
 
 
