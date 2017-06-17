@@ -1,4 +1,4 @@
-package xyz.donot.roselin
+package xyz.donot.roselin.view
 
 import android.content.Intent
 import android.os.Bundle
@@ -17,16 +17,14 @@ import kotlinx.android.synthetic.main.content_oauth.*
 import twitter4j.Twitter
 import twitter4j.TwitterFactory
 import twitter4j.auth.AccessToken
+import xyz.donot.roselin.R
 import xyz.donot.roselin.model.realm.DBAccount
 import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getSerialized
 
 
-
-
-
-
 class OauthActivity : AppCompatActivity() {
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +36,7 @@ class OauthActivity : AppCompatActivity() {
       login_button.callback= object : Callback<TwitterSession>() {
           override fun success(result: Result<TwitterSession>) {
               val factory = TwitterFactory()
-              val accessToken =AccessToken(result.data.authToken.token,result.data.authToken.secret)
+              val accessToken = AccessToken(result.data.authToken.token,result.data.authToken.secret)
               val twitter = factory.instance
               twitter.setOAuthConsumer(getString(R.string.twitter_consumer_key),getString(R.string.twitter_consumer_secret))
               twitter.oAuthAccessToken = accessToken

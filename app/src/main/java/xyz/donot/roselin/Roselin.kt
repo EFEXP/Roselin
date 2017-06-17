@@ -14,6 +14,8 @@ import xyz.donot.roselin.model.realm.MyRealmMigration
 import java.io.FileNotFoundException
 
 
+
+
 class Roselin : Application() {
     private val TWITTER_KEY = "TeiKvNzEh3M4uBEIbu3akEtWE"
     private val TWITTER_SECRET = "9d31gTjgCekP5l947bPhVGe3BLIJ6ZrqG9zVDRVXSLWnBdzEUM"

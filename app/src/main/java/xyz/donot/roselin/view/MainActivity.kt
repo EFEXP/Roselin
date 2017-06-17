@@ -1,8 +1,9 @@
-package xyz.donot.roselin
+package xyz.donot.roselin.view
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import xyz.donot.roselin.R
 import xyz.donot.roselin.util.extraUtils.intent
 import xyz.donot.roselin.util.haveToken
 
