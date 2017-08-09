@@ -8,10 +8,9 @@
     android:layout_width="60dp"
     android:layout_height="60dp"
     app:layout_constraintTop_toTopOf="parent"
-    android:layout_marginTop="8dp"
-    android:layout_marginLeft="8dp"
+    android:layout_margin="8dp"
     app:layout_constraintLeft_toLeftOf="parent"
-    android:id="@+id/imageView2" />
+    android:id="@+id/imageview_icon" />
 
     <TextView
         android:id="@+id/textview_username"
@@ -19,18 +18,22 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintLeft_toRightOf="@+id/imageView2"
+        app:layout_constraintLeft_toRightOf="@+id/imageview_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="えふらん" />
 
     <TextView
         android:id="@+id/textview_text"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
-        app:layout_constraintLeft_toRightOf="@+id/imageView2"
+
+        app:layout_constraintLeft_toRightOf="@+id/imageview_icon"
         app:layout_constraintTop_toBottomOf="@+id/textview_username"
-        tools:text="りんごんりんごーん 私ベルエンジェル シャドウバース知ってる 本格カードゲームがスマホで楽しめちゃうの カードの進化が勝負の鍵 進化したら私だってこんなに強くなっちゃうんだから どすこーい❗ お前に負けるなら悔いはないさ…！ シャドウバース！" />
+        tools:text="りんごんりんごーん 私ベルエンジェル シャドウバース知ってる 本格カードゲームがスマホで楽しめちゃうの カードの進化が勝負の鍵 進化したら私だってこんなに強くなっちゃうんだから どすこーい❗ お前に負けるなら悔いはないさ…！ シャドウバース！"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="8dp" />
 </android.support.constraint.ConstraintLayout>

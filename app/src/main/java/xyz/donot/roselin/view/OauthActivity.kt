@@ -86,11 +86,12 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                         }
                     }
                 }
+                finish()
+                startActivity(Intent(this@OauthActivity, MainActivity::class.java))
             }
 
         }.execute(tw)
-        finish()
-        startActivity(Intent(this@OauthActivity, MainActivity::class.java))
+
 
 
     }
