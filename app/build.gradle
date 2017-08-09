@@ -23,7 +23,7 @@ repositories {
 
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion  25
     buildToolsVersion "25.0.0"
     defaultConfig {
         applicationId "xyz.donot.roselin"
@@ -74,6 +74,6 @@ dependencies {
     compile 'com.android.support:design:25.4.0'
     compile 'io.reactivex.rxjava2:rxjava:2.0.6'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.19'
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.27'
     testCompile 'junit:junit:4.12'
 }

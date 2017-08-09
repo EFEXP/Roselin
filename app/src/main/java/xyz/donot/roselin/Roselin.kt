@@ -17,8 +17,8 @@ import java.io.FileNotFoundException
 
 
 class Roselin : Application() {
-    private val TWITTER_KEY = "TeiKvNzEh3M4uBEIbu3akEtWE"
-    private val TWITTER_SECRET = "9d31gTjgCekP5l947bPhVGe3BLIJ6ZrqG9zVDRVXSLWnBdzEUM"
+    private val TWITTER_KEY by lazy { getString(R.string.twitter_consumer_key) }
+    private val TWITTER_SECRET by lazy {resources.getString(R.string.twitter_consumer_secret) }
 
     override fun onCreate() {
         super.onCreate()
