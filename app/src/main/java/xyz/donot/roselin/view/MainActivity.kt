@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
+import com.chad.library.adapter.base.BaseQuickAdapter
 import kotlinx.android.synthetic.main.content_main.*
 import twitter4j.ResponseList
 import twitter4j.Status
@@ -38,11 +39,12 @@ class MainActivity : AppCompatActivity() {
 
                override fun onPostExecute(result: ResponseList<twitter4j.Status>) {
                    super.onPostExecute(result)
-                   recycler.adapter=StatusAdapter(getActivity(),result)
+                   val adapter=StatusAdapter(getActivity(),result)
+                   adapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT)
+                   adapter.isFirstOnly(false);
+                   recycler.adapter=adapter
 
                }
-
-
            }
             task.execute(twitter)
 
