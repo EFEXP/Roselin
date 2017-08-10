@@ -1,13 +1,9 @@
 package xyz.donot.roselin.util
 
-import io.reactivex.Flowable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import io.realm.Realm
 import twitter4j.Twitter
 import xyz.donot.roselin.model.realm.DBAccount
 import xyz.donot.roselin.util.extraUtils.logd
-import xyz.donot.roselin.util.extraUtils.logi
 import java.io.*
 
 
@@ -43,4 +39,3 @@ fun haveToken(): Boolean {
     }
 }
 
-fun <T> Flowable<T>.basicNetworkTask()=subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread())

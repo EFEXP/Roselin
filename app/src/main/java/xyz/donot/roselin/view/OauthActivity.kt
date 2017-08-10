@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.answers.Answers
 import com.crashlytics.android.answers.CustomEvent
@@ -14,6 +13,7 @@ import com.twitter.sdk.android.core.Result
 import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.TwitterSession
 import io.realm.Realm
+import kotlinx.android.synthetic.main.activity_oauth.*
 import kotlinx.android.synthetic.main.content_oauth.*
 import twitter4j.Twitter
 import twitter4j.TwitterFactory
@@ -35,7 +35,6 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_oauth)
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
       login_button.callback= object : Callback<TwitterSession>() {

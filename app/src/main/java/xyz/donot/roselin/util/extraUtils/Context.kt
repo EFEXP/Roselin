@@ -1,7 +1,5 @@
 package xyz.donot.roselin.util.extraUtils
 
-import android.app.Activity
-import android.app.Fragment
 import android.app.Notification
 import android.content.Context
 import android.content.Intent
@@ -33,11 +31,7 @@ fun Context.pxToDp(px: Int): Int {
     return (px / this.displayMetrics.density + 0.5).toInt()
 }
 
-inline fun <reified T : View> View.find(id: Int): T = this.findViewById(id) as T
 
-inline fun <reified T : View> Activity.find(id: Int): T = this.findViewById(id) as T
-
-inline fun <reified T : View> Fragment.find(id: Int): T = this.view.findViewById(id) as T
 
 private fun inflateView(context: Context, layoutResId: Int, parent: ViewGroup?,
                         attachToRoot: Boolean): View =
