@@ -12,6 +12,7 @@ import twitter4j.MediaEntity
 import twitter4j.Status
 import xyz.donot.roselin.R
 import java.util.*
+import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
 
@@ -24,7 +25,10 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
         helper.apply {
             setText(R.id.textview_text, getExpandedText(item))
             setText(R.id.textview_username,item.user.name)
+            setText(R.id.textview_screenname,"@"+item.user.screenName)
             setText(R.id.textview_via, getClientName(item.source))
+            setText(R.id.textview_date, getRelativeTime(item.createdAt))
+            setText(R.id.textview_count, "RT:${item.retweetCount} いいね:${item.favoriteCount}")
         }
         //mediaType
         val statusMediaIds=getImageUrls(item)
@@ -183,4 +187,18 @@ fun getImageUrls(status: Status): ArrayList<String> {
     }
 
     return imageUrls
+}
+fun getRelativeTime(create: Date): String {
+    val datetime1 = System.currentTimeMillis()
+    val datetime2 = create.time
+    val Difference = datetime1 - datetime2
+    return if (Difference < 60000L) {
+        "%d秒前".format(TimeUnit.MILLISECONDS.toSeconds(Difference))
+    } else if (Difference < 3600000L) {
+        "%d分前".format(TimeUnit.MILLISECONDS.toMinutes(Difference))
+    } else if (Difference < 86400000L) {
+        "%d時間前".format(TimeUnit.MILLISECONDS.toHours(Difference))
+    } else {
+        "%d日前".format(TimeUnit.MILLISECONDS.toDays(Difference))
+    }
 }

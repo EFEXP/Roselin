@@ -3,6 +3,7 @@ package xyz.donot.roselin.view
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import kotlinx.android.synthetic.main.activity_oauth.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -42,7 +43,9 @@ class MainActivity : AppCompatActivity() {
             adapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT)
             adapter.setOnLoadMoreListener({  loadMore(adapter) },recycler)
             adapter.setLoadMoreView(MyLoadingView())
+            adapter.emptyView=View.inflate(this@MainActivity, R.layout.item_empty,null)
             recycler.adapter=adapter
+
             loadMore(adapter)
 
 

@@ -69,9 +69,9 @@ dependencies {
         transitive = true;
     }
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    compile 'com.android.support:appcompat-v7:26.0.0'
+    compile 'com.android.support:appcompat-v7:26.0.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:design:26.0.0'
+    compile 'com.android.support:design:26.0.1'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.27'
     compile 'com.airbnb.android:lottie:2.1.2'
     testCompile 'junit:junit:4.12'
