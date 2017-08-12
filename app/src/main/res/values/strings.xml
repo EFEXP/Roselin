@@ -4,4 +4,5 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="hint_enter_a_message">今何してる？</string>
     <string name="now_loading">Loading…</string>
+    <string name="hello">Hello!</string>
 </resources>
