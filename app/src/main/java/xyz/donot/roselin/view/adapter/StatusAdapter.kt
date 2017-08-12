@@ -33,7 +33,7 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
         //mediaType
         val statusMediaIds=getImageUrls(item)
         if(statusMediaIds.isNotEmpty()){
-            val mAdapter=TweetCardPicAdapter(context,statusMediaIds)
+            val mAdapter = TweetCardPicAdapter(statusMediaIds)
             val manager = LinearLayoutManager(context).apply {
                 orientation = LinearLayoutManager.HORIZONTAL
             }

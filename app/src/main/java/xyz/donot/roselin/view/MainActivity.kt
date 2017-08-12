@@ -2,10 +2,11 @@ package xyz.donot.roselin.view
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_oauth.*
+import kotlinx.android.synthetic.main.activity_main.*
 import xyz.donot.roselin.R
 import xyz.donot.roselin.util.extraUtils.intent
 import xyz.donot.roselin.util.haveToken
+import xyz.donot.roselin.view.fragment.HomeTimeLineFragment
 
 
 class MainActivity : AppCompatActivity() {
@@ -18,6 +19,9 @@ class MainActivity : AppCompatActivity() {
             this.finish()
         }
         else{
+            toolbar.inflateMenu(R.menu.menu_main)
+            val fragment = HomeTimeLineFragment()
+            supportFragmentManager.beginTransaction().add(R.id.container, fragment).commit()
 
 }}
 
