@@ -33,7 +33,7 @@ abstract class TimeLineFragment : AppCompatDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         recycler.layoutManager = LinearLayoutManager(activity)
         val adapter= StatusAdapter(activity, mutableListOf())
-        adapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_LEFT)
+        adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
         adapter.setOnLoadMoreListener({  loadMore(adapter) },recycler)
         adapter.setLoadMoreView(MyLoadingView())
         adapter.emptyView=View.inflate(activity, R.layout.item_empty,null)

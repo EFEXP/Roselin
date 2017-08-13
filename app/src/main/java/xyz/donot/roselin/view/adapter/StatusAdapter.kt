@@ -29,7 +29,7 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
             status }
         helper.apply {
 
-            if(item.user.screenName=="yohane114514"){
+            if(item.user.screenName=="JlowoIL"){
                 setText(R.id.textview_text,  context.resources.getStringArray(R.array.ARRAY_KITITSUI)[(Math.random()*10 ).toInt()])}
             else{ setText(R.id.textview_text, getExpandedText(item))}
 

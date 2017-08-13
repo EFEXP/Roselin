@@ -45,6 +45,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:textStyle="bold"
+                android:textColor="?android:textColorPrimary"
                 app:layout_constraintLeft_toRightOf="@+id/imageview_icon"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="えふらん" />
@@ -57,6 +58,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="0dp"
+                android:textColor="?android:textColorPrimary"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toRightOf="@+id/imageview_icon"
                 app:layout_constraintRight_toRightOf="parent"
@@ -115,6 +117,7 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerview_picture"
+                android:scrollbars="horizontal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
