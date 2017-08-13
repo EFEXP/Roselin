@@ -5,8 +5,9 @@ import android.app.UiModeManager
 import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatDelegate
 import com.crashlytics.android.Crashlytics
-import com.twitter.sdk.android.Twitter
+import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterAuthConfig
+import com.twitter.sdk.android.core.TwitterConfig
 import io.fabric.sdk.android.Fabric
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -23,8 +24,11 @@ class Roselin : Application() {
     override fun onCreate() {
         super.onCreate()
         Realm.init(this)
-        val authConfig = TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET)
-        Fabric.with(this, Twitter(authConfig), Crashlytics())
+        val twitterConfig = TwitterConfig.Builder(this)
+                .twitterAuthConfig(TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET))
+                .debug(true).build()
+        Twitter.initialize(twitterConfig)
+        Fabric.with(this, Crashlytics())
 
 
         val config= RealmConfiguration.Builder().schemaVersion(0L)

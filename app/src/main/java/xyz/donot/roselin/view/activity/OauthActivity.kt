@@ -1,4 +1,4 @@
-package xyz.donot.roselin.view
+package xyz.donot.roselin.view.activity
 
 import android.content.Intent
 import android.os.AsyncTask

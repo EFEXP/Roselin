@@ -1,4 +1,4 @@
-package xyz.donot.roselin.view
+package xyz.donot.roselin.view.activity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity

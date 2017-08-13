@@ -21,9 +21,18 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
 
 
     override fun convert(helper: BaseViewHolder, status: Status) {
-        val item= if (status.isRetweet){ status.retweetedStatus }else{ status }
+        val item= if (status.isRetweet){
+            helper.setText(R.id.textview_is_retweet,"${status.user.name}がリツイート")
+            helper.setVisible(R.id.textview_is_retweet,true)
+            status.retweetedStatus }else{
+            helper.setVisible(R.id.textview_is_retweet,false)
+            status }
         helper.apply {
-            setText(R.id.textview_text, getExpandedText(item))
+
+            if(item.user.screenName=="yohane114514"){
+                setText(R.id.textview_text,  context.resources.getStringArray(R.array.ARRAY_KITITSUI)[(Math.random()*10 ).toInt()])}
+            else{ setText(R.id.textview_text, getExpandedText(item))}
+
             setText(R.id.textview_username,item.user.name)
             setText(R.id.textview_screenname,"@"+item.user.screenName)
             setText(R.id.textview_via, getClientName(item.source))
