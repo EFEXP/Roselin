@@ -1,6 +1,8 @@
 package xyz.donot.roselin.view.adapter
 
+import android.app.Activity
 import android.content.Context
+import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -11,6 +13,8 @@ import com.squareup.picasso.Picasso
 import twitter4j.MediaEntity
 import twitter4j.Status
 import xyz.donot.roselin.R
+import xyz.donot.roselin.util.extraUtils.start
+import xyz.donot.roselin.view.activity.PictureActivity
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
@@ -32,7 +36,6 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
             if(item.user.screenName=="JlowoIL"){
                 setText(R.id.textview_text,  context.resources.getStringArray(R.array.ARRAY_KITITSUI)[(Math.random()*10 ).toInt()])}
             else{ setText(R.id.textview_text, getExpandedText(item))}
-
             setText(R.id.textview_username,item.user.name)
             setText(R.id.textview_screenname,"@"+item.user.screenName)
             setText(R.id.textview_via, getClientName(item.source))
@@ -52,11 +55,17 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
                 visibility = View.VISIBLE
                 hasFixedSize()
             }
+            mAdapter.setOnItemClickListener { _, _, position ->
+                ( context as Activity).start<PictureActivity>(Bundle().apply {
+
+                   putStringArrayList("picture_urls",getImageUrls(item))
+                }) }
 
         }
         else{
             helper.getView<RecyclerView>(R.id.recyclerview_picture).visibility = View.GONE
         }
+        //EndMedia
 
         Picasso.with(mContext).load(item.user.originalProfileImageURLHttps).into(helper.getView<ImageView>(R.id.imageview_icon))
 

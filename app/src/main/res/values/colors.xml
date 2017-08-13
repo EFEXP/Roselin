@@ -7,4 +7,5 @@
     <color name="colorButton">#00bc98</color>
         <color name="black_overlay">#66000000</color>
         <color name="white">#FFFF</color>
+    <color name="trans">#46ffffff</color>
 </resources>
