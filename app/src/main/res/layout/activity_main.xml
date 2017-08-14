@@ -13,7 +13,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
     tools:context="xyz.donot.roselin.view.activity.MainActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -39,10 +38,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:orientation="horizontal">
         <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="5"
+            android:layout_weight="1"
             android:focusable="true"
+            app:theme="@style/AppTheme.Design"
             >
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/editText_status"
@@ -56,7 +56,7 @@
             android:id="@+id/button_tweet"
             android:layout_width="70sp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:gravity="right"
             android:background="@android:color/transparent"
             app:srcCompat="@drawable/ic_send_primary_24dp" />
     </LinearLayout>

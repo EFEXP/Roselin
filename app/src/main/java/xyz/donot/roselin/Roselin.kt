@@ -46,8 +46,9 @@ class Roselin : Application() {
             "white"->{AppCompatDelegate.MODE_NIGHT_NO}
             "auto"->{AppCompatDelegate.MODE_NIGHT_AUTO}
             else->{AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM}
+           // else->{AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM}
         }
-        AppCompatDelegate.setDefaultNightMode(design)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         (getSystemService(UI_MODE_SERVICE)as UiModeManager).nightMode = UiModeManager.MODE_NIGHT_AUTO
     }
 

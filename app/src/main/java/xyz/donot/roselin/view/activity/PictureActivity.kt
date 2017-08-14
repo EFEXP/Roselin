@@ -8,9 +8,11 @@ import xyz.donot.roselin.view.adapter.PicturePagerAdapter
 
 class PictureActivity : AppCompatActivity() {
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_picture)
+        supportPostponeEnterTransition()
         val strings = intent.extras.getStringArrayList("picture_urls")
         val pager=picture_view_pager
         pager.offscreenPageLimit=strings.count()

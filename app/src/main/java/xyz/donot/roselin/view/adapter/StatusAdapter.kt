@@ -2,11 +2,14 @@ package xyz.donot.roselin.view.adapter
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.squareup.picasso.Picasso
@@ -15,9 +18,12 @@ import twitter4j.Status
 import xyz.donot.roselin.R
 import xyz.donot.roselin.util.extraUtils.start
 import xyz.donot.roselin.view.activity.PictureActivity
+import xyz.donot.roselin.view.activity.VideoActivity
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
+
+
 
 
 class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_tweet,list)
@@ -32,10 +38,17 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
             helper.setVisible(R.id.textview_is_retweet,false)
             status }
         helper.apply {
-
-            if(item.user.screenName=="JlowoIL"){
-                setText(R.id.textview_text,  context.resources.getStringArray(R.array.ARRAY_KITITSUI)[(Math.random()*10 ).toInt()])}
+            //キチツイ
+            if(item.user.screenName==""){
+                val array= context.resources.getStringArray(R.array.ARRAY_KITITSUI)
+                setText(R.id.textview_text,array[Random().nextInt(array.count())])}
             else{ setText(R.id.textview_text, getExpandedText(item))}
+            //認証済み
+            if(item.user.isVerified){
+                getView<TextView>(R.id.textview_username)
+                    .setCompoundDrawablesWithIntrinsicBounds(null,null, ResourcesCompat.getDrawable(context.resources, R.drawable.ic_check_circle_black_18dp, null),null)}
+            else{getView<TextView>(R.id.textview_username).setCompoundDrawablesWithIntrinsicBounds(null,null, null, null)}
+
             setText(R.id.textview_username,item.user.name)
             setText(R.id.textview_screenname,"@"+item.user.screenName)
             setText(R.id.textview_via, getClientName(item.source))
@@ -55,11 +68,14 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
                 visibility = View.VISIBLE
                 hasFixedSize()
             }
-            mAdapter.setOnItemClickListener { _, _, position ->
-                ( context as Activity).start<PictureActivity>(Bundle().apply {
+            mAdapter.setOnItemClickListener { adapter, _, position ->
+                val videoUrl: String? = getVideoURL(status.mediaEntities)
+                if(videoUrl!=null){context.startActivity(Intent(context, VideoActivity::class.java).putExtra("video_url", videoUrl))}
+                else{ ( context as Activity).start<PictureActivity>(Bundle().apply {
+                    putStringArrayList("picture_urls",getImageUrls(item))
+                })}
 
-                   putStringArrayList("picture_urls",getImageUrls(item))
-                }) }
+                }
 
         }
         else{
