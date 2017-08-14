@@ -1,5 +1,13 @@
 package xyz.donot.roselin.view.fragment
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.Bundle
+import android.support.v4.content.LocalBroadcastManager
+import android.util.Log
+import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.content_base_fragment.*
@@ -9,8 +17,15 @@ import twitter4j.Status
 import twitter4j.Twitter
 import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.util.extraUtils.toast
+import xyz.donot.roselin.util.getDeserialized
 
 class HomeTimeLineFragment :TimeLineFragment(){
+    val receiver by lazy { StatusReceiver() }
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        LocalBroadcastManager.getInstance(activity).registerReceiver(receiver, IntentFilter("NewStatus"))
+        Log.d("DataReceiver", " setUpBroadCast()")
+    }
     override fun loadMore(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
         val asyncTask:SafeAsyncTask<Twitter,ResponseList<Status>> = object : SafeAsyncTask<Twitter,ResponseList<Status>>() {
             override fun doTask(arg: Twitter): ResponseList<twitter4j.Status> {
@@ -28,7 +43,6 @@ class HomeTimeLineFragment :TimeLineFragment(){
         }
         asyncTask.execute(twitter)
     }
-
     override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
         val asyncTask: SafeAsyncTask<Twitter, ResponseList<Status>> = object : SafeAsyncTask<Twitter, ResponseList<Status>>() {
             override fun doTask(arg: Twitter): ResponseList<twitter4j.Status> {
@@ -49,6 +63,17 @@ class HomeTimeLineFragment :TimeLineFragment(){
         }
         asyncTask.execute(twitter)
     }
-
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(activity).unregisterReceiver(receiver)
+    }
+    inner class StatusReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            Log.d("DataReceiver", "onReceive")
+            adapter.addData(0,intent.extras.getByteArray("Status").getDeserialized<Status>())
+            adapter.notifyItemInserted(0)
+            recycler.smoothScrollToPosition(0)
+        }
+    }
 
 }

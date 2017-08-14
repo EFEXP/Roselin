@@ -18,6 +18,7 @@ import xyz.donot.roselin.view.custom.MyLoadingView
 
 abstract class TimeLineFragment : AppCompatDialogFragment() {
     val twitter by lazy { getTwitterInstance() }
+    val adapter by lazy { StatusAdapter(activity, mutableListOf()) }
     abstract fun loadMore(adapter:BaseQuickAdapter<Status,BaseViewHolder>)
     abstract fun   pullToRefresh(adapter:BaseQuickAdapter<Status,BaseViewHolder>)
     var page: Int = 0
@@ -32,7 +33,6 @@ abstract class TimeLineFragment : AppCompatDialogFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler.layoutManager = LinearLayoutManager(activity)
-        val adapter= StatusAdapter(activity, mutableListOf())
         adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
         adapter.setOnLoadMoreListener({  loadMore(adapter) },recycler)
         adapter.setLoadMoreView(MyLoadingView())

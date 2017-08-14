@@ -35,7 +35,11 @@
             android:name=".view.activity.PictureActivity"
             android:label="@string/title_activity_picture"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.activity.VideoActivity"></activity>
+        <activity android:name=".view.activity.VideoActivity" />
+
+        <service
+            android:name=".service.StreamService"
+            android:exported="false" />
     </application>
 
 </manifest>

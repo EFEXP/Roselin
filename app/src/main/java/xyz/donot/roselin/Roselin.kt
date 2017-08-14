@@ -17,6 +17,8 @@ import java.io.FileNotFoundException
 
 
 
+
+
 class Roselin : Application() {
     private val TWITTER_KEY by lazy { getString(R.string.twitter_consumer_key) }
     private val TWITTER_SECRET by lazy {resources.getString(R.string.twitter_consumer_secret) }
@@ -39,8 +41,6 @@ class Roselin : Application() {
         }
         catch(e: FileNotFoundException){}
         Realm.setDefaultConfiguration(config)
-
-
         val design=  when(PreferenceManager.getDefaultSharedPreferences(this).getString("night_mode","auto")){
             "black"->{ AppCompatDelegate.MODE_NIGHT_YES}
             "white"->{AppCompatDelegate.MODE_NIGHT_NO}
@@ -50,6 +50,8 @@ class Roselin : Application() {
         }
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         (getSystemService(UI_MODE_SERVICE)as UiModeManager).nightMode = UiModeManager.MODE_NIGHT_AUTO
+
     }
+
 
 }
