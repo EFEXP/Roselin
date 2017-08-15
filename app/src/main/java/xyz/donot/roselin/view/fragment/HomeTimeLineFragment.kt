@@ -16,6 +16,7 @@ import twitter4j.ResponseList
 import twitter4j.Status
 import twitter4j.Twitter
 import xyz.donot.roselin.extend.SafeAsyncTask
+import xyz.donot.roselin.util.extraUtils.mainThread
 import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getDeserialized
 
@@ -70,9 +71,11 @@ class HomeTimeLineFragment :TimeLineFragment(){
     inner class StatusReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             Log.d("DataReceiver", "onReceive")
+            mainThread {
             adapter.addData(0,intent.extras.getByteArray("Status").getDeserialized<Status>())
             adapter.notifyItemInserted(0)
             recycler.smoothScrollToPosition(0)
+            }
         }
     }
 

@@ -2,11 +2,11 @@ package xyz.donot.roselin.view.activity
 
 import android.app.ActivityManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.navigation_header.*
 import twitter4j.Status
 import twitter4j.Twitter
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
             this.finish()
         }
         else{
-            toolbar.inflateMenu(R.menu.menu_main)
+           toolbar.inflateMenu(R.menu.menu_main)
             button_tweet.setOnClickListener {
                 if (!editText_status.text.isNullOrBlank() && editText_status.text.count() <= 140){
                     class SendTask(val txt:String): SafeAsyncTask<Twitter, Status>(){
@@ -57,10 +57,10 @@ class MainActivity : AppCompatActivity() {
 
             }
             main_viewpager.adapter = MainTimeLineAdapter(supportFragmentManager)
-            main_viewpager.offscreenPageLimit = 2
-            toast(isActiveService().toString())
+           main_viewpager.offscreenPageLimit = 2
+            toast((!isActiveService()).toString())
             if(!isActiveService()) {
-         //       startService(Intent(this@MainActivity, StreamService ::class.java))
+         startService(Intent(this@MainActivity, StreamService ::class.java))
             }
             setUpHeader()
             setUpDrawerEvent()
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 }
 
 
-    fun isActiveService(): Boolean {
+    private fun isActiveService(): Boolean {
 
         val activityManager =getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val runningServicesInfo = activityManager.getRunningServices(Integer.MAX_VALUE)
@@ -85,7 +85,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpDrawerEvent() {
-        design_navigation_view.setNavigationItemSelectedListener({
+        navigation_drawer.setNavigationItemSelectedListener({
                 when (it.itemId) {
                     R.id.my_profile -> {
                       //  startActivity(newIntent<UserActivity>(Bundle { putLong("user_id",getMyId()) }))

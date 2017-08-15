@@ -13,7 +13,7 @@ class MainTimeLineAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
                 return HomeTimeLineFragment()
             }
             1 -> {
-                return HomeTimeLineFragment()
+                return Fragment()
             }
             else -> {
                 throw IllegalAccessError()
