@@ -28,7 +28,7 @@ android {
     android.defaultConfig.vectorDrawables.useSupportLibrary = true
     defaultConfig {
         applicationId "xyz.donot.roselin"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -62,14 +62,8 @@ dependencies {
     compile "com.android.support:design:${support}"
     compile "com.android.support:support-v4:${support}"
     compile "com.android.support:preference-v7:${support}"
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile "com.android.support:customtabs:${support}"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile 'com.makeramen:roundedimageview:2.3.0'
-    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.27'
-    compile 'com.airbnb.android:lottie:2.1.2'
-    compile 'com.github.chrisbanes:PhotoView:2.0.0'
-    compile 'com.klinkerapps:link_builder:1.6.1'
     compile('com.twitter.sdk.android:twitter:3.1.1@aar') {
         transitive = true
     }
@@ -77,4 +71,10 @@ dependencies {
         transitive = true
     }
 
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.makeramen:roundedimageview:2.3.0'
+    compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.27'
+    compile 'com.airbnb.android:lottie:2.1.2'
+    compile 'com.github.chrisbanes:PhotoView:2.0.0'
+    compile 'com.klinkerapps:link_builder:1.6.1'
 }

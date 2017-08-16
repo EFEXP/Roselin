@@ -1,7 +1,11 @@
 package xyz.donot.roselin.util
 
+import android.content.Context
 import io.realm.Realm
 import twitter4j.Twitter
+import twitter4j.TwitterFactory
+import twitter4j.conf.ConfigurationBuilder
+import xyz.donot.roselin.R
 import xyz.donot.roselin.model.realm.DBAccount
 import xyz.donot.roselin.util.extraUtils.logd
 import java.io.*
@@ -29,7 +33,12 @@ fun getTwitterInstance(): twitter4j.Twitter {
         val ac= it.where(DBAccount::class.java).equalTo("isMain",true).findFirst()
         return ac.twitter?.getDeserialized<Twitter>()?:throw IllegalStateException()
     }
-
+}
+fun getOfficialInstance(context: Context): twitter4j.Twitter {
+    val builder= ConfigurationBuilder()
+    builder.setOAuthConsumerKey(context.getString(R.string.twitter_consumer_key))
+    builder.setOAuthConsumerSecret(context.getString(R.string.twitter_consumer_secret))
+    return TwitterFactory(builder.build()).instance
 }
 
 fun haveToken(): Boolean {

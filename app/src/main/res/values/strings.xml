@@ -13,4 +13,6 @@
     <string name="what_is_happening">いまどうしてる？</string>
     <string name="title_activity_picture">PictureActivity</string>
     <string name="title_activity_user">UserActivity</string>
+    <string name="title_activity_tweet_edit">TweetEditActivity</string>
+    <string name="title_activity_twitter_detail">TwitterDetailActivity</string>
 </resources>

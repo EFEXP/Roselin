@@ -44,12 +44,19 @@
         <activity
             android:name=".view.activity.UserActivity"
             android:label="@string/title_activity_user"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".view.activity.SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.activity.SettingsActivity"
             android:label="SettingsActivity"
-            android:theme="@style/AppTheme.Preference"
-           />
+            android:theme="@style/AppTheme.Preference" />
+        <activity
+            android:name=".view.activity.TweetEditActivity"
+            android:label="@string/title_activity_tweet_edit"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.activity.TwitterDetailActivity"
+            android:label="@string/title_activity_twitter_detail"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
-
 
 </manifest>

@@ -19,8 +19,10 @@ import twitter4j.Twitter
 import xyz.donot.quetzal.view.fragment.getMyId
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
+import xyz.donot.roselin.util.extraUtils.newIntent
 import xyz.donot.roselin.util.getSerialized
 import xyz.donot.roselin.util.getTwitterInstance
+import xyz.donot.roselin.view.activity.TwitterDetailActivity
 import xyz.donot.roselin.view.adapter.StatusAdapter
 import xyz.donot.roselin.view.custom.MyLoadingView
 
@@ -108,6 +110,7 @@ abstract class TimeLineFragment : AppCompatDialogFragment() {
                                     DeleteTask().execute(getTwitterInstance())
                                 }
                                 "会話" -> {
+                                    context. startActivity(context.newIntent<TwitterDetailActivity>(Bundle().apply {putSerializable("Status",item) }))
 
                                 }
                                 "コピー" -> {

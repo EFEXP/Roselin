@@ -65,9 +65,6 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
                 intent.putExtra("user_id",item.user.id)
                context.startActivity(intent)
             }
-
-
-
         }
         //mediaType
         val statusMediaIds=getImageUrls(item)
@@ -115,9 +112,14 @@ fun getLinkList(context: Context) :MutableList<Link> {
                     .setUnderlined(false)
                     .setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
                     .setOnClickListener {
-                        val builder = CustomTabsIntent.Builder()
-                        val customTabsIntent = builder.build()
-                        customTabsIntent.launchUrl(context, Uri.parse(it))
+
+                            CustomTabsIntent.Builder()
+                                    .setShowTitle(true)
+                                    .addDefaultShareMenuItem()
+                                    .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                                    .setStartAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                                    .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build()
+                                    .launchUrl(context, Uri.parse(it))
                     }
             ,
             Link(xyz.donot.roselin.util.Regex.HASHTAG_PATTERN)
