@@ -4,6 +4,7 @@ package xyz.donot.roselin.view.fragment
 import android.app.Activity
 import android.content.*
 import android.os.Bundle
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatDialogFragment
 import android.support.v7.widget.LinearLayoutManager
@@ -18,7 +19,7 @@ import twitter4j.Twitter
 import xyz.donot.quetzal.view.fragment.getMyId
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
-import xyz.donot.roselin.util.extraUtils.longToast
+import xyz.donot.roselin.util.getSerialized
 import xyz.donot.roselin.util.getTwitterInstance
 import xyz.donot.roselin.view.adapter.StatusAdapter
 import xyz.donot.roselin.view.custom.MyLoadingView
@@ -34,9 +35,7 @@ abstract class TimeLineFragment : AppCompatDialogFragment() {
             return field
         }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.content_base_fragment, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = inflater.inflate(R.layout.content_base_fragment, container, false)
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler.layoutManager = LinearLayoutManager(activity)
@@ -56,16 +55,37 @@ abstract class TimeLineFragment : AppCompatDialogFragment() {
                 loadMore(adapter)
                 refresh.isRefreshing=false
             } }
+        //クリックリスナー
         adapter.setOnItemClickListener { adapter, view, position ->
             val status=adapter.data[position] as Status
             val item=  if (status.isRetweet){ status.retweetedStatus }else{ status }
-            class DeleteTask: SafeAsyncTask<Twitter, Status>(){
-                override fun doTask(arg: Twitter): twitter4j.Status {
-                    return arg.destroyStatus(status.id)
-                }
+            class FavoriteTask : SafeAsyncTask<Twitter, Status>(){
+                override fun doTask(arg: Twitter): twitter4j.Status = arg.createFavorite(status.id)
 
                 override fun onSuccess(result: twitter4j.Status) {
-                    context.longToast("削除しました")
+                    LocalBroadcastManager.getInstance(this@TimeLineFragment.context).sendBroadcast(Intent("Favorite").putExtra("Status",result.getSerialized()))
+                }
+
+                override fun onFailure(exception: Exception) {
+
+                }
+            }
+            class RetweetTask : SafeAsyncTask<Twitter, Status>(){
+                override fun doTask(arg: Twitter): twitter4j.Status = arg.retweetStatus(item.id)
+
+                override fun onSuccess(result: twitter4j.Status) {
+                    LocalBroadcastManager.getInstance(this@TimeLineFragment.context).sendBroadcast(Intent("Retweet").putExtra("Status",result.getSerialized()))
+                }
+
+                override fun onFailure(exception: Exception) {
+
+                }
+            }
+            class DeleteTask: SafeAsyncTask<Twitter, Status>(){
+                override fun doTask(arg: Twitter): twitter4j.Status = arg.destroyStatus(status.id)
+
+                override fun onSuccess(result: twitter4j.Status) {
+
                 }
 
                 override fun onFailure(exception: Exception) {
@@ -78,6 +98,12 @@ abstract class TimeLineFragment : AppCompatDialogFragment() {
                         .setItems(tweetItem, { _, int ->
                             val selectedItem=context.resources.getStringArray(tweetItem)[int]
                             when (selectedItem) {
+                                "いいね" -> {
+                                   FavoriteTask().execute(getTwitterInstance())
+                                }
+                                "RT" -> {
+                                  RetweetTask().execute(getTwitterInstance())
+                                }
                                 "削除" -> {
                                     DeleteTask().execute(getTwitterInstance())
                                 }
@@ -107,5 +133,8 @@ abstract class TimeLineFragment : AppCompatDialogFragment() {
                         .show()
             }
         }
+        //クリックリスナーEnd
     }
+
+
 }

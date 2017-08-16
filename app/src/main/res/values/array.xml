@@ -12,6 +12,8 @@
     <string-array name="tweet_menu">
         <item>会話</item>
         <item>RTした人</item>
+        <item>RT</item>
+        <item>いいね</item>
         <item>公式で見る</item>
         <item>コピー</item>
         <item>共有</item>
@@ -19,6 +21,8 @@
     <string-array name="tweet_my_menu">
         <item>会話</item>
         <item>RTした人</item>
+        <item>RT</item>
+        <item>いいね</item>
         <item>公式で見る</item>
         <item>コピー</item>
         <item>共有</item>

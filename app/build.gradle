@@ -63,6 +63,7 @@ dependencies {
     compile "com.android.support:support-v4:${support}"
     compile "com.android.support:preference-v7:${support}"
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile "com.android.support:customtabs:${support}"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile 'com.makeramen:roundedimageview:2.3.0'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.27'

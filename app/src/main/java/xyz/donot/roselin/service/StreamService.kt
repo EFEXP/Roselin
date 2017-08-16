@@ -51,7 +51,7 @@ class StreamService : IntentService("StreamService") {
         }
 
         override fun onDeletionNotice(statusDeletionNotice: StatusDeletionNotice) {
-
+            LocalBroadcastManager.getInstance(this@StreamService).sendBroadcast(Intent("DeleteStatus").putExtra("StatusDeletionNotice",statusDeletionNotice.getSerialized()))
         }
 
         override fun onFavorite(source: User, target: User, favoritedStatus: Status) {

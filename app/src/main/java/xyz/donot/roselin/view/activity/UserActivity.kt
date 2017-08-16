@@ -15,6 +15,7 @@ import xyz.donot.roselin.util.getTwitterInstance
 
 class UserActivity : AppCompatActivity() {
     private  val userId: Long by lazy { intent.getLongExtra("user_id",0L) }
+    private  val screenName: String by lazy { intent.getStringExtra("screen_name") }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
@@ -31,8 +32,21 @@ class UserActivity : AppCompatActivity() {
                 return arg.showUser(userId)
             }
         }
-        lookUpUserTask(userId).execute(getTwitterInstance())
+        class lookUpUserNameTask(private val screenName:String):SafeAsyncTask<Twitter,User>(){
+            override fun onSuccess(result: User) {
+                setUp(result)
+            }
 
+            override fun onFailure(exception: Exception) {
+                toast(exception.localizedMessage)
+            }
+
+            override fun doTask(arg: Twitter): User = arg.showUser(screenName)
+        }
+        if(userId==0L) {
+            lookUpUserNameTask(screenName).execute(getTwitterInstance())
+        }
+        else{  lookUpUserTask(userId).execute(getTwitterInstance())}
     }
     fun setUp(user: User){
         Picasso.with(applicationContext).load(user.profileBannerIPadURL).into(banner)

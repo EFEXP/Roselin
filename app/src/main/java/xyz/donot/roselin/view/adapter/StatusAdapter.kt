@@ -3,7 +3,9 @@ package xyz.donot.roselin.view.adapter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.LinearLayoutManager
@@ -17,17 +19,16 @@ import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
 import com.squareup.picasso.Picasso
 import twitter4j.Status
-import twitter4j.Twitter
 import xyz.donot.roselin.R
-import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.util.*
 import xyz.donot.roselin.util.extraUtils.intent
-import xyz.donot.roselin.util.extraUtils.longToast
 import xyz.donot.roselin.util.extraUtils.start
 import xyz.donot.roselin.view.activity.PictureActivity
 import xyz.donot.roselin.view.activity.UserActivity
 import xyz.donot.roselin.view.activity.VideoActivity
 import java.util.*
+
+
 
 
 class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_tweet,list)
@@ -39,46 +40,6 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
             status.retweetedStatus }else{
             helper.setVisible(R.id.textview_is_retweet,false)
             status }
-        //Taskの宣言
-        class DeleteTask : SafeAsyncTask<Twitter, Status>(){
-            override fun doTask(arg: Twitter): twitter4j.Status {
-                return arg.destroyStatus(status.id)
-            }
-
-            override fun onSuccess(result: twitter4j.Status) {
-                context.longToast("削除しました")
-            }
-
-            override fun onFailure(exception: Exception) {
-
-            }
-        }
-        class FavoriteTask : SafeAsyncTask<Twitter, Status>(){
-            override fun doTask(arg: Twitter): twitter4j.Status {
-                return arg.destroyStatus(status.id)
-            }
-
-            override fun onSuccess(result: twitter4j.Status) {
-                context.longToast("削除しました")
-            }
-
-            override fun onFailure(exception: Exception) {
-
-            }
-        }
-        class RetweetTask : SafeAsyncTask<Twitter, Status>(){
-            override fun doTask(arg: Twitter): twitter4j.Status {
-                return arg.destroyStatus(status.id)
-            }
-
-            override fun onSuccess(result: twitter4j.Status) {
-                context.longToast("削除しました")
-            }
-
-            override fun onFailure(exception: Exception) {
-
-            }
-        }
         //Viewの初期化
         helper.apply {
             //キチツイ
@@ -142,26 +103,25 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
     }
 }
 fun getLinkList(context: Context) :MutableList<Link> {
-    return listOf<Link>(
+    return   listOf<Link>(
             Link(xyz.donot.roselin.util.Regex.MENTION_PATTERN)
                     .setUnderlined(false)
                     .setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
-                    .setBold(true)
                     .setOnClickListener {
-                      //  startActivity(Intent(context, UserActivity::class.java).putExtra("user_name", it.replace("@","")))
+                       context.startActivity(Intent(context, UserActivity::class.java).putExtra("screen_name", it.replace("@","")))
                     }
             ,
             Link(xyz.donot.roselin.util.Regex.VALID_URL)
                     .setUnderlined(false)
                     .setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
-                    .setBold(true)
                     .setOnClickListener {
-
+                        val builder = CustomTabsIntent.Builder()
+                        val customTabsIntent = builder.build()
+                        customTabsIntent.launchUrl(context, Uri.parse(it))
                     }
             ,
             Link(xyz.donot.roselin.util.Regex.HASHTAG_PATTERN)
                     .setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
-                    .setBold(true)
                     .setOnClickListener {
 
                     }
