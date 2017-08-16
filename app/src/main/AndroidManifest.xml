@@ -40,6 +40,11 @@
         <service
             android:name=".service.StreamService"
             android:exported="false" />
+
+        <activity
+            android:name=".view.activity.UserActivity"
+            android:label="@string/title_activity_user"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

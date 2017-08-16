@@ -21,14 +21,14 @@ import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getDeserialized
 
 class HomeTimeLineFragment :TimeLineFragment(){
-    val receiver by lazy { StatusReceiver() }
+    private val receiver by lazy { StatusReceiver() }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         LocalBroadcastManager.getInstance(activity).registerReceiver(receiver, IntentFilter("NewStatus"))
         Log.d("DataReceiver", " setUpBroadCast()")
     }
     override fun loadMore(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
-        val asyncTask:SafeAsyncTask<Twitter,ResponseList<Status>> = object : SafeAsyncTask<Twitter,ResponseList<Status>>() {
+        class HomeTimeLineTask: SafeAsyncTask<Twitter,ResponseList<Status>>() {
             override fun doTask(arg: Twitter): ResponseList<twitter4j.Status> {
                 return arg.getHomeTimeline(Paging(page))
             }
@@ -42,7 +42,7 @@ class HomeTimeLineFragment :TimeLineFragment(){
             }
 
         }
-        asyncTask.execute(twitter)
+        HomeTimeLineTask().execute(twitter)
     }
     override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
         val asyncTask: SafeAsyncTask<Twitter, ResponseList<Status>> = object : SafeAsyncTask<Twitter, ResponseList<Status>>() {
@@ -73,8 +73,7 @@ class HomeTimeLineFragment :TimeLineFragment(){
             Log.d("DataReceiver", "onReceive")
             mainThread {
             adapter.addData(0,intent.extras.getByteArray("Status").getDeserialized<Status>())
-            adapter.notifyItemInserted(0)
-            recycler.smoothScrollToPosition(0)
+             recycler.smoothScrollToPosition(0)
             }
         }
     }

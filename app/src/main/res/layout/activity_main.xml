@@ -42,6 +42,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         android:orientation="horizontal"
+        android:background="#c8424242"
 
         >
         <android.support.design.widget.TextInputLayout

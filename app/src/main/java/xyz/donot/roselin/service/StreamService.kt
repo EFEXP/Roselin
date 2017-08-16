@@ -18,7 +18,7 @@ class StreamService : IntentService("StreamService") {
     val twitter= getTwitterInstance()
 
     override fun onHandleIntent(intent: Intent?) {
-        val mNotification = NotificationCompat.Builder(this)
+        val mNotification = NotificationCompat.Builder(this,"Stream")
                  .setSmallIcon(R.drawable.tw__ic_logo_default)
                 .setContentTitle("Streaming")
                 .setAutoCancel(false)

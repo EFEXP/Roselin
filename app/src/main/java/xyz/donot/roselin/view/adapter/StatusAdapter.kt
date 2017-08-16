@@ -16,8 +16,10 @@ import com.squareup.picasso.Picasso
 import twitter4j.MediaEntity
 import twitter4j.Status
 import xyz.donot.roselin.R
+import xyz.donot.roselin.util.extraUtils.intent
 import xyz.donot.roselin.util.extraUtils.start
 import xyz.donot.roselin.view.activity.PictureActivity
+import xyz.donot.roselin.view.activity.UserActivity
 import xyz.donot.roselin.view.activity.VideoActivity
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -48,13 +50,20 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
                 getView<TextView>(R.id.textview_username)
                     .setCompoundDrawablesWithIntrinsicBounds(null,null, ResourcesCompat.getDrawable(context.resources, R.drawable.ic_check_circle_black_18dp, null),null)}
             else{getView<TextView>(R.id.textview_username).setCompoundDrawablesWithIntrinsicBounds(null,null, null, null)}
-
+            //テキスト関係
             setText(R.id.textview_username,item.user.name)
             setText(R.id.textview_screenname,"@"+item.user.screenName)
             setText(R.id.textview_via, getClientName(item.source))
             setText(R.id.textview_date, getRelativeTime(item.createdAt))
             setText(R.id.textview_count, "RT:${item.retweetCount} いいね:${item.favoriteCount}")
+            //Listener
+            getView<ImageView>(R.id.imageview_icon).setOnClickListener{
+                val intent=context.intent<UserActivity>()
+                intent.putExtra("user_id",item.user.id)
+               context.startActivity(intent)
+            }
         }
+
         //mediaType
         val statusMediaIds=getImageUrls(item)
         if(statusMediaIds.isNotEmpty()){
@@ -82,14 +91,8 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
             helper.getView<RecyclerView>(R.id.recyclerview_picture).visibility = View.GONE
         }
         //EndMedia
-
         Picasso.with(mContext).load(item.user.originalProfileImageURLHttps).into(helper.getView<ImageView>(R.id.imageview_icon))
-
-
     }
-
-
-
 }
 
 
@@ -162,7 +165,6 @@ fun getVideoURL(mediaEntities: Array<MediaEntity>): String? {
 
     return null
 }
-
 fun getImageUrls(status: Status): ArrayList<String> {
     val imageUrls = ArrayList<String>()
     for (url in status.urlEntities) {
