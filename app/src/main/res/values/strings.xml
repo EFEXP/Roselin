@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <string name="app_name">Roselin</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="hint_enter_a_message">今何してる？</string>

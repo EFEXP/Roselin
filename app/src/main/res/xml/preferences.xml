@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:key="night"
+        android:summary="夜間モードを使用します。"
+        android:title="夜間モード" />
+    <ListPreference
+        android:key="list"
+        android:title="ListPreference"
+        android:summary="LIIIIIIIIIIIST"
+        android:entries="@array/entries"
+        android:entryValues="@array/entries"
+        android:defaultValue="1"/>
+</PreferenceScreen>

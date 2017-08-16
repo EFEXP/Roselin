@@ -14,11 +14,6 @@ import io.realm.RealmConfiguration
 import xyz.donot.roselin.model.realm.MyRealmMigration
 import java.io.FileNotFoundException
 
-
-
-
-
-
 class Roselin : Application() {
     private val TWITTER_KEY by lazy { getString(R.string.twitter_consumer_key) }
     private val TWITTER_SECRET by lazy {resources.getString(R.string.twitter_consumer_secret) }
@@ -41,14 +36,12 @@ class Roselin : Application() {
         }
         catch(e: FileNotFoundException){}
         Realm.setDefaultConfiguration(config)
-        val design=  when(PreferenceManager.getDefaultSharedPreferences(this).getString("night_mode","auto")){
-            "black"->{ AppCompatDelegate.MODE_NIGHT_YES}
-            "white"->{AppCompatDelegate.MODE_NIGHT_NO}
-            "auto"->{AppCompatDelegate.MODE_NIGHT_AUTO}
-            else->{AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM}
-           // else->{AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM}
-        }
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
+        val design= if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("night",true)){ AppCompatDelegate.MODE_NIGHT_YES}
+        else{AppCompatDelegate.MODE_NIGHT_NO}
+
+
+        AppCompatDelegate.setDefaultNightMode(design)
         (getSystemService(UI_MODE_SERVICE)as UiModeManager).nightMode = UiModeManager.MODE_NIGHT_AUTO
 
     }

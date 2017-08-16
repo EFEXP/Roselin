@@ -44,7 +44,12 @@
         <activity
             android:name=".view.activity.UserActivity"
             android:label="@string/title_activity_user"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".view.activity.SettingsActivity"
+            android:label="SettingsActivity"
+            android:theme="@style/AppTheme.Preference"
+           />
     </application>
+
 
 </manifest>

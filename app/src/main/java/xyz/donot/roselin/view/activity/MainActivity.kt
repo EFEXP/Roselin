@@ -11,13 +11,14 @@ import kotlinx.android.synthetic.main.navigation_header.*
 import twitter4j.Status
 import twitter4j.Twitter
 import twitter4j.User
+import xyz.donot.quetzal.view.fragment.getMyId
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.service.StreamService
 import xyz.donot.roselin.util.extraUtils.hideSoftKeyboard
 import xyz.donot.roselin.util.extraUtils.intent
+import xyz.donot.roselin.util.extraUtils.newIntent
 import xyz.donot.roselin.util.extraUtils.start
-import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getTwitterInstance
 import xyz.donot.roselin.util.haveToken
 import xyz.donot.roselin.view.adapter.MainTimeLineAdapter
@@ -38,15 +39,12 @@ class MainActivity : AppCompatActivity() {
             button_tweet.setOnClickListener {
                 if (!editText_status.text.isNullOrBlank() && editText_status.text.count() <= 140){
                     class SendTask(val txt:String): SafeAsyncTask<Twitter, Status>(){
-                        override fun doTask(arg: Twitter): twitter4j.Status {
-                            return  arg.updateStatus(txt)
-                        }
+                        override fun doTask(arg: Twitter): twitter4j.Status = arg.updateStatus(txt)
 
                         override fun onSuccess(result: twitter4j.Status) {
                             editText_status.hideSoftKeyboard()
                             editText_status.setText("")
                         }
-
                         override fun onFailure(exception: Exception) {
 
                         }
@@ -58,7 +56,6 @@ class MainActivity : AppCompatActivity() {
             }
             main_viewpager.adapter = MainTimeLineAdapter(supportFragmentManager)
            main_viewpager.offscreenPageLimit = 2
-            toast((!isActiveService()).toString())
             if(!isActiveService()) {
          startService(Intent(this@MainActivity, StreamService ::class.java))
             }
@@ -74,13 +71,10 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun isActiveService(): Boolean {
-
         val activityManager =getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val runningServicesInfo = activityManager.getRunningServices(Integer.MAX_VALUE)
-        val isActive=runningServicesInfo.any { it.service.className == StreamService ::class.java.name.toString()}
-
        // logd("DataReceiver",isActive.toString())
-        return isActive
+        return runningServicesInfo.any { it.service.className == StreamService ::class.java.name.toString()}
 
     }
 
@@ -88,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         navigation_drawer.setNavigationItemSelectedListener({
                 when (it.itemId) {
                     R.id.my_profile -> {
-                      //  startActivity(newIntent<UserActivity>(Bundle { putLong("user_id",getMyId()) }))
+                       startActivity(newIntent<UserActivity>(Bundle().apply { putLong("user_id", getMyId()) }))
                         drawer_layout.closeDrawers()
                     }
                     R.id.action_help -> {

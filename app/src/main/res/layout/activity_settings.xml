@@ -5,5 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="xyz.donot.roselin.view.activity.SettingsActivity">
+<fragment
+    android:id="@+id/pref_fragment"
+    android:name="xyz.donot.roselin.view.MPreferenceFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    >
 
+</fragment>
 </android.support.constraint.ConstraintLayout>
