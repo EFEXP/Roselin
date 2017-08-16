@@ -17,9 +17,12 @@ import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
 import com.squareup.picasso.Picasso
 import twitter4j.Status
+import twitter4j.Twitter
 import xyz.donot.roselin.R
+import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.util.*
 import xyz.donot.roselin.util.extraUtils.intent
+import xyz.donot.roselin.util.extraUtils.longToast
 import xyz.donot.roselin.util.extraUtils.start
 import xyz.donot.roselin.view.activity.PictureActivity
 import xyz.donot.roselin.view.activity.UserActivity
@@ -29,8 +32,6 @@ import java.util.*
 
 class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_tweet,list)
 {
-
-
     override fun convert(helper: BaseViewHolder, status: Status) {
         val item= if (status.isRetweet){
             helper.setText(R.id.textview_is_retweet,"${status.user.name}がリツイート")
@@ -38,6 +39,47 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
             status.retweetedStatus }else{
             helper.setVisible(R.id.textview_is_retweet,false)
             status }
+        //Taskの宣言
+        class DeleteTask : SafeAsyncTask<Twitter, Status>(){
+            override fun doTask(arg: Twitter): twitter4j.Status {
+                return arg.destroyStatus(status.id)
+            }
+
+            override fun onSuccess(result: twitter4j.Status) {
+                context.longToast("削除しました")
+            }
+
+            override fun onFailure(exception: Exception) {
+
+            }
+        }
+        class FavoriteTask : SafeAsyncTask<Twitter, Status>(){
+            override fun doTask(arg: Twitter): twitter4j.Status {
+                return arg.destroyStatus(status.id)
+            }
+
+            override fun onSuccess(result: twitter4j.Status) {
+                context.longToast("削除しました")
+            }
+
+            override fun onFailure(exception: Exception) {
+
+            }
+        }
+        class RetweetTask : SafeAsyncTask<Twitter, Status>(){
+            override fun doTask(arg: Twitter): twitter4j.Status {
+                return arg.destroyStatus(status.id)
+            }
+
+            override fun onSuccess(result: twitter4j.Status) {
+                context.longToast("削除しました")
+            }
+
+            override fun onFailure(exception: Exception) {
+
+            }
+        }
+        //Viewの初期化
         helper.apply {
             //キチツイ
             if(item.user.screenName==""){
@@ -55,13 +97,16 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
             setText(R.id.textview_via, getClientName(item.source))
             setText(R.id.textview_date, getRelativeTime(item.createdAt))
             setText(R.id.textview_count, "RT:${item.retweetCount} いいね:${item.favoriteCount}")
-            LinkBuilder.on(getView<TextView>(R.id.textview_text)).addLinks(getLinkList(context)).build()
+            LinkBuilder.on(getView(R.id.textview_text)).addLinks(getLinkList(context)).build()
             //Listener
             getView<ImageView>(R.id.imageview_icon).setOnClickListener{
                 val intent=context.intent<UserActivity>()
                 intent.putExtra("user_id",item.user.id)
                context.startActivity(intent)
             }
+
+
+
         }
         //mediaType
         val statusMediaIds=getImageUrls(item)
@@ -90,6 +135,10 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
         }
         //EndMedia
         Picasso.with(mContext).load(item.user.originalProfileImageURLHttps).into(helper.getView<ImageView>(R.id.imageview_icon))
+
+
+
+
     }
 }
 fun getLinkList(context: Context) :MutableList<Link> {
@@ -118,3 +167,4 @@ fun getLinkList(context: Context) :MutableList<Link> {
                     }
     ).toMutableList()
 }
+

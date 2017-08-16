@@ -24,8 +24,9 @@ import xyz.donot.roselin.util.haveToken
 import xyz.donot.roselin.view.adapter.MainTimeLineAdapter
 
 
-class MainActivity : AppCompatActivity() {
 
+
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -46,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                             editText_status.setText("")
                         }
                         override fun onFailure(exception: Exception) {
-
+                            editText_status.hideSoftKeyboard()
                         }
                     }
                     SendTask(editText_status.editableText.toString()).execute(getTwitterInstance())
@@ -54,16 +55,14 @@ class MainActivity : AppCompatActivity() {
                 }
 
             }
-            main_viewpager.adapter = MainTimeLineAdapter(supportFragmentManager)
+            val adapter=MainTimeLineAdapter(supportFragmentManager)
+           main_viewpager.adapter = adapter
            main_viewpager.offscreenPageLimit = 2
             if(!isActiveService()) {
          startService(Intent(this@MainActivity, StreamService ::class.java))
             }
             setUpHeader()
             setUpDrawerEvent()
-
-
-
          }
 
 
@@ -131,6 +130,7 @@ class MainActivity : AppCompatActivity() {
         }
         HeaderTask().execute(getTwitterInstance())
     }
+
 
 
 

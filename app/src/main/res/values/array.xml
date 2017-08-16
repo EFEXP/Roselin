@@ -9,4 +9,19 @@
         <item>∗˚(* ˃̤൬˂̤ *)˚∗</item>
         <item>⊚⃝⸜꒰´•‧̫•ू`꒰⑅꒱</item>
     </array>
+    <string-array name="tweet_menu">
+        <item>会話</item>
+        <item>RTした人</item>
+        <item>公式で見る</item>
+        <item>コピー</item>
+        <item>共有</item>
+    </string-array>
+    <string-array name="tweet_my_menu">
+        <item>会話</item>
+        <item>RTした人</item>
+        <item>公式で見る</item>
+        <item>コピー</item>
+        <item>共有</item>
+        <item>削除</item>
+    </string-array>
 </resources>

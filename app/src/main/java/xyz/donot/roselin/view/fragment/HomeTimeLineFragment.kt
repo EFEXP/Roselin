@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -26,12 +27,12 @@ class HomeTimeLineFragment :TimeLineFragment(){
         super.onViewCreated(view, savedInstanceState)
         LocalBroadcastManager.getInstance(activity).registerReceiver(receiver, IntentFilter("NewStatus"))
         Log.d("DataReceiver", " setUpBroadCast()")
+
     }
     override fun loadMore(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
         class HomeTimeLineTask: SafeAsyncTask<Twitter,ResponseList<Status>>() {
-            override fun doTask(arg: Twitter): ResponseList<twitter4j.Status> {
-                return arg.getHomeTimeline(Paging(page))
-            }
+            override fun doTask(arg: Twitter): ResponseList<twitter4j.Status> =
+                    arg.getHomeTimeline(Paging(page))
             override fun onSuccess(result: ResponseList<twitter4j.Status>) {
                 adapter.addData(result)
                 adapter.loadMoreComplete()
@@ -46,9 +47,8 @@ class HomeTimeLineFragment :TimeLineFragment(){
     }
     override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
         val asyncTask: SafeAsyncTask<Twitter, ResponseList<Status>> = object : SafeAsyncTask<Twitter, ResponseList<Status>>() {
-            override fun doTask(arg: Twitter): ResponseList<twitter4j.Status> {
-                return arg.getHomeTimeline(Paging(adapter.data[0].id))
-            }
+            override fun doTask(arg: Twitter): ResponseList<twitter4j.Status> =
+                    arg.getHomeTimeline(Paging(adapter.data[0].id))
             override fun onSuccess(result: ResponseList<twitter4j.Status>) {
                 if (result.isNotEmpty()){
                     adapter.addData(0,result)
@@ -71,11 +71,18 @@ class HomeTimeLineFragment :TimeLineFragment(){
     inner class StatusReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             Log.d("DataReceiver", "onReceive")
+          val  positionIndex =  (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+            val data=intent.extras.getByteArray("Status").getDeserialized<Status>()
             mainThread {
-            adapter.addData(0,intent.extras.getByteArray("Status").getDeserialized<Status>())
-             recycler.smoothScrollToPosition(0)
+                if (positionIndex==0) {
+                    adapter.addData(0,data)
+                    (recycler).smoothScrollToPosition(0)
+                }
+
             }
         }
     }
 
 }
+
+
