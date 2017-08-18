@@ -1,6 +1,8 @@
 package xyz.donot.roselin.util
 
 import android.content.Context
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.BaseViewHolder
 import io.realm.Realm
 import twitter4j.Twitter
 import twitter4j.TwitterFactory
@@ -8,6 +10,7 @@ import twitter4j.conf.ConfigurationBuilder
 import xyz.donot.roselin.R
 import xyz.donot.roselin.model.realm.DBAccount
 import xyz.donot.roselin.util.extraUtils.logd
+import xyz.donot.roselin.util.extraUtils.mainThread
 import java.io.*
 
 
@@ -18,6 +21,19 @@ fun<T:Serializable> T.getSerialized():ByteArray{
         val bytes = it.toByteArray()
         out.close()
         return bytes
+    }
+}
+
+fun<U,T:BaseViewHolder> BaseQuickAdapter<U,T>.remove(item:U){
+    val int=   data.indexOf(item)
+   remove(int)
+}
+fun<U,T:BaseViewHolder> BaseQuickAdapter<U,T>.replace(replacedItem: U,replaceItem: U){
+    val int=  data.indexOf(replacedItem)
+    mainThread {
+        data.removeAt(int)
+        data.add(int,replaceItem)
+        notifyItemChanged(int)
     }
 }
 

@@ -31,3 +31,4 @@
 -keepclassmembers public class * extends com.chad.library.adapter.base.BaseViewHolder {
      <init>(android.view.View);
 }
+-dontwarn com.bumptech.glide.**

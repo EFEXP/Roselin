@@ -7,8 +7,6 @@ import xyz.donot.roselin.R
 import xyz.donot.roselin.view.adapter.PicturePagerAdapter
 
 class PictureActivity : AppCompatActivity() {
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_picture)

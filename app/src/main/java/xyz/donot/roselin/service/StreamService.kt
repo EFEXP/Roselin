@@ -1,13 +1,9 @@
 package xyz.donot.roselin.service
 
 import android.app.IntentService
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
-import android.support.v4.app.NotificationCompat
 import android.support.v4.content.LocalBroadcastManager
 import twitter4j.*
-import xyz.donot.roselin.R
 import xyz.donot.roselin.util.StreamCreateUtil
 import xyz.donot.roselin.util.extraUtils.logd
 import xyz.donot.roselin.util.getSerialized
@@ -18,14 +14,6 @@ class StreamService : IntentService("StreamService") {
     val twitter= getTwitterInstance()
 
     override fun onHandleIntent(intent: Intent?) {
-        val mNotification = NotificationCompat.Builder(this,"Stream")
-                 .setSmallIcon(R.drawable.tw__ic_logo_default)
-                .setContentTitle("Streaming")
-                .setAutoCancel(false)
-                .setContentText("ストリームは正常に稼働中です。")
-                .build()
-        val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        mNotificationManager.notify(0, mNotification )
         handleActionStream()
     }
     private fun handleActionStream(){

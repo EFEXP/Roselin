@@ -66,7 +66,7 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
                context.startActivity(intent)
             }
         }
-        //mediaType
+        //mediaTypet
         val statusMediaIds=getImageUrls(item)
         if(statusMediaIds.isNotEmpty()){
             val mAdapter = TweetCardPicAdapter(statusMediaIds)

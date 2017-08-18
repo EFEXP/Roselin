@@ -15,8 +15,14 @@ import xyz.donot.roselin.model.realm.MyRealmMigration
 import java.io.FileNotFoundException
 
 class Roselin : Application() {
-    private val TWITTER_KEY by lazy { getString(R.string.twitter_consumer_key) }
-    private val TWITTER_SECRET by lazy {resources.getString(R.string.twitter_consumer_secret) }
+    private val TWITTER_KEY by lazy {
+        resources.getString(R.string.twitter_official_consumer_key)
+      //  getString(R.string.twitter_consumer_key)
+    }
+    private val TWITTER_SECRET by lazy {
+        resources.getString(R.string.twitter_official_consumer_secret)
+        //resources.getString(R.string.twitter_consumer_secret)
+    }
 
     override fun onCreate() {
         super.onCreate()

@@ -28,4 +28,7 @@
         <item>共有</item>
         <item>削除</item>
     </string-array>
+    <string-array name="text_tools">
+        <item>突然の死</item>
+    </string-array>
 </resources>

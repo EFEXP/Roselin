@@ -1,10 +1,15 @@
 package xyz.donot.roselin.view.activity
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.navigation_header.*
@@ -15,10 +20,7 @@ import xyz.donot.quetzal.view.fragment.getMyId
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.service.StreamService
-import xyz.donot.roselin.util.extraUtils.hideSoftKeyboard
-import xyz.donot.roselin.util.extraUtils.intent
-import xyz.donot.roselin.util.extraUtils.newIntent
-import xyz.donot.roselin.util.extraUtils.start
+import xyz.donot.roselin.util.extraUtils.*
 import xyz.donot.roselin.util.getTwitterInstance
 import xyz.donot.roselin.util.haveToken
 import xyz.donot.roselin.view.adapter.MainTimeLineAdapter
@@ -27,6 +29,7 @@ import xyz.donot.roselin.view.adapter.MainTimeLineAdapter
 
 
 class MainActivity : AppCompatActivity() {
+   private val REQUEST_WRITE_READ=0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -58,15 +61,36 @@ class MainActivity : AppCompatActivity() {
             val adapter=MainTimeLineAdapter(supportFragmentManager)
            main_viewpager.adapter = adapter
            main_viewpager.offscreenPageLimit = 2
+            //stream
             if(!isActiveService()) {
          startService(Intent(this@MainActivity, StreamService ::class.java))
             }
+            //view
+            fab.setOnClickListener{start<TweetEditActivity>()}
+            if (!defaultSharedPreferences.getBoolean("quick_tweet",true)){editText_layout.visibility= View.GONE}
             setUpHeader()
             setUpDrawerEvent()
+            InitialRequestPermission()
          }
 
 
 }
+
+    @SuppressLint("NewApi")
+    private fun InitialRequestPermission() {
+        fromApi(23, true){
+            val EX_WRITE= ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED
+            val LOCATION=ContextCompat.checkSelfPermission(applicationContext,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED
+            val EX_READ=ContextCompat.checkSelfPermission(applicationContext,Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED
+            if(!(EX_WRITE&&EX_READ&&LOCATION)){
+                requestPermissions(
+                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                ,Manifest.permission.READ_EXTERNAL_STORAGE
+                                ,Manifest.permission.ACCESS_FINE_LOCATION)
+                        ,REQUEST_WRITE_READ)
+            }
+        }
+    }
 
 
     private fun isActiveService(): Boolean {

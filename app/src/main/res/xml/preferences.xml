@@ -5,6 +5,11 @@
         android:key="night"
         android:summary="夜間モードを使用します。"
         android:title="夜間モード" />
+    <SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:key="quick_tweet"
+        android:summary="ホームタイムラインのツイートバーを有効にします。"
+        android:title="ツイートバー" />
     <ListPreference
         android:key="list"
         android:title="ListPreference"
