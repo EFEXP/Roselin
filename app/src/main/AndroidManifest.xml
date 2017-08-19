@@ -17,9 +17,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:label"
-        >
-
+        tools:replace="android:label">
         <activity
             android:name=".view.activity.OauthActivity"
             android:label="OauthActivity"
@@ -64,10 +62,25 @@
         <activity
             android:name=".view.activity.TwitterDetailActivity"
             android:label="@string/title_activity_twitter_detail"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <service
             android:name=".service.TweetPostService"
             android:exported="false" />
+
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.activity.BackImageActivity"
+            android:label="@string/title_activity_back_image"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="xyz.donot.roselin.view.activity.BackImageActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

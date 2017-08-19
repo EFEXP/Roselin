@@ -6,7 +6,10 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -24,8 +27,6 @@ import xyz.donot.roselin.util.extraUtils.*
 import xyz.donot.roselin.util.getTwitterInstance
 import xyz.donot.roselin.util.haveToken
 import xyz.donot.roselin.view.adapter.MainTimeLineAdapter
-
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -70,11 +71,20 @@ class MainActivity : AppCompatActivity() {
             if (!defaultSharedPreferences.getBoolean("quick_tweet",true)){editText_layout.visibility= View.GONE}
             setUpHeader()
             setUpDrawerEvent()
+            setUpView()
             InitialRequestPermission()
          }
 
 
 }
+
+    private fun setUpView() {
+        val uriString=defaultSharedPreferences.getString("BackGroundUri","")
+        if (!uriString.isNullOrBlank()){
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,   Uri.parse(uriString))
+            main_coordinator.background=BitmapDrawable(resources, bitmap)
+        }
+    }
 
     @SuppressLint("NewApi")
     private fun InitialRequestPermission() {

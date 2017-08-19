@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatDialogFragment
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +27,8 @@ import xyz.donot.roselin.view.activity.TwitterDetailActivity
 import xyz.donot.roselin.view.adapter.StatusAdapter
 import xyz.donot.roselin.view.custom.MyLoadingView
 
+
+
 abstract class TimeLineFragment : AppCompatDialogFragment() {
     val twitter by lazy { getTwitterInstance() }
     val adapter by lazy { StatusAdapter(activity, mutableListOf()) }
@@ -40,6 +43,10 @@ abstract class TimeLineFragment : AppCompatDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = inflater.inflate(R.layout.content_base_fragment, container, false)
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val dividerItemDecoration = DividerItemDecoration( recycler.context,
+                LinearLayoutManager(activity).orientation)
+        recycler.addItemDecoration(dividerItemDecoration)
+    //    dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider));
         recycler.layoutManager = LinearLayoutManager(activity)
         adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
         adapter.setOnLoadMoreListener({  loadMore(adapter) },recycler)

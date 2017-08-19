@@ -9,6 +9,7 @@
 
     <android.support.design.widget.CoordinatorLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/main_coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
     tools:context="xyz.donot.roselin.view.activity.MainActivity">

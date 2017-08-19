@@ -10,6 +10,14 @@
         android:key="quick_tweet"
         android:summary="ホームタイムラインのツイートバーを有効にします。"
         android:title="ツイートバー" />
+    <PreferenceScreen
+        android:title="背景変更"
+        android:summary="ホームタイムラインの背景を変更します。">
+
+        <intent android:action="xyz.donot.roselin.view.activity.BackImageActivity" />
+
+    </PreferenceScreen>
+
     <ListPreference
         android:key="list"
         android:title="ListPreference"
