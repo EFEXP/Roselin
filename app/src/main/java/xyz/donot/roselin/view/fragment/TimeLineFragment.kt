@@ -3,7 +3,10 @@ package xyz.donot.roselin.view.fragment
 
 import android.app.Activity
 import android.content.*
+import android.net.Uri
 import android.os.Bundle
+import android.support.customtabs.CustomTabsIntent
+import android.support.v4.content.ContextCompat
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatDialogFragment
@@ -134,7 +137,13 @@ abstract class TimeLineFragment : AppCompatDialogFragment() {
                                     })
                                 }
                                 "公式で見る"-> {
-
+                                    CustomTabsIntent.Builder()
+                                            .setShowTitle(true)
+                                            .addDefaultShareMenuItem()
+                                            .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                                            .setStartAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                                            .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build()
+                                            .launchUrl(context, Uri.parse("https://twitter.com/${item.user.screenName}/status/${item.id}"))
                                 }
                             }
 

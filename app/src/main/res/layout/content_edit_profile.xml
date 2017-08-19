@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  app:layout_behavior="@string/appbar_scrolling_view_behavior"
+  tools:context=".view.activity.EditProfileActivity"
+  tools:showIn="@layout/activity_edit_profile">
+
+  <ImageView
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:id="@+id/profile_banner"
+    android:layout_centerHorizontal="true"
+      android:scaleType="fitXY"
+
+    />
+
+  <ImageView
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:id="@+id/icon"
+    android:layout_alignBottom="@+id/profile_banner"
+    android:layout_centerHorizontal="true" />
+
+  <android.support.design.widget.TextInputLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentEnd="true"
+    android:layout_below="@+id/icon"
+    app:counterEnabled="true"
+    app:counterMaxLength="20"
+    android:id="@+id/user_name_"
+      app:theme="@style/AppTheme.Design"
+    >
+<android.support.design.widget.TextInputEditText
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:id="@+id/user_name"
+  android:hint="名前"
+  />
+  </android.support.design.widget.TextInputLayout>
+
+  <android.support.design.widget.TextInputLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/user_name_"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_alignRight="@+id/user_name_"
+    android:layout_alignEnd="@+id/user_name_"
+    android:id="@+id/web_"
+      app:theme="@style/AppTheme.Design"
+    >
+  <android.support.design.widget.TextInputEditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/web"
+    android:hint="URL"
+    />
+  </android.support.design.widget.TextInputLayout>
+  <android.support.design.widget.TextInputLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/web_"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_alignRight="@+id/web_"
+    android:layout_alignEnd="@+id/web_"
+    android:id="@+id/geo_"
+      app:theme="@style/AppTheme.Design"
+    >
+  <android.support.design.widget.TextInputEditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/geo"
+    android:hint="位置"
+    />
+
+  </android.support.design.widget.TextInputLayout>
+
+  <android.support.design.widget.TextInputLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/geo_"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentEnd="true"
+      app:theme="@style/AppTheme.Design"
+    >
+  <android.support.design.widget.TextInputEditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:inputType="textMultiLine"
+    android:ems="10"
+    android:minLines="3"
+    android:id="@+id/description"
+    app:counterEnabled="true"
+    app:counterMaxLength="160"
+    android:hint="詳細"
+    />
+  </android.support.design.widget.TextInputLayout>
+</RelativeLayout>

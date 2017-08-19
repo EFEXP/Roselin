@@ -46,7 +46,7 @@ class TweetPostService : IntentService("TweetPostService") {
     private fun notificate(int:Int) {
         val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val mNotification = NotificationCompat.Builder(this,"Sending")
-                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("送信中")
                 .setProgress(100,100,true)
                 .setContentText("ツイートを送信中…")

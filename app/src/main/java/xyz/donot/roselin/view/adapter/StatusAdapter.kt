@@ -80,7 +80,7 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
                 hasFixedSize()
             }
             mAdapter.setOnItemClickListener { adapter, _, position ->
-                val videoUrl: String? = getVideoURL(status.mediaEntities)
+                val videoUrl: String? = getVideoURL(item.mediaEntities)
                 if(videoUrl!=null){context.startActivity(Intent(context, VideoActivity::class.java).putExtra("video_url", videoUrl))}
                 else{ ( context as Activity).start<PictureActivity>(Bundle().apply {
                     putStringArrayList("picture_urls",getImageUrls(item))

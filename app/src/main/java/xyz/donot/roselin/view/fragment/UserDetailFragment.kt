@@ -16,7 +16,9 @@ import twitter4j.User
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.model.realm.DBAccount
+import xyz.donot.roselin.util.extraUtils.start
 import xyz.donot.roselin.util.getTwitterInstance
+import xyz.donot.roselin.view.activity.EditProfileActivity
 import xyz.donot.roselin.view.activity.PictureActivity
 import java.text.SimpleDateFormat
 
@@ -85,7 +87,7 @@ class UserDetailFragment: Fragment()
         }
         else{
             edit_profile.visibility=View.VISIBLE
-          //  edit_profile.setOnClickListener{  activity.start<EditProfileActivity>()}
+         edit_profile.setOnClickListener{  activity.start<EditProfileActivity>()}
         }
 
 

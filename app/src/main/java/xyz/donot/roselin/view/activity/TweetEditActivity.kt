@@ -155,7 +155,9 @@ class TweetEditActivity : AppCompatActivity() {
 
     }
 
-    fun addPhotos(uri: Uri){
+    private fun addPhotos(uri: Uri){
         mAdapter.addData(uri)
     }
+
+
 }

@@ -53,7 +53,7 @@
           android:layout_alignParentEnd="true"
           android:layout_alignParentRight="true"
           android:layout_alignBottom="@+id/icon_user"
-          android:text="edit_my_profile"
+          android:text="編集"
           android:visibility="gone"
           />
 
