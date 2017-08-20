@@ -7,7 +7,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatDialogFragment
 import android.support.v7.widget.DividerItemDecoration
@@ -24,7 +23,6 @@ import xyz.donot.quetzal.view.fragment.getMyId
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.util.extraUtils.newIntent
-import xyz.donot.roselin.util.getSerialized
 import xyz.donot.roselin.util.getTwitterInstance
 import xyz.donot.roselin.view.activity.TwitterDetailActivity
 import xyz.donot.roselin.view.adapter.StatusAdapter
@@ -67,32 +65,12 @@ abstract class TimeLineFragment : AppCompatDialogFragment() {
                 loadMore(adapter)
                 refresh.isRefreshing=false
             } }
+        //
+
         //クリックリスナー
-        adapter.setOnItemClickListener { adapter, view, position ->
+        adapter.setOnItemClickListener { adapter, _, position ->
             val status=adapter.data[position] as Status
             val item=  if (status.isRetweet){ status.retweetedStatus }else{ status }
-            class FavoriteTask : SafeAsyncTask<Twitter, Status>(){
-                override fun doTask(arg: Twitter): twitter4j.Status = arg.createFavorite(status.id)
-
-                override fun onSuccess(result: twitter4j.Status) {
-                    LocalBroadcastManager.getInstance(this@TimeLineFragment.context).sendBroadcast(Intent("Favorite").putExtra("Status",result.getSerialized()))
-                }
-
-                override fun onFailure(exception: Exception) {
-
-                }
-            }
-            class RetweetTask : SafeAsyncTask<Twitter, Status>(){
-                override fun doTask(arg: Twitter): twitter4j.Status = arg.retweetStatus(item.id)
-
-                override fun onSuccess(result: twitter4j.Status) {
-                    LocalBroadcastManager.getInstance(this@TimeLineFragment.context).sendBroadcast(Intent("Retweet").putExtra("Status",result.getSerialized()))
-                }
-
-                override fun onFailure(exception: Exception) {
-
-                }
-            }
             class DeleteTask: SafeAsyncTask<Twitter, Status>(){
                 override fun doTask(arg: Twitter): twitter4j.Status = arg.destroyStatus(status.id)
 
@@ -110,12 +88,6 @@ abstract class TimeLineFragment : AppCompatDialogFragment() {
                         .setItems(tweetItem, { _, int ->
                             val selectedItem=context.resources.getStringArray(tweetItem)[int]
                             when (selectedItem) {
-                                "いいね" -> {
-                                   FavoriteTask().execute(getTwitterInstance())
-                                }
-                                "RT" -> {
-                                  RetweetTask().execute(getTwitterInstance())
-                                }
                                 "削除" -> {
                                     DeleteTask().execute(getTwitterInstance())
                                 }

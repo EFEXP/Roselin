@@ -53,7 +53,7 @@ class EditProfileActivity : AppCompatActivity() {
      AlertDialog.Builder(this@EditProfileActivity)
             .setTitle("戻る")
             .setMessage("編集を削除して戻りますか？")
-            .setPositiveButton("はい",  { dialogInterface, i ->   super.onBackPressed() })
+            .setPositiveButton("はい",  { _,  _->   super.onBackPressed() })
             .setNegativeButton("いいえ",{ dialogInterface, i -> dialogInterface.cancel()})
             .show()
   }
@@ -166,7 +166,7 @@ class EditProfileActivity : AppCompatActivity() {
                 } else if (bannerUri != null) {
                     object : SafeAsyncTask<Twitter,Unit>(){
                         override fun doTask(arg: Twitter): Unit {
-                            return  arg.updateProfileBanner(File(getPath(this@EditProfileActivity, iconUri!!)))
+                            return  arg.updateProfileBanner(File(getPath(this@EditProfileActivity, bannerUri!!)))
                         }
 
                         override fun onSuccess(result: Unit) {

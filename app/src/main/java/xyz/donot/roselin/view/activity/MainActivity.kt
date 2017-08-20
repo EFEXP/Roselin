@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
             }
             //view
             fab.setOnClickListener{start<TweetEditActivity>()}
-            if (!defaultSharedPreferences.getBoolean("quick_tweet",true)){editText_layout.visibility= View.GONE}
+            if (!defaultSharedPreferences.getBoolean("quick_tweet",true)){ editText_layout.visibility= View.GONE}
             setUpHeader()
             setUpDrawerEvent()
             setUpView()

@@ -7,7 +7,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.media.MediaScannerConnection
 import android.net.Uri
-import android.support.v7.app.NotificationCompat
+import android.support.v4.app.NotificationCompat
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.LayoutInflater

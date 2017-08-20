@@ -41,7 +41,7 @@ class TweetEditActivity : AppCompatActivity() {
         setContentView(R.layout.activity_tweet_edit)
         setSupportActionBar(toolbar)
        tvTextCounter.setEditText(editText_status)
-        tvTextCounter.setCharCountChangedListener { i, b ->
+        tvTextCounter.setCharCountChangedListener {_, b ->
            if (b){send_status.isEnabled=false}
         }
         val manager = LinearLayoutManager(this@TweetEditActivity).apply { orientation = LinearLayoutManager.HORIZONTAL }
@@ -71,7 +71,7 @@ class TweetEditActivity : AppCompatActivity() {
 
 
 
-        mAdapter.setOnItemClickListener { adapter, view, position ->
+        mAdapter.setOnItemClickListener { _, _, position ->
             val item=mAdapter.getItem(position)
             val color=ContextCompat.getColor(this@TweetEditActivity,R.color.colorPrimary)
             AlertDialog.Builder(this@TweetEditActivity)  .setTitle("写真")
@@ -87,7 +87,7 @@ class TweetEditActivity : AppCompatActivity() {
                             setAllowedGestures(UCropActivity.SCALE, UCropActivity.SCALE,UCropActivity.SCALE)
                         })
                         .start(this@TweetEditActivity)
-            }) .setNegativeButton("削除", { dialogInterface, i ->
+            }) .setNegativeButton("削除", { _,_ ->
                 mAdapter.remove(position)
             })
                     .show()
@@ -96,7 +96,7 @@ class TweetEditActivity : AppCompatActivity() {
         text_tools.onClick{
             val item=R.array.text_tools
             AlertDialog.Builder(this@TweetEditActivity)
-                    .setItems(item, { dialogInterface, int ->
+                    .setItems(item, { _, int ->
                         val selectedItem=resources.getStringArray(item)[int]
                         when (selectedItem) {
                             "突然の死"->{

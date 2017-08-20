@@ -70,6 +70,7 @@ class HomeTimeLineFragment :TimeLineFragment(){
 
         }
     }
+    //Receiver
     inner class StatusReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
 

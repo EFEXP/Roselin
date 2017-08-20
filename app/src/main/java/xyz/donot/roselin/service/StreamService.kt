@@ -19,12 +19,26 @@ class StreamService : IntentService("StreamService") {
     private fun handleActionStream(){
         val stream = TwitterStreamFactory().getInstance(twitter.authorization)
         StreamCreateUtil.addStatusListener(stream,MyStreamAdapter())
+        stream.addConnectionLifeCycleListener(MyConnectionListener())
         stream.user()
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
+    }
+    inner class MyConnectionListener:ConnectionLifeCycleListener{
+        override fun onConnect() {
+            LocalBroadcastManager.getInstance(this@StreamService).sendBroadcast(Intent("OnConnect"))
+        }
+
+        override fun onCleanUp() {
+            LocalBroadcastManager.getInstance(this@StreamService).sendBroadcast(Intent("OnCleanUp"))
+        }
+
+        override fun onDisconnect() {
+            LocalBroadcastManager.getInstance(this@StreamService).sendBroadcast(Intent("OnDisconnect"))
+        }
     }
     inner class MyStreamAdapter: UserStreamAdapter(){
 
@@ -44,6 +58,8 @@ class StreamService : IntentService("StreamService") {
 
         override fun onFavorite(source: User, target: User, favoritedStatus: Status) {
             super.onFavorite(source, target, favoritedStatus)
+            logd("Favorite",source.name+"to"+target.name )
+            LocalBroadcastManager.getInstance(this@StreamService).sendBroadcast(Intent("OnFavorited").putExtra("FavoritedStatus",favoritedStatus.getSerialized()))
         }
     }
 }
