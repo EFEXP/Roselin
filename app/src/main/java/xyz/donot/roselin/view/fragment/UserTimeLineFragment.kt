@@ -13,13 +13,11 @@ import kotlinx.android.synthetic.main.person_item.view.*
 import twitter4j.*
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
-import xyz.donot.roselin.util.extraUtils.async
-import xyz.donot.roselin.util.extraUtils.inflate
-import xyz.donot.roselin.util.extraUtils.mainThread
-import xyz.donot.roselin.util.extraUtils.show
+import xyz.donot.roselin.util.extraUtils.*
 import xyz.donot.roselin.util.getLinkList
 import xyz.donot.roselin.util.getMyId
 import xyz.donot.roselin.util.getTagLinkList
+import xyz.donot.roselin.view.activity.EditProfileActivity
 import xyz.donot.roselin.view.activity.PictureActivity
 import java.text.SimpleDateFormat
 
@@ -67,10 +65,10 @@ class UserTimeLineFragment:TimeLineFragment()
         v.tv_tweets.text=user.statusesCount.toString()
 
         v. tv_date.text= "${SimpleDateFormat("yyyy/MM/dd").format(user.createdAt)}に開始"
-       // v. listed.text="${user.listedCount}個のリストに追加されています"
         v.tv_follower.text=user.followersCount.toString()
         v.tv_friends.text=user.friendsCount.toString()
         v.tv_fav.text=user.favouritesCount.toString()
+        v.bt_list.text=user.listedCount.toString()
 
         //Linkable
         LinkBuilder.on( v.tv_web).addLinks(context.getLinkList()).build()
@@ -79,18 +77,38 @@ class UserTimeLineFragment:TimeLineFragment()
             if(user.id!= getMyId()) {
               //  v. follow_button.visibility=View.VISIBLE
                 v.tv_isfollowed.show()
+                v.bt_follow.show()
                 class RelationshipTask: SafeAsyncTask<Twitter, Relationship>(){
                     override fun doTask(arg: Twitter): Relationship =
                             twitter.showFriendship(getMyId(),user.id)
 
                     override fun onSuccess(result: Relationship) {
-                        if (result.isSourceFollowingTarget) {}
+                        if (result.isSourceFollowingTarget) {
+                            v.bt_follow.isChecked=true
+                            v.bt_follow.onClick {
+                                    if (v.bt_follow.isChecked) {
+                                        async { val t = twitter.destroyFriendship(user.id)
+                                        mainThread { if (t != null) v.bt_follow.isChecked = false }  }
+                                    }
+                                    else{
+                                        async {
+                                            val t= twitter.createFriendship(user.id)
+                                            mainThread { if (t!=null)v.bt_follow.isChecked=true  }
+                                        }
 
-                        if(result.isTargetFollowingSource){
-                            v.tv_isfollowed.text="フォローされています"
+                                }
+                            }
+
                         }
                         else{
-                            v.tv_isfollowed.text= "フォローされていません"
+                            v.bt_follow.isChecked=false
+                        }
+
+                        if(result.isTargetFollowingSource){
+                            v.tv_isfollowed.setText(R.string.follows_you)
+                        }
+                        else{
+                            v.tv_isfollowed.setText(R.string.not_following_you)
                         }
                     }
 
@@ -101,8 +119,8 @@ class UserTimeLineFragment:TimeLineFragment()
                 RelationshipTask().execute(twitter)
             }
             else{
-              //  v. edit_profile.hide()
-            //    v.  edit_profile.setOnClickListener{  activity.start<EditProfileActivity>()}
+              v. bt_edit.show()
+            v.bt_edit.setOnClickListener{  activity.start<EditProfileActivity>()}
             }
       return v
 

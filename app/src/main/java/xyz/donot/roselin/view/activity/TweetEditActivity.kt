@@ -30,11 +30,11 @@ import java.util.*
 
 
 class TweetEditActivity : AppCompatActivity() {
-    var croppingUri:Uri?= null
-    val statusTxt: String by lazy { intent.getStringExtra("status_txt") }
-    val  statusId by lazy {  intent.getLongExtra("status_id",0) }
-    val mAdapter=TwitterImageAdapter()
-    var screenName :String=""
+    private var croppingUri:Uri?= null
+    private val statusTxt: String by lazy { intent.getStringExtra("status_txt") }
+    private val  statusId by lazy {  intent.getLongExtra("status_id",0) }
+    private val mAdapter=TwitterImageAdapter()
+    private var screenName :String=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

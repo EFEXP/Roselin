@@ -41,7 +41,9 @@
             android:name=".view.activity.PictureActivity"
             android:label="@string/title_activity_picture"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.activity.VideoActivity" />
+        <activity
+            android:name=".view.activity.VideoActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".service.StreamService"
@@ -82,9 +84,11 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="xyz.donot.roselin.view.activity.BackImageActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.activity.UserListActivity"></activity>
     </application>
 
 </manifest>

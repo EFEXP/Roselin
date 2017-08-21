@@ -165,7 +165,7 @@ class EditProfileActivity : AppCompatActivity() {
 
                 } else if (bannerUri != null) {
                     object : SafeAsyncTask<Twitter,Unit>(){
-                        override fun doTask(arg: Twitter): Unit {
+                        override fun doTask(arg: Twitter) {
                             return  arg.updateProfileBanner(File(getPath(this@EditProfileActivity, bannerUri!!)))
                         }
 

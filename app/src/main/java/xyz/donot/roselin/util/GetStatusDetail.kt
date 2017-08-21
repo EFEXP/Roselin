@@ -114,14 +114,11 @@ fun getRelativeTime(create: Date): String {
     val datetime1 = System.currentTimeMillis()
     val datetime2 = create.time
     val Difference = datetime1 - datetime2
-    return if (Difference < 60000L) {
-        "%d秒前".format(TimeUnit.MILLISECONDS.toSeconds(Difference))
-    } else if (Difference < 3600000L) {
-        "%d分前".format(TimeUnit.MILLISECONDS.toMinutes(Difference))
-    } else if (Difference < 86400000L) {
-        "%d時間前".format(TimeUnit.MILLISECONDS.toHours(Difference))
-    } else {
-        "%d日前".format(TimeUnit.MILLISECONDS.toDays(Difference))
+    return when {
+        Difference < 60000L -> "%d秒前".format(TimeUnit.MILLISECONDS.toSeconds(Difference))
+        Difference < 3600000L -> "%d分前".format(TimeUnit.MILLISECONDS.toMinutes(Difference))
+        Difference < 86400000L -> "%d時間前".format(TimeUnit.MILLISECONDS.toHours(Difference))
+        else -> "%d日前".format(TimeUnit.MILLISECONDS.toDays(Difference))
     }
 }
 fun getClientName(source: String): String {

@@ -2,8 +2,6 @@ package xyz.donot.roselin.util.extraUtils
 
 import android.content.Intent
 import android.os.BatteryManager
-import android.os.Environment
-import android.os.StatFs
 
 
 fun getBatteryLevel(batteryIntent: Intent): Float {

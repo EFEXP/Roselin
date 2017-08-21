@@ -16,6 +16,7 @@ import xyz.donot.roselin.view.adapter.UserTimeLineAdapter
 class UserActivity : AppCompatActivity() {
     private  val userId: Long by lazy { intent.getLongExtra("user_id",0L) }
     private  val screenName: String by lazy { intent.getStringExtra("screen_name") }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
@@ -48,20 +49,24 @@ class UserActivity : AppCompatActivity() {
     }
     fun setUp(user: User){
       Picasso.with(applicationContext).load(user.profileBannerIPadRetinaURL).into(banner)
-
         banner.setOnClickListener{startActivity(Intent(applicationContext, PictureActivity::class.java)
                 .putStringArrayListExtra("picture_urls",arrayListOf(user.profileBannerIPadRetinaURL)))}
         toolbar.title=user.screenName
-        //toolbar.subtitle=user.screenName
         val adapter= UserTimeLineAdapter(supportFragmentManager)
         adapter.user=user
         viewpager_user.adapter=adapter
         viewpager_user.offscreenPageLimit=1
         tabs_user.setupWithViewPager(viewpager_user)
-
-
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         }
 
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
 
 
 
