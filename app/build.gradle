@@ -15,7 +15,6 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'realm-android'
 
 repositories {
-    maven { url "https://maven.google.com" }
     maven { url 'https://maven.fabric.io/public' }
     mavenCentral()
     maven { url "https://jitpack.io" }
@@ -24,7 +23,7 @@ repositories {
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    buildToolsVersion "26.0.1"
     android.defaultConfig.vectorDrawables.useSupportLibrary = true
     defaultConfig {
         applicationId "xyz.donot.roselin"
@@ -54,17 +53,17 @@ android {
 
 dependencies {
     def twitter4j = "4.0.6"
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile "org.twitter4j:twitter4j-core:${twitter4j}"
     compile "org.twitter4j:twitter4j-media-support:${twitter4j}"
     compile "org.twitter4j:twitter4j-stream:${twitter4j}"
     def support = "26.0.1"
     compile "com.android.support:appcompat-v7:${support}"
-   // compile "com.android.support:palette-v7:${support}"
+    // compile "com.android.support:palette-v7:${support}"
     compile "com.android.support:design:${support}"
     compile "com.android.support:support-v4:${support}"
     compile "com.android.support:preference-v7:${support}"
-   // compile "com.android.support:cardview-v7:${support}"
+    compile "com.android.support:cardview-v7:${support}"
     compile "com.android.support:customtabs:${support}"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     compile('com.twitter.sdk.android:twitter:3.1.1@aar') {

@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentManager
 import xyz.donot.roselin.view.custom.DynamicViewPager
 import xyz.donot.roselin.view.fragment.PictureFragment
 
-class PicturePagerAdapter(fm: FragmentManager, var pictureUrls: ArrayList<String>) : DynamicViewPager(fm) {
+class PicturePagerAdapter(fm: FragmentManager, private var pictureUrls: ArrayList<String>) : DynamicViewPager(fm) {
 
     override fun getItem(i: Int): Fragment {
         val p = PictureFragment()

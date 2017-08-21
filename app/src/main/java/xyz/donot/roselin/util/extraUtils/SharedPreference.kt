@@ -2,7 +2,6 @@ package xyz.donot.roselin.util.extraUtils
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.os.Build
 import android.preference.PreferenceManager
 
 val Context.defaultSharedPreferences: SharedPreferences
@@ -76,9 +75,5 @@ private fun SharedPreferences.getEditor(): SharedPreferences.Editor {
 }
 
 private fun apply(editor: SharedPreferences.Editor) {
-  if (Build.VERSION.SDK_INT < Build.VERSION_CODES.GINGERBREAD) {
-    editor.commit()
-  } else {
     editor.apply()
-  }
 }

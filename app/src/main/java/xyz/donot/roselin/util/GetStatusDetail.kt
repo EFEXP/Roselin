@@ -126,10 +126,10 @@ fun getRelativeTime(create: Date): String {
 }
 fun getClientName(source: String): String {
     val tokens = source.split("[<>]".toRegex()).dropLastWhile(String::isEmpty).toTypedArray()
-    if (tokens.size > 1) {
-        return tokens[2]
+    return if (tokens.size > 1) {
+        tokens[2]
     } else {
-        return tokens[0]
+        tokens[0]
     }
 }
 fun getExpandedText(status: Status): String {
@@ -139,5 +139,14 @@ fun getExpandedText(status: Status): String {
         val m = p.matcher(text)
         text = m.replaceAll(url.expandedURL)
     }
+
+    if (status.mediaEntities.isNotEmpty()) {
+        status.mediaEntities.forEach {
+            val p = Pattern.compile(it.url)
+            val m = p.matcher(text)
+            text = m.replaceAll("")
+        }
+    }
+
     return text
 }

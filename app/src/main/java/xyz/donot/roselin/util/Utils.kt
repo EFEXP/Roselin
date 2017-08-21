@@ -57,6 +57,12 @@ fun getOfficialInstance(context: Context): twitter4j.Twitter {
     return TwitterFactory(builder.build()).instance
 }
 
+fun getMyId(): Long{
+    Realm.getDefaultInstance().use {
+        return  it.where(DBAccount::class.java).equalTo("isMain",true).findFirst().id
+    }
+}
+
 fun haveToken(): Boolean {
     Realm.getDefaultInstance().use {
         logd( "AddedAccounts","You have ${it.where(DBAccount::class.java).count()} accounts!")

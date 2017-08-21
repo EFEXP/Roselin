@@ -19,10 +19,10 @@ import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import twitter4j.Status
 import twitter4j.Twitter
-import xyz.donot.quetzal.view.fragment.getMyId
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.util.extraUtils.newIntent
+import xyz.donot.roselin.util.getMyId
 import xyz.donot.roselin.util.getTwitterInstance
 import xyz.donot.roselin.view.activity.TwitterDetailActivity
 import xyz.donot.roselin.view.adapter.StatusAdapter

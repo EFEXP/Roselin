@@ -16,8 +16,7 @@ inline fun <reified T : Context> Context.newIntent(flags: Int): Intent {
     return intent
 }
 
-inline fun <reified T : Context> Context.newIntent(extras: Bundle): Intent =
-        newIntent<T>(0, extras)
+inline fun <reified T : Context> Context.newIntent(extras: Bundle): Intent = newIntent<T>(0, extras)
 
 inline fun <reified T : Context> Context.newIntent(flags: Int, extras: Bundle): Intent {
     val intent = newIntent<T>(flags)

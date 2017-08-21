@@ -19,11 +19,11 @@ import kotlinx.android.synthetic.main.navigation_header.*
 import twitter4j.Status
 import twitter4j.Twitter
 import twitter4j.User
-import xyz.donot.quetzal.view.fragment.getMyId
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.service.StreamService
 import xyz.donot.roselin.util.extraUtils.*
+import xyz.donot.roselin.util.getMyId
 import xyz.donot.roselin.util.getTwitterInstance
 import xyz.donot.roselin.util.haveToken
 import xyz.donot.roselin.view.adapter.MainTimeLineAdapter
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
 
     @SuppressLint("NewApi")
     private fun InitialRequestPermission() {
-        fromApi(23, true){
+        fromApi(23){
             val EX_WRITE= ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED
             val LOCATION=ContextCompat.checkSelfPermission(applicationContext,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED
             val EX_READ=ContextCompat.checkSelfPermission(applicationContext,Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED
@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity() {
         navigation_drawer.setNavigationItemSelectedListener({
                 when (it.itemId) {
                     R.id.my_profile -> {
-                       startActivity(newIntent<UserActivity>(Bundle().apply { putLong("user_id", getMyId()) }))
+                        start<UserActivity>(Bundle().apply { putLong("user_id", getMyId()) })
                         drawer_layout.closeDrawers()
                     }
                     R.id.action_help -> {

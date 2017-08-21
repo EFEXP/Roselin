@@ -3,10 +3,7 @@ package xyz.donot.roselin.view.adapter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.support.customtabs.CustomTabsIntent
-import android.support.v4.content.ContextCompat
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.AppCompatImageButton
 import android.support.v7.widget.LinearLayoutManager
@@ -16,7 +13,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
 import com.squareup.picasso.Picasso
 import twitter4j.Status
@@ -103,7 +99,7 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
             setText(R.id.textview_via, getClientName(item.source))
             setText(R.id.textview_date, getRelativeTime(item.createdAt))
             setText(R.id.textview_count, "RT:${item.retweetCount} いいね:${item.favoriteCount}")
-            LinkBuilder.on(getView(R.id.textview_text)).addLinks(getLinkList(context)).build()
+            LinkBuilder.on(getView(R.id.textview_text)).addLinks(context.getTagLinkList()).build()
             //Listener
             getView<ImageView>(R.id.imageview_icon).setOnClickListener{
                 val intent=context.intent<UserActivity>()
@@ -129,7 +125,7 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
                 if(!item.isRetweeted){
                 RetweetTask().execute(getTwitterInstance())}}
         }
-        //mediaTypet
+        //mediaType
         val statusMediaIds=getImageUrls(item)
         if(statusMediaIds.isNotEmpty()){
             val mAdapter = TweetCardPicAdapter(statusMediaIds)
@@ -161,35 +157,5 @@ class StatusAdapter(val context: Context,list:List<Status>) : BaseQuickAdapter<S
 
 
     }
-}
-fun getLinkList(context: Context) :MutableList<Link> {
-    return   listOf<Link>(
-            Link(xyz.donot.roselin.util.Regex.MENTION_PATTERN)
-                    .setUnderlined(false)
-                    .setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
-                    .setOnClickListener {
-                       context.startActivity(Intent(context, UserActivity::class.java).putExtra("screen_name", it.replace("@","")))
-                    }
-            ,
-            Link(xyz.donot.roselin.util.Regex.VALID_URL)
-                    .setUnderlined(false)
-                    .setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
-                    .setOnClickListener {
-
-                            CustomTabsIntent.Builder()
-                                    .setShowTitle(true)
-                                    .addDefaultShareMenuItem()
-                                    .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                                    .setStartAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                                    .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build()
-                                    .launchUrl(context, Uri.parse(it))
-                    }
-            ,
-            Link(xyz.donot.roselin.util.Regex.HASHTAG_PATTERN)
-                    .setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
-                    .setOnClickListener {
-
-                    }
-    ).toMutableList()
 }
 

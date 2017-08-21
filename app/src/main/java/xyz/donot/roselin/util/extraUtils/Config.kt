@@ -3,7 +3,7 @@ package xyz.donot.roselin.util.extraUtils
 import android.util.Log
 
 
-class QuetzalConfig {
+class RoselinConfig {
     companion object {
         var logLevel = Log.ASSERT
         var logEnabled: Boolean
