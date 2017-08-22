@@ -19,6 +19,7 @@ import xyz.donot.roselin.util.getMyId
 import xyz.donot.roselin.util.getTagLinkList
 import xyz.donot.roselin.view.activity.EditProfileActivity
 import xyz.donot.roselin.view.activity.PictureActivity
+import xyz.donot.roselin.view.activity.UserListActivity
 import java.text.SimpleDateFormat
 
 class UserTimeLineFragment:TimeLineFragment()
@@ -29,17 +30,15 @@ class UserTimeLineFragment:TimeLineFragment()
        val v=setUpViews()
        adapter.setHeaderView(v)
     }
-    override fun loadMore(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
-        async {
-            val result=twitter.getUserTimeline(user.id,Paging(page))
-            if (result!=null){
-                mainThread {
-                    adapter.addData(result)
-                    adapter.loadMoreComplete()
-                }}
-        }
+    override fun loadMore(adapter: BaseQuickAdapter<Status, BaseViewHolder>) = async {
+        val result=twitter.getUserTimeline(user.id,Paging(page))
+        if (result!=null){
+            mainThread {
+                adapter.addData(result)
+                adapter.loadMoreComplete()
+            }}
     }
-    override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {}
+    override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) = Unit
     /*override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
         async {
             val result=twitter.getUserTimeline(user.id, Paging(adapter.data[0].id))
@@ -63,19 +62,28 @@ class UserTimeLineFragment:TimeLineFragment()
         v.tv_web.text=user.urlEntity.expandedURL
         v.tv_geo.text=user.location
         v.tv_tweets.text=user.statusesCount.toString()
-
         v. tv_date.text= "${SimpleDateFormat("yyyy/MM/dd").format(user.createdAt)}に開始"
         v.tv_follower.text=user.followersCount.toString()
         v.tv_friends.text=user.friendsCount.toString()
         v.tv_fav.text=user.favouritesCount.toString()
         v.bt_list.text=user.listedCount.toString()
-
         //Linkable
         LinkBuilder.on( v.tv_web).addLinks(context.getLinkList()).build()
         LinkBuilder.on( v.tv_description).addLinks(context.getTagLinkList()).build()
 
+        v.tv_friends.setOnClickListener {
+            val b=Bundle()
+            b.putLong("userId",user.id)
+            b.putBoolean("isFriend",true)
+            activity.start<UserListActivity>(b)
+        }
+        v.tv_follower.setOnClickListener {
+            val b=Bundle()
+            b.putLong("userId",user.id)
+            b.putBoolean("isFriend",false)
+            activity.start<UserListActivity>(b)
+        }
             if(user.id!= getMyId()) {
-              //  v. follow_button.visibility=View.VISIBLE
                 v.tv_isfollowed.show()
                 v.bt_follow.show()
                 class RelationshipTask: SafeAsyncTask<Twitter, Relationship>(){
@@ -112,9 +120,7 @@ class UserTimeLineFragment:TimeLineFragment()
                         }
                     }
 
-                    override fun onFailure(exception: Exception) {
-
-                    }
+                    override fun onFailure(exception: Exception) = Unit
                 }
                 RelationshipTask().execute(twitter)
             }

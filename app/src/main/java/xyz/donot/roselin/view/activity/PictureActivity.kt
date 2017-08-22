@@ -60,38 +60,32 @@ class PictureActivity : AppCompatActivity() {
     }
 
     //実際のセーブ処理
-    private fun Save(stringURL:String){
-        Picasso.with(this).load( stringURL).into(object :com.squareup.picasso.Target{
-            override fun onBitmapFailed(p0: Drawable?) {
-            }
-            override fun onBitmapLoaded(p0: Bitmap, p1: Picasso.LoadedFrom?) {
-                val file  = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                try{
-                    val name= Date().time
-                    val attachName = File("$file/", "$name.jpg")
-                    FileOutputStream(attachName).use {
-                        p0.compress(Bitmap.CompressFormat.JPEG,100,it)
-                        it.flush()
-                      toast("保存しました")
-                    }
-
-                    val values=  ContentValues().apply {
-                        put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-                        put(MediaStore.Images.Media.TITLE,"$file/$name.jpg")
-                        put("_data",attachName.absolutePath )
-                    }
-                    contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+    private fun Save(stringURL:String) = Picasso.with(this).load( stringURL).into(object :com.squareup.picasso.Target{
+        override fun onBitmapFailed(p0: Drawable?) = Unit
+        override fun onBitmapLoaded(p0: Bitmap, p1: Picasso.LoadedFrom?) {
+            val file  = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+            try{
+                val name= Date().time
+                val attachName = File("$file/", "$name.jpg")
+                FileOutputStream(attachName).use {
+                    p0.compress(Bitmap.CompressFormat.JPEG,100,it)
+                    it.flush()
+                  toast("保存しました")
                 }
-                catch(ex: IOException){
-                    ex.printStackTrace()
+
+                val values=  ContentValues().apply {
+                    put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+                    put(MediaStore.Images.Media.TITLE,"$file/$name.jpg")
+                    put("_data",attachName.absolutePath )
                 }
+                contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
             }
-            override fun onPrepareLoad(p0: Drawable?) {
-
+            catch(ex: IOException){
+                ex.printStackTrace()
             }
+        }
+        override fun onPrepareLoad(p0: Drawable?) = Unit
 
-        })
-
-    }
+    })
 
 }

@@ -50,9 +50,7 @@ class MainActivity : AppCompatActivity() {
                             editText_status.hideSoftKeyboard()
                             editText_status.setText("")
                         }
-                        override fun onFailure(exception: Exception) {
-                            editText_status.hideSoftKeyboard()
-                        }
+                        override fun onFailure(exception: Exception) = editText_status.hideSoftKeyboard()
                     }
                     SendTask(editText_status.editableText.toString()).execute(getTwitterInstance())
 
@@ -87,18 +85,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("NewApi")
-    private fun InitialRequestPermission() {
-        fromApi(23){
-            val EX_WRITE= ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED
-            val LOCATION=ContextCompat.checkSelfPermission(applicationContext,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED
-            val EX_READ=ContextCompat.checkSelfPermission(applicationContext,Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED
-            if(!(EX_WRITE&&EX_READ&&LOCATION)){
-                requestPermissions(
-                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE
-                                ,Manifest.permission.READ_EXTERNAL_STORAGE
-                                ,Manifest.permission.ACCESS_FINE_LOCATION)
-                        ,REQUEST_WRITE_READ)
-            }
+    private fun InitialRequestPermission() = fromApi(23){
+        val EX_WRITE= ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED
+        val LOCATION=ContextCompat.checkSelfPermission(applicationContext,Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED
+        val EX_READ=ContextCompat.checkSelfPermission(applicationContext,Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED
+        if(!(EX_WRITE&&EX_READ&&LOCATION)){
+            requestPermissions(
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            ,Manifest.permission.READ_EXTERNAL_STORAGE
+                            ,Manifest.permission.ACCESS_FINE_LOCATION)
+                    ,REQUEST_WRITE_READ)
         }
     }
 
@@ -111,45 +107,40 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun setUpDrawerEvent() {
-        navigation_drawer.setNavigationItemSelectedListener({
-                when (it.itemId) {
-                    R.id.my_profile -> {
-                        start<UserActivity>(Bundle().apply { putLong("user_id", getMyId()) })
-                        drawer_layout.closeDrawers()
-                    }
-                    R.id.action_help -> {
-                      //  HelpFragment().show(supportFragmentManager,"")
-                        drawer_layout.closeDrawers()
-                    }
-                    R.id.action_setting -> {
-                        start<SettingsActivity>()
-                        drawer_layout.closeDrawers()
-                    }
-                    R.id.action_account -> {
-                  //      startForResult<AccountSettingActivity>(0)
-                        drawer_layout.closeDrawers()
-                    }
-                    R.id.action_list -> {
-                   //     start<ListsActivity>(Bundle().apply { putLong("user_id",getMyId()) })
-                        drawer_layout.closeDrawers()
-                    }
-                    R.id.action_whats_new -> {
-                    //    onCustomTabEvent("http://donot.xyz/")
-                        drawer_layout.closeDrawers()
-                    }
+    private fun setUpDrawerEvent() = navigation_drawer.setNavigationItemSelectedListener({
+            when (it.itemId) {
+                R.id.my_profile -> {
+                    start<UserActivity>(Bundle().apply { putLong("user_id", getMyId()) })
+                    drawer_layout.closeDrawers()
                 }
-            true
-        })
-
-    }
+                R.id.action_help -> {
+                  //  HelpFragment().show(supportFragmentManager,"")
+                    drawer_layout.closeDrawers()
+                }
+                R.id.action_setting -> {
+                    start<SettingsActivity>()
+                    drawer_layout.closeDrawers()
+                }
+                R.id.action_account -> {
+              //      startForResult<AccountSettingActivity>(0)
+                    drawer_layout.closeDrawers()
+                }
+                R.id.action_list -> {
+               //     start<ListsActivity>(Bundle().apply { putLong("user_id",getMyId()) })
+                    drawer_layout.closeDrawers()
+                }
+                R.id.action_whats_new -> {
+                //    onCustomTabEvent("http://donot.xyz/")
+                    drawer_layout.closeDrawers()
+                }
+            }
+        true
+    })
 
 
     private fun setUpHeader(){
         class HeaderTask:SafeAsyncTask<Twitter,User>(){
-            override fun doTask(arg: Twitter): User {
-                return arg.verifyCredentials()
-            }
+            override fun doTask(arg: Twitter): User = arg.verifyCredentials()
 
             override fun onSuccess(result: User) {
                 Picasso.with(applicationContext).load(result.profileBannerIPadRetinaURL).into(my_header)
@@ -158,9 +149,7 @@ class MainActivity : AppCompatActivity() {
                 my_screen_name_header.text = "@${result.screenName}"
             }
 
-            override fun onFailure(exception: Exception) {
-
-            }
+            override fun onFailure(exception: Exception) = Unit
         }
         HeaderTask().execute(getTwitterInstance())
     }

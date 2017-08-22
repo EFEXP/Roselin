@@ -18,7 +18,7 @@ import xyz.donot.roselin.view.adapter.StatusAdapter
 
 
 class TwitterDetailActivity : AppCompatActivity() {
-    val  mAdapter by lazy { StatusAdapter(this@TwitterDetailActivity, arrayListOf()) }
+    val  mAdapter by lazy { StatusAdapter() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_twitter_detail)
@@ -32,9 +32,7 @@ class TwitterDetailActivity : AppCompatActivity() {
 
     fun loadReply(long: Long){
         class ConvTask:SafeAsyncTask<Twitter,Status>(){
-            override fun doTask(arg: Twitter): twitter4j.Status {
-                return  arg.showStatus(long)
-            }
+            override fun doTask(arg: Twitter): twitter4j.Status = arg.showStatus(long)
 
             override fun onSuccess(result: twitter4j.Status) {
                 mAdapter.addData(0,result)
@@ -44,9 +42,7 @@ class TwitterDetailActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(exception: Exception) {
-
-            }
+            override fun onFailure(exception: Exception) = Unit
         }
     ConvTask().execute(getTwitterInstance())
     }
@@ -61,25 +57,15 @@ class TwitterDetailActivity : AppCompatActivity() {
         logd("Tag",query.count.toString())
 
         class DiscussTask:SafeAsyncTask<Twitter,QueryResult>(){
-            override fun doTask(arg: Twitter): QueryResult{
-                return  twitter.search(query)
+            override fun doTask(arg: Twitter): QueryResult = twitter.search(query)
+
+            override fun onSuccess(result: QueryResult) = result.tweets.forEach {
+                if (it.inReplyToStatusId == id){mAdapter.addData(it)}
             }
 
-            override fun onSuccess(result: QueryResult) {
-                result.tweets.forEach {
-                    if (it.inReplyToStatusId == id){mAdapter.addData(it)}
-                }
-
-
-            }
-
-            override fun onFailure(exception: Exception) {
-
-            }
+            override fun onFailure(exception: Exception) = Unit
         }
         DiscussTask().execute(getTwitterInstance())
-
-
     }
     }
 

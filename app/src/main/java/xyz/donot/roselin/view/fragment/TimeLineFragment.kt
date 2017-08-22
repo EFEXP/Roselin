@@ -6,9 +6,9 @@ import android.content.*
 import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
+import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatDialogFragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -30,9 +30,9 @@ import xyz.donot.roselin.view.custom.MyLoadingView
 
 
 
-abstract class TimeLineFragment : AppCompatDialogFragment() {
+abstract class TimeLineFragment : Fragment() {
     val twitter by lazy { getTwitterInstance() }
-    val adapter by lazy { StatusAdapter(activity, mutableListOf()) }
+    val adapter by lazy { StatusAdapter() }
     abstract fun loadMore(adapter:BaseQuickAdapter<Status,BaseViewHolder>)
     abstract fun   pullToRefresh(adapter:BaseQuickAdapter<Status,BaseViewHolder>)
     var page: Int = 0
@@ -47,12 +47,11 @@ abstract class TimeLineFragment : AppCompatDialogFragment() {
         val dividerItemDecoration = DividerItemDecoration( recycler.context,
                 LinearLayoutManager(activity).orientation)
         recycler.addItemDecoration(dividerItemDecoration)
-    //    dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.divider));
         recycler.layoutManager = LinearLayoutManager(activity)
-        adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
+       // adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
         adapter.setOnLoadMoreListener({  loadMore(adapter) },recycler)
         adapter.setLoadMoreView(MyLoadingView())
-        adapter.emptyView=View.inflate(activity, R.layout.item_empty,null)
+       // adapter.emptyView=View.inflate(activity, R.layout.item_empty,null)
         recycler.adapter=adapter
         loadMore(adapter)
         refresh.setOnRefreshListener {
@@ -74,13 +73,9 @@ abstract class TimeLineFragment : AppCompatDialogFragment() {
             class DeleteTask: SafeAsyncTask<Twitter, Status>(){
                 override fun doTask(arg: Twitter): twitter4j.Status = arg.destroyStatus(status.id)
 
-                override fun onSuccess(result: twitter4j.Status) {
+                override fun onSuccess(result: twitter4j.Status) = Unit
 
-                }
-
-                override fun onFailure(exception: Exception) {
-
-                }
+                override fun onFailure(exception: Exception) = Unit
             }
             if( !(context as Activity).isFinishing){
                 val tweetItem=if(getMyId() ==status.user.id){ R.array.tweet_my_menu}else{R.array.tweet_menu}

@@ -15,11 +15,7 @@ class PicturePagerAdapter(fm: FragmentManager, private var pictureUrls: ArrayLis
         p.arguments = bundle
         return p
     }
-    override fun getCount(): Int {
-        return pictureUrls.count()
-    }
-    override fun getPageTitle(position: Int): CharSequence {
-        return position.toString()
-    }
+    override fun getCount(): Int = pictureUrls.count()
+    override fun getPageTitle(position: Int): CharSequence = position.toString()
 
 }

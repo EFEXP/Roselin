@@ -20,7 +20,7 @@
         app:riv_corner_radius="30dip"
         />
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_name"
         tools:layout_editor_absoluteX="76dp">
 
-        <com.klinker.android.link_builder.LinkConsumableTextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/tv_web"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
             android:maxLines="1"
             tools:text="https://github.com/EFEXP/Roselin" />
 
-        <com.klinker.android.link_builder.LinkConsumableTextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/tv_geo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
             tools:text="XXXXX県" />
     </LinearLayout>
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/tv_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
         android:layout_marginEnd="8dp" />
 
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/tv_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -151,7 +151,7 @@
 
     </LinearLayout>
 
-    <TextView
+    <android.support.v7.widget.AppCompatTextView
         android:id="@+id/tv_isfollowed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -196,7 +196,7 @@
             android:gravity="center"
             tools:text="Fav" />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/bt_list"
             android:layout_width="0dp"
             android:layout_height="match_parent"

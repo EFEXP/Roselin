@@ -18,13 +18,9 @@ class PictureFragment : Fragment() {
         val v = inflater.inflate(R.layout.fragment_picture, container, false)
         val image=v.findViewById<ImageView>(R.id.img)
         Picasso.with(activity).load(stringURL).into(image, object : Callback {
-            override fun onSuccess() {
-               activity.supportStartPostponedEnterTransition()
-            }
+            override fun onSuccess() = activity.supportStartPostponedEnterTransition()
 
-            override fun onError() {
-                activity.supportStartPostponedEnterTransition()
-            }
+            override fun onError() = activity.supportStartPostponedEnterTransition()
         })
 
 

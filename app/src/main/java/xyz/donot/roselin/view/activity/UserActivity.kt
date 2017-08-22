@@ -21,24 +21,16 @@ class UserActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
         class lookUpUserTask(private val userId:Long):SafeAsyncTask<Twitter,User>(){
-            override fun onSuccess(result: User) {
-                setUp(result)
-            }
+            override fun onSuccess(result: User) = setUp(result)
 
-            override fun onFailure(exception: Exception) {
-                toast(exception.localizedMessage)
-            }
+            override fun onFailure(exception: Exception) = toast(exception.localizedMessage)
 
             override fun doTask(arg: Twitter): User = arg.showUser(userId)
         }
         class lookUpUserNameTask(private val screenName:String):SafeAsyncTask<Twitter,User>(){
-            override fun onSuccess(result: User) {
-                setUp(result)
-            }
+            override fun onSuccess(result: User) = setUp(result)
 
-            override fun onFailure(exception: Exception) {
-                toast(exception.localizedMessage)
-            }
+            override fun onFailure(exception: Exception) = toast(exception.localizedMessage)
 
             override fun doTask(arg: Twitter): User = arg.showUser(screenName)
         }
@@ -55,7 +47,7 @@ class UserActivity : AppCompatActivity() {
         val adapter= UserTimeLineAdapter(supportFragmentManager)
         adapter.user=user
         viewpager_user.adapter=adapter
-        viewpager_user.offscreenPageLimit=1
+        viewpager_user.offscreenPageLimit=adapter.count
         tabs_user.setupWithViewPager(viewpager_user)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

@@ -57,9 +57,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
               saveToken(twitter)
           }
 
-          override fun failure(exception: TwitterException?) {
-            toast("失敗しました。")
-          }
+          override fun failure(exception: TwitterException?) = toast("失敗しました。")
 
       }
 
@@ -71,9 +69,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
 
         object : AsyncTask<Twitter, Void,Long>() {
-            override fun doInBackground(vararg params: Twitter):Long{
-                return params[0].verifyCredentials().id
-            }
+            override fun doInBackground(vararg params: Twitter):Long = params[0].verifyCredentials().id
 
             override fun onPostExecute(result: Long) {
                 super.onPostExecute(result)

@@ -7,9 +7,7 @@ class RoselinConfig {
     companion object {
         var logLevel = Log.ASSERT
         var logEnabled: Boolean
-            get() {
-                return logLevel < Log.ASSERT
-            }
+            get() = logLevel < Log.ASSERT
             set(value) {
                 logLevel = if (value) Log.VERBOSE else Log.ASSERT
             }

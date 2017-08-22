@@ -1,4 +1,4 @@
-package xyz.donot.quetzal.util
+package xyz.donot.roselin.util
 
 import android.content.ContentUris
 import android.content.Context
@@ -105,25 +105,19 @@ import android.provider.MediaStore
      * *
      * @return Whether the Uri authority is ExternalStorageProvider.
      */
-    fun isExternalStorageDocument(uri: Uri): Boolean {
-        return "com.android.externalstorage.documents" == uri.authority
-    }
+    fun isExternalStorageDocument(uri: Uri): Boolean = "com.android.externalstorage.documents" == uri.authority
 
     /**
      * @param uri The Uri to check.
      * *
      * @return Whether the Uri authority is DownloadsProvider.
      */
-    fun isDownloadsDocument(uri: Uri): Boolean {
-        return "com.android.providers.downloads.documents" == uri.authority
-    }
+    fun isDownloadsDocument(uri: Uri): Boolean = "com.android.providers.downloads.documents" == uri.authority
 
     /**
      * @param uri The Uri to check.
      * *
      * @return Whether the Uri authority is MediaProvider.
      */
-    fun isMediaDocument(uri: Uri): Boolean {
-        return "com.android.providers.media.documents" == uri.authority
-    }
+    fun isMediaDocument(uri: Uri): Boolean = "com.android.providers.media.documents" == uri.authority
 

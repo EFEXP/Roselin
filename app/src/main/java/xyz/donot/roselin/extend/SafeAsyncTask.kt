@@ -15,14 +15,12 @@ abstract class SafeAsyncTask<Arg,Result>:AsyncTask<Arg,Void,Result>(){
     protected abstract fun onSuccess(result: Result)
     protected abstract fun onFailure(exception: Exception)
 
-    override fun doInBackground(vararg p0: Arg): Result? {
-        return try {
-            doTask(p0[0])
-        } catch (e: Exception) {
-            exception = e
-            cancel(true)
-            null
-        }
+    override fun doInBackground(vararg p0: Arg): Result? = try {
+        doTask(p0[0])
+    } catch (e: Exception) {
+        exception = e
+        cancel(true)
+        null
     }
 
 
@@ -34,7 +32,5 @@ abstract class SafeAsyncTask<Arg,Result>:AsyncTask<Arg,Void,Result>(){
         exception = null
     }
 
-    override fun onPostExecute(result: Result) {
-        onSuccess(result)
-    }
+    override fun onPostExecute(result: Result) = onSuccess(result)
 }

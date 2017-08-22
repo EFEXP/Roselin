@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:label">
+        tools:replace="android:label"
+        android:fullBackupContent="@xml/backup_descriptor">
         <activity
             android:name=".view.activity.OauthActivity"
             android:label="OauthActivity"
@@ -88,7 +89,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.UserListActivity"></activity>
+        <activity android:name=".view.activity.UserListActivity"/>
     </application>
 
 </manifest>

@@ -9,29 +9,17 @@ fun Throwable.stackTraceString(): String = Log.getStackTraceString(this)
 private fun logMessageWithThreadName(message: String): String
         = "$message [thread:${threadName()}]"
 
-fun Context.logv(message: String) {
- logv(javaClass.simpleName, message)
-}
+fun Context.logv(message: String) = logv(javaClass.simpleName, message)
 
-fun Context.logd(message: String) {
- logd(javaClass.simpleName, message)
-}
+fun Context.logd(message: String) = logd(javaClass.simpleName, message)
 
-fun Context.logi(message: String) {
- logi(javaClass.simpleName, message)
-}
+fun Context.logi(message: String) = logi(javaClass.simpleName, message)
 
-fun Context.logw(message: String) {
- logw(javaClass.simpleName, message)
-}
+fun Context.logw(message: String) = logw(javaClass.simpleName, message)
 
-fun Context.loge(message: String) {
- loge(javaClass.simpleName, message)
-}
+fun Context.loge(message: String) = loge(javaClass.simpleName, message)
 
-fun Context.logf(message: String) {
- logf(javaClass.simpleName, message)
-}
+fun Context.logf(message: String) = logf(javaClass.simpleName, message)
 
 fun logv(tag: String, message: String, exception: Throwable? = null) {
  if (RoselinConfig.logLevel <= Log.VERBOSE) {
@@ -81,29 +69,17 @@ fun logf(tag: String, exception: Throwable?) {
  }
 }
 
-inline fun Context.logv(lazyMessage: () -> Any?) {
- logv(javaClass.simpleName, lazyMessage)
-}
+inline fun Context.logv(lazyMessage: () -> Any?) = logv(javaClass.simpleName, lazyMessage)
 
-inline fun Context.logd(lazyMessage: () -> Any?) {
- logd(javaClass.simpleName, lazyMessage)
-}
+inline fun Context.logd(lazyMessage: () -> Any?) = logd(javaClass.simpleName, lazyMessage)
 
-inline fun Context.logi(lazyMessage: () -> Any?) {
- logi(javaClass.simpleName, lazyMessage)
-}
+inline fun Context.logi(lazyMessage: () -> Any?) = logi(javaClass.simpleName, lazyMessage)
 
-inline fun Context.logw(lazyMessage: () -> Any?) {
- logw(javaClass.simpleName, lazyMessage)
-}
+inline fun Context.logw(lazyMessage: () -> Any?) = logw(javaClass.simpleName, lazyMessage)
 
-inline fun Context.loge(lazyMessage: () -> Any?) {
- loge(javaClass.simpleName, lazyMessage)
-}
+inline fun Context.loge(lazyMessage: () -> Any?) = loge(javaClass.simpleName, lazyMessage)
 
-inline fun Context.logf(lazyMessage: () -> Any?) {
- logf(javaClass.simpleName, lazyMessage)
-}
+inline fun Context.logf(lazyMessage: () -> Any?) = logf(javaClass.simpleName, lazyMessage)
 
 inline fun logv(tag: String, lazyMessage: () -> Any?, exception: Throwable? = null) {
  if (RoselinConfig.logLevel <= Log.VERBOSE) {

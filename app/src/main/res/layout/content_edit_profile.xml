@@ -42,7 +42,7 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:id="@+id/user_name"
-  android:hint="名前"
+  android:hint="@string/name_char_length"
   />
   </android.support.design.widget.TextInputLayout>
 
@@ -61,7 +61,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/web"
-    android:hint="URL"
+    android:hint="@string/optional_url"
     />
   </android.support.design.widget.TextInputLayout>
   <android.support.design.widget.TextInputLayout
@@ -79,7 +79,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/geo"
-    android:hint="位置"
+    android:hint="@string/optional_location"
     />
 
   </android.support.design.widget.TextInputLayout>
@@ -103,7 +103,7 @@
     android:id="@+id/description"
     app:counterEnabled="true"
     app:counterMaxLength="160"
-    android:hint="詳細"
+    android:hint="@string/optional_description"
     />
   </android.support.design.widget.TextInputLayout>
 </RelativeLayout>

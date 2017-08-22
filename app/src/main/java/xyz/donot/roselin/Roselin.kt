@@ -2,6 +2,7 @@ package xyz.donot.roselin
 
 import android.app.Application
 import android.app.UiModeManager
+import android.os.StrictMode
 import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatDelegate
 import com.crashlytics.android.Crashlytics
@@ -13,6 +14,8 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 import xyz.donot.roselin.model.realm.MyRealmMigration
 import java.io.FileNotFoundException
+
+
 
 class Roselin : Application() {
     private val TWITTER_KEY by lazy {
@@ -46,9 +49,13 @@ class Roselin : Application() {
         val design= if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("night",true)){ AppCompatDelegate.MODE_NIGHT_YES}
         else{AppCompatDelegate.MODE_NIGHT_NO}
 
-
         AppCompatDelegate.setDefaultNightMode(design)
         (getSystemService(UI_MODE_SERVICE)as UiModeManager).nightMode = UiModeManager.MODE_NIGHT_AUTO
+
+        StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
+                .detectAll()
+                .penaltyLog()
+                .build())
 
     }
 

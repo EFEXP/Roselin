@@ -17,14 +17,14 @@ import com.yalantis.ucrop.UCropActivity
 import kotlinx.android.synthetic.main.activity_tweet_edit.*
 import kotlinx.android.synthetic.main.content_tweet_edit.*
 import twitter4j.StatusUpdate
-import xyz.donot.quetzal.util.getPath
-import xyz.donot.quetzal.viewmodel.adapter.TwitterImageAdapter
 import xyz.donot.roselin.R
 import xyz.donot.roselin.service.TweetPostService
 import xyz.donot.roselin.util.extraUtils.newIntent
 import xyz.donot.roselin.util.extraUtils.onClick
+import xyz.donot.roselin.util.getPath
 import xyz.donot.roselin.util.getSerialized
 import xyz.donot.roselin.util.replace
+import xyz.donot.roselin.view.adapter.TwitterImageAdapter
 import java.io.File
 import java.util.*
 
@@ -33,7 +33,7 @@ class TweetEditActivity : AppCompatActivity() {
     private var croppingUri:Uri?= null
     private val statusTxt: String by lazy { intent.getStringExtra("status_txt") }
     private val  statusId by lazy {  intent.getLongExtra("status_id",0) }
-    private val mAdapter=TwitterImageAdapter()
+    private val mAdapter= TwitterImageAdapter()
     private var screenName :String=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -155,9 +155,7 @@ class TweetEditActivity : AppCompatActivity() {
 
     }
 
-    private fun addPhotos(uri: Uri){
-        mAdapter.addData(uri)
-    }
+    private fun addPhotos(uri: Uri) = mAdapter.addData(uri)
 
 
 }

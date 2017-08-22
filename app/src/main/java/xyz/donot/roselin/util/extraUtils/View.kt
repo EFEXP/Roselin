@@ -51,13 +51,9 @@ fun Int.dpToPx(): Int {
   return Math.round(px)
 }
 
-fun View.dpToPx(dp: Int): Int {
-  return (dp * this.dm.density + 0.5).toInt()
-}
+fun View.dpToPx(dp: Int): Int = (dp * this.dm.density + 0.5).toInt()
 
-fun View.pxToDp(px: Int): Int {
-  return (px / this.dm.density + 0.5).toInt()
-}
+fun View.pxToDp(px: Int): Int = (px / this.dm.density + 0.5).toInt()
 
 fun View.hideSoftKeyboard() {
   context.getInputMethodManager().hideSoftInputFromWindow(this.windowToken, 0)
@@ -75,44 +71,27 @@ fun EditText.toggleSoftKeyboard() {
   }
 }
 
-fun View.onClick(f: (View) -> Unit) {
-  this.setOnClickListener(f)
-}
+fun View.onClick(f: (View) -> Unit) = this.setOnClickListener(f)
 
-fun View.onLongClick(f: (View) -> Boolean) {
-  this.setOnLongClickListener(f)
-}
+fun View.onLongClick(f: (View) -> Boolean) = this.setOnLongClickListener(f)
 
-fun View.onTouchEvent(f: (View, MotionEvent) -> Boolean) {
-  this.setOnTouchListener(f)
-}
+fun View.onTouchEvent(f: (View, MotionEvent) -> Boolean) = this.setOnTouchListener(f)
 
-fun View.onKeyEvent(f: (View, Int, KeyEvent) -> Boolean) {
-  this.setOnKeyListener(f)
-}
+fun View.onKeyEvent(f: (View, Int, KeyEvent) -> Boolean) = this.setOnKeyListener(f)
 
-fun View.onFocusChange(f: (View, Boolean) -> Unit) {
-  this.setOnFocusChangeListener(f)
-}
+fun View.onFocusChange(f: (View, Boolean) -> Unit) = this.setOnFocusChangeListener(f)
 
-fun CompoundButton.onCheckedChanged(f: (CompoundButton, Boolean) -> Unit) {
-  this.setOnCheckedChangeListener(f)
-}
+fun CompoundButton.onCheckedChanged(f: (CompoundButton, Boolean) -> Unit) = this.setOnCheckedChangeListener(f)
 
-fun AdapterView<*>.onItemClick(f: (AdapterView<*>, View, Int, Long) -> Unit) {
-  this.setOnItemClickListener(f)
-}
+fun AdapterView<*>.onItemClick(f: (AdapterView<*>, View, Int, Long) -> Unit) = this.setOnItemClickListener(f)
 
 inline fun <T : AbsListView> T.onScrollChanged(
         crossinline stateChanged: (View, Int) -> Unit) {
   val listener = object : AbsListView.OnScrollListener {
-    override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
-      stateChanged(view, scrollState)
-    }
+    override fun onScrollStateChanged(view: AbsListView, scrollState: Int) = stateChanged(view, scrollState)
 
     override fun onScroll(view: AbsListView, firstVisibleItem: Int,
-                          visibleItemCount: Int, totalItemCount: Int) {
-    }
+                          visibleItemCount: Int, totalItemCount: Int) = Unit
   }
   this.setOnScrollListener(listener)
 }
@@ -120,9 +99,7 @@ inline fun <T : AbsListView> T.onScrollChanged(
 inline fun EditText.onTextChange(crossinline f: (CharSequence, Int, Int, Int) -> Unit) {
   val listener = object : KoiTextWatcher() {
     override fun onTextChanged(s: CharSequence, start: Int,
-                               before: Int, count: Int) {
-      f(s, start, before, count)
-    }
+                               before: Int, count: Int) = f(s, start, before, count)
   }
   this.addTextChangedListener(listener)
 }
@@ -138,23 +115,17 @@ fun SeekBar.onProgressChanged(f: (SeekBar, Int, Boolean) -> Unit) {
 }
 
 abstract class KoiTextWatcher : TextWatcher {
-  override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-  }
+  override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) = Unit
 
-  override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-  }
+  override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) = Unit
 
-  override fun afterTextChanged(s: Editable) {
-  }
+  override fun afterTextChanged(s: Editable) = Unit
 }
 
 abstract class KoiSeekBarChangeListener : SeekBar.OnSeekBarChangeListener {
-  override fun onStopTrackingTouch(seekBar: SeekBar) {
-  }
+  override fun onStopTrackingTouch(seekBar: SeekBar) = Unit
 
-  override fun onStartTrackingTouch(seekBar: SeekBar) {
-  }
+  override fun onStartTrackingTouch(seekBar: SeekBar) = Unit
 
-  override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-  }
+  override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) = Unit
 }

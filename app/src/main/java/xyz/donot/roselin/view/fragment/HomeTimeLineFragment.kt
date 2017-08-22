@@ -36,9 +36,7 @@ class HomeTimeLineFragment :TimeLineFragment(){
                 adapter.loadMoreComplete()
             }
 
-            override fun onFailure(exception: Exception) {
-                toast(exception.localizedMessage)
-            }
+            override fun onFailure(exception: Exception) = toast(exception.localizedMessage)
 
         }
         HomeTimeLineTask().execute(twitter)
@@ -55,9 +53,7 @@ class HomeTimeLineFragment :TimeLineFragment(){
 
             }
 
-            override fun onFailure(exception: Exception) {
-                toast(exception.localizedMessage)
-            }
+            override fun onFailure(exception: Exception) = toast(exception.localizedMessage)
 
         }
         asyncTask.execute(twitter)

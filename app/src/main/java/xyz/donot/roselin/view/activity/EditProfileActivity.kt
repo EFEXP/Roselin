@@ -19,10 +19,10 @@ import kotlinx.android.synthetic.main.activity_edit_profile.*
 import kotlinx.android.synthetic.main.content_edit_profile.*
 import twitter4j.Twitter
 import twitter4j.User
-import xyz.donot.quetzal.util.getPath
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.util.extraUtils.longToast
+import xyz.donot.roselin.util.getPath
 import xyz.donot.roselin.util.getSerialized
 import xyz.donot.roselin.util.getTwitterInstance
 import java.io.File
@@ -65,9 +65,7 @@ class EditProfileActivity : AppCompatActivity() {
     val color=ContextCompat.getColor(this@EditProfileActivity,R.color.colorPrimary)
       toolbar.setNavigationOnClickListener { onBackPressed() }
       class userTask:SafeAsyncTask<Twitter,User>(){
-          override fun doTask(arg: Twitter): User {
-              return  arg.verifyCredentials()
-          }
+          override fun doTask(arg: Twitter): User = arg.verifyCredentials()
 
           override fun onSuccess(result: User) {
               Picasso.with(this@EditProfileActivity).load(result.profileBannerIPadRetinaURL).into(profile_banner)
@@ -110,9 +108,7 @@ class EditProfileActivity : AppCompatActivity() {
               }
           }
 
-          override fun onFailure(exception: Exception) {
-
-          }
+          override fun onFailure(exception: Exception) = Unit
       }
       userTask().execute(getTwitterInstance())
 
@@ -121,13 +117,11 @@ class EditProfileActivity : AppCompatActivity() {
 
         fab.setOnClickListener {
     object : SafeAsyncTask<Twitter,User>(){
-          override fun doTask(arg: Twitter): User {
-                return  arg.updateProfile(
-                          user_name.text.toString(),
-                          geo.text.toString(),
-                          description.text.toString(),
-                          web.text.toString())
-          }
+          override fun doTask(arg: Twitter): User = arg.updateProfile(
+                    user_name.text.toString(),
+                    web.text.toString(),
+                    geo.text.toString(),
+                  description.text.toString())
 
           override fun onSuccess(result: User) {
             //  longToast("更新しました")
@@ -137,9 +131,7 @@ class EditProfileActivity : AppCompatActivity() {
               setResult(RESULT_OK,Intent().putExtras(bundle))
           }
 
-          override fun onFailure(exception: Exception) {
-              longToast("失敗しました")
-          }
+          override fun onFailure(exception: Exception) = longToast("失敗しました")
       }.execute(getTwitterInstance())
 
             val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -148,9 +140,7 @@ class EditProfileActivity : AppCompatActivity() {
                 notifiy(id)
                 if (iconUri != null) {
                     object : SafeAsyncTask<Twitter,User>(){
-                        override fun doTask(arg: Twitter): User {
-                            return  arg.updateProfileImage(File(getPath(this@EditProfileActivity, iconUri!!)))
-                        }
+                        override fun doTask(arg: Twitter): User = arg.updateProfileImage(File(getPath(this@EditProfileActivity, iconUri!!)))
 
                         override fun onSuccess(result: User) {
                             longToast("更新しました")
@@ -165,9 +155,7 @@ class EditProfileActivity : AppCompatActivity() {
 
                 } else if (bannerUri != null) {
                     object : SafeAsyncTask<Twitter,Unit>(){
-                        override fun doTask(arg: Twitter) {
-                            return  arg.updateProfileBanner(File(getPath(this@EditProfileActivity, bannerUri!!)))
-                        }
+                        override fun doTask(arg: Twitter) = arg.updateProfileBanner(File(getPath(this@EditProfileActivity, bannerUri!!)))
 
                         override fun onSuccess(result: Unit) {
                             longToast("更新しました")

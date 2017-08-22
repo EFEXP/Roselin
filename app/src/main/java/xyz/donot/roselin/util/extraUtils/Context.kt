@@ -23,13 +23,9 @@ val Context.displayMetrics: DisplayMetrics
     get() = resources.displayMetrics
 
 
-fun Context.dpToPx(dp: Int): Int {
-    return (dp * this.displayMetrics.density + 0.5).toInt()
-}
+fun Context.dpToPx(dp: Int): Int = (dp * this.displayMetrics.density + 0.5).toInt()
 
-fun Context.pxToDp(px: Int): Int {
-    return (px / this.displayMetrics.density + 0.5).toInt()
-}
+fun Context.pxToDp(px: Int): Int = (px / this.displayMetrics.density + 0.5).toInt()
 
 
 

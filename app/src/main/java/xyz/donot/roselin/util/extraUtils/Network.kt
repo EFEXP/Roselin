@@ -36,20 +36,16 @@ fun Context.networkType(): NetworkType {
         return NetworkType.NONE
     }
     val type = info.type
-    when (type) {
-        ConnectivityManager.TYPE_WIFI -> return NetworkType.WIFI
-        ConnectivityManager.TYPE_MOBILE -> return NetworkType.MOBILE
-        else -> return NetworkType.OTHER
+    return when (type) {
+        ConnectivityManager.TYPE_WIFI -> NetworkType.WIFI
+        ConnectivityManager.TYPE_MOBILE -> NetworkType.MOBILE
+        else -> NetworkType.OTHER
     }
 }
 
-fun Context.isWifi(): Boolean {
-    return networkType() == NetworkType.WIFI
-}
+fun Context.isWifi(): Boolean = networkType() == NetworkType.WIFI
 
-fun Context.isMobile(): Boolean {
-    return networkType() == NetworkType.MOBILE
-}
+fun Context.isMobile(): Boolean = networkType() == NetworkType.MOBILE
 
 fun Context.isConnected(): Boolean {
     val cm = this.getConnectivityManager()

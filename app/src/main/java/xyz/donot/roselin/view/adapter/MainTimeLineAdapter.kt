@@ -8,12 +8,12 @@ import xyz.donot.roselin.view.fragment.HomeTimeLineFragment
 
 class MainTimeLineAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
     override fun getItem(i: Int): Fragment {
-        when (i) {
+        return when (i) {
             0 -> {
-                return HomeTimeLineFragment()
+                HomeTimeLineFragment()
             }
             1 -> {
-                return Fragment()
+                Fragment()
             }
             else -> {
                 throw IllegalAccessError()
@@ -22,17 +22,15 @@ class MainTimeLineAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     }
 
-    override fun getCount(): Int {
-        return 2
-    }
+    override fun getCount(): Int = 2
 
     override fun getPageTitle(position: Int): CharSequence {
-        when (position) {
+        return when (position) {
             0 -> {
-                return "Home"
+                "Home"
             }
             1 -> {
-                return "Mention"
+                "Mention"
             }
             else -> {
                 throw IllegalAccessError()

@@ -13,9 +13,7 @@ import xyz.donot.roselin.util.getTwitterInstance
 class StreamService : IntentService("StreamService") {
     val twitter= getTwitterInstance()
 
-    override fun onHandleIntent(intent: Intent?) {
-        handleActionStream()
-    }
+    override fun onHandleIntent(intent: Intent?) = handleActionStream()
     private fun handleActionStream(){
         val stream = TwitterStreamFactory().getInstance(twitter.authorization)
         StreamCreateUtil.addStatusListener(stream,MyStreamAdapter())
@@ -23,10 +21,7 @@ class StreamService : IntentService("StreamService") {
         stream.user()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-    }
+    override fun onDestroy() = super.onDestroy()
     inner class MyConnectionListener:ConnectionLifeCycleListener{
         override fun onConnect() {
             LocalBroadcastManager.getInstance(this@StreamService).sendBroadcast(Intent("OnConnect"))
