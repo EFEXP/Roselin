@@ -3,7 +3,7 @@ package xyz.donot.roselin.view.adapter
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import xyz.donot.roselin.view.fragment.HomeTimeLineFragment
+import xyz.donot.roselin.view.fragment.status.HomeTimeLineFragment
 
 
 class MainTimeLineAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {

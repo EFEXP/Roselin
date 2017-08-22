@@ -1,4 +1,4 @@
-package xyz.donot.roselin.view.fragment
+package xyz.donot.roselin.view.fragment.status
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -13,11 +13,12 @@ import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import twitter4j.*
 import xyz.donot.roselin.extend.SafeAsyncTask
+import xyz.donot.roselin.util.extraUtils.async
 import xyz.donot.roselin.util.extraUtils.mainThread
 import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getDeserialized
 
-class HomeTimeLineFragment :TimeLineFragment(){
+class HomeTimeLineFragment : TimeLineFragment(){
     private val receiver by lazy { StatusReceiver() }
     private val deleteReceiver by lazy { DeleteReceiver() }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -42,28 +43,22 @@ class HomeTimeLineFragment :TimeLineFragment(){
         HomeTimeLineTask().execute(twitter)
     }
     override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
-        val asyncTask: SafeAsyncTask<Twitter, ResponseList<Status>> = object : SafeAsyncTask<Twitter, ResponseList<Status>>() {
-            override fun doTask(arg: Twitter): ResponseList<twitter4j.Status> =
-                    arg.getHomeTimeline(Paging(adapter.data[0].id))
-            override fun onSuccess(result: ResponseList<twitter4j.Status>) {
-                if (result.isNotEmpty()){
-                    adapter.addData(0,result)
-                    recycler.smoothScrollToPosition(0)
-                }
-
+        async {
+            try {
+            val result =twitter.getHomeTimeline(Paging(adapter.data[0].id))
+            if (result.isNotEmpty()){
+                adapter.addData(0,result)
+                recycler.smoothScrollToPosition(0) }
             }
-
-            override fun onFailure(exception: Exception) = toast(exception.localizedMessage)
-
+            catch (e:Exception){ toast(e.localizedMessage)}
         }
-        asyncTask.execute(twitter)
+
     }
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(activity).apply {
             unregisterReceiver(receiver)
             unregisterReceiver(deleteReceiver)
-
         }
     }
     //Receiver

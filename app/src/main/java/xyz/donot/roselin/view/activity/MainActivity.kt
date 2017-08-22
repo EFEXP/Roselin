@@ -2,8 +2,6 @@ package xyz.donot.roselin.view.activity
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.ActivityManager
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.drawable.BitmapDrawable
@@ -13,9 +11,10 @@ import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.navigation_header.*
 import twitter4j.Status
 import twitter4j.Twitter
 import twitter4j.User
@@ -31,41 +30,28 @@ import xyz.donot.roselin.view.adapter.MainTimeLineAdapter
 
 class MainActivity : AppCompatActivity() {
    private val REQUEST_WRITE_READ=0
+   private var user:User?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        toolbar.inflateMenu(R.menu.menu_main)
         setSupportActionBar(toolbar)
         if (!haveToken()) {
             startActivity(intent<OauthActivity>())
             this.finish()
         }
         else{
-           toolbar.inflateMenu(R.menu.menu_main)
-            button_tweet.setOnClickListener {
-                if (!editText_status.text.isNullOrBlank() && editText_status.text.count() <= 140){
-                    class SendTask(val txt:String): SafeAsyncTask<Twitter, Status>(){
-                        override fun doTask(arg: Twitter): twitter4j.Status = arg.updateStatus(txt)
-
-                        override fun onSuccess(result: twitter4j.Status) {
-                            editText_status.hideSoftKeyboard()
-                            editText_status.setText("")
-                        }
-                        override fun onFailure(exception: Exception) = editText_status.hideSoftKeyboard()
-                    }
-                    SendTask(editText_status.editableText.toString()).execute(getTwitterInstance())
-
-                }
-
-            }
+            //pager
             val adapter=MainTimeLineAdapter(supportFragmentManager)
            main_viewpager.adapter = adapter
            main_viewpager.offscreenPageLimit = 2
-            //stream
-            if(!isActiveService()) {
+            // stream&savedInstance
+            if(savedInstanceState==null) {
          startService(Intent(this@MainActivity, StreamService ::class.java))
             }
-            //view
-            fab.setOnClickListener{start<TweetEditActivity>()}
+            else{
+                user= savedInstanceState.getSerializable("user") as User
+            }
             if (!defaultSharedPreferences.getBoolean("quick_tweet",true)){ editText_layout.visibility= View.GONE}
             setUpHeader()
             setUpDrawerEvent()
@@ -75,14 +61,6 @@ class MainActivity : AppCompatActivity() {
 
 
 }
-
-    private fun setUpView() {
-        val uriString=defaultSharedPreferences.getString("BackGroundUri","")
-        if (!uriString.isNullOrBlank()){
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,   Uri.parse(uriString))
-            main_coordinator.background=BitmapDrawable(resources, bitmap)
-        }
-    }
 
     @SuppressLint("NewApi")
     private fun InitialRequestPermission() = fromApi(23){
@@ -96,15 +74,6 @@ class MainActivity : AppCompatActivity() {
                             ,Manifest.permission.ACCESS_FINE_LOCATION)
                     ,REQUEST_WRITE_READ)
         }
-    }
-
-
-    private fun isActiveService(): Boolean {
-        val activityManager =getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        val runningServicesInfo = activityManager.getRunningServices(Integer.MAX_VALUE)
-       // logd("DataReceiver",isActive.toString())
-        return runningServicesInfo.any { it.service.className == StreamService ::class.java.name.toString()}
-
     }
 
     private fun setUpDrawerEvent() = navigation_drawer.setNavigationItemSelectedListener({
@@ -139,22 +108,63 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun setUpHeader(){
-        class HeaderTask:SafeAsyncTask<Twitter,User>(){
-            override fun doTask(arg: Twitter): User = arg.verifyCredentials()
-
-            override fun onSuccess(result: User) {
-                Picasso.with(applicationContext).load(result.profileBannerIPadRetinaURL).into(my_header)
-                Picasso.with(applicationContext).load(result.originalProfileImageURLHttps).into(my_icon)
-                my_name_header.text= result.name
-                my_screen_name_header.text = "@${result.screenName}"
-            }
-
-            override fun onFailure(exception: Exception) = Unit
+        val view = navigation_drawer.getHeaderView(0)
+        val my_banner=view.findViewById<ImageView>(R.id.my_header)
+        val my_profile=view.findViewById<ImageView>(R.id.my_icon)
+        val my_name=view.findViewById<TextView>(R.id.my_name_header)
+        val my_screenname=view.findViewById<TextView>(R.id.my_screen_name_header)
+        if (user==null){ async { user= getTwitterInstance().verifyCredentials()
+         mainThread {
+             Picasso.with(applicationContext).load(user?.profileBannerIPadRetinaURL).into(my_banner)
+             Picasso.with(applicationContext).load(user?.originalProfileImageURLHttps).into(my_profile)
+             my_name.text= user?.name
+             my_screenname.text = "@${user?.screenName}"
+         }
         }
-        HeaderTask().execute(getTwitterInstance())
+        }
+        else{
+            Picasso.with(applicationContext).load(user?.profileBannerIPadRetinaURL).into(my_banner)
+            Picasso.with(applicationContext).load(user?.originalProfileImageURLHttps).into(my_profile)
+            my_name.text= user?.name
+            my_screenname.text = "@${user?.screenName}" }
+
+
+
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if (user!=null){
+        outState.putSerializable("user",user)
+    }
 
+    }
+
+    private fun setUpView() {
+        val uriString=defaultSharedPreferences.getString("BackGroundUri","")
+        if (!uriString.isNullOrBlank()){
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,Uri.parse(uriString))
+            main_coordinator.background=BitmapDrawable(resources, bitmap)
+        }
+        //view
+        fab.setOnClickListener{start<TweetEditActivity>()}
+        button_tweet.setOnClickListener {
+            if (!editText_status.text.isNullOrBlank() && editText_status.text.count() <= 140){
+                class SendTask(val txt:String): SafeAsyncTask<Twitter, Status>(){
+                    override fun doTask(arg: Twitter): twitter4j.Status = arg.updateStatus(txt)
+
+                    override fun onSuccess(result: twitter4j.Status) {
+                        editText_status.hideSoftKeyboard()
+                        editText_status.setText("")
+                    }
+                    override fun onFailure(exception: Exception) = editText_status.hideSoftKeyboard()
+                }
+                SendTask(editText_status.editableText.toString()).execute(getTwitterInstance())
+
+            }
+
+        }
+    }
 
 
 

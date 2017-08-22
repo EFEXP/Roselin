@@ -1,4 +1,4 @@
-package xyz.donot.roselin.view.fragment
+package xyz.donot.roselin.view.fragment.status
 
 import android.content.Intent
 import android.os.Bundle
@@ -22,7 +22,7 @@ import xyz.donot.roselin.view.activity.PictureActivity
 import xyz.donot.roselin.view.activity.UserListActivity
 import java.text.SimpleDateFormat
 
-class UserTimeLineFragment:TimeLineFragment()
+class UserTimeLineFragment: TimeLineFragment()
 {
     val user by lazy {arguments.getSerializable("user") as User }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -39,16 +39,7 @@ class UserTimeLineFragment:TimeLineFragment()
             }}
     }
     override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) = Unit
-    /*override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
-        async {
-            val result=twitter.getUserTimeline(user.id, Paging(adapter.data[0].id))
-            if (result!=null){
-            mainThread {
-                adapter.addData(0,result)
-                recycler.smoothScrollToPosition(0)
-            }}
 
-        }*/
     private fun setUpViews():View{
         val v=context.inflate(R.layout.person_item)
             refresh.isEnabled=false

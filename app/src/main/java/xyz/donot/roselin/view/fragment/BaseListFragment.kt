@@ -10,23 +10,17 @@ import android.view.ViewGroup
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.content_base_fragment.*
-import twitter4j.Status
 import xyz.donot.roselin.R
 import xyz.donot.roselin.util.getTwitterInstance
-import xyz.donot.roselin.view.adapter.StatusAdapter
 import xyz.donot.roselin.view.custom.MyLoadingView
 
-abstract class BaseListFragment : Fragment() {
+abstract class BaseListFragment<T> : Fragment() {
     val twitter by lazy { getTwitterInstance() }
-    val adapter by lazy { StatusAdapter() }
+    val adapter by lazy { adapterFun() }
 
-    var isEnabledRefresh:Boolean=false
-    set(value) {
-        refresh.isEnabled=value
-        field=value
-    }
-    abstract fun loadMore(adapter: BaseQuickAdapter<Status, BaseViewHolder>)
-    abstract fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>)
+    abstract fun adapterFun():BaseQuickAdapter<T,BaseViewHolder>
+    abstract fun loadMore(adapter: BaseQuickAdapter<T, BaseViewHolder>)
+    abstract fun pullToRefresh(adapter: BaseQuickAdapter<T, BaseViewHolder>)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = inflater.inflate(R.layout.content_base_fragment, container, false)
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -49,7 +43,7 @@ abstract class BaseListFragment : Fragment() {
                 loadMore(adapter)
                 refresh.isRefreshing=false
             } }
-        isEnabledRefresh=refresh.isEnabled
+
     }
 
 
