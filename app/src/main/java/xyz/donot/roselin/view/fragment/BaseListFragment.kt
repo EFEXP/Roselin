@@ -1,9 +1,12 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package xyz.donot.roselin.view.fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,7 +36,12 @@ abstract class BaseListFragment<T> : Fragment() {
         adapter.setLoadMoreView(MyLoadingView())
         // adapter.emptyView=View.inflate(activity, R.layout.item_empty,null)
         recycler.adapter=adapter
-        loadMore(adapter)
+      if (savedInstanceState==null){loadMore(adapter)}
+        else{
+          val t=savedInstanceState.getSerializable("data") as ArrayList<T>
+          Log.d("SavedInstanceStateHas",t.size.toString())
+          adapter.addData(t)
+      }
         refresh.setOnRefreshListener {
             if (adapter.data.isNotEmpty()){
                 pullToRefresh(adapter)
@@ -46,6 +54,14 @@ abstract class BaseListFragment<T> : Fragment() {
 
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+       val l=ArrayList<T>()
+        l.addAll(adapter.data)
+        Log.d("GiveData",adapter.data.count().toString())
+        outState?.putSerializable("data",l)
+
+    }
 
 
 }
