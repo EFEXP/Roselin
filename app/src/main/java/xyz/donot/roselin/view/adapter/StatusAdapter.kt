@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
-import android.support.v7.widget.AppCompatImageButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -69,22 +68,27 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
                 setText(R.id.textview_text,array[Random().nextInt(array.count())])}
             else{ setText(R.id.textview_text, getExpandedText(item))}
             //ふぁぼ済み
-            val fav= getView<AppCompatImageButton>(R.id.favorite)
-            if (item.isFavorited){ fav.setImageResource(R.drawable.ic_favorite_pressed_18dp) } else{ fav.setImageResource(R.drawable.ic_favorite_grey_18dp) }
+            val fav= getView<TextView>(R.id.tv_favorite)
+            if (item.isFavorited){
+                fav.setCompoundDrawablesWithIntrinsicBounds( ResourcesCompat.getDrawable(mContext.resources, R.drawable.wrap_favorite_pressed,null),null,null, null)
+            } else{
+                fav.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, R.drawable.wrap_favorite, null), null, null,null)
+            }
             //RT
-            val rt=getView<AppCompatImageButton>(R.id.retweet)
-            if (item.isRetweeted) { rt.setImageResource(R.drawable.ic_retweet_pressed) }
-            else { rt.setImageResource(R.drawable.ic_retweet_grey) }
+            val rt=getView<TextView>(R.id.tv_retweet)
+            if (item.isRetweeted) { fav.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, R.drawable.wrap_retweet_pressed ,null),null,null ,null) }
+            else { rt.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, R.drawable.wrap_retweet, null),null, null, null)
+            }
 
             //認証済み
             if(item.user.isVerified || item.user.screenName=="JlowoIL"){
                 getView<TextView>(R.id.textview_username)
-                    .setCompoundDrawablesWithIntrinsicBounds(null,null, ResourcesCompat.getDrawable(mContext.resources, R.drawable.ic_check_circle_black_18dp, null),null)}
+                    .setCompoundDrawablesWithIntrinsicBounds(null,null, ResourcesCompat.getDrawable(mContext.resources, R.drawable.wraped_verify, null),null)}
             else{getView<TextView>(R.id.textview_username).setCompoundDrawablesWithIntrinsicBounds(null,null, null, null)}
             //鍵垢
             if(item.user.isProtected){
                 getView<TextView>(R.id.textview_via)
-                        .setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, R.drawable.ic_lock_grey_400_18dp,null),null, null, null)}
+                        .setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, R.drawable.wrap_lock,null),null, null, null)}
             else{getView<TextView>(R.id.textview_via).setCompoundDrawablesWithIntrinsicBounds(null,null, null, null)}
 
             //テキスト関係
@@ -92,7 +96,9 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
             setText(R.id.textview_screenname,"@"+item.user.screenName)
             setText(R.id.textview_via, getClientName(item.source))
             setText(R.id.textview_date, getRelativeTime(item.createdAt))
-            setText(R.id.textview_count, "RT:${item.retweetCount} いいね:${item.favoriteCount}")
+            setText(R.id.tv_retweet,item.retweetCount.toString())
+            setText(R.id.tv_favorite,item.favoriteCount.toString())
+           // setText(R.id.textview_count, "RT:${item.retweetCount} いいね:${item.favoriteCount}")
 
 
 
@@ -103,7 +109,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
                 intent.putExtra("user_id",item.user.id)
                 mContext.startActivity(intent)
             }
-            getView<AppCompatImageButton>(R.id.favorite).setOnClickListener{
+            getView<TextView>(R.id.tv_favorite).setOnClickListener{
                 if(!item.isFavorited) {
                     FavoriteTask().execute(getTwitterInstance())
                 }
@@ -111,14 +117,14 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
                     DestroyFavoriteTask().execute(getTwitterInstance())
                 }
                 }
-            getView<AppCompatImageButton>(R.id.reply).setOnClickListener{
+            getView<TextView>(R.id.reply).setOnClickListener{
                 val bundle=  Bundle()
                 bundle.putString("status_txt",item.text)
                 bundle.putLong("status_id",item.id)
                 bundle.putString("user_screen_name",item.user.screenName)
                 (mContext as Activity).start<TweetEditActivity>(bundle)
             }
-            getView<AppCompatImageButton>(R.id.retweet).setOnClickListener{
+            getView<TextView>(R.id.tv_retweet).setOnClickListener{
                 if(!item.isRetweeted){
                 RetweetTask().execute(getTwitterInstance())}}
             }

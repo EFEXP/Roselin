@@ -49,7 +49,7 @@
             android:id="@+id/tv_web"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_link_grey_400_18dp"
+            android:drawableStart="@drawable/wrap_link"
             android:ellipsize="end"
             android:maxLines="1"
             tools:text="https://github.com/EFEXP/Roselin" />
@@ -58,7 +58,7 @@
             android:id="@+id/tv_geo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_location_on_grey_400_18dp"
+            android:drawableStart="@drawable/wrap_location_on"
             android:ellipsize="end"
             android:maxLines="1"
             tools:text="XXXXX県" />
@@ -111,7 +111,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableStart="@drawable/ic_vertical_align_bottom_grey_400_18dp"
+            android:drawableStart="@drawable/wrap_align_bottom"
             android:gravity="center"
             tools:text="follow" />
 
@@ -120,7 +120,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableStart="@drawable/ic_vertical_align_top_grey_400_18dp"
+            android:drawableStart="@drawable/wrap_align_top"
             android:gravity="center"
             tools:text="followed" />
 
@@ -185,7 +185,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableStart="@drawable/ic_mode_comment_grey_400_18dp"
+            android:drawableStart="@drawable/wrap_comment"
             android:gravity="center"
             tools:text="Tweets" />
 
@@ -194,7 +194,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableStart="@drawable/ic_favorite_grey_400_18dp"
+            android:drawableStart="@drawable/wrap_favorite"
             android:gravity="center"
             tools:text="Fav" />
 
@@ -204,7 +204,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:drawableStart="@drawable/ic_view_list_grey_400_18dp"
+            android:drawableStart="@drawable/wrap_list"
             android:gravity="center"
             tools:text="20000" />
     </LinearLayout>

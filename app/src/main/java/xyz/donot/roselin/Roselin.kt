@@ -29,6 +29,7 @@ class Roselin : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         Realm.init(this)
         val twitterConfig = TwitterConfig.Builder(this)
                 .twitterAuthConfig(TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET))

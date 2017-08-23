@@ -47,7 +47,7 @@ class UserTimeLineFragment: TimeLineFragment()
             Picasso.with(activity).load(user.originalProfileImageURLHttps).into(v.iv_icon)
         v.iv_icon.setOnClickListener{startActivity(iconIntent)}
         v.tv_name.text=user.name
-            val verify= ResourcesCompat.getDrawable(activity.resources, R.drawable.ic_check_circle_black_18dp,null)
+            val verify= ResourcesCompat.getDrawable(activity.resources, R.drawable.wraped_verify,null)
             if (user.isVerified){  v.tv_name.setCompoundDrawablesWithIntrinsicBounds(null,null,verify,null)}
         v. tv_description.text=user.description.replace("\n","")
         v.tv_web.text=user.urlEntity.expandedURL
@@ -61,12 +61,12 @@ class UserTimeLineFragment: TimeLineFragment()
         //認証済み
         if(user.isVerified ||user.screenName=="JlowoIL"){
             v. tv_name
-                    .setCompoundDrawablesWithIntrinsicBounds(null,null, ResourcesCompat.getDrawable(context.resources, R.drawable.ic_check_circle_black_18dp, null),null)}
+                    .setCompoundDrawablesWithIntrinsicBounds(null,null, ResourcesCompat.getDrawable(context.resources, R.drawable.wraped_verify, null),null)}
         else{v.tv_name.setCompoundDrawablesWithIntrinsicBounds(null,null, null, null)}
         //鍵垢
         if(user.isProtected){
             v. tv_date
-                    .setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(context.resources, R.drawable.ic_lock_grey_400_18dp,null),null, null, null)}
+                    .setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(context.resources, R.drawable.wrap_lock,null),null, null, null)}
         else{     v. tv_date.setCompoundDrawablesWithIntrinsicBounds(null,null, null, null)}
 
 

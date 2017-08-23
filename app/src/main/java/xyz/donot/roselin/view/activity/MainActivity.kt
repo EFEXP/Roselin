@@ -29,6 +29,8 @@ import xyz.donot.roselin.util.haveToken
 import xyz.donot.roselin.view.adapter.MainTimeLineAdapter
 
 
+
+
 class MainActivity : AppCompatActivity() {
    private val REQUEST_WRITE_READ=0
    private var user:User?=null
@@ -170,8 +172,6 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-
-
 
 
 
