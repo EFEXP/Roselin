@@ -149,6 +149,7 @@ class MainActivity : AppCompatActivity() {
         if (!uriString.isNullOrBlank()){
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,Uri.parse(uriString))
             main_coordinator.background=BitmapDrawable(resources, bitmap)
+            background_overlay.show()
         }
         //view
         fab.setOnClickListener{start<TweetEditActivity>()}

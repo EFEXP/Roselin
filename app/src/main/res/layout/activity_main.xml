@@ -13,6 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
     tools:context="xyz.donot.roselin.view.activity.MainActivity">
+        <View
+            android:id="@+id/background_overlay"
+            android:background="@color/text_input_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            />
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,7 +58,6 @@
             android:layout_margin="@dimen/fab_margin"
             app:srcCompat="@drawable/ic_edit_white_24dp" />
         <LinearLayout
-
             android:id="@+id/editText_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -59,9 +65,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:orientation="horizontal"
-            android:background="@color/text_input_background"
-
-            >
+            android:background="@color/text_input_background">
             <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -87,7 +91,6 @@
                 app:srcCompat="@drawable/ic_send_primary_24dp" />
         </LinearLayout>
         </android.support.constraint.ConstraintLayout>
-
 
     </android.support.design.widget.CoordinatorLayout>
 
