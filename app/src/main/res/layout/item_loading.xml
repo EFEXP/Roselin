@@ -11,15 +11,13 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <com.airbnb.lottie.LottieAnimationView
+        <ProgressBar
             android:id="@+id/animation_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp_4"
             android:layout_marginRight="@dimen/dp_4"
-            app:lottie_fileName="material_wave_loading.json"
-            app:lottie_loop="true"
-            app:lottie_autoPlay="true" />
+          />
 
         <TextView
             android:id="@+id/loading_text"

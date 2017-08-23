@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageView
@@ -34,8 +35,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        toolbar.inflateMenu(R.menu.menu_main)
-        setSupportActionBar(toolbar)
         if (!haveToken()) {
             startActivity(intent<OauthActivity>())
             this.finish()
@@ -45,6 +44,11 @@ class MainActivity : AppCompatActivity() {
             val adapter=MainTimeLineAdapter(supportFragmentManager)
            main_viewpager.adapter = adapter
            main_viewpager.offscreenPageLimit = 2
+            toolbar.apply {
+                inflateMenu(R.menu.menu_main)
+                setNavigationOnClickListener { drawer_layout.openDrawer(GravityCompat.START) }
+            }
+
             // stream&savedInstance
             if(savedInstanceState==null) {
          startService(Intent(this@MainActivity, StreamService ::class.java))

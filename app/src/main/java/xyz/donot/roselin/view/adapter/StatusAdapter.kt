@@ -81,6 +81,12 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
                 getView<TextView>(R.id.textview_username)
                     .setCompoundDrawablesWithIntrinsicBounds(null,null, ResourcesCompat.getDrawable(mContext.resources, R.drawable.ic_check_circle_black_18dp, null),null)}
             else{getView<TextView>(R.id.textview_username).setCompoundDrawablesWithIntrinsicBounds(null,null, null, null)}
+            //鍵垢
+            if(item.user.isProtected){
+                getView<TextView>(R.id.textview_via)
+                        .setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, R.drawable.ic_lock_grey_400_18dp,null),null, null, null)}
+            else{getView<TextView>(R.id.textview_via).setCompoundDrawablesWithIntrinsicBounds(null,null, null, null)}
+
             //テキスト関係
             setText(R.id.textview_username,item.user.name)
             setText(R.id.textview_screenname,"@"+item.user.screenName)

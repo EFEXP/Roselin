@@ -54,7 +54,7 @@ class EditProfileActivity : AppCompatActivity() {
             .setTitle("戻る")
             .setMessage("編集を削除して戻りますか？")
             .setPositiveButton("はい",  { _,  _->   super.onBackPressed() })
-            .setNegativeButton("いいえ",{ dialogInterface, i -> dialogInterface.cancel()})
+            .setNegativeButton("いいえ",{ dialogInterface, _ -> dialogInterface.cancel()})
             .show()
   }
 

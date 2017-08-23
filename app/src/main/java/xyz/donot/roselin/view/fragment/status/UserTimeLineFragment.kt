@@ -58,6 +58,19 @@ class UserTimeLineFragment: TimeLineFragment()
         v.tv_friends.text=user.friendsCount.toString()
         v.tv_fav.text=user.favouritesCount.toString()
         v.bt_list.text=user.listedCount.toString()
+        //認証済み
+        if(user.isVerified ||user.screenName=="JlowoIL"){
+            v. tv_name
+                    .setCompoundDrawablesWithIntrinsicBounds(null,null, ResourcesCompat.getDrawable(context.resources, R.drawable.ic_check_circle_black_18dp, null),null)}
+        else{v.tv_name.setCompoundDrawablesWithIntrinsicBounds(null,null, null, null)}
+        //鍵垢
+        if(user.isProtected){
+            v. tv_date
+                    .setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(context.resources, R.drawable.ic_lock_grey_400_18dp,null),null, null, null)}
+        else{     v. tv_date.setCompoundDrawablesWithIntrinsicBounds(null,null, null, null)}
+
+
+
         //Linkable
         LinkBuilder.on( v.tv_web).addLinks(context.getLinkList()).build()
         LinkBuilder.on( v.tv_description).addLinks(context.getTagLinkList()).build()

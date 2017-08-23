@@ -14,17 +14,20 @@ import com.mlsdev.rximagepicker.RxImagePicker
 import com.mlsdev.rximagepicker.Sources
 import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.UCropActivity
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_tweet_edit.*
 import kotlinx.android.synthetic.main.content_tweet_edit.*
 import twitter4j.StatusUpdate
 import xyz.donot.roselin.R
+import xyz.donot.roselin.model.realm.DBDraft
 import xyz.donot.roselin.service.TweetPostService
 import xyz.donot.roselin.util.extraUtils.newIntent
-import xyz.donot.roselin.util.extraUtils.onClick
+import xyz.donot.roselin.util.getMyId
 import xyz.donot.roselin.util.getPath
 import xyz.donot.roselin.util.getSerialized
 import xyz.donot.roselin.util.replace
 import xyz.donot.roselin.view.adapter.TwitterImageAdapter
+import xyz.donot.roselin.view.fragment.DraftFragment
 import java.io.File
 import java.util.*
 
@@ -93,7 +96,11 @@ class TweetEditActivity : AppCompatActivity() {
                     .show()
 
         }
-        text_tools.onClick{
+        show_drafts.setOnClickListener {
+            DraftFragment().show(supportFragmentManager,"")
+        }
+
+        text_tools.setOnClickListener{
             val item=R.array.text_tools
             AlertDialog.Builder(this@TweetEditActivity)
                     .setItems(item, { _, int ->
@@ -140,6 +147,10 @@ class TweetEditActivity : AppCompatActivity() {
 
 
 }
+    fun changeDraft(draft: DBDraft){
+        editText_status.editableText.clear()
+        editText_status.append(draft.text)
+    }
 
     override fun onActivityResult(requestCode:Int , resultCode: Int, data: Intent?){
         if (resultCode == AppCompatActivity.RESULT_OK &&data!=null) {
@@ -157,5 +168,27 @@ class TweetEditActivity : AppCompatActivity() {
 
     private fun addPhotos(uri: Uri) = mAdapter.addData(uri)
 
+    override fun onBackPressed() {
+        if(!editText_status.editableText.isBlank()&&!editText_status.editableText.isEmpty()) {
+            AlertDialog.Builder(this@TweetEditActivity)
+                    .setTitle("戻る")
+                    .setMessage("下書きに保存しますか？")
+                    .setPositiveButton("はい", { _, _ ->
+                        Realm.getDefaultInstance().executeTransaction {
+                            it.createObject(DBDraft::class.java).apply {
+                                text=editText_status.text.toString()
+                                replyToScreenName=screenName
+                                replyToStatusId=statusId
+                                accountId= getMyId()
+                            }
+                        }
+                        super.onBackPressed() })
+                    .setNegativeButton("いいえ", {  _, _ -> super.onBackPressed() })
+                    .show()
+        }
+        else{
+            super.onBackPressed()
+        }
+    }
 
 }

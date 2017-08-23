@@ -65,7 +65,6 @@ android {
         }
     }
 }
-
 dependencies {
     def twitter4j = "4.0.6"
     compile "org.twitter4j:twitter4j-core:${twitter4j}"
@@ -86,12 +85,12 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true
     }
+    compile 'io.realm:android-adapters:2.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.makeramen:roundedimageview:2.3.0'
     compile 'com.mlsdev.rximagepicker:library:2.0.0'
     compile 'com.github.yalantis:ucrop:2.2.1'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.27'
-    compile 'com.airbnb.android:lottie:2.1.2'
     compile 'com.github.chrisbanes:PhotoView:2.1.2'
     compile 'com.klinkerapps:link_builder:1.6.1'
     compile 'com.github.xbroak:CharCountTextView:v1.0'

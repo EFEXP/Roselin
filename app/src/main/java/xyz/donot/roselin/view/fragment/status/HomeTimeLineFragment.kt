@@ -11,8 +11,9 @@ import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.content_base_fragment.*
-import twitter4j.*
-import xyz.donot.roselin.extend.SafeAsyncTask
+import twitter4j.Paging
+import twitter4j.Status
+import twitter4j.StatusDeletionNotice
 import xyz.donot.roselin.util.extraUtils.async
 import xyz.donot.roselin.util.extraUtils.mainThread
 import xyz.donot.roselin.util.extraUtils.toast
@@ -29,18 +30,22 @@ class HomeTimeLineFragment : TimeLineFragment(){
         }
     }
     override fun loadMore(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
-        class HomeTimeLineTask: SafeAsyncTask<Twitter,ResponseList<Status>>() {
-            override fun doTask(arg: Twitter): ResponseList<twitter4j.Status> =
-                    arg.getHomeTimeline(Paging(page))
-            override fun onSuccess(result: ResponseList<twitter4j.Status>) {
-                adapter.addData(result)
-                adapter.loadMoreComplete()
+        async {
+            try {
+                val result=twitter.getHomeTimeline(Paging(page))
+                if (result!=null)
+                {
+                    mainThread {
+                        adapter.addData(result)
+                        adapter.loadMoreComplete()
+                    }
+                }
+            } catch (e: Exception) {
+                toast(e.localizedMessage)
             }
 
-            override fun onFailure(exception: Exception) = toast(exception.localizedMessage)
-
         }
-        HomeTimeLineTask().execute(twitter)
+
     }
     override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
         async {
