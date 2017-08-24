@@ -124,7 +124,7 @@
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/reply"
                 android:layout_width="0dp"
-                android:layout_height="18dp"
+                android:layout_height="24dp"
                 android:layout_weight="1"
                 android:drawableStart="@drawable/wrap_reply"
                 android:gravity="center"
@@ -133,14 +133,14 @@
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_retweet"
                 android:layout_width="0dp"
-                android:layout_height="18dp"
+                android:layout_height="24dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 tools:text="2000000" />
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_favorite"
                 android:layout_width="0dp"
-                android:layout_height="18dp"
+                android:layout_height="24dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 tools:text="2000000" />

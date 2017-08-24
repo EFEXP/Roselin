@@ -13,26 +13,23 @@ import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import twitter4j.Paging
 import twitter4j.Status
-import twitter4j.StatusDeletionNotice
 import xyz.donot.roselin.util.extraUtils.async
 import xyz.donot.roselin.util.extraUtils.mainThread
 import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getDeserialized
 
-class HomeTimeLineFragment : TimeLineFragment(){
-    private val receiver by lazy { StatusReceiver() }
-    private val deleteReceiver by lazy { DeleteReceiver() }
+class MentionTimeLine :TimeLineFragment(){
+    private val replyReceiver by lazy { ReplyReceiver () }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         LocalBroadcastManager.getInstance(activity).apply {
-            registerReceiver(receiver, IntentFilter("NewStatus"))
-            registerReceiver(deleteReceiver, IntentFilter("DeleteStatus"))
+            registerReceiver(replyReceiver, IntentFilter("NewReply"))
         }
     }
     override fun loadMore(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
         async {
             try {
-                val result=twitter.getHomeTimeline(Paging(page))
+                val result=     twitter.getMentionsTimeline(Paging(page))
                 if (result!=null)
                 {
                     mainThread {
@@ -47,32 +44,29 @@ class HomeTimeLineFragment : TimeLineFragment(){
         }
 
     }
-    override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
-        async {
-            try {
-            val result =twitter.getHomeTimeline(Paging(adapter.data[0].id))
-            if (result.isNotEmpty()){
-             mainThread {
-                 adapter.addData(0,result)
-                 recycler.smoothScrollToPosition(0) }
-             }
-            }
-            catch (e:Exception){ toast(e.localizedMessage)}
-        }
 
-    }
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(activity).apply {
-            unregisterReceiver(receiver)
-            unregisterReceiver(deleteReceiver)
+            unregisterReceiver(replyReceiver)
         }
     }
-    //Receiver
-    inner class StatusReceiver : BroadcastReceiver() {
+    override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
+        async {
+            try {
+                val result= twitter.getMentionsTimeline(Paging(adapter.data[0].id))
+                if (result.isNotEmpty()){
+                    mainThread {
+                        adapter.addData(0,result)
+                        recycler.smoothScrollToPosition(0) }
+                }
+            }
+            catch (e:Exception){ toast(e.localizedMessage)}
+        }
+      }
+    inner class ReplyReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-
-          val  positionIndex =  (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+            val  positionIndex =  (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
             val data=intent.extras.getByteArray("Status").getDeserialized<Status>()
             mainThread {
                 adapter.addData(0,data)
@@ -83,18 +77,5 @@ class HomeTimeLineFragment : TimeLineFragment(){
             }
         }
     }
-    inner class DeleteReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            val data=intent.extras.getByteArray("StatusDeletionNotice").getDeserialized<StatusDeletionNotice>()
-            mainThread {
-                adapter.data.filter { de -> de.id == data.statusId }.mapNotNull {
-                    val int=   adapter.data.indexOf(it)
-                    adapter.remove(int)
-                }
-
-            }
-        }
-    }
 }
-
 

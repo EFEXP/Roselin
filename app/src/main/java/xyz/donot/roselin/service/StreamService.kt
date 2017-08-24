@@ -5,7 +5,7 @@ import android.content.Intent
 import android.support.v4.content.LocalBroadcastManager
 import twitter4j.*
 import xyz.donot.roselin.util.StreamCreateUtil
-import xyz.donot.roselin.util.extraUtils.logd
+import xyz.donot.roselin.util.getMyId
 import xyz.donot.roselin.util.getSerialized
 import xyz.donot.roselin.util.getTwitterInstance
 
@@ -38,7 +38,17 @@ class StreamService : IntentService("StreamService") {
     inner class MyStreamAdapter: UserStreamAdapter(){
 
             override fun onStatus(x: Status) {
-                logd { "OnStatus" }
+                if(x.isRetweet)
+                {
+                    if(x.retweetedStatus.user.id== getMyId()){
+                        LocalBroadcastManager.getInstance(this@StreamService).sendBroadcast(Intent("onRetweeted").putExtra("Status",x.getSerialized()))
+                    }
+
+                }
+                else{
+                    if (x.inReplyToUserId== getMyId())  LocalBroadcastManager.getInstance(this@StreamService).sendBroadcast(Intent("NewReply").putExtra("Status",x.getSerialized()))
+                }
+
                 LocalBroadcastManager.getInstance(this@StreamService).sendBroadcast(Intent("NewStatus").putExtra("Status",x.getSerialized()))
             }
 
@@ -53,8 +63,11 @@ class StreamService : IntentService("StreamService") {
 
         override fun onFavorite(source: User, target: User, favoritedStatus: Status) {
             super.onFavorite(source, target, favoritedStatus)
-            logd("Favorite",source.name+"to"+target.name )
-            LocalBroadcastManager.getInstance(this@StreamService).sendBroadcast(Intent("OnFavorited").putExtra("FavoritedStatus",favoritedStatus.getSerialized()))
+          //  logd("Favorite",source.name+"to"+target.name )
+            //toast(source.name+"to"+target.name )
+            LocalBroadcastManager.getInstance(this@StreamService)
+                    .sendBroadcast(Intent("OnFavorited")
+                            .putExtra("Status",favoritedStatus.getSerialized()))
         }
     }
 }

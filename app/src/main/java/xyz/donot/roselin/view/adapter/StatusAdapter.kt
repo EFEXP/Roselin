@@ -76,7 +76,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
             }
             //RT
             val rt=getView<TextView>(R.id.tv_retweet)
-            if (item.isRetweeted) { fav.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, R.drawable.wrap_retweet_pressed ,null),null,null ,null) }
+            if (item.isRetweeted) { rt.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, R.drawable.wrap_retweet_pressed ,null),null,null ,null) }
             else { rt.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, R.drawable.wrap_retweet, null),null, null, null)
             }
 
@@ -125,7 +125,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
                 (mContext as Activity).start<TweetEditActivity>(bundle)
             }
             getView<TextView>(R.id.tv_retweet).setOnClickListener{
-                if(!item.isRetweeted){
+                if(!status.isRetweeted){
                 RetweetTask().execute(getTwitterInstance())}}
             }
 
