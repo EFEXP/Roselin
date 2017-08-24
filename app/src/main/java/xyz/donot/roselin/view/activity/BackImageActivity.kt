@@ -24,6 +24,8 @@ class BackImageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_back_image)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         val uriString=defaultSharedPreferences.getString("BackGroundUri","")
         if (!uriString.isNullOrBlank()){
             Picasso.with(this@BackImageActivity).load(uriString).into(iv_background)
@@ -67,9 +69,11 @@ class BackImageActivity : AppCompatActivity() {
             iv_background.setImageBitmap(null)
             Picasso.with(this@BackImageActivity).load(uri).into(iv_background)
 
-
-
         }
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 
 }

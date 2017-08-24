@@ -9,7 +9,6 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import com.mlsdev.rximagepicker.RxImagePicker
 import com.mlsdev.rximagepicker.Sources
 import com.squareup.picasso.Picasso
@@ -57,13 +56,18 @@ class EditProfileActivity : AppCompatActivity() {
             .setNegativeButton("いいえ",{ dialogInterface, _ -> dialogInterface.cancel()})
             .show()
   }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
 
   override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
-        val toolbar: Toolbar = findViewById(R.id.toolbar)
+      setSupportActionBar(toolbar)
+      supportActionBar?.setDisplayHomeAsUpEnabled(true)
+      supportActionBar?.setDisplayShowHomeEnabled(true)
     val color=ContextCompat.getColor(this@EditProfileActivity,R.color.colorPrimary)
-      toolbar.setNavigationOnClickListener { onBackPressed() }
       class userTask:SafeAsyncTask<Twitter,User>(){
           override fun doTask(arg: Twitter): User = arg.verifyCredentials()
 

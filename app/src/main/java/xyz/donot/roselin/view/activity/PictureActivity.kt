@@ -27,7 +27,6 @@ class PictureActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_picture)
         setSupportActionBar(toolbar)
-        toolbar.setTitle(R.string.pictures)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         val pager=picture_view_pager

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="xyz.donot.roselin.view.activity.PictureActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -14,6 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@android:color/transparent"
+            app:title="@string/title_picture"
             />
     </android.support.design.widget.AppBarLayout>
 

@@ -702,6 +702,14 @@ Talon はその代わりに TwitPic を使用して画像をアップロード�
     <string name="three_mb_message">Twitterでは5MB以内のGIFのみが投稿できます。Talonは、Giphyからこれらの制約に適した高クオリティなGIFを提供します。\n\n検索結果に表示されるのはこの制限に適したものだけであり、5MB以下にダウンサンプリングされたものは表示されません。</string>
     <string name="quoted_you">引用RTされました</string>
     <string name="title_home">ホーム</string>
+    <string name="title_set_background">背景設定</string>
+    <string name="title_edit_profile">プロフィール編集</string>
+    <string name="title_oauth">アカウント認証</string>
+    <string name="title_picture">写真</string>
+    <string name="title_setting">設定</string>
+    <string name="title_tweet_edit">新規ツイート</string>
+    <string name="title_conversation">会話</string>
+    <string name="title_video">ビデオ</string>
 
 
 </resources>

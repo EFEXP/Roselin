@@ -157,11 +157,11 @@
         android:id="@+id/tv_isfollowed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
         android:textSize="12sp"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_description"
         app:layout_constraintTop_toBottomOf="@+id/tv_description"
-        tools:layout_editor_absoluteX="0dp"
         tools:text="フォローされています" />
 
 

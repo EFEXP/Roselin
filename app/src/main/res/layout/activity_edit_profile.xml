@@ -18,7 +18,7 @@
       android:layout_height="wrap_content"
       android:background="?attr/colorPrimary"
       app:popupTheme="@style/AppTheme.PopupOverlay"
-      app:title="EditProfileActivity"
+      app:title="@string/title_edit_profile"
       />
 
   </android.support.design.widget.AppBarLayout>

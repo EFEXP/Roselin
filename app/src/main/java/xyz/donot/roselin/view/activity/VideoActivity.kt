@@ -78,6 +78,7 @@ class VideoActivity : AppCompatActivity() {
         }
     }
 
+
     private fun getMimeType(url: String): String? {
         var type: String? = null
         val extension = MimeTypeMap.getFileExtensionFromUrl(url)

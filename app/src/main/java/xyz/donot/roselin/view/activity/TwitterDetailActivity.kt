@@ -23,12 +23,19 @@ class TwitterDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_twitter_detail)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         val status: Status=intent.extras.getSerializable("Status") as Status
         loadReply(status.id)
         getDiscuss(status)
         detail_recycler_view.adapter = mAdapter
         detail_recycler_view.layoutManager = LinearLayoutManager(this@TwitterDetailActivity)
     }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
+
 
     fun loadReply(long: Long){
         class ConvTask:SafeAsyncTask<Twitter,Status>(){

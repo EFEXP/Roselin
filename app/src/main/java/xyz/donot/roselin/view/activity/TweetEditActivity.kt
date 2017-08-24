@@ -43,6 +43,8 @@ class TweetEditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tweet_edit)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
        tvTextCounter.setEditText(editText_status)
         tvTextCounter.setCharCountChangedListener {_, b ->
            if (b){send_status.isEnabled=false}
@@ -165,6 +167,11 @@ class TweetEditActivity : AppCompatActivity() {
 
 
     }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
+
 
     private fun addPhotos(uri: Uri) = mAdapter.addData(uri)
 
