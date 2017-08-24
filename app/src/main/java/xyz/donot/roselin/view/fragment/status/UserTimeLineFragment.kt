@@ -14,9 +14,9 @@ import twitter4j.*
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.util.extraUtils.*
-import xyz.donot.roselin.util.getLinkList
+import xyz.donot.roselin.util.getURLLink
 import xyz.donot.roselin.util.getMyId
-import xyz.donot.roselin.util.getTagLinkList
+import xyz.donot.roselin.util.getTagURLMention
 import xyz.donot.roselin.view.activity.EditProfileActivity
 import xyz.donot.roselin.view.activity.PictureActivity
 import xyz.donot.roselin.view.activity.UserListActivity
@@ -72,8 +72,8 @@ class UserTimeLineFragment: TimeLineFragment()
 
 
         //Linkable
-        LinkBuilder.on( v.tv_web).addLinks(context.getLinkList()).build()
-        LinkBuilder.on( v.tv_description).addLinks(context.getTagLinkList()).build()
+        LinkBuilder.on( v.tv_web).addLinks(context.getURLLink()).build()
+        LinkBuilder.on( v.tv_description).addLinks(context.getTagURLMention()).build()
 
         v.tv_friends.setOnClickListener {
             val b=Bundle()

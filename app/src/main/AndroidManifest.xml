@@ -22,7 +22,7 @@
         <activity
             android:name=".view.activity.OauthActivity"
             android:label="OauthActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -41,10 +41,10 @@
         <activity
             android:name=".view.activity.PictureActivity"
             android:label="@string/title_activity_picture"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".view.activity.VideoActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <service
             android:name=".service.StreamService"
@@ -53,7 +53,7 @@
         <activity
             android:name=".view.activity.UserActivity"
             android:label="@string/title_activity_user"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.Translucent.User" />
         <activity
             android:name=".view.activity.SettingsActivity"
             android:label="SettingsActivity"
@@ -61,15 +61,15 @@
         <activity
             android:name=".view.activity.TweetEditActivity"
             android:label="@string/title_activity_tweet_edit"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".view.activity.TwitterDetailActivity"
             android:label="@string/title_activity_twitter_detail"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".view.activity.EditProfileActivity"
             android:label="EditProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <service
             android:name=".service.TweetPostService"

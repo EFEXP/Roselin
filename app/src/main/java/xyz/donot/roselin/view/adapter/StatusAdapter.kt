@@ -32,9 +32,9 @@ import java.util.*
 class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_tweet)
 {
     override fun convert(helper: BaseViewHolder, status: Status) {
-
         val item= if (status.isRetweet){
-            helper.setText(R.id.textview_is_retweet,"${status.user.name}がリツイート")
+            helper.setText(R.id.textview_is_retweet,"@${status.user.screenName}がリツイート")
+            LinkBuilder.on( helper.getView(R.id.textview_is_retweet)).addLinks(mContext.getMentionLink()).build()
             helper.setVisible(R.id.textview_is_retweet,true)
             status.retweetedStatus }else{
             helper.setVisible(R.id.textview_is_retweet,false)
@@ -102,7 +102,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
 
 
 
-            LinkBuilder.on(getView(R.id.textview_text)).addLinks(mContext.getTagLinkList()).build()
+            LinkBuilder.on(getView(R.id.textview_text)).addLinks(mContext.getTagURLMention()).build()
             //Listener
             getView<ImageView>(R.id.imageview_icon).setOnClickListener{
                 val intent=mContext.intent<UserActivity>()
@@ -130,23 +130,22 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
             }
 
         //mediaType
-        val statusMediaIds=getImageUrls(item)
+        val statusMediaIds=item.images
         if(statusMediaIds.isNotEmpty()){
-            val mAdapter = TweetCardPicAdapter(statusMediaIds)
+            val mAdapter =TweetCardPicAdapter(statusMediaIds)
             val manager = LinearLayoutManager(mContext).apply {
                 orientation = LinearLayoutManager.HORIZONTAL
             }
-             helper.getView<RecyclerView>(R.id.recyclerview_picture).apply {
+            helper.getView<RecyclerView>(R.id.recyclerview_picture).apply {
                 adapter=mAdapter
                 layoutManager=manager
                 visibility = View.VISIBLE
                 hasFixedSize()
             }
             mAdapter.setOnItemClickListener { adapter, _, position ->
-                val videoUrl: String? = getVideoURL(item.mediaEntities)
-                if(videoUrl!=null){mContext.startActivity(Intent(mContext, VideoActivity::class.java).putExtra("video_url", videoUrl))}
+                if(item.hasVideo){mContext.startActivity(Intent(mContext,VideoActivity::class.java).putExtra("video_url", item.getVideoURL()))}
                 else{ ( mContext as Activity).start<PictureActivity>(Bundle().apply {
-                    putStringArrayList("picture_urls",getImageUrls(item))
+                    putStringArrayList("picture_urls",item.images)
                 })}
                 }
         }

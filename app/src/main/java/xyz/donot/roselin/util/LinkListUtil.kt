@@ -9,7 +9,8 @@ import com.klinker.android.link_builder.Link
 import xyz.donot.roselin.R
 import xyz.donot.roselin.view.activity.UserActivity
 
-fun Context.getTagLinkList() :MutableList<Link> = arrayListOf(
+
+fun Context.getTagURLMention() :MutableList<Link> = arrayListOf(
         Link(Regex.MENTION_PATTERN)
                 .setUnderlined(false)
                 .setTextColor(ContextCompat.getColor(this, R.color.colorAccent))
@@ -37,18 +38,24 @@ fun Context.getTagLinkList() :MutableList<Link> = arrayListOf(
 
                 }
 )
-fun Context.getLinkList() :MutableList<Link> = arrayListOf(
+fun Context.getURLLink() :MutableList<Link> = arrayListOf(
         Link(Regex.VALID_URL)
                 .setUnderlined(false)
-                .setTextColor(ContextCompat.getColor(this@getLinkList, R.color.colorAccent))
+                .setTextColor(ContextCompat.getColor(this@getURLLink, R.color.colorAccent))
                 .setOnClickListener {
                     CustomTabsIntent.Builder()
                             .setShowTitle(true)
                             .addDefaultShareMenuItem()
-                            .setToolbarColor(ContextCompat.getColor(this@getLinkList, R.color.colorPrimary))
-                            .setStartAnimations(this@getLinkList, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                            .setExitAnimations(this@getLinkList, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build()
-                            .launchUrl(this@getLinkList, Uri.parse(it))
+                            .setToolbarColor(ContextCompat.getColor(this@getURLLink, R.color.colorPrimary))
+                            .setStartAnimations(this@getURLLink, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                            .setExitAnimations(this@getURLLink, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build()
+                            .launchUrl(this@getURLLink, Uri.parse(it))})
+
+fun Context.getMentionLink() :MutableList<Link> = arrayListOf(
+        Link(Regex.MENTION_PATTERN)
+                .setUnderlined(false)
+                .setTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .setOnClickListener {
+                    this.startActivity(Intent(this, UserActivity::class.java).putExtra("screen_name", it.replace("@","")))
                 }
 )
-

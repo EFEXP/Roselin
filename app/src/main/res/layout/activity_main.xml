@@ -5,14 +5,12 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
-
+    >
     <android.support.design.widget.CoordinatorLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/main_coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-    tools:context="xyz.donot.roselin.view.activity.MainActivity">
+        tools:context="xyz.donot.roselin.view.activity.MainActivity">
         <View
             android:id="@+id/background_overlay"
             android:background="@color/text_input_background"

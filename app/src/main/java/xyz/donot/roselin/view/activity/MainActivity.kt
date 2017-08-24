@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
            main_viewpager.adapter = adapter
            main_viewpager.offscreenPageLimit = 2
             toolbar.apply {
+                title = context.getString(R.string.title_home)
                 inflateMenu(R.menu.menu_main)
                 setNavigationOnClickListener { drawer_layout.openDrawer(GravityCompat.START) }
             }

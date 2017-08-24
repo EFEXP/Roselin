@@ -52,8 +52,10 @@ class HomeTimeLineFragment : TimeLineFragment(){
             try {
             val result =twitter.getHomeTimeline(Paging(adapter.data[0].id))
             if (result.isNotEmpty()){
-                adapter.addData(0,result)
-                recycler.smoothScrollToPosition(0) }
+             mainThread {
+                 adapter.addData(0,result)
+                 recycler.smoothScrollToPosition(0) }
+             }
             }
             catch (e:Exception){ toast(e.localizedMessage)}
         }
