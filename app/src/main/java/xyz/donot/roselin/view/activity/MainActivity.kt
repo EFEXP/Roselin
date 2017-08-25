@@ -15,12 +15,14 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
 import twitter4j.Status
 import twitter4j.Twitter
 import twitter4j.User
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
+import xyz.donot.roselin.model.realm.DBTabData
 import xyz.donot.roselin.service.StreamService
 import xyz.donot.roselin.util.extraUtils.*
 import xyz.donot.roselin.util.getMyId
@@ -36,6 +38,7 @@ class MainActivity : AppCompatActivity() {
    private var user:User?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val realm =  Realm.getDefaultInstance()
         setContentView(R.layout.activity_main)
         if (!haveToken()) {
             startActivity(intent<OauthActivity>())
@@ -51,6 +54,14 @@ class MainActivity : AppCompatActivity() {
                 inflateMenu(R.menu.menu_main)
                 setNavigationOnClickListener { drawer_layout.openDrawer(GravityCompat.START) }
             }
+            //initial tabdata
+            if (realm.where(DBTabData::class.java).findFirst()==null){
+               realm.executeTransaction {
+                    it.createObject(DBTabData::class.java).apply { name="Home" }
+                    it.createObject(DBTabData::class.java).apply { name="Mention" }
+                }
+            }
+
 
             // stream&savedInstance
             if(savedInstanceState==null) {

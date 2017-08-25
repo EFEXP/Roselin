@@ -12,17 +12,17 @@
     <application
         android:name=".Roselin"
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
         android:label="${appName}"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:replace="android:label"
-        android:fullBackupContent="@xml/backup_descriptor">
+        tools:replace="android:label">
         <activity
             android:name=".view.activity.OauthActivity"
             android:label="OauthActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -41,10 +41,10 @@
         <activity
             android:name=".view.activity.PictureActivity"
             android:label="@string/title_activity_picture"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.activity.VideoActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".service.StreamService"
@@ -61,15 +61,15 @@
         <activity
             android:name=".view.activity.TweetEditActivity"
             android:label="@string/title_activity_tweet_edit"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.activity.TwitterDetailActivity"
             android:label="@string/title_activity_twitter_detail"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.activity.EditProfileActivity"
             android:label="EditProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".service.TweetPostService"
@@ -89,7 +89,17 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.UserListActivity"/>
+        <activity android:name=".view.activity.UserListActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".view.activity.TabSettingActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            >
+            <intent-filter>
+                <action android:name="xyz.donot.roselin.view.activity.TabSettingActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

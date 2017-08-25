@@ -3,8 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="xyz.donot.roselin.view.activity.OauthActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/setting"
-        app:showAsAction="never" />
+        android:id="@+id/menu_notification"
+        android:icon="@drawable/ic_notifications_white_24dp"
+        android:title="@string/notifications"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menu_search"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:title="@string/search"
+        app:showAsAction="ifRoom" />
 </menu>

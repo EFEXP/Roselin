@@ -41,12 +41,12 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
           override fun success(result: Result<TwitterSession>) {
               val builder= ConfigurationBuilder()
               builder.setOAuthConsumerKey(
-                  //  getString(R.string.twitter_official_consumer_key)
-                        getString(R.string.twitter_consumer_key)
+                getString(R.string.twitter_official_consumer_key)
+                      //       getString(R.string.twitter_consumer_key)
               )
               builder.setOAuthConsumerSecret(
-                   //   getString(R.string.twitter_official_consumer_secret)
-                      getString(R.string.twitter_consumer_secret)
+                     getString(R.string.twitter_official_consumer_secret)
+                      //    getString(R.string.twitter_consumer_secret)
               )
               builder.setTweetModeExtended(true)
               builder.setOAuthAccessToken(result.data.authToken.token)

@@ -19,11 +19,9 @@
 
     </PreferenceScreen>
 
-    <ListPreference
-        android:key="list"
-        android:title="ListPreference"
-        android:summary="LIIIIIIIIIIIST"
-        android:entries="@array/entries"
-        android:entryValues="@array/entries"
-        android:defaultValue="1"/>
+    <PreferenceScreen
+        android:title="タブの設定"
+        android:summary="タブの設定を変更します。">
+        <intent android:action="xyz.donot.roselin.view.activity.TabSettingActivity" />
+    </PreferenceScreen>
 </PreferenceScreen>
