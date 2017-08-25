@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--suppress AndroidElementNotAllowed -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <SwitchPreferenceCompat
+    <SwitchPreference
         android:defaultValue="true"
         android:key="night"
         android:summary="夜間モードを使用します。"
         android:title="夜間モード" />
-    <SwitchPreferenceCompat
+    <SwitchPreference
         android:defaultValue="true"
         android:key="quick_tweet"
         android:summary="ホームタイムラインのツイートバーを有効にします。"

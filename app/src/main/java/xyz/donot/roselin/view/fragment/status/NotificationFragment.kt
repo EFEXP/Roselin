@@ -11,11 +11,14 @@ import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.content_base_fragment.*
+import twitter4j.ResponseList
 import twitter4j.Status
 import xyz.donot.roselin.util.extraUtils.mainThread
 import xyz.donot.roselin.util.getDeserialized
 
 class NotificationFragment:TimeLineFragment(){
+    override fun GetData(): ResponseList<Status>? =null
+
     private val rtReceiver by lazy { RTReceiver() }
     private val favReceiver by lazy { FavReceiver() }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -24,11 +27,8 @@ class NotificationFragment:TimeLineFragment(){
             registerReceiver(rtReceiver, IntentFilter("onRetweeted"))
             registerReceiver(favReceiver, IntentFilter("OnFavorited"))
         }
+        refresh.isEnabled=false
     }
-    override fun loadMore(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
-
-    }
-
     override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
 
     }

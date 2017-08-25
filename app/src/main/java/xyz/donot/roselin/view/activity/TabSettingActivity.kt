@@ -1,6 +1,7 @@
 package xyz.donot.roselin.view.activity
 
 import android.os.Bundle
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -11,7 +12,6 @@ import com.chad.library.adapter.base.BaseItemDraggableAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
 import com.chad.library.adapter.base.listener.OnItemDragListener
-import com.squareup.picasso.Picasso
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_tab_setting.*
 import xyz.donot.roselin.R
@@ -52,12 +52,12 @@ class TabSettingActivity : AppCompatActivity() {
             helper.apply {
                 setText(R.id.tv_tabname,item.name)
                 setText(R.id.tv_screenname,item.accountId.toString())
-             val t=   when (item.name){
+             val t=  ResourcesCompat.getDrawable(resources, when (item.name){
                     "Home"->{R.drawable.ic_home}
                     "Mention"->{R.drawable.ic_reply}
                  else->{throw IllegalStateException()}
-                }
-                Picasso.with(this@TabSettingActivity).load(t).into(getView<ImageView>(R.id.iv_icon))
+                },null)
+                getView<ImageView>(R.id.iv_icon).setImageDrawable(t)
 
             }
 

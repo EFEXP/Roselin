@@ -108,6 +108,11 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
       page=  savedInstanceState.getInt("page",0)
     }
 
+
+
+
+
+
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.putInt("page",pagecopy)

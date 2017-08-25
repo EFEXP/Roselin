@@ -14,9 +14,9 @@ import twitter4j.*
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.util.extraUtils.*
-import xyz.donot.roselin.util.getURLLink
 import xyz.donot.roselin.util.getMyId
 import xyz.donot.roselin.util.getTagURLMention
+import xyz.donot.roselin.util.getURLLink
 import xyz.donot.roselin.view.activity.EditProfileActivity
 import xyz.donot.roselin.view.activity.PictureActivity
 import xyz.donot.roselin.view.activity.UserListActivity
@@ -24,20 +24,15 @@ import java.text.SimpleDateFormat
 
 class UserTimeLineFragment: TimeLineFragment()
 {
+    override fun GetData(): ResponseList<Status>? =twitter.getUserTimeline(user.id,Paging(page))
+
     val user by lazy {arguments.getSerializable("user") as User }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
        val v=setUpViews()
        adapter.setHeaderView(v)
     }
-    override fun loadMore(adapter: BaseQuickAdapter<Status, BaseViewHolder>) = async {
-        val result=twitter.getUserTimeline(user.id,Paging(page))
-        if (result!=null){
-            mainThread {
-                adapter.addData(result)
-                adapter.loadMoreComplete()
-            }}
-    }
+
     override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) = Unit
 
     private fun setUpViews():View{

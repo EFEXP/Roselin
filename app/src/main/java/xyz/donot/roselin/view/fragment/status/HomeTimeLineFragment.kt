@@ -12,6 +12,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import twitter4j.Paging
+import twitter4j.ResponseList
 import twitter4j.Status
 import twitter4j.StatusDeletionNotice
 import xyz.donot.roselin.util.extraUtils.async
@@ -20,6 +21,7 @@ import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getDeserialized
 
 class HomeTimeLineFragment : TimeLineFragment(){
+    override fun GetData(): ResponseList<Status>? =twitter.getHomeTimeline(Paging(page))
     private val receiver by lazy { StatusReceiver() }
     private val deleteReceiver by lazy { DeleteReceiver() }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -29,24 +31,7 @@ class HomeTimeLineFragment : TimeLineFragment(){
             registerReceiver(deleteReceiver, IntentFilter("DeleteStatus"))
         }
     }
-    override fun loadMore(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
-        async {
-            try {
-                val result=twitter.getHomeTimeline(Paging(page))
-                if (result!=null)
-                {
-                    mainThread {
-                        adapter.addData(result)
-                        adapter.loadMoreComplete()
-                    }
-                }
-            } catch (e: Exception) {
-                toast(e.localizedMessage)
-            }
 
-        }
-
-    }
     override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
         async {
             try {

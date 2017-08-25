@@ -12,6 +12,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import twitter4j.Paging
+import twitter4j.ResponseList
 import twitter4j.Status
 import xyz.donot.roselin.util.extraUtils.async
 import xyz.donot.roselin.util.extraUtils.mainThread
@@ -19,6 +20,7 @@ import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getDeserialized
 
 class MentionTimeLine :TimeLineFragment(){
+    override fun GetData(): ResponseList<Status>? =twitter.getMentionsTimeline(Paging(page))
     private val replyReceiver by lazy { ReplyReceiver () }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -26,25 +28,6 @@ class MentionTimeLine :TimeLineFragment(){
             registerReceiver(replyReceiver, IntentFilter("NewReply"))
         }
     }
-    override fun loadMore(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
-        async {
-            try {
-                val result=     twitter.getMentionsTimeline(Paging(page))
-                if (result!=null)
-                {
-                    mainThread {
-                        adapter.addData(result)
-                        adapter.loadMoreComplete()
-                    }
-                }
-            } catch (e: Exception) {
-                toast(e.localizedMessage)
-            }
-
-        }
-
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(activity).apply {
