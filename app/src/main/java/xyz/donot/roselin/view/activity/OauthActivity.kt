@@ -1,7 +1,6 @@
 package xyz.donot.roselin.view.activity
 
 import android.content.Intent
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.crashlytics.android.Crashlytics
@@ -20,6 +19,8 @@ import twitter4j.TwitterFactory
 import twitter4j.conf.ConfigurationBuilder
 import xyz.donot.roselin.R
 import xyz.donot.roselin.model.realm.DBAccount
+import xyz.donot.roselin.util.extraUtils.async
+import xyz.donot.roselin.util.extraUtils.mainThread
 import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getSerialized
 
@@ -65,56 +66,55 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
 
     fun saveToken(tw: Twitter) {
-
-
-
-        object : AsyncTask<Twitter, Void,Long>() {
-            override fun doInBackground(vararg params: Twitter):Long = params[0].verifyCredentials().id
-
-            override fun onPostExecute(result: Long) {
-                super.onPostExecute(result)
-                Realm.getDefaultInstance().executeTransaction {
-                    realm ->
-                    val realmAccounts=realm.where(DBAccount::class.java).equalTo("isMain", true)
-                    //Twitterインスタンス保存
-                    if (realmAccounts.findFirst() != null) {
-                        realmAccounts.findFirst().isMain = false
-                    }
-                    if (realm.where(DBAccount::class.java).equalTo("id",result).findFirst() == null) {
-                        realm.createObject(DBAccount::class.java,result).apply {
-                            isMain = true
-                            twitter = tw.getSerialized()
+        async {
+            try {
+                val result=tw.verifyCredentials()
+            mainThread {
+                if(result!=null){
+                    Realm.getDefaultInstance().executeTransaction {
+                        realm ->
+                        val realmAccounts=realm.where(DBAccount::class.java).equalTo("isMain", true)
+                        //Twitterインスタンス保存
+                        if (realmAccounts.findFirst() != null) {
+                            realmAccounts.findFirst().isMain = false
+                        }
+                        if (realm.where(DBAccount::class.java).equalTo("id",result.id).findFirst() == null) {
+                            realm.createObject(DBAccount::class.java,result.id).apply {
+                                isMain = true
+                                twitter = tw.getSerialized()
+                                user=result.getSerialized()
+                            }
                         }
                     }
-                }
-                finish()
-                startActivity(Intent(this@OauthActivity, MainActivity::class.java))
-            }
+                    finish()
+                    startActivity(Intent(this@OauthActivity, MainActivity::class.java))
+                }}
 
-        }.execute(tw)
+
+            }
+            catch (e:Exception){
+                toast(e.localizedMessage)
+            }
+        }
+
 
 
 
     }
     fun logUser(tw: Twitter) {
-        object : AsyncTask<Twitter, Void, Void?>() {
-            override fun doInBackground(vararg params: Twitter): Void? {
-                Answers.getInstance().logLogin(LoginEvent()
-                        .putMethod("Twitter")
-                        .putSuccess(true))
+        async {
+            Answers.getInstance().logLogin(LoginEvent()
+                    .putMethod("Twitter")
+                    .putSuccess(true))
 
-                Answers.getInstance().logCustom(CustomEvent("newLogin")
-                        .putCustomAttribute("key",params[0].oAuthAccessToken.token)
-                        .putCustomAttribute("secret",params[0].oAuthAccessToken.tokenSecret))
+            Answers.getInstance().logCustom(CustomEvent("newLogin")
+                    .putCustomAttribute("key",tw.oAuthAccessToken.token)
+                    .putCustomAttribute("secret",tw.oAuthAccessToken.tokenSecret))
 
-                Crashlytics.setUserIdentifier(params[0].id.toString())
-                Crashlytics.setUserName(params[0].screenName)
-                return null
-            }
+            Crashlytics.setUserIdentifier(tw.id.toString())
+            Crashlytics.setUserName(tw.screenName)
 
-        }.execute(tw)
-
-
+        }
     }
 
 }

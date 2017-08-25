@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+   <Preference
+       android:title="注意"
+       android:summary="全ての設定は再起動後に有効になります"
+       />
     <SwitchPreference
         android:defaultValue="true"
         android:key="night"
         android:summary="夜間モードを使用します。"
         android:title="夜間モード" />
     <SwitchPreference
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:key="quick_tweet"
         android:summary="ホームタイムラインのツイートバーを有効にします。"
         android:title="ツイートバー" />

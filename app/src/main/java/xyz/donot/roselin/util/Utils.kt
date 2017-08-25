@@ -6,6 +6,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import io.realm.Realm
 import twitter4j.Twitter
 import twitter4j.TwitterFactory
+import twitter4j.User
 import twitter4j.conf.ConfigurationBuilder
 import xyz.donot.roselin.R
 import xyz.donot.roselin.model.realm.DBAccount
@@ -56,6 +57,10 @@ fun getOfficialInstance(context: Context): twitter4j.Twitter {
 }
 
 
+fun getMyScreenName(): String = Realm.getDefaultInstance().use {
+  val b=  it.where(DBAccount::class.java).equalTo("isMain",true).findFirst().user!!.getDeserialized<User>()
+    return  b.screenName
+}
 fun getMyId(): Long = Realm.getDefaultInstance().use {
     return  it.where(DBAccount::class.java).equalTo("isMain",true).findFirst().id
 }

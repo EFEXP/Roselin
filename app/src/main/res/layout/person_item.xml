@@ -199,7 +199,7 @@
             tools:text="Fav" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/bt_list"
+            android:id="@+id/tv_list"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

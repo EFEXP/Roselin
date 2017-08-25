@@ -20,6 +20,7 @@ import xyz.donot.roselin.util.getURLLink
 import xyz.donot.roselin.view.activity.EditProfileActivity
 import xyz.donot.roselin.view.activity.PictureActivity
 import xyz.donot.roselin.view.activity.UserListActivity
+import xyz.donot.roselin.view.activity.UserListsActivity
 import java.text.SimpleDateFormat
 
 class UserTimeLineFragment: TimeLineFragment()
@@ -52,7 +53,7 @@ class UserTimeLineFragment: TimeLineFragment()
         v.tv_follower.text=user.followersCount.toString()
         v.tv_friends.text=user.friendsCount.toString()
         v.tv_fav.text=user.favouritesCount.toString()
-        v.bt_list.text=user.listedCount.toString()
+        v.tv_list.text=user.listedCount.toString()
         //認証済み
         if(user.isVerified ||user.screenName=="JlowoIL"){
             v. tv_name
@@ -70,17 +71,19 @@ class UserTimeLineFragment: TimeLineFragment()
         LinkBuilder.on( v.tv_web).addLinks(context.getURLLink()).build()
         LinkBuilder.on( v.tv_description).addLinks(context.getTagURLMention()).build()
 
+        v.tv_list.setOnClickListener {
+            activity.start<UserListsActivity>(Bundle { putLong("userId",user.id) })
+        }
         v.tv_friends.setOnClickListener {
-            val b=Bundle()
-            b.putLong("userId",user.id)
-            b.putBoolean("isFriend",true)
-            activity.start<UserListActivity>(b)
+            activity.start<UserListActivity>(Bundle {
+                putLong("userId",user.id)
+                putBoolean("isFriend",true) })
         }
         v.tv_follower.setOnClickListener {
-            val b=Bundle()
-            b.putLong("userId",user.id)
-            b.putBoolean("isFriend",false)
-            activity.start<UserListActivity>(b)
+            activity.start<UserListActivity>(Bundle {
+                        putLong("userId",user.id)
+                        putBoolean("isFriend",false)
+                    })
         }
             if(user.id!= getMyId()) {
                 v.tv_isfollowed.show()

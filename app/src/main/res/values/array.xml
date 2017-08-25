@@ -24,6 +24,12 @@
         <item>共有</item>
         <item>削除</item>
     </string-array>
+    <string-array name="add_tab_menu">
+       <item>ホーム</item>
+        <item>リスト</item>
+        <item>リプライ</item>
+        <item>通知</item>
+    </string-array>
     <string-array name="text_tools">
         <item>突然の死</item>
     </string-array>

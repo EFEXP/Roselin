@@ -3,7 +3,7 @@
 package xyz.donot.roselin.view.fragment
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatDialogFragment
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -21,7 +21,7 @@ import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getTwitterInstance
 import xyz.donot.roselin.view.custom.MyLoadingView
 
-abstract class BaseListFragment<T> : Fragment() {
+abstract class BaseListFragment<T> : AppCompatDialogFragment() {
     val twitter by lazy { getTwitterInstance() }
     val adapter by lazy { adapterFun() }
 

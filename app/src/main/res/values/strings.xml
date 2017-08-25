@@ -710,6 +710,7 @@ Talon はその代わりに TwitPic を使用して画像をアップロード�
     <string name="title_tweet_edit">新規ツイート</string>
     <string name="title_conversation">会話</string>
     <string name="title_video">ビデオ</string>
+    <string name="title_activity_user_lists">UserListsActivity</string>
 
 
 </resources>

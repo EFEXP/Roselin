@@ -23,14 +23,15 @@ import twitter4j.User
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.model.realm.DBTabData
+import xyz.donot.roselin.model.realm.HOME
+import xyz.donot.roselin.model.realm.MENTION
 import xyz.donot.roselin.service.StreamService
 import xyz.donot.roselin.util.extraUtils.*
 import xyz.donot.roselin.util.getMyId
+import xyz.donot.roselin.util.getMyScreenName
 import xyz.donot.roselin.util.getTwitterInstance
 import xyz.donot.roselin.util.haveToken
 import xyz.donot.roselin.view.adapter.MainTimeLineAdapter
-
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -45,23 +46,39 @@ class MainActivity : AppCompatActivity() {
             this.finish()
         }
         else{
+            //initial tabdata
+            if (realm.where(DBTabData::class.java).findFirst()==null){
+                realm.executeTransaction {
+                    it.createObject(DBTabData::class.java).apply {
+                        order=0
+                        type= HOME
+                        accountId= getMyId()
+                        screenName= getMyScreenName()
+                    }
+                    it.createObject(DBTabData::class.java).apply {
+                        order=1
+                        type= MENTION
+                        accountId= getMyId()
+                        screenName= getMyScreenName()
+                    }
+                }
+            }
             //pager
-            val adapter=MainTimeLineAdapter(supportFragmentManager)
-           main_viewpager.adapter = adapter
-           main_viewpager.offscreenPageLimit = 2
+          val list= ArrayList<DBTabData>().apply {
+              realm.where(DBTabData::class.java)
+                      .findAll().forEach {
+                  add(realm.copyFromRealm(it))
+              }
+          }
+            val adapter= MainTimeLineAdapter(supportFragmentManager,list )
+            main_viewpager.adapter = adapter
+            main_viewpager.offscreenPageLimit = 3
+
             toolbar.apply {
                 title = context.getString(R.string.title_home)
                 inflateMenu(R.menu.menu_main)
                 setNavigationOnClickListener { drawer_layout.openDrawer(GravityCompat.START) }
             }
-            //initial tabdata
-            if (realm.where(DBTabData::class.java).findFirst()==null){
-               realm.executeTransaction {
-                    it.createObject(DBTabData::class.java).apply { name="Home" }
-                    it.createObject(DBTabData::class.java).apply { name="Mention" }
-                }
-            }
-
 
             // stream&savedInstance
             if(savedInstanceState==null) {
@@ -70,7 +87,7 @@ class MainActivity : AppCompatActivity() {
             else{
                 user= savedInstanceState.getSerializable("user") as User
             }
-            if (!defaultSharedPreferences.getBoolean("quick_tweet",true)){ editText_layout.visibility= View.GONE}
+            if (!defaultSharedPreferences.getBoolean("quick_tweet",false)){ editText_layout.visibility= View.GONE}
             setUpHeader()
             setUpDrawerEvent()
             setUpView()
@@ -159,6 +176,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpView() {
+
         val uriString=defaultSharedPreferences.getString("BackGroundUri","")
         if (!uriString.isNullOrBlank()){
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,Uri.parse(uriString))
