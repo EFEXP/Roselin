@@ -2,13 +2,18 @@ package xyz.donot.roselin.view.activity
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.LocalBroadcastManager
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -37,6 +42,8 @@ import xyz.donot.roselin.view.adapter.MainTimeLineAdapter
 class MainActivity : AppCompatActivity() {
    private val REQUEST_WRITE_READ=0
    private var user:User?=null
+    private val disConnectionReceiver by lazy { DisConnectionReceiver() }
+    private val connectionReceiver by lazy { ConnectionReceiver() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val realm =  Realm.getDefaultInstance()
@@ -46,8 +53,13 @@ class MainActivity : AppCompatActivity() {
             this.finish()
         }
         else{
+            //Receiver
+            LocalBroadcastManager.getInstance(this).apply {
+                registerReceiver(disConnectionReceiver, IntentFilter("OnDisconnect"))
+                registerReceiver(connectionReceiver, IntentFilter("OnConnect"))
+            }
             //initial tabdata
-            if (realm.where(DBTabData::class.java).findFirst()==null){
+            if (realm.where(DBTabData::class.java).count()==0L){
                 realm.executeTransaction {
                     it.createObject(DBTabData::class.java).apply {
                         order=0
@@ -63,16 +75,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-            //pager
-          val list= ArrayList<DBTabData>().apply {
-              realm.where(DBTabData::class.java)
-                      .findAll().forEach {
-                  add(realm.copyFromRealm(it))
-              }
-          }
-            val adapter= MainTimeLineAdapter(supportFragmentManager,list )
-            main_viewpager.adapter = adapter
-            main_viewpager.offscreenPageLimit = 3
 
             toolbar.apply {
                 title = context.getString(R.string.title_home)
@@ -93,6 +95,8 @@ class MainActivity : AppCompatActivity() {
             setUpView()
             InitialRequestPermission()
          }
+
+
 
 
 }
@@ -176,7 +180,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpView() {
-
+        //pager
+        val realm =  Realm.getDefaultInstance()
+        val list= ArrayList<DBTabData>().apply {
+            realm.where(DBTabData::class.java)
+                    .findAll().forEach {
+                add(realm.copyFromRealm(it))
+            }
+        }
+        val adapter= MainTimeLineAdapter(supportFragmentManager,list )
+        main_viewpager.adapter = adapter
+        main_viewpager.offscreenPageLimit = 3
         val uriString=defaultSharedPreferences.getString("BackGroundUri","")
         if (!uriString.isNullOrBlank()){
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,Uri.parse(uriString))
@@ -203,6 +217,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        LocalBroadcastManager.getInstance(this).apply {
+            unregisterReceiver(connectionReceiver)
+            unregisterReceiver(disConnectionReceiver)
+        }
+    }
+    inner class ConnectionReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+         mainThread {   iv_connected_stream.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_cloud,null))  }
+        }
+    }
+    inner class DisConnectionReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            mainThread {   iv_connected_stream.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_cloud_off,null))}
+        }
+    }
 
 }

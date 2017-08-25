@@ -23,6 +23,7 @@ import xyz.donot.roselin.R
 import xyz.donot.roselin.model.realm.*
 import xyz.donot.roselin.util.extraUtils.newIntent
 import xyz.donot.roselin.util.getMyId
+import xyz.donot.roselin.util.getMyScreenName
 
 
 class TabSettingActivity : AppCompatActivity() {
@@ -77,14 +78,33 @@ private val REQUEST_LISTS=1
                     .setItems(tab_menu, { _, int ->
                         val selectedItem=resources.getStringArray(tab_menu)[int]
                         when(selectedItem){
-                            "ホーム"->{}
+                            "ホーム"->{
+                                mAdapter.addData( DBTabData().apply {
+                                    type= HOME
+                                    accountId= getMyId()
+                                    screenName= getMyScreenName()
+                                     })
+                            }
                             "リスト"->{
                                 startActivityForResult(newIntent<UserListsActivity>().apply {
                                     putExtra("userId", getMyId())
                                     putExtra("selectList",true) },REQUEST_LISTS)
                             }
-                            "リプライ"->{}
-                            "通知"->{}
+                            "リプライ"->{
+                                mAdapter.addData( DBTabData().apply {
+                                    type= MENTION
+                                    accountId= getMyId()
+                                    screenName= getMyScreenName()
+                                })
+                            }
+                            "通知"->{
+                                mAdapter.addData( DBTabData().apply {
+                                    type= NOTIFICATION
+                                    accountId= getMyId()
+                                    screenName= getMyScreenName()
+                                })
+
+                            }
                         }
 
                     })
@@ -103,6 +123,7 @@ private val REQUEST_LISTS=1
                 realm.createObject(DBTabData::class.java).apply {
                     type=data.type
                     order =i
+                    screenName=data.screenName
                     listId=data.listId
                     accountId=data.accountId
                     searchWord=data.searchWord
@@ -118,7 +139,7 @@ private val REQUEST_LISTS=1
             if (requestCode==REQUEST_LISTS){
                 mAdapter.addData( DBTabData().apply {
                     type= LIST
-
+                    listName=data.getStringExtra("listName")
                     listId=data.getLongExtra("listId",0L)
                 })
             }
@@ -138,12 +159,14 @@ private val REQUEST_LISTS=1
                     HOME->{setText(R.id.tv_tabname,text)}
                     MENTION->{setText(R.id.tv_tabname,text)}
                     LIST->{ setText(R.id.tv_tabname,item.listName)}
+                    NOTIFICATION->{setText(R.id.tv_tabname,text)}
                     else->{throw Exception()}
                 }
             val image= ResourcesCompat.getDrawable(resources, when (item.type){
                     HOME->{R.drawable.ic_home}
                     MENTION->{R.drawable.ic_reply}
                     LIST->{R.drawable.ic_view_list}
+                NOTIFICATION->{R.drawable.ic_notifications}
                  else->{throw Exception()}
                 },null)
                 getView<ImageView>(R.id.iv_icon).setImageDrawable(image)

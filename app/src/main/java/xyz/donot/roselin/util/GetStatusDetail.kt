@@ -40,5 +40,7 @@ fun getExpandedText(status: Status): String {
             text = m.replaceAll("")
         }
     }
+
+
     return text
 }
