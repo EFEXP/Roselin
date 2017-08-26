@@ -19,6 +19,7 @@ import twitter4j.TwitterFactory
 import twitter4j.conf.ConfigurationBuilder
 import xyz.donot.roselin.R
 import xyz.donot.roselin.model.realm.DBAccount
+import xyz.donot.roselin.model.realm.DBMute
 import xyz.donot.roselin.util.extraUtils.async
 import xyz.donot.roselin.util.extraUtils.mainThread
 import xyz.donot.roselin.util.extraUtils.toast
@@ -42,20 +43,21 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
           override fun success(result: Result<TwitterSession>) {
               val builder= ConfigurationBuilder()
               builder.setOAuthConsumerKey(
-                getString(R.string.twitter_official_consumer_key)
-                      //       getString(R.string.twitter_consumer_key)
+                      //  getString(R.string.twitter_official_consumer_key)
+                          getString(R.string.twitter_consumer_key)
               )
               builder.setOAuthConsumerSecret(
-                     getString(R.string.twitter_official_consumer_secret)
-                      //    getString(R.string.twitter_consumer_secret)
+                    // getString(R.string.twitter_official_consumer_secret)
+                          getString(R.string.twitter_consumer_secret)
               )
               builder.setTweetModeExtended(true)
               builder.setOAuthAccessToken(result.data.authToken.token)
               builder.setOAuthAccessTokenSecret(result.data.authToken.secret)
 
-                val twitter=TwitterFactory(builder.build()).instance
+              val twitter=TwitterFactory(builder.build()).instance
               logUser(twitter)
               saveToken(twitter)
+              saveMute(twitter)
           }
 
           override fun failure(exception: TwitterException?) = toast("失敗しました。")
@@ -96,9 +98,25 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                 toast(e.localizedMessage)
             }
         }
+    }
+    fun  saveMute(tw: Twitter){
+        var cursor: Long = -1L
+        val arrayMute=ArrayList<Long>()
+            async {
+               val result = tw.getMutesIDs(cursor)
+                if (result!=null) {
+                    mainThread { arrayMute.addAll(result.iDs.toList()) }
+                }
+            }
+        Realm.getDefaultInstance().executeTransaction {
+            realm ->
+           arrayMute.forEach { ids->
+               realm.createObject(DBMute::class.java).apply {
+                   id=ids
+               }
+           }
 
-
-
+        }
 
     }
     fun logUser(tw: Twitter) {

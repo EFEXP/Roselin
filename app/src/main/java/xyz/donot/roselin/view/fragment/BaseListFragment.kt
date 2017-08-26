@@ -74,6 +74,12 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
                         adapter.loadMoreComplete()
                     }
                 }
+                else{
+                    mainThread {
+                    adapter.loadMoreComplete()
+                    adapter.loadMoreEnd()
+                    }
+                }
             } catch (e: Exception) {
                 toast(e.localizedMessage)
                 adapter.loadMoreFail()

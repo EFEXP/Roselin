@@ -104,6 +104,7 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
             }
         }
         //クリックリスナーEnd
+        adapter.emptyView=View.inflate(activity, R.layout.item_empty,null)
         if (savedInstanceState!=null)
       page=  savedInstanceState.getInt("page",0)
     }

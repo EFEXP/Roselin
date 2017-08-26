@@ -4,12 +4,14 @@ import android.content.Context
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import io.realm.Realm
+import twitter4j.Status
 import twitter4j.Twitter
 import twitter4j.TwitterFactory
 import twitter4j.User
 import twitter4j.conf.ConfigurationBuilder
 import xyz.donot.roselin.R
 import xyz.donot.roselin.model.realm.DBAccount
+import xyz.donot.roselin.model.realm.DBMute
 import xyz.donot.roselin.util.extraUtils.logd
 import xyz.donot.roselin.util.extraUtils.mainThread
 import java.io.*
@@ -69,3 +71,19 @@ fun haveToken(): Boolean = Realm.getDefaultInstance().use {
     return  it.where(DBAccount::class.java).count()>0
 }
 
+fun canPass(status: Status):Boolean
+{
+    val realm=Realm.getDefaultInstance()
+    val userId=status.user.id
+    val text=status.text
+
+    if (realm.where(DBMute::class.java).equalTo("id",userId).count()>0){
+        return false
+    }
+    if (realm.where(DBMute::class.java).equalTo("text",text).count()>0){
+        return false
+    }
+
+    return true
+
+}

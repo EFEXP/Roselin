@@ -68,6 +68,7 @@ class SearchSettingActivity : AppCompatActivity() {
             toast(querytext)
             start<SearchActivity>(Bundle().apply {
                 putByteArray("query_bundle",query.getSerialized())
+                putString("query_text",search_setting_query.text.toString())
             })
     }}
     override fun onSupportNavigateUp(): Boolean {

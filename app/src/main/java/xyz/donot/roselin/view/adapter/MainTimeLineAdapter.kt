@@ -8,6 +8,7 @@ import xyz.donot.roselin.util.extraUtils.Bundle
 import xyz.donot.roselin.view.fragment.status.HomeTimeLineFragment
 import xyz.donot.roselin.view.fragment.status.ListTimeLine
 import xyz.donot.roselin.view.fragment.status.MentionTimeLine
+import xyz.donot.roselin.view.fragment.status.NotificationFragment
 
 
 class MainTimeLineAdapter(fm: FragmentManager, private val realmResults:ArrayList<DBTabData>) : FragmentPagerAdapter(fm) {
@@ -18,6 +19,7 @@ class MainTimeLineAdapter(fm: FragmentManager, private val realmResults:ArrayLis
         HOME->HomeTimeLineFragment()
         MENTION->MentionTimeLine()
         LIST->ListTimeLine().apply { arguments= Bundle { putLong("listId",realmResults[i].listId) } }
+        NOTIFICATION->NotificationFragment()
     else->throw IllegalStateException()
     }
 

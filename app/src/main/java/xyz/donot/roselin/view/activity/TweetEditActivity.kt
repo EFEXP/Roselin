@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.support.v4.app.DialogFragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -28,6 +29,7 @@ import xyz.donot.roselin.util.getSerialized
 import xyz.donot.roselin.util.replace
 import xyz.donot.roselin.view.adapter.TwitterImageAdapter
 import xyz.donot.roselin.view.fragment.DraftFragment
+import xyz.donot.roselin.view.fragment.TrendFragment
 import java.io.File
 import java.util.*
 
@@ -38,6 +40,7 @@ class TweetEditActivity : AppCompatActivity() {
     private val  statusId by lazy {  intent.getLongExtra("status_id",0) }
     private val mAdapter= TwitterImageAdapter()
     private var screenName :String=""
+    var dialog: DialogFragment?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +102,8 @@ class TweetEditActivity : AppCompatActivity() {
 
         }
         show_drafts.setOnClickListener {
-            DraftFragment().show(supportFragmentManager,"")
+            dialog=DraftFragment()
+            dialog?.show(supportFragmentManager,"")
         }
 
         text_tools.setOnClickListener{
@@ -119,11 +123,14 @@ class TweetEditActivity : AppCompatActivity() {
                                 val text="＿人人人人人人$a＿\n＞ ${editText_status.text} ＜\n￣Y^Y^Y^Y^Y$b￣"
                                 editText_status.text.clear()
                                 editText_status.setText(text)
-
                             }
                         }
                     })
                     .show()
+        }
+        trend_hashtag.setOnClickListener{
+            dialog=TrendFragment()
+            dialog?.show(supportFragmentManager,"")
         }
         use_camera.setOnClickListener {
             if(pic_recycler_view.layoutManager.itemCount<4
@@ -140,14 +147,8 @@ class TweetEditActivity : AppCompatActivity() {
             {
                 RxImagePicker.with(applicationContext).requestImage(Sources.GALLERY)
                         .subscribe({addPhotos(it)},{it.printStackTrace()})
-
             }
-
-
-
     }
-
-
 }
     fun changeDraft(draft: DBDraft){
         editText_status.editableText.clear()
@@ -174,6 +175,18 @@ class TweetEditActivity : AppCompatActivity() {
 
 
     private fun addPhotos(uri: Uri) = mAdapter.addData(uri)
+
+    fun changeToDraft(draft: DBDraft){
+        editText_status.editableText.clear()
+        editText_status.append(draft.text)
+        dialog?.dismiss()
+        dialog=null
+    }
+    fun addTrendHashtag(string: String){
+        editText_status.append(" $string")
+        dialog?.dismiss()
+        dialog=null
+    }
 
     override fun onBackPressed() {
         if(!editText_status.editableText.isBlank()&&!editText_status.editableText.isEmpty()) {

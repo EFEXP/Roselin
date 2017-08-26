@@ -10,9 +10,9 @@ import xyz.donot.roselin.util.getDeserialized
 import xyz.donot.roselin.view.adapter.SearchAdapter
 
 class SearchActivity : AppCompatActivity() {
+    private val query_text :String by lazy {  intent.getStringExtra("query_text")}
     override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
-      val query_txt :String?= intent.getStringExtra("query_txt")
       val query_bundle=intent.getByteArrayExtra("query_bundle")
       setContentView(R.layout.activity_search)
         setSupportActionBar(toolbar)
@@ -24,8 +24,8 @@ class SearchActivity : AppCompatActivity() {
         setUpViews(q)
                 //Analytics
       }
-        else if (query_txt != null) {
-        setUpViews(Query(query_txt))
+        else {
+        setUpViews(Query(query_text))
           //Analytics
 
       }
@@ -33,7 +33,7 @@ class SearchActivity : AppCompatActivity() {
 
     }
  private fun setUpViews(tweetQuery: Query){
-     search_view_pager.adapter = SearchAdapter(tweetQuery, supportFragmentManager)
+     search_view_pager.adapter = SearchAdapter(tweetQuery,query_text,supportFragmentManager)
      search_tabs.setupWithViewPager(search_view_pager)
  }
     override fun onSupportNavigateUp(): Boolean {
