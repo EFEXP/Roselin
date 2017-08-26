@@ -19,11 +19,14 @@ import com.chad.library.adapter.base.listener.OnItemDragListener
 import com.chad.library.adapter.base.listener.OnItemSwipeListener
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_tab_setting.*
+import twitter4j.Query
 import xyz.donot.roselin.R
 import xyz.donot.roselin.model.realm.*
 import xyz.donot.roselin.util.extraUtils.newIntent
 import xyz.donot.roselin.util.getMyId
 import xyz.donot.roselin.util.getMyScreenName
+import xyz.donot.roselin.util.getSerialized
+import xyz.donot.roselin.view.fragment.SearchSettingFragment
 
 
 class TabSettingActivity : AppCompatActivity() {
@@ -99,6 +102,16 @@ private val REQUEST_LISTS=1
                                 })
                                 realmRecreate()
                             }
+                            "トレンド"->{
+                                mAdapter.addData( DBTabData().apply {
+                                    type= TREND
+                                })
+                                realmRecreate()
+                            }
+                            "検索"->{
+                                SearchSettingFragment().show(supportFragmentManager,"")
+                            }
+
                             "通知"->{
                                 mAdapter.addData( DBTabData().apply {
                                     type= NOTIFICATION
@@ -113,7 +126,15 @@ private val REQUEST_LISTS=1
                     })
                     .show()
         }
+    }
 
+    fun setSearchWord(query: Query,querytext: String){
+        mAdapter.addData( DBTabData().apply {
+            type= SEARCH
+            searchQuery=query.getSerialized()
+           searchWord= querytext
+        })
+        realmRecreate()
     }
     fun realmRecreate()
     {
@@ -128,9 +149,12 @@ private val REQUEST_LISTS=1
                     order =i
                     screenName=data.screenName
                     listId=data.listId
+                    listName=data.listName
                     accountId=data.accountId
+                    searchQuery=data.searchQuery
                     searchWord=data.searchWord
                 }
+
             }
         }
     }
@@ -146,7 +170,6 @@ private val REQUEST_LISTS=1
                     listId=data.getLongExtra("listId",0L)
                 })
             }
-
             realmRecreate()
 
         }
@@ -163,13 +186,17 @@ private val REQUEST_LISTS=1
                     MENTION->{setText(R.id.tv_tabname,text)}
                     LIST->{ setText(R.id.tv_tabname,item.listName)}
                     NOTIFICATION->{setText(R.id.tv_tabname,text)}
+                    TREND->{setText(R.id.tv_tabname,text)}
+                    SEARCH->{setText(R.id.tv_tabname,item.searchWord)}
                     else->{throw Exception()}
                 }
             val image= ResourcesCompat.getDrawable(resources, when (item.type){
                     HOME->{R.drawable.ic_home}
                     MENTION->{R.drawable.ic_reply}
                     LIST->{R.drawable.ic_view_list}
-                NOTIFICATION->{R.drawable.ic_notifications}
+                    NOTIFICATION->{R.drawable.ic_notifications}
+                   TREND->{R.drawable.ic_trending}
+                SEARCH->{R.drawable.ic_search}
                  else->{throw Exception()}
                 },null)
                 getView<ImageView>(R.id.iv_icon).setImageDrawable(image)

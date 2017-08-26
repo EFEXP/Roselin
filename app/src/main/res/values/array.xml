@@ -10,6 +10,7 @@
         <item>⊚⃝⸜꒰´•‧̫•ू`꒰⑅꒱</item>
     </array>
     <string-array name="tweet_menu">
+        <item>返信</item>
         <item>会話</item>
         <item>RTした人</item>
         <item>公式で見る</item>
@@ -17,6 +18,7 @@
         <item>共有</item>
     </string-array>
     <string-array name="tweet_my_menu">
+        <item>返信</item>
         <item>会話</item>
         <item>RTした人</item>
         <item>公式で見る</item>
@@ -29,6 +31,8 @@
         <item>リスト</item>
         <item>リプライ</item>
         <item>通知</item>
+        <item>検索</item>
+        <item>トレンド</item>
     </string-array>
     <string-array name="text_tools">
         <item>突然の死</item>

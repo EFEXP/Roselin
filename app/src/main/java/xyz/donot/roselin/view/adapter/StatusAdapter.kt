@@ -21,7 +21,6 @@ import xyz.donot.roselin.util.*
 import xyz.donot.roselin.util.extraUtils.intent
 import xyz.donot.roselin.util.extraUtils.start
 import xyz.donot.roselin.view.activity.PictureActivity
-import xyz.donot.roselin.view.activity.TweetEditActivity
 import xyz.donot.roselin.view.activity.UserActivity
 import xyz.donot.roselin.view.activity.VideoActivity
 import java.util.*
@@ -117,13 +116,6 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
                     DestroyFavoriteTask().execute(getTwitterInstance())
                 }
                 }
-            getView<TextView>(R.id.reply).setOnClickListener{
-                val bundle=  Bundle()
-                bundle.putString("status_txt",item.text)
-                bundle.putLong("status_id",item.id)
-                bundle.putString("user_screen_name",item.user.screenName)
-                (mContext as Activity).start<TweetEditActivity>(bundle)
-            }
             getView<TextView>(R.id.tv_retweet).setOnClickListener{
                 if(!status.isRetweeted){
                 RetweetTask().execute(getTwitterInstance())}}
@@ -153,7 +145,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
             helper.getView<RecyclerView>(R.id.recyclerview_picture).visibility = View.GONE
         }
         //EndMedia
-        Picasso.with(mContext).load(item.user.originalProfileImageURLHttps).into(helper.getView<ImageView>(R.id.imageview_icon))
+        Picasso.with(mContext).load(item.user.biggerProfileImageURLHttps).into(helper.getView<ImageView>(R.id.imageview_icon))
     }
 }
 

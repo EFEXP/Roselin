@@ -29,5 +29,6 @@ open class DBTabData : RealmObject() {
     open  var order:Int=0
     open  var listId:Long=0L
     open  var listName:String?=null
+    open  var searchQuery:ByteArray?=null
     open  var searchWord:String?=null
 }

@@ -706,6 +706,7 @@ Talon はその代わりに TwitPic を使用して画像をアップロード�
     <string name="title_video">ビデオ</string>
     <string name="title_activity_user_lists">UserListsActivity</string>
     <string name="use_only_japanese">日本語のみ</string>
+    <string name="search_absolute">検索（完全一致）</string>
 
 
 </resources>

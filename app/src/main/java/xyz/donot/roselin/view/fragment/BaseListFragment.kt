@@ -23,22 +23,26 @@ import xyz.donot.roselin.view.custom.MyLoadingView
 abstract class BaseListFragment<T> : AppCompatDialogFragment() {
     val twitter by lazy { getTwitterInstance() }
     val adapter by lazy { adapterFun() }
+    var useDefaultLoad=true
 
     abstract fun adapterFun():BaseQuickAdapter<T,BaseViewHolder>
     abstract fun pullToRefresh(adapter: BaseQuickAdapter<T, BaseViewHolder>)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = inflater.inflate(R.layout.content_base_fragment, container, false)
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val dividerItemDecoration = DividerItemDecoration( recycler.context,
                 LinearLayoutManager(activity).orientation)
         recycler.addItemDecoration(dividerItemDecoration)
         recycler.layoutManager = LinearLayoutManager(activity)
-        // adapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN)
-        adapter.setOnLoadMoreListener({ LoadMoreData()},recycler)
+        adapter.setOnLoadMoreListener({ if (useDefaultLoad){LoadMoreData()} else{LoadMoreData2()} },recycler)
         adapter.setLoadMoreView(MyLoadingView())
-        // adapter.emptyView=View.inflate(activity, R.layout.item_empty,null)
+        adapter.emptyView=View.inflate(activity, R.layout.item_empty,null)
         recycler.adapter=adapter
-      if (savedInstanceState==null){LoadMoreData()}
+      if (savedInstanceState==null){
+          if (useDefaultLoad){LoadMoreData()}
+          else{LoadMoreData2()}
+      }
         else{
           val t=savedInstanceState.getSerializable("data") as ArrayList<T>
           Log.d("SavedInstanceStateHas",t.size.toString())
@@ -50,11 +54,15 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
                 refresh.isRefreshing=false
             }
             else{
-               LoadMoreData()
+               if (useDefaultLoad){LoadMoreData()}
+                else{LoadMoreData2()}
                 refresh.isRefreshing=false
             } }
 
     }
+
+
+    open  fun LoadMoreData2(){}
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
        val l=ArrayList<T>()

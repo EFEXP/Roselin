@@ -30,6 +30,8 @@ import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.model.realm.DBTabData
 import xyz.donot.roselin.model.realm.HOME
 import xyz.donot.roselin.model.realm.MENTION
+import xyz.donot.roselin.model.realm.SEARCH
+import xyz.donot.roselin.service.SearchStreamService
 import xyz.donot.roselin.service.StreamService
 import xyz.donot.roselin.util.extraUtils.*
 import xyz.donot.roselin.util.getMyId
@@ -91,7 +93,14 @@ class MainActivity : AppCompatActivity() {
 
             // stream&savedInstance
             if(savedInstanceState==null) {
-         startService(Intent(this@MainActivity, StreamService ::class.java))
+                 startService(Intent(this@MainActivity, StreamService ::class.java))
+                if (defaultSharedPreferences.getBoolean("use_search_stream",false)){
+                val result=   realm.where(DBTabData::class.java).equalTo("type", SEARCH).findAll()
+                result.forEach {
+                startService(newIntent<SearchStreamService>(Bundle {
+                    putString("query_text",it.searchWord)
+                    }))
+                }}
             }
             else{
                 user= savedInstanceState.getSerializable("user") as User

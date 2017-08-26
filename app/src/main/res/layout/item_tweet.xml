@@ -65,28 +65,18 @@
 
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/textview_via"
-            android:layout_width="wrap_content"
-            android:layout_height="14dp"
-            android:layout_marginTop="8dp"
-            android:textSize="12sp"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerview_picture"
-            tools:text="ClientName"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" />
-
-
-        <android.support.v7.widget.AppCompatTextView
             android:id="@+id/textview_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/textview_username"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toRightOf="@+id/textview_username"
             app:layout_constraintStart_toEndOf="@+id/textview_username"
             tools:text="18秒前" />
@@ -96,11 +86,13 @@
             android:id="@+id/textview_is_retweet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="0dp"
             android:textSize="12sp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textview_screenname"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/textview_screenname"
             app:layout_constraintTop_toBottomOf="@+id/textview_username"
             tools:text="JlowoilがRT!"
@@ -110,49 +102,51 @@
             android:id="@+id/linearLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textview_via"
-            tools:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="8dp">
-
-            <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/reply"
-                android:layout_width="0dp"
-                android:layout_height="24dp"
-                android:layout_weight="1"
-                android:drawableStart="@drawable/wrap_reply"
-                android:gravity="center"
-                tools:text="2000000" />
+            app:layout_constraintTop_toBottomOf="@+id/recyclerview_picture"
+            tools:layout_height="wrap_content">
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_retweet"
                 android:layout_width="0dp"
                 android:layout_height="24dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:gravity="center"
                 tools:text="2000000" />
+
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/tv_favorite"
                 android:layout_width="0dp"
                 android:layout_height="24dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:gravity="center"
                 tools:text="2000000" />
-        </LinearLayout>
 
+            <TextView
+                android:id="@+id/textview_via"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:ellipsize="end"
+                android:gravity="end"
+                android:singleLine="true"
+                android:textSize="12sp"
+                tools:text="Twitter for You" />
+
+        </LinearLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview_picture"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
             android:scrollbars="horizontal"
             android:visibility="gone"

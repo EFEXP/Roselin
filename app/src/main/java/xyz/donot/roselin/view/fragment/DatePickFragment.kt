@@ -15,9 +15,9 @@ class DatePickFragment: DialogFragment()
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
         val parentActivity= activity
-        val minDate = Calendar.getInstance().apply {
-            add(Calendar.DAY_OF_MONTH, -7)
-        }
+        //val minDate = Calendar.getInstance().apply {
+        //    add(Calendar.DAY_OF_MONTH, -7)
+     //   }
 
         val  maxDate = c
 
@@ -33,7 +33,7 @@ class DatePickFragment: DialogFragment()
         val dialog=DatePickerDialog(activity, listener,  year, month, day)
         .apply {
             datePicker.maxDate=maxDate.timeInMillis
-            datePicker.minDate=minDate.timeInMillis
+         //   datePicker.minDate=minDate.timeInMillis
         }
             return  dialog
 

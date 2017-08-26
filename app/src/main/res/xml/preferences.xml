@@ -5,20 +5,39 @@
        android:title="注意"
        android:summary="全ての設定は再起動後に有効になります"
        />
-    <SwitchPreference
-        android:defaultValue="true"
-        android:key="night"
-        android:summary="夜間モードを使用します。"
-        android:title="夜間モード" />
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="quick_tweet"
-        android:summary="ホームタイムラインのツイートバーを有効にします。"
-        android:title="ツイートバー" />
+    <PreferenceScreen
+        android:title="デザイン設定"
+        >
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="night"
+            android:summary="夜間モードを使用します。"
+            android:title="夜間モード" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="quick_tweet"
+            android:summary="ホームタイムラインのツイートバーを有効にします。"
+            android:title="ツイートバー" />
+    </PreferenceScreen>
+    <PreferenceScreen
+        android:title="ストリーム設定"
+        >
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="use_search_stream"
+            android:summary="検索タブにストリームを使用します。大量のデータと電池を消費することがあります。通常はオフにしてください。"
+            android:title="検索ストリーム" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="use_home_stream"
+            android:summary="ホームタイムラインにストリームを使用します。"
+            android:title="ホームストリーム" />
+    </PreferenceScreen>
+
+
     <PreferenceScreen
         android:title="背景変更"
         android:summary="ホームタイムラインの背景を変更します。">
-
         <intent android:action="xyz.donot.roselin.view.activity.BackImageActivity" />
 
     </PreferenceScreen>

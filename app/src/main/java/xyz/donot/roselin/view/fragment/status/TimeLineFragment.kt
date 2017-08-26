@@ -14,12 +14,12 @@ import android.view.ViewGroup
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import twitter4j.Status
-import twitter4j.Twitter
 import xyz.donot.roselin.R
-import xyz.donot.roselin.extend.SafeAsyncTask
+import xyz.donot.roselin.util.extraUtils.async
 import xyz.donot.roselin.util.extraUtils.newIntent
+import xyz.donot.roselin.util.extraUtils.start
 import xyz.donot.roselin.util.getMyId
-import xyz.donot.roselin.util.getTwitterInstance
+import xyz.donot.roselin.view.activity.TweetEditActivity
 import xyz.donot.roselin.view.activity.TwitterDetailActivity
 import xyz.donot.roselin.view.adapter.StatusAdapter
 import xyz.donot.roselin.view.fragment.BaseListFragment
@@ -50,13 +50,6 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                 status
             }
 
-            class DeleteTask : SafeAsyncTask<Twitter, Status>() {
-                override fun doTask(arg: Twitter): twitter4j.Status = arg.destroyStatus(status.id)
-
-                override fun onSuccess(result: twitter4j.Status) = Unit
-
-                override fun onFailure(exception: Exception) = Unit
-            }
             if (!(context as Activity).isFinishing) {
                 val tweetItem = if (getMyId() == status.user.id) {
                     R.array.tweet_my_menu
@@ -67,8 +60,15 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                         .setItems(tweetItem, { _, int ->
                             val selectedItem = context.resources.getStringArray(tweetItem)[int]
                             when (selectedItem) {
+                                "返信"->{
+                                    val bundle=  Bundle()
+                                    bundle.putString("status_txt",item.text)
+                                    bundle.putLong("status_id",item.id)
+                                    bundle.putString("user_screen_name",item.user.screenName)
+                                    activity.start<TweetEditActivity>(bundle)
+                                }
                                 "削除" -> {
-                                    DeleteTask().execute(getTwitterInstance())
+                                   async {   twitter.destroyStatus(status.id)}
                                 }
                                 "会話" -> {
                                     context.startActivity(context.newIntent<TwitterDetailActivity>(Bundle().apply { putSerializable("Status", item) }))

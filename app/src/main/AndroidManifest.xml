@@ -74,6 +74,9 @@
         <service
             android:name=".service.TweetPostService"
             android:exported="false" />
+        <service
+            android:name=".service.SearchStreamService"
+            android:exported="false" />
         <activity
             android:name=".view.activity.SearchActivity"
             android:theme="@style/AppTheme.NoActionBar" />

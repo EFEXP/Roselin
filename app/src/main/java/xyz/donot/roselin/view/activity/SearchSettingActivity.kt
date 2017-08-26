@@ -14,11 +14,11 @@ import xyz.donot.roselin.view.fragment.DatePickFragment
 class SearchSettingActivity : AppCompatActivity() {
    fun dateSet(year: Int, monthOfYear: Int, dayOfMonth: Int,isFrom:Boolean) {
        if(isFrom){
-           day_from.text = "${year}年${monthOfYear}月${dayOfMonth}日～"
+           day_from.text = "${year}/${monthOfYear}/${dayOfMonth}/～"
            day_from.tag=" since:${year}-${monthOfYear}-${dayOfMonth}"
        }
        else {
-           day_to.text = "～${year}年${monthOfYear}月${dayOfMonth}日"
+           day_to.text = "～${year}/${monthOfYear}/${dayOfMonth}日"
            day_to.tag=" until:${year}-${monthOfYear}-${dayOfMonth}"
        }
     }
@@ -53,6 +53,15 @@ class SearchSettingActivity : AppCompatActivity() {
                 if(search_setting_image.isChecked) {
                     querytext +=" filter:images"
                 }
+         if ( !search_setting_query_absolute.text.toString().isNullOrBlank()){
+             querytext +="\"${search_setting_query_absolute.text}\""
+         }
+
+
+            if(search_setting_links.isChecked) {
+            querytext +=" filter:links"
+              }
+
                 if(day_from.tag!=null&&day_from.tag is String){
                     querytext +=day_from.tag
                 }
