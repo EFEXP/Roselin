@@ -22,6 +22,8 @@ class UserListsActivity : AppCompatActivity() {
                 putLong("userId", userId)
                 putBoolean("selectList",selectList)
             }
+
+
         }
         supportFragmentManager.beginTransaction().add(R.id.container_user_lists,fragment).commit()
     }

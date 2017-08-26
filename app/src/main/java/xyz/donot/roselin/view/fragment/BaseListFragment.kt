@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.content_base_fragment.*
-import twitter4j.ResponseList
 import xyz.donot.roselin.R
 import xyz.donot.roselin.util.extraUtils.async
 import xyz.donot.roselin.util.extraUtils.mainThread
@@ -63,7 +62,7 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
         Log.d("GiveData",adapter.data.count().toString())
         outState?.putSerializable("data",l)
     }
-    abstract fun GetData(): ResponseList<T>?
+    abstract fun GetData(): MutableList<T>?
     private fun LoadMoreData(){
         async {
             try {

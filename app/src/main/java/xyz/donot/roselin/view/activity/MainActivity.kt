@@ -80,6 +80,13 @@ class MainActivity : AppCompatActivity() {
                 title = context.getString(R.string.title_home)
                 inflateMenu(R.menu.menu_main)
                 setNavigationOnClickListener { drawer_layout.openDrawer(GravityCompat.START) }
+                setOnMenuItemClickListener {
+                    when(it.itemId){
+                        R.id.menu_search-> start<SearchSettingActivity>()
+                        else->throw Exception()
+                    }
+                    true
+                   }
             }
 
             // stream&savedInstance
@@ -190,7 +197,7 @@ class MainActivity : AppCompatActivity() {
         }
         val adapter= MainTimeLineAdapter(supportFragmentManager,list )
         main_viewpager.adapter = adapter
-        main_viewpager.offscreenPageLimit = 3
+        main_viewpager.offscreenPageLimit = adapter.count
         val uriString=defaultSharedPreferences.getString("BackGroundUri","")
         if (!uriString.isNullOrBlank()){
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,Uri.parse(uriString))

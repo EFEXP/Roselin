@@ -74,10 +74,15 @@
         <service
             android:name=".service.TweetPostService"
             android:exported="false" />
-
+        <activity
+            android:name=".view.activity.SearchActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".view.activity.SearchSettingActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.activity.BackImageActivity"
@@ -85,7 +90,6 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="xyz.donot.roselin.view.activity.BackImageActivity" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -104,7 +108,7 @@
         <activity
             android:name=".view.activity.UserListsActivity"
             android:label="@string/title_activity_user_lists"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
