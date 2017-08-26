@@ -6,14 +6,14 @@ import android.support.v4.app.FragmentPagerAdapter
 import twitter4j.Query
 import xyz.donot.roselin.util.extraUtils.Bundle
 import xyz.donot.roselin.util.getSerialized
-import xyz.donot.roselin.view.fragment.SearchTweet
+import xyz.donot.roselin.view.fragment.SearchTimeline
 
 class SearchAdapter(val query: Query, fm: FragmentManager) : FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
         return when(position){
             0->
             {
-               SearchTweet().apply { arguments= Bundle { putByteArray("query_bundle",query.getSerialized()) } }
+               SearchTimeline().apply { arguments= Bundle { putByteArray("query_bundle",query.getSerialized()) } }
 
             }
          ///   1 ->  {

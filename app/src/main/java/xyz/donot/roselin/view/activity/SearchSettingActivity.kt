@@ -6,6 +6,7 @@ import kotlinx.android.synthetic.main.activity_search_setting.*
 import twitter4j.Query
 import xyz.donot.roselin.R
 import xyz.donot.roselin.util.extraUtils.start
+import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getSerialized
 import xyz.donot.roselin.view.fragment.DatePickFragment
 
@@ -24,11 +25,10 @@ class SearchSettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_setting)
+        toolbar.inflateMenu(R.menu.menu_search_setting)
        setSupportActionBar(toolbar)
        supportActionBar?.setDisplayHomeAsUpEnabled(true)
        supportActionBar?.setDisplayShowHomeEnabled(true)
-
-
         day_from.setOnClickListener {
             DatePickFragment()
                 .apply { arguments= Bundle().apply { putBoolean("isFrom",true) } }
@@ -36,11 +36,8 @@ class SearchSettingActivity : AppCompatActivity() {
         day_to.setOnClickListener {DatePickFragment()
                 .apply { arguments= Bundle().apply { putBoolean("isFrom",false) } }
                 .show(supportFragmentManager,"") }
-        toolbar.setNavigationOnClickListener{onBackPressed()}
-
-       bt_do_search.setOnClickListener{
+        bt_search.setOnClickListener{
             var querytext=search_setting_query.text.toString()
-
                 val query=Query()
                 if(!search_setting_from.text.isNullOrEmpty()) {
                     querytext +=" from:${search_setting_from.text}"
@@ -59,18 +56,20 @@ class SearchSettingActivity : AppCompatActivity() {
                 if(day_from.tag!=null&&day_from.tag is String){
                     querytext +=day_from.tag
                 }
+            if(search_setting_only_japanese.isChecked){
+                query.lang="jpn"
+            }
             if(day_to.tag!=null&&day_to.tag is String){
                 querytext +=day_to.tag
             }
                 querytext +=" -rt"
               query.resultType=Query.MIXED
-
-                query.query=querytext
-                start<SearchActivity>(Bundle().apply {
-                    putByteArray("query_bundle",query.getSerialized())
-                })
-        }
-    }
+            query.query=querytext
+            toast(querytext)
+            start<SearchActivity>(Bundle().apply {
+                putByteArray("query_bundle",query.getSerialized())
+            })
+    }}
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()

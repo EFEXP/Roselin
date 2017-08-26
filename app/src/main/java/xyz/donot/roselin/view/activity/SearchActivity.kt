@@ -32,7 +32,7 @@ class SearchActivity : AppCompatActivity() {
 
 
     }
- fun setUpViews(tweetQuery: Query){
+ private fun setUpViews(tweetQuery: Query){
      search_view_pager.adapter = SearchAdapter(tweetQuery, supportFragmentManager)
      search_tabs.setupWithViewPager(search_view_pager)
  }

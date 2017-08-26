@@ -265,9 +265,6 @@
     <string name="make_a_theme">テーマを作成</string>
     <string name="layout">レイアウト</string>
     <string name="themeing_complete">テーマを適用しました</string>
-    <string name="themeing_complete_summary">\"Talon\"を終了します。\n\n
-                最近のアプリで\"Talon\"をスワイプして削除すると反映されます。\n\n
-                プロフィール画像が正しく表示されない場合はウィジェットを削除してからもう一度追加してください。</string>
     <string name="layout_summary">変更すると、アプリのキャッシュが削除されます</string>
     <string name="text_size">文字サイズ</string>
     <string name="night_mode">ナイトモード</string>
@@ -289,9 +286,6 @@
     <string name="enable_emojis">iOS 絵文字を使用</string>
     <string name="to_market">Play ストアへ</string>
     <string name="get_ios">プラグインをダウンロード</string>
-    <string name="emoji_dialog_summary">このアプリでiOSの絵文字を有効にするには\"Sliding Emoji Keyboard\"か\"Sliding Emoji Keyboard - iOS\"をインストールしてください。\n\n
-                アンインストールしてもう一方をインストールすることで切り替えられます。両方インストールされているとAndroid絵文字を使用します。\n\n
-                注意: 絵文字は体験期間が終了しても使えます! キーボードとしては使えませんがプラグインとして使うことは出来ます。</string>
     <string name="theme_light">ライトテーマ</string>
     <string name="theme_dark">ダークテーマ</string>
     <string name="theme_black">ブラックテーマ</string>
@@ -711,6 +705,7 @@ Talon はその代わりに TwitPic を使用して画像をアップロード�
     <string name="title_conversation">会話</string>
     <string name="title_video">ビデオ</string>
     <string name="title_activity_user_lists">UserListsActivity</string>
+    <string name="use_only_japanese">日本語のみ</string>
 
 
 </resources>

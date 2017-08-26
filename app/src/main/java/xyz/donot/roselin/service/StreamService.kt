@@ -5,7 +5,6 @@ import android.content.Intent
 import android.support.v4.content.LocalBroadcastManager
 import twitter4j.*
 import xyz.donot.roselin.util.StreamCreateUtil
-import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getMyId
 import xyz.donot.roselin.util.getSerialized
 import xyz.donot.roselin.util.getTwitterInstance
@@ -25,7 +24,6 @@ class StreamService : IntentService("StreamService") {
     override fun onDestroy() = super.onDestroy()
     inner class MyConnectionListener:ConnectionLifeCycleListener{
         override fun onConnect() {
-            toast("onConnect")
             LocalBroadcastManager.getInstance(this@StreamService).sendBroadcast(Intent("OnConnect"))
         }
 
@@ -34,7 +32,6 @@ class StreamService : IntentService("StreamService") {
         }
 
         override fun onDisconnect() {
-            toast("onDisConnect")
             LocalBroadcastManager.getInstance(this@StreamService).sendBroadcast(Intent("OnDisconnect"))
         }
     }

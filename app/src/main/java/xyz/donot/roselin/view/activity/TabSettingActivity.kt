@@ -84,6 +84,7 @@ private val REQUEST_LISTS=1
                                     accountId= getMyId()
                                     screenName= getMyScreenName()
                                      })
+                                realmRecreate()
                             }
                             "リスト"->{
                                 startActivityForResult(newIntent<UserListsActivity>().apply {
@@ -96,6 +97,7 @@ private val REQUEST_LISTS=1
                                     accountId= getMyId()
                                     screenName= getMyScreenName()
                                 })
+                                realmRecreate()
                             }
                             "通知"->{
                                 mAdapter.addData( DBTabData().apply {
@@ -103,6 +105,7 @@ private val REQUEST_LISTS=1
                                     accountId= getMyId()
                                     screenName= getMyScreenName()
                                 })
+                                realmRecreate()
 
                             }
                         }
