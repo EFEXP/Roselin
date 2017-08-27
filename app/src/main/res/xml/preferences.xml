@@ -12,6 +12,11 @@
             android:summary="ホームタイムラインの背景を変更します。">
             <intent android:action="xyz.donot.roselin.view.activity.BackImageActivity" />
         </PreferenceScreen>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="use_home_tab"
+            android:summary="ホームタイムラインのタブの名前を表示します"
+            android:title="ホームタブを表示"/>
     <SwitchPreference
         android:defaultValue="true"
         android:key="night"

@@ -212,6 +212,7 @@ class MainActivity : AppCompatActivity() {
             main_coordinator.background=BitmapDrawable(resources, bitmap)
             background_overlay.show()
         }
+        if (defaultSharedPreferences.getBoolean("use_home_tab",false)){tabs_main.setupWithViewPager(main_viewpager)}
         //view
         fab.setOnClickListener{start<TweetEditActivity>()}
         button_tweet.setOnClickListener {

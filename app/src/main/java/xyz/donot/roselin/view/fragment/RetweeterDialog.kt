@@ -6,7 +6,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import twitter4j.User
 import xyz.donot.roselin.util.extraUtils.mainThread
-import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.view.adapter.UserListAdapter
 
 class RetweeterDialog : BaseListFragment<User>() {
@@ -20,11 +19,11 @@ class RetweeterDialog : BaseListFragment<User>() {
     override fun GetData(): MutableList<User>? {
         val result=twitter.getRetweeterIds(tweetId, cursor)
         val users=twitter.users().lookupUsers(*result.iDs)
-        toast(result.iDs[0].toString())
         return if (users != null) {
             mainThread {
                 if (result.hasNext()){cursor=result.nextCursor}
                 else{
+                    adapter.loadMoreComplete()
                     shouldLoad=false
                     }
             }
