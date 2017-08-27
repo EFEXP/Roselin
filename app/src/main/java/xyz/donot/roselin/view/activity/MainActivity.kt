@@ -33,7 +33,7 @@ import xyz.donot.roselin.model.realm.HOME
 import xyz.donot.roselin.model.realm.MENTION
 import xyz.donot.roselin.model.realm.SEARCH
 import xyz.donot.roselin.service.SearchStreamService
-import xyz.donot.roselin.service.StreamService
+import xyz.donot.roselin.service.StreamingService
 import xyz.donot.roselin.util.extraUtils.*
 import xyz.donot.roselin.util.getMyId
 import xyz.donot.roselin.util.getMyScreenName
@@ -91,10 +91,12 @@ class MainActivity : AppCompatActivity() {
                     true
                    }
             }
-
             // stream&savedInstance
             if(savedInstanceState==null) {
-                 startService(Intent(this@MainActivity, StreamService ::class.java))
+         if (defaultSharedPreferences.getBoolean("use_home_stream",true)){
+
+               startService<StreamingService>()
+           }
                 if (defaultSharedPreferences.getBoolean("use_search_stream",false)){
                 val result=   realm.where(DBTabData::class.java).equalTo("type", SEARCH).findAll()
                 result.forEach {
@@ -183,9 +185,6 @@ class MainActivity : AppCompatActivity() {
             Picasso.with(applicationContext).load(user?.originalProfileImageURLHttps).into(my_profile)
             my_name.text= user?.name
             my_screenname.text = "@${user?.screenName}" }
-
-
-
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -228,7 +227,6 @@ class MainActivity : AppCompatActivity() {
                     override fun onFailure(exception: Exception) = editText_status.hideSoftKeyboard()
                 }
                 SendTask(editText_status.editableText.toString()).execute(getTwitterInstance())
-
             }
 
         }
@@ -244,6 +242,7 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onDestroy() {
         super.onDestroy()
+        stopService(newIntent<StreamingService>())
         LocalBroadcastManager.getInstance(this).apply {
             unregisterReceiver(connectionReceiver)
             unregisterReceiver(disConnectionReceiver)

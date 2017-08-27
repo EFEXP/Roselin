@@ -118,7 +118,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
             LinkBuilder.on(getView(R.id.textview_text)).addLinks(mContext.getTagURLMention()).build()
             //Listener
             getView<View>(R.id.quote_tweet_holder).onClick {
-                ( mContext as Activity).start<TwitterDetailActivity>(Bundle { putSerializable("status",item.quotedStatus) })
+                ( mContext as Activity).start<TwitterDetailActivity>(Bundle { putSerializable("Status",item.quotedStatus) })
             }
             getView<ImageView>(R.id.imageview_icon).setOnClickListener{
                 val intent=mContext.intent<UserActivity>()

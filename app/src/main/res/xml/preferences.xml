@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
    <Preference
        android:title="注意"
        android:summary="全ての設定は再起動後に有効になります"
@@ -22,11 +21,11 @@
     <PreferenceScreen
         android:title="ストリーム設定"
         >
-        <SwitchPreference
+     <!--   <SwitchPreference
             android:defaultValue="false"
             android:key="use_search_stream"
             android:summary="検索タブにストリームを使用します。大量のデータと電池を消費することがあります。通常はオフにしてください。"
-            android:title="検索ストリーム" />
+            android:title="検索ストリーム" />-->
         <SwitchPreference
             android:defaultValue="true"
             android:key="use_home_stream"

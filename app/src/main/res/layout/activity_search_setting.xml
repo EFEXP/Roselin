@@ -41,7 +41,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:maxLines="1" />
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -61,7 +63,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:maxLines="1" />
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+        />
     </android.support.design.widget.TextInputLayout>
 
 

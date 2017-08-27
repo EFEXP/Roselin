@@ -10,7 +10,7 @@ import xyz.donot.roselin.view.fragment.TrendFragment
 import xyz.donot.roselin.view.fragment.status.HomeTimeLineFragment
 import xyz.donot.roselin.view.fragment.status.ListTimeLine
 import xyz.donot.roselin.view.fragment.status.MentionTimeLine
-import xyz.donot.roselin.view.fragment.status.NotificationFragment
+import xyz.donot.roselin.view.fragment.NotificationFragment
 
 
 class MainTimeLineAdapter(fm: FragmentManager, private val realmResults:ArrayList<DBTabData>) : FragmentPagerAdapter(fm) {
@@ -24,7 +24,7 @@ class MainTimeLineAdapter(fm: FragmentManager, private val realmResults:ArrayLis
             putString("query_text",realmResults[i].searchWord)
             putByteArray("query_bundle",realmResults[i].searchQuery) } }
         LIST->ListTimeLine().apply { arguments= Bundle { putLong("listId",realmResults[i].listId) } }
-        NOTIFICATION->NotificationFragment()
+        NOTIFICATION-> NotificationFragment()
         TREND->TrendFragment()
     else->throw IllegalStateException()
     }

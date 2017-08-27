@@ -13,7 +13,6 @@ import io.fabric.sdk.android.Fabric
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import xyz.donot.roselin.model.realm.MyRealmMigration
-import java.io.FileNotFoundException
 
 
 
@@ -46,7 +45,7 @@ class Roselin : Application() {
         try {
             Realm.migrateRealm(config, MyRealmMigration())
         }
-        catch(e: FileNotFoundException){}
+        catch(e: Exception){}
         Realm.setDefaultConfiguration(config)
 
         val design= if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("night",true)){ AppCompatDelegate.MODE_NIGHT_YES}
