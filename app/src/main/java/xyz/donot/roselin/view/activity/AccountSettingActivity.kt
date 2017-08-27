@@ -25,6 +25,8 @@ class AccountSettingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_account_setting)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         toolbar.title="アカウントの選択"
         val dividerItemDecoration = DividerItemDecoration( recycler_account.context,
                 LinearLayoutManager(this).orientation)
@@ -63,5 +65,9 @@ class AccountSettingActivity : AppCompatActivity() {
             start<OauthActivity>()
         }
 }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
 }
 

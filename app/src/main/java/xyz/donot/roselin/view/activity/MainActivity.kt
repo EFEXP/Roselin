@@ -28,10 +28,7 @@ import twitter4j.Twitter
 import twitter4j.User
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
-import xyz.donot.roselin.model.realm.DBTabData
-import xyz.donot.roselin.model.realm.HOME
-import xyz.donot.roselin.model.realm.MENTION
-import xyz.donot.roselin.model.realm.SEARCH
+import xyz.donot.roselin.model.realm.*
 import xyz.donot.roselin.service.SearchStreamService
 import xyz.donot.roselin.service.StreamingService
 import xyz.donot.roselin.util.extraUtils.*
@@ -72,6 +69,12 @@ class MainActivity : AppCompatActivity() {
                     }
                     it.createObject(DBTabData::class.java).apply {
                         order=1
+                        type= NOTIFICATION
+                        accountId= getMyId()
+                        screenName= getMyScreenName()
+                    }
+                    it.createObject(DBTabData::class.java).apply {
+                        order=2
                         type= MENTION
                         accountId= getMyId()
                         screenName= getMyScreenName()
@@ -150,10 +153,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.action_account -> {
                     startForResult<AccountSettingActivity>(0)
-                    drawer_layout.closeDrawers()
-                }
-                R.id.action_list -> {
-               //     start<ListsActivity>(Bundle().apply { putLong("user_id",getMyId()) })
                     drawer_layout.closeDrawers()
                 }
                 R.id.action_whats_new -> {

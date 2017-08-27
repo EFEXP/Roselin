@@ -12,10 +12,6 @@
             android:id="@+id/action_account"
             android:icon="@drawable/ic_contacts_grey_400_36dp"
             android:title="@string/account" />
-        <item
-            android:id="@+id/action_list"
-            android:icon="@drawable/ic_view_list_grey_400_36dp"
-            android:title="@string/mylist" />
     </group>
     <group
         android:id="@+id/group_setting"

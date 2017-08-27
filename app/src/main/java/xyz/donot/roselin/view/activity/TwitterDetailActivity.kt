@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_twitter_detail.*
-import kotlinx.android.synthetic.main.content_twitter_detail.*
+import kotlinx.android.synthetic.main.content_a_recycler.*
 import twitter4j.Query
 import twitter4j.QueryResult
 import twitter4j.Status
@@ -28,8 +28,8 @@ class TwitterDetailActivity : AppCompatActivity() {
         val status: Status=intent.extras.getSerializable("Status") as Status
         loadReply(status.id)
         getDiscuss(status)
-        detail_recycler_view.adapter = mAdapter
-        detail_recycler_view.layoutManager = LinearLayoutManager(this@TwitterDetailActivity)
+        a_recycler_view.adapter = mAdapter
+        a_recycler_view.layoutManager = LinearLayoutManager(this@TwitterDetailActivity)
     }
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
@@ -74,7 +74,9 @@ class TwitterDetailActivity : AppCompatActivity() {
         }
         DiscussTask().execute(getTwitterInstance())
     }
+
     }
+
 
 
 

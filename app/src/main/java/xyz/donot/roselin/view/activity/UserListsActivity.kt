@@ -15,6 +15,8 @@ class UserListsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_lists)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         val userId= intent.getLongExtra("userId",0L)
         val selectList= intent.getBooleanExtra("selectList",false)
         val fragment=UsersListFragment().apply {
@@ -34,8 +36,10 @@ class UserListsActivity : AppCompatActivity() {
        }
        setResult(Activity.RESULT_OK,intent)
        finish()
-
-
    }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
 
 }

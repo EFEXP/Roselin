@@ -6,12 +6,15 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.squareup.picasso.Picasso
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_user.*
 import twitter4j.Twitter
 import twitter4j.User
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
+import xyz.donot.roselin.model.realm.DBMute
 import xyz.donot.roselin.util.extraUtils.toast
+import xyz.donot.roselin.util.getSerialized
 import xyz.donot.roselin.util.getTwitterInstance
 import xyz.donot.roselin.view.adapter.UserTimeLineAdapter
 
@@ -49,13 +52,31 @@ class UserActivity : AppCompatActivity() {
         }
         else{  lookUpUserTask(userId).execute(getTwitterInstance())}
     }
-    fun setUp(user: User){
-      Picasso.with(applicationContext).load(user.profileBannerIPadRetinaURL).into(banner)
+    fun setUp(user_: User){
+      Picasso.with(applicationContext).load(user_.profileBannerIPadRetinaURL).into(banner)
         banner.setOnClickListener{startActivity(Intent(applicationContext, PictureActivity::class.java)
-                .putStringArrayListExtra("picture_urls",arrayListOf(user.profileBannerIPadRetinaURL)))}
-        toolbar.title=user.screenName
+                .putStringArrayListExtra("picture_urls",arrayListOf(user_.profileBannerIPadRetinaURL)))}
+        toolbar.apply {
+            title= user_.screenName
+            inflateMenu(R.menu.menu_user)
+            setOnMenuItemClickListener {
+                when(it.itemId){
+                    R.id.mute-> {
+                        Realm.getDefaultInstance().executeTransaction {
+                            it.createObject(DBMute::class.java)
+                                    .apply {
+                                        id= user_.id
+                                        user=user_.getSerialized()
+                                    }
+                        }
+                    }
+                    else->throw Exception()
+                }
+                true
+            }
+        }
         val adapter= UserTimeLineAdapter(supportFragmentManager)
-        adapter.user=user
+        adapter.user= user_
         viewpager_user.adapter=adapter
         viewpager_user.offscreenPageLimit=adapter.count
         tabs_user.setupWithViewPager(viewpager_user)

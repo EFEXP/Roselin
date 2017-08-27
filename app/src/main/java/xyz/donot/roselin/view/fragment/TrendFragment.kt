@@ -32,7 +32,9 @@ class TrendFragment : BaseListFragment<Trend>() {
            }
        }
     }
-    override fun GetData(): MutableList<Trend>? =  twitter.getPlaceTrends(23424856).trends.asList().toMutableList()
+    override fun GetData(): MutableList<Trend>? {
+        adapter.loadMoreComplete()
+      return  twitter.getPlaceTrends(23424856).trends.asList().toMutableList()}
     inner class TrendAdapter:BaseQuickAdapter<Trend,BaseViewHolder>(R.layout.item_trend)
     {
         override fun convert(helper: BaseViewHolder, item: Trend) {

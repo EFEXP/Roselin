@@ -88,8 +88,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                             }
                         }
                     }
-                    finish()
-                    startActivity(Intent(this@OauthActivity, MainActivity::class.java))
+
                 }}
 
 
@@ -101,22 +100,25 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
     }
     fun  saveMute(tw: Twitter){
         var cursor: Long = -1L
-        val arrayMute=ArrayList<Long>()
             async {
-               val result = tw.getMutesIDs(cursor)
+               val result = tw.getMutesList(cursor)
                 if (result!=null) {
-                    mainThread { arrayMute.addAll(result.iDs.toList()) }
+                    mainThread {
                     Realm.getDefaultInstance().executeTransaction {
                         realm ->
-                        arrayMute.forEach { ids->
+                        result.forEach { muser->
                             realm.createObject(DBMute::class.java).apply {
-                                id=ids
+                                user=muser.getSerialized()
+                                id=muser.id
                             }
+
                         }
 
                     }
+                        finish()
+                        startActivity(Intent(this@OauthActivity, MainActivity::class.java))
                 }
-            }
+            }}
 
 
     }

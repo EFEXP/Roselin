@@ -1,0 +1,71 @@
+package xyz.donot.roselin.view.activity
+
+import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentPagerAdapter
+import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
+import android.widget.EditText
+import io.realm.Realm
+import kotlinx.android.synthetic.main.activity_mute_setting.*
+import xyz.donot.roselin.R
+import xyz.donot.roselin.model.realm.DBMute
+import xyz.donot.roselin.view.fragment.realm.MuteUserFragment
+import xyz.donot.roselin.view.fragment.realm.MuteWordFragment
+
+
+
+class MuteSettingActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_mute_setting)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        mute_pager.adapter=MuteViewPager(supportFragmentManager)
+        mute_tab.setupWithViewPager(mute_pager)
+        fab.setOnClickListener { view ->
+            val editView = EditText(this@MuteSettingActivity)
+            AlertDialog.Builder(this@MuteSettingActivity)
+                    .setTitle("ミュートワードを入力してください")
+                    .setView(editView)
+                    .setPositiveButton("OK", { dialog, _ ->
+                      Realm.getDefaultInstance().executeTransaction{
+                          it.createObject(DBMute::class.java)
+                                  .apply {
+                                      text=editView.text.toString()
+                                  }
+                      }
+                    })
+                    .setNegativeButton("キャンセル",  { dialog, whichButton -> })
+                    .show()
+        }
+    }
+
+
+
+    inner class MuteViewPager(fm: FragmentManager): FragmentPagerAdapter(fm) {
+        override fun getCount(): Int =2
+
+        override fun getItem(position: Int): Fragment =when(position)
+        {
+            0->MuteUserFragment()
+            1->MuteWordFragment()
+            else-> throw Exception()
+        }
+
+        override fun getPageTitle(position: Int): CharSequence=when(position)
+        {
+            0->"ユーザー"
+            1->"ワード"
+            else-> throw Exception()
+        }
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
+
+
+}

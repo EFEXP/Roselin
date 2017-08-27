@@ -2,9 +2,11 @@ package xyz.donot.roselin.view.activity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.KeyEvent
 import kotlinx.android.synthetic.main.activity_search_setting.*
 import twitter4j.Query
 import xyz.donot.roselin.R
+import xyz.donot.roselin.util.extraUtils.hideSoftKeyboard
 import xyz.donot.roselin.util.extraUtils.start
 import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getSerialized
@@ -29,6 +31,17 @@ class SearchSettingActivity : AppCompatActivity() {
        setSupportActionBar(toolbar)
        supportActionBar?.setDisplayHomeAsUpEnabled(true)
        supportActionBar?.setDisplayShowHomeEnabled(true)
+        search_setting_query.setOnKeyListener { view, i, keyEvent ->
+            if ((keyEvent.action== KeyEvent.ACTION_DOWN)&&(i==KeyEvent.KEYCODE_ENTER)){
+               view.hideSoftKeyboard()
+                bt_search.performClick()
+            }
+            if ((keyEvent.action== KeyEvent.ACTION_DOWN)&&(i==KeyEvent.KEYCODE_BACK))onBackPressed()
+            return@setOnKeyListener true
+        }
+
+
+
         day_from.setOnClickListener {
             DatePickFragment()
                 .apply { arguments= Bundle().apply { putBoolean("isFrom",true) } }

@@ -10,7 +10,7 @@ import xyz.donot.roselin.view.fragment.TrendFragment
 import xyz.donot.roselin.view.fragment.status.HomeTimeLineFragment
 import xyz.donot.roselin.view.fragment.status.ListTimeLine
 import xyz.donot.roselin.view.fragment.status.MentionTimeLine
-import xyz.donot.roselin.view.fragment.NotificationFragment
+import xyz.donot.roselin.view.fragment.realm.NotificationFragment
 
 
 class MainTimeLineAdapter(fm: FragmentManager, private val realmResults:ArrayList<DBTabData>) : FragmentPagerAdapter(fm) {

@@ -1,8 +1,5 @@
-package xyz.donot.roselin.view.fragment
+package xyz.donot.roselin.view.fragment.realm
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatDialogFragment
 import android.support.v7.widget.DividerItemDecoration
@@ -25,7 +22,6 @@ import xyz.donot.roselin.R
 import xyz.donot.roselin.model.realm.DBNotification
 import xyz.donot.roselin.model.realm.NRETWEET
 import xyz.donot.roselin.util.extraUtils.Bundle
-import xyz.donot.roselin.util.extraUtils.mainThread
 import xyz.donot.roselin.util.extraUtils.start
 import xyz.donot.roselin.util.getDeserialized
 import xyz.donot.roselin.util.getExpandedText
@@ -51,26 +47,7 @@ class NotificationFragment:AppCompatDialogFragment(){
     }
 
 
-    inner class FavReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            val  positionIndex =  (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-            val data=intent.extras.getByteArray("Status")
-            val data2=intent.extras.getByteArray("User")
-            mainThread {
-                realm.executeTransaction {
-                    it.createObject(DBNotification::class.java).apply {
-                        status=data
-                        sourceUser=data2
-                        type= NRETWEET
-                    }
-                }
-                if (positionIndex==0) {
-                    (recycler).smoothScrollToPosition(0)
-                }
 
-            }
-        }
-    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = inflater.inflate(R.layout.content_base_fragment, container, false)
 
 

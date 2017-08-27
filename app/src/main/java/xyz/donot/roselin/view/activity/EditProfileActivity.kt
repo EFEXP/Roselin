@@ -181,7 +181,7 @@ class EditProfileActivity : AppCompatActivity() {
     private fun notifiy(int:Int) {
         val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val mNotification = NotificationCompat.Builder(this,"Sending")
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle("更新中")
                 .setProgress(100,100,true)
                 .setContentText("プロフィールを更新中…")

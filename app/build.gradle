@@ -84,7 +84,7 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true
     }
-    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
+    compile 'id.zelory:compressor:2.1.0'
     compile 'io.realm:android-adapters:2.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.makeramen:roundedimageview:2.3.0'

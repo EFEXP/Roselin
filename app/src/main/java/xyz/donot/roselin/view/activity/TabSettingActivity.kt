@@ -36,6 +36,10 @@ private val REQUEST_LISTS=1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tab_setting)
+
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
         //Listener
        val onItemDragListener = object : OnItemDragListener {
            override fun onItemDragMoving(source: RecyclerView.ViewHolder?, from: Int, target: RecyclerView.ViewHolder?, to: Int) {
@@ -128,6 +132,10 @@ private val REQUEST_LISTS=1
         }
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
     fun setSearchWord(query: Query,querytext: String){
         mAdapter.addData( DBTabData().apply {
             type= SEARCH

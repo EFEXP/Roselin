@@ -708,6 +708,9 @@ Talon はその代わりに TwitPic を使用して画像をアップロード�
     <string name="use_only_japanese">日本語のみ</string>
     <string name="search_absolute">検索（完全一致）</string>
     <string name="title_activity_account_setting">AccountSettingActivity</string>
+    <string name="title_activity_mute_setting">MuteSettingActivity</string>
+    <string name="title_mute">ミュート設定</string>
+    <string name="title_account">アカウント設定</string>
 
 
 </resources>

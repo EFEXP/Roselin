@@ -13,9 +13,8 @@
         android:name=".Roselin"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher"
         android:label="${appName}"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:label">
@@ -94,10 +93,10 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="xyz.donot.roselin.view.activity.BackImageActivity" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".view.activity.UserListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -106,7 +105,6 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="xyz.donot.roselin.view.activity.TabSettingActivity" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -130,11 +128,19 @@
             android:name=".view.activity.AccountSettingActivity"
             android:label="@string/title_activity_account_setting"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <service
             android:name=".service.StreamingService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="false"/>
+        <activity
+            android:name=".view.activity.MuteSettingActivity"
+            android:label="@string/title_activity_mute_setting"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="xyz.donot.roselin.view.activity.MuteSettingActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

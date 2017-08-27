@@ -9,6 +9,7 @@ import com.crashlytics.android.Crashlytics
 import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
+
 import io.fabric.sdk.android.Fabric
 import io.realm.Realm
 import io.realm.RealmConfiguration
@@ -53,7 +54,6 @@ class Roselin : Application() {
 
         AppCompatDelegate.setDefaultNightMode(design)
         (getSystemService(UI_MODE_SERVICE)as UiModeManager).nightMode = UiModeManager.MODE_NIGHT_AUTO
-
         StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.Builder()
                 .detectAll()
                 .penaltyLog()

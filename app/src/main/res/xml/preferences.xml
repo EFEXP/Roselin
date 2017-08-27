@@ -5,21 +5,54 @@
        android:summary="全ての設定は再起動後に有効になります"
        />
     <PreferenceScreen
-        android:title="デザイン設定"
+    android:title="デザイン設定"
+        android:summary="画面の色やデザインに関する設定です">
+     <PreferenceScreen
+            android:title="背景変更"
+            android:summary="ホームタイムラインの背景を変更します。">
+            <intent android:action="xyz.donot.roselin.view.activity.BackImageActivity" />
+        </PreferenceScreen>
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="night"
+        android:summary="夜間モードを使用します"
+        android:title="夜間モード" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="quick_tweet"
+        android:summary="ホームタイムラインのツイートバーを有効にします"
+        android:title="ツイートバー" />
+</PreferenceScreen>
+    <PreferenceScreen
+        android:title="通知設定"
+        android:summary="イベントの通知に関する設定です"
         >
+        <RingtonePreference
+            android:key="notifications_ringtone"
+            android:title="通知音"
+            android:summary="通知音を変更します"
+            android:ringtoneType="all"
+            android:showDefault="true"
+            android:showSilent="true" />
         <SwitchPreference
             android:defaultValue="true"
-            android:key="night"
-            android:summary="夜間モードを使用します。"
-            android:title="夜間モード" />
+            android:key="notification_reply"
+            android:summary="リプライ通知を有効にします"
+            android:title="リプライ通知" />
         <SwitchPreference
-            android:defaultValue="false"
-            android:key="quick_tweet"
-            android:summary="ホームタイムラインのツイートバーを有効にします。"
-            android:title="ツイートバー" />
+            android:defaultValue="true"
+            android:key="notification_retweet"
+            android:summary="ポップアップ式のRT通知を有効にします"
+            android:title="RT通知" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="notification_favorite"
+            android:summary="ポップアップ式のいいね通知を有効にします"
+            android:title="いいね通知" />
     </PreferenceScreen>
     <PreferenceScreen
         android:title="ストリーム設定"
+        android:summary="自動でツイートを取得する機能に関する設定です"
         >
      <!--   <SwitchPreference
             android:defaultValue="false"
@@ -29,18 +62,19 @@
         <SwitchPreference
             android:defaultValue="true"
             android:key="use_home_stream"
-            android:summary="ホームタイムラインにストリームを使用します。"
+            android:summary="ホームタイムラインにストリームを使用します"
             android:title="ホームストリーム" />
     </PreferenceScreen>
-    <PreferenceScreen
-        android:title="背景変更"
-        android:summary="ホームタイムラインの背景を変更します。">
-        <intent android:action="xyz.donot.roselin.view.activity.BackImageActivity" />
 
-    </PreferenceScreen>
     <PreferenceScreen
         android:title="タブの設定"
-        android:summary="タブの設定を変更します。">
+        android:summary="ホーム画面のタブに関する設定です">
         <intent android:action="xyz.donot.roselin.view.activity.TabSettingActivity" />
     </PreferenceScreen>
+    <PreferenceScreen
+        android:title="ミュートの設定"
+        android:summary="ミュートに関する設定です">
+        <intent android:action="xyz.donot.roselin.view.activity.MuteSettingActivity"/>
+    </PreferenceScreen>
+
 </PreferenceScreen>
