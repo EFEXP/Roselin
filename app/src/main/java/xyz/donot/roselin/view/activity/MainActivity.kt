@@ -2,6 +2,7 @@ package xyz.donot.roselin.view.activity
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -146,7 +147,7 @@ class MainActivity : AppCompatActivity() {
                     drawer_layout.closeDrawers()
                 }
                 R.id.action_account -> {
-              //      startForResult<AccountSettingActivity>(0)
+                    startForResult<AccountSettingActivity>(0)
                     drawer_layout.closeDrawers()
                 }
                 R.id.action_list -> {
@@ -204,7 +205,7 @@ class MainActivity : AppCompatActivity() {
                 add(realm.copyFromRealm(it))
             }
         }
-        val adapter= MainTimeLineAdapter(supportFragmentManager,list )
+        val adapter= MainTimeLineAdapter(supportFragmentManager,list)
         main_viewpager.adapter = adapter
         main_viewpager.offscreenPageLimit = adapter.count
         val uriString=defaultSharedPreferences.getString("BackGroundUri","")
@@ -233,6 +234,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode== Activity.RESULT_OK){
+            if(requestCode==0){
+                restart()
+            }
+        }
+    }
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(this).apply {

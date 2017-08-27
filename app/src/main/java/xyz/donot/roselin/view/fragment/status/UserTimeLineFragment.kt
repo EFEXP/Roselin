@@ -34,11 +34,23 @@ class UserTimeLineFragment: TimeLineFragment()
        adapter.setHeaderView(v)
     }
 
-    override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) = Unit
+    override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
+        async {
+            try {
+                val result =twitter.getUserTimeline(Paging(adapter.data[0].id))
+                if (result.isNotEmpty()){
+                    mainThread {
+                        insertDataBackground(result)
+                        recycler.smoothScrollToPosition(0) }
+                }
+            }
+            catch (e:Exception){ toast(e.localizedMessage)}
+        }
+
+    }
 
     private fun setUpViews():View{
         val v=context.inflate(R.layout.person_item)
-            refresh.isEnabled=false
             val iconIntent= Intent(activity, PictureActivity::class.java).putStringArrayListExtra("picture_urls",arrayListOf(user.originalProfileImageURLHttps))
             Picasso.with(activity).load(user.originalProfileImageURLHttps).into(v.iv_icon)
         v.iv_icon.setOnClickListener{startActivity(iconIntent)}

@@ -17,6 +17,8 @@ import java.io.FileNotFoundException
 
 
 
+
+
 class Roselin : Application() {
     private val TWITTER_KEY by lazy {
         //     resources.getString(R.string.twitter_official_consumer_key)

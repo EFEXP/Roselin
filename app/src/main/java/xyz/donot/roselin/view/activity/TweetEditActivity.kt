@@ -1,6 +1,8 @@
 package xyz.donot.roselin.view.activity
 
 import android.Manifest
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -22,6 +24,7 @@ import twitter4j.StatusUpdate
 import xyz.donot.roselin.R
 import xyz.donot.roselin.model.realm.DBDraft
 import xyz.donot.roselin.service.TweetPostService
+import xyz.donot.roselin.util.extraUtils.defaultSharedPreferences
 import xyz.donot.roselin.util.extraUtils.newIntent
 import xyz.donot.roselin.util.getMyId
 import xyz.donot.roselin.util.getPath
@@ -40,9 +43,10 @@ class TweetEditActivity : AppCompatActivity() {
     private val  statusId by lazy {  intent.getLongExtra("status_id",0) }
     private val mAdapter= TwitterImageAdapter()
     private var screenName :String=""
-    var dialog: DialogFragment?=null
+    private var dialog: DialogFragment?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tweet_edit)
         setSupportActionBar(toolbar)
@@ -112,6 +116,12 @@ class TweetEditActivity : AppCompatActivity() {
                     .setItems(item, { _, int ->
                         val selectedItem=resources.getStringArray(item)[int]
                         when (selectedItem) {
+                            "#NowPlaying"->{
+                              val track=  defaultSharedPreferences.getString("track","")
+                              val artists=   defaultSharedPreferences.getString("artist","")
+                              val album=  defaultSharedPreferences.getString("album","")
+                                editText_status.setText("♪ $track /$album /$artists #NowPlaying")
+                            }
                             "突然の死"->{
                                 val i=editText_status.text.count()-4
                                 var a=""
@@ -175,13 +185,6 @@ class TweetEditActivity : AppCompatActivity() {
 
 
     private fun addPhotos(uri: Uri) = mAdapter.addData(uri)
-
-    fun changeToDraft(draft: DBDraft){
-        editText_status.editableText.clear()
-        editText_status.append(draft.text)
-        dialog?.dismiss()
-        dialog=null
-    }
     fun addTrendHashtag(string: String){
         editText_status.append(" $string")
         dialog?.dismiss()
@@ -209,6 +212,19 @@ class TweetEditActivity : AppCompatActivity() {
         else{
             super.onBackPressed()
         }
+    }
+}
+class MusicReceiver : BroadcastReceiver(){
+
+    override fun onReceive(context: Context, intent: Intent) {
+        val  bundle = intent.extras
+        val prefs= context.defaultSharedPreferences
+        prefs.edit().apply {
+            putString("track",bundle.getString("track"))
+            putString("artist", bundle.getString("artist"))
+            putString("album",bundle.getString("album"))
+        }.apply()
+
     }
 
 }

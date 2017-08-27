@@ -89,6 +89,18 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
                 getView<TextView>(R.id.textview_via)
                         .setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, R.drawable.wrap_lock,null),null, null, null)}
             else{getView<TextView>(R.id.textview_via).setCompoundDrawablesWithIntrinsicBounds(null,null, null, null)}
+            //引用
+            if (item.quotedStatus!=null){
+              setVisible(R.id.quote_tweet_holder,true)
+                setText(R.id.quoted_screenname,  item.quotedStatus.user.screenName)
+                setText(R.id.quoted_text,  item.quotedStatus.text)
+                setText(R.id.quoted_name,item.quotedStatus.user.name)
+              Picasso.with(mContext).load(item.quotedStatus.user.biggerProfileImageURLHttps).into(  getView<ImageView>(R.id.quoted_icon))
+            }
+            else{
+                setVisible(R.id.quote_tweet_holder,false)
+            }
+
 
             //テキスト関係
             setText(R.id.textview_username,item.user.name)

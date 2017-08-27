@@ -38,7 +38,7 @@ class HomeTimeLineFragment : TimeLineFragment(){
             val result =twitter.getHomeTimeline(Paging(adapter.data[0].id))
             if (result.isNotEmpty()){
              mainThread {
-                 adapter.addData(0,result)
+                insertDataBackground(result)
                  recycler.smoothScrollToPosition(0) }
              }
             }
@@ -56,11 +56,10 @@ class HomeTimeLineFragment : TimeLineFragment(){
     //Receiver
     inner class StatusReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-
           val  positionIndex =  (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
             val data=intent.extras.getByteArray("Status").getDeserialized<Status>()
             mainThread {
-                adapter.addData(0,data)
+                insertDataBackground(data)
                 if (positionIndex==0) {
                     (recycler).smoothScrollToPosition(0)
                 }

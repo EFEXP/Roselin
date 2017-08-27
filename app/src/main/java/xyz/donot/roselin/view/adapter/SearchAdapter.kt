@@ -9,7 +9,7 @@ import twitter4j.User
 import xyz.donot.roselin.util.extraUtils.Bundle
 import xyz.donot.roselin.util.extraUtils.mainThread
 import xyz.donot.roselin.util.getSerialized
-import xyz.donot.roselin.view.fragment.SearchTimeline
+import xyz.donot.roselin.view.fragment.status.SearchTimeline
 import xyz.donot.roselin.view.fragment.TrendFragment
 import xyz.donot.roselin.view.fragment.user.UserListFragment
 

@@ -33,15 +33,12 @@
             android:summary="ホームタイムラインにストリームを使用します。"
             android:title="ホームストリーム" />
     </PreferenceScreen>
-
-
     <PreferenceScreen
         android:title="背景変更"
         android:summary="ホームタイムラインの背景を変更します。">
         <intent android:action="xyz.donot.roselin.view.activity.BackImageActivity" />
 
     </PreferenceScreen>
-
     <PreferenceScreen
         android:title="タブの設定"
         android:summary="タブの設定を変更します。">

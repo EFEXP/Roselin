@@ -19,6 +19,7 @@ abstract class UserListFragment:BaseListFragment<User>()
             if (result.hasNext()) {
                 cursor = result.nextCursor
             }
+            else{shouldLoad=false}
         }
         return result
     }

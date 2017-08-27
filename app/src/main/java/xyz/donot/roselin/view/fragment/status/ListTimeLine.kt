@@ -20,7 +20,7 @@ class ListTimeLine:TimeLineFragment(){
                 val result= twitter.getUserListStatuses(listId,Paging(adapter.data[0].id))
                 if (result.isNotEmpty()){
                     mainThread {
-                        adapter.addData(0,result)
+                        insertDataBackground(result)
                         recycler.smoothScrollToPosition(0) }
                 }
             }

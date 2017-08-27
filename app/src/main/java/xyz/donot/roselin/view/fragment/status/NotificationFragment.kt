@@ -23,6 +23,7 @@ class NotificationFragment:TimeLineFragment(){
     private val favReceiver by lazy { FavReceiver() }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        adapter.isUseEmpty(false)
         LocalBroadcastManager.getInstance(activity).apply {
             registerReceiver(rtReceiver, IntentFilter("onRetweeted"))
             registerReceiver(favReceiver, IntentFilter("OnFavorited"))

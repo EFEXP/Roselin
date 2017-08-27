@@ -1,4 +1,4 @@
-package xyz.donot.roselin.view.fragment
+package xyz.donot.roselin.view.fragment.status
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -16,7 +16,6 @@ import twitter4j.Status
 import xyz.donot.roselin.util.extraUtils.async
 import xyz.donot.roselin.util.extraUtils.mainThread
 import xyz.donot.roselin.util.getDeserialized
-import xyz.donot.roselin.view.fragment.status.TimeLineFragment
 
 class SearchTimeline : TimeLineFragment() {
     private  var query :Query?=null
@@ -54,8 +53,7 @@ class SearchTimeline : TimeLineFragment() {
                     adapter.loadMoreComplete()
                 } else {
                     query = null
-                    adapter.loadMoreComplete()
-                    adapter.loadMoreEnd()
+                    shouldLoad=false
                 }
                 adapter.addData(result.tweets)
             }
@@ -69,7 +67,7 @@ class SearchTimeline : TimeLineFragment() {
     override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
         adapter.data.clear()
         adapter.notifyDataSetChanged()
-        page=0
+        query=arguments.getByteArray("query_bundle").getDeserialized<Query>()
         LoadMoreData2()
     }
     //Receiver
@@ -78,7 +76,7 @@ class SearchTimeline : TimeLineFragment() {
             val  positionIndex =  (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
             val data=intent.extras.getByteArray("Status").getDeserialized<Status>()
             mainThread {
-                adapter.addData(0,data)
+                insertDataBackground(data)
                 if (positionIndex==0) {
                     (recycler).smoothScrollToPosition(0)
                 }

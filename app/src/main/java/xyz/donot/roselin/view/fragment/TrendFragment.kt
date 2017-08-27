@@ -20,7 +20,7 @@ class TrendFragment : BaseListFragment<Trend>() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter.setEnableLoadMore(false)
+        shouldLoad=false
         refresh.isEnabled=false
         adapter.setOnItemClickListener { _, _, position ->
             if (activity is SearchActivity) {

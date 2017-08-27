@@ -15,6 +15,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import twitter4j.Status
 import xyz.donot.roselin.R
+import xyz.donot.roselin.util.extraUtils.Bundle
 import xyz.donot.roselin.util.extraUtils.async
 import xyz.donot.roselin.util.extraUtils.newIntent
 import xyz.donot.roselin.util.extraUtils.start
@@ -23,13 +24,14 @@ import xyz.donot.roselin.view.activity.TweetEditActivity
 import xyz.donot.roselin.view.activity.TwitterDetailActivity
 import xyz.donot.roselin.view.adapter.StatusAdapter
 import xyz.donot.roselin.view.fragment.BaseListFragment
+import xyz.donot.roselin.view.fragment.RetweeterDialog
 
 
 abstract class TimeLineFragment : BaseListFragment<Status>() {
     var page: Int = 0
         set(value) {
             pagecopy=value
-            field=page
+            field=value
         }
         get() {
             field++
@@ -78,7 +80,9 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                                     (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip = ClipData.newPlainText(ClipDescription.MIMETYPE_TEXT_URILIST, item.text)
                                 }
                                 "RTした人" -> {
-
+                                    val rd=RetweeterDialog()
+                                    rd.arguments=Bundle{putLong("tweetId",item.id)}
+                                    rd.show(activity.supportFragmentManager,"")
                                 }
                                 "共有" -> {
                                     context.startActivity(Intent().apply {
@@ -108,9 +112,6 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
         if (savedInstanceState!=null)
       page=  savedInstanceState.getInt("page",0)
     }
-
-
-
 
 
 

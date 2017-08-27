@@ -43,7 +43,7 @@ android {
         }
         debug {
             shrinkResources false
-            minifyEnabled true
+            minifyEnabled false
             applicationIdSuffix ".debug"
             manifestPlaceholders = [appName: "Roselin α"]
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -83,6 +83,7 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true
     }
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.3'
     compile 'io.realm:android-adapters:2.1.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.makeramen:roundedimageview:2.3.0'
@@ -92,5 +93,4 @@ dependencies {
     compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.6.0'
     compile 'com.klinkerapps:link_builder:1.6.1'
     compile 'com.github.xbroak:CharCountTextView:v1.0'
-    compile 'com.android.support:support-v4:26.0.1'
 }

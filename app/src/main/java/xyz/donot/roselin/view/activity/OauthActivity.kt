@@ -106,17 +106,18 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                val result = tw.getMutesIDs(cursor)
                 if (result!=null) {
                     mainThread { arrayMute.addAll(result.iDs.toList()) }
+                    Realm.getDefaultInstance().executeTransaction {
+                        realm ->
+                        arrayMute.forEach { ids->
+                            realm.createObject(DBMute::class.java).apply {
+                                id=ids
+                            }
+                        }
+
+                    }
                 }
             }
-        Realm.getDefaultInstance().executeTransaction {
-            realm ->
-           arrayMute.forEach { ids->
-               realm.createObject(DBMute::class.java).apply {
-                   id=ids
-               }
-           }
 
-        }
 
     }
     fun logUser(tw: Twitter) {

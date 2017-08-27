@@ -23,22 +23,45 @@ import xyz.donot.roselin.view.custom.MyLoadingView
 abstract class BaseListFragment<T> : AppCompatDialogFragment() {
     val twitter by lazy { getTwitterInstance() }
     val adapter by lazy { adapterFun() }
+    var isBackground=false
     var useDefaultLoad=true
+    var shouldLoad =true
+    set(value) {
+        if (!value){
+            adapter.loadMoreComplete()
+            adapter.loadMoreEnd()
+        }
+        field=value
+    }
+    private val dataStore=ArrayList<T>()
 
     abstract fun adapterFun():BaseQuickAdapter<T,BaseViewHolder>
     abstract fun pullToRefresh(adapter: BaseQuickAdapter<T, BaseViewHolder>)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = inflater.inflate(R.layout.content_base_fragment, container, false)
-
+    fun insertDataBackground(data:List<T>){
+        if(!isBackground){adapter.addData(0,data)}
+        else{dataStore.addAll(0,data)}
+    }
+    fun insertDataBackground(data:T){
+        if(!isBackground){adapter.addData(0,data)}
+        else{dataStore.add(0,data)}
+    }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val dividerItemDecoration = DividerItemDecoration( recycler.context,
                 LinearLayoutManager(activity).orientation)
         recycler.addItemDecoration(dividerItemDecoration)
         recycler.layoutManager = LinearLayoutManager(activity)
-        adapter.setOnLoadMoreListener({ if (useDefaultLoad){LoadMoreData()} else{LoadMoreData2()} },recycler)
+        adapter.setOnLoadMoreListener({
+            if (shouldLoad){ if (useDefaultLoad){LoadMoreData()} else{LoadMoreData2()} }
+
+        },recycler)
         adapter.setLoadMoreView(MyLoadingView())
         adapter.emptyView=View.inflate(activity, R.layout.item_empty,null)
         recycler.adapter=adapter
+
+
       if (savedInstanceState==null){
           if (useDefaultLoad){LoadMoreData()}
           else{LoadMoreData2()}
@@ -48,10 +71,11 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
           Log.d("SavedInstanceStateHas",t.size.toString())
           adapter.addData(t)
       }
+
         refresh.setOnRefreshListener {
             if (adapter.data.isNotEmpty()){
                 pullToRefresh(adapter)
-                refresh.isRefreshing=false
+               refresh.isRefreshing=false
             }
             else{
                if (useDefaultLoad){LoadMoreData()}
@@ -61,7 +85,17 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        isBackground=false
+        adapter.addData(0,dataStore)
+        dataStore.clear()
+    }
 
+    override fun onStop() {
+        super.onStop()
+        isBackground=true
+    }
     open  fun LoadMoreData2(){}
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
@@ -78,14 +112,8 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
                 if (result!=null)
                 {
                     mainThread {
-                        adapter.addData(result)
-                        adapter.loadMoreComplete()
-                    }
-                }
-                else{
-                    mainThread {
-                    adapter.loadMoreComplete()
-                    adapter.loadMoreEnd()
+                     adapter.addData(result)
+                     adapter.loadMoreComplete()
                     }
                 }
             } catch (e: Exception) {

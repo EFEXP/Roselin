@@ -10,4 +10,5 @@ class MPreferenceFragment: PreferenceFragment(){
         super.onCreate(savedInstanceState)
         addPreferencesFromResource(R.xml.preferences)
     }
+
 }

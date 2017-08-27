@@ -30,7 +30,7 @@
 
         <activity
             android:name=".view.activity.MainActivity"
-            android:label="@string/app_name"
+            android:label="${appName}"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -77,6 +77,7 @@
         <service
             android:name=".service.SearchStreamService"
             android:exported="false" />
+
         <activity
             android:name=".view.activity.SearchActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -93,6 +94,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="xyz.donot.roselin.view.activity.BackImageActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -111,6 +113,20 @@
         <activity
             android:name=".view.activity.UserListsActivity"
             android:label="@string/title_activity_user_lists"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <receiver
+            android:name=".view.activity.MusicReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.music.metachanged" />
+                <action android:name="com.android.music.playstatechanged" />
+                <action android:name="com.android.music.playbackcomplete" />
+            </intent-filter>
+        </receiver>
+        <activity
+            android:name=".view.activity.AccountSettingActivity"
+            android:label="@string/title_activity_account_setting"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 

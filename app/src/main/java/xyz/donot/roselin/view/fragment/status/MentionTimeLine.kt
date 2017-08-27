@@ -40,7 +40,7 @@ class MentionTimeLine :TimeLineFragment(){
                 val result= twitter.getMentionsTimeline(Paging(adapter.data[0].id))
                 if (result.isNotEmpty()){
                     mainThread {
-                        adapter.addData(0,result)
+                        insertDataBackground(result)
                         recycler.smoothScrollToPosition(0) }
                 }
             }
