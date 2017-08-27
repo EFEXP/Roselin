@@ -2,7 +2,6 @@ package xyz.donot.roselin.view.adapter
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -18,9 +17,12 @@ import twitter4j.Twitter
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.util.*
+import xyz.donot.roselin.util.extraUtils.Bundle
 import xyz.donot.roselin.util.extraUtils.intent
+import xyz.donot.roselin.util.extraUtils.onClick
 import xyz.donot.roselin.util.extraUtils.start
 import xyz.donot.roselin.view.activity.PictureActivity
+import xyz.donot.roselin.view.activity.TwitterDetailActivity
 import xyz.donot.roselin.view.activity.UserActivity
 import xyz.donot.roselin.view.activity.VideoActivity
 import java.util.*
@@ -115,6 +117,9 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
 
             LinkBuilder.on(getView(R.id.textview_text)).addLinks(mContext.getTagURLMention()).build()
             //Listener
+            getView<View>(R.id.quote_tweet_holder).onClick {
+                ( mContext as Activity).start<TwitterDetailActivity>(Bundle { putSerializable("status",item.quotedStatus) })
+            }
             getView<ImageView>(R.id.imageview_icon).setOnClickListener{
                 val intent=mContext.intent<UserActivity>()
                 intent.putExtra("user_id",item.user.id)
@@ -148,9 +153,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
             }
             mAdapter.setOnItemClickListener { adapter, _, position ->
                 if(item.hasVideo){mContext.startActivity(Intent(mContext,VideoActivity::class.java).putExtra("video_url", item.getVideoURL()))}
-                else{ ( mContext as Activity).start<PictureActivity>(Bundle().apply {
-                    putStringArrayList("picture_urls",item.images)
-                })}
+                else{     ( mContext as Activity).start<PictureActivity>(Bundle { putStringArrayList("picture_urls",item.images) })}
                 }
         }
         else{
