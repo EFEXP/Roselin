@@ -19,9 +19,6 @@ class DatePickFragment: DialogFragment()
         //    add(Calendar.DAY_OF_MONTH, -7)
      //   }
 
-        val  maxDate = c
-
-
 
         val listener= DatePickerDialog.OnDateSetListener { view, y, monthOfYear, dayOfMonth ->
             if(parentActivity is SearchSettingActivity) {
@@ -30,12 +27,11 @@ class DatePickFragment: DialogFragment()
 
         }
 
-        val dialog=DatePickerDialog(activity, listener,  year, month, day)
+        return DatePickerDialog(activity, listener,  year, month, day)
         .apply {
-            datePicker.maxDate=maxDate.timeInMillis
+            datePicker.maxDate= c.timeInMillis
          //   datePicker.minDate=minDate.timeInMillis
         }
-            return  dialog
 
 
 

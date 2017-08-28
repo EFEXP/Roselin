@@ -7,7 +7,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="xyz.donot.roselin.view.activity.PictureActivity"
     tools:showIn="@layout/activity_picture">
-<xyz.donot.quetzal.view.customview.FixedViewPager
+<xyz.donot.roselin.view.custom.FixedViewPager
     android:id="@+id/picture_view_pager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>

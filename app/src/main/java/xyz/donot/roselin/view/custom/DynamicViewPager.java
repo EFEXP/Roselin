@@ -18,10 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public abstract class DynamicViewPager extends PagerAdapter {
-
-
     private static final String TAG = "ifpa";
-    private final boolean DEBUG = false;
 
     private final FragmentManager mFragmentManager;
     private FragmentTransaction mCurTransaction = null;
@@ -56,7 +53,6 @@ public abstract class DynamicViewPager extends PagerAdapter {
                 return f;
             }
         }
-
         if (mCurTransaction == null) {
             mCurTransaction = mFragmentManager.beginTransaction();
         }

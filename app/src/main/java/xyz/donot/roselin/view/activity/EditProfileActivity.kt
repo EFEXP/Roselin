@@ -20,7 +20,10 @@ import twitter4j.Twitter
 import twitter4j.User
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
+import xyz.donot.roselin.util.extraUtils.async
 import xyz.donot.roselin.util.extraUtils.longToast
+import xyz.donot.roselin.util.extraUtils.mainThread
+import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getPath
 import xyz.donot.roselin.util.getSerialized
 import xyz.donot.roselin.util.getTwitterInstance
@@ -120,23 +123,22 @@ class EditProfileActivity : AppCompatActivity() {
 
 
         fab.setOnClickListener {
-    object : SafeAsyncTask<Twitter,User>(){
-          override fun doTask(arg: Twitter): User = arg.updateProfile(
-                    user_name.text.toString(),
-                    web.text.toString(),
-                    geo.text.toString(),
-                  description.text.toString())
-
-          override fun onSuccess(result: User) {
-            //  longToast("更新しました")
-              finish()
-              val bundle =  Bundle()
-              bundle.putByteArray("user",result.getSerialized())
-              setResult(RESULT_OK,Intent().putExtras(bundle))
-          }
-
-          override fun onFailure(exception: Exception) = longToast("失敗しました")
-      }.execute(getTwitterInstance())
+            async{
+                try { val user= getTwitterInstance().updateProfile(
+                            user_name.text.toString(),
+                            web.text.toString(),
+                            geo.text.toString(),
+                            description.text.toString())
+                    if (user!=null){
+                        mainThread {
+                            finish()
+                            val bundle =  Bundle()
+                            bundle.putByteArray("user",user.getSerialized())
+                            setResult(RESULT_OK,Intent().putExtras(bundle))
+                        }
+                    }
+                }catch (e:Exception){toast(e.localizedMessage)}
+            }
 
             val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             if (bannerUri != null || iconUri != null) {

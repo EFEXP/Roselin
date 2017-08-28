@@ -7,5 +7,5 @@ import io.realm.annotations.RealmClass
 
 @RealmClass
 open class DBStatus : RealmObject() {
-  open  var status: ByteArray? =null
+  open  var status: ByteArray=kotlin.ByteArray(0)
 }

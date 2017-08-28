@@ -44,7 +44,7 @@ inline fun <reified T : Activity> Activity.startActivityForResult(requestCode: I
         this.startActivityForResult(newIntent<T>(flags), requestCode)
 
 inline fun <reified T : Activity> Activity.startActivityForResult(
-        extras: Bundle, requestCode: Int): Unit =
+        extras: Bundle, requestCode: Int) =
         this.startActivityForResult(newIntent<T>(extras), requestCode)
 
 inline fun <reified T : Activity> Activity.startActivityForResult(

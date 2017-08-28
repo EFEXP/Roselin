@@ -1,4 +1,4 @@
-package xyz.donot.quetzal.view.customview
+package xyz.donot.roselin.view.custom
 
 import android.content.Context
 import android.support.v4.view.ViewPager

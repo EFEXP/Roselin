@@ -4,8 +4,6 @@
     <color name="colorPrimaryDark">#D32F2F</color>
     <color name="colorAccent">#FF5252</color>
     <color name="colorPrimaryLight">#FFCDD2</color>
-        <color name="black_overlay">#66000000</color>
-        <color name="white">#FFFF</color>
     <color name="favorite">#E71C4F</color>
     <color name="retweet">#19CE85</color>
     <color name="grey">#BDBDBD</color>

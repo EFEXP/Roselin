@@ -16,12 +16,12 @@ import xyz.donot.roselin.view.fragment.DatePickFragment
 class SearchSettingActivity : AppCompatActivity() {
    fun dateSet(year: Int, monthOfYear: Int, dayOfMonth: Int,isFrom:Boolean) {
        if(isFrom){
-           day_from.text = "${year}/${monthOfYear}/${dayOfMonth}/～"
-           day_from.tag=" since:${year}-${monthOfYear}-${dayOfMonth}"
+           day_from.text = "$year/$monthOfYear/$dayOfMonth/～"
+           day_from.tag=" since:$year-$monthOfYear-$dayOfMonth"
        }
        else {
-           day_to.text = "～${year}/${monthOfYear}/${dayOfMonth}日"
-           day_to.tag=" until:${year}-${monthOfYear}-${dayOfMonth}"
+           day_to.text = "～$year/$monthOfYear/$dayOfMonth/"
+           day_to.tag=" until:$year-$monthOfYear-$dayOfMonth"
        }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +66,7 @@ class SearchSettingActivity : AppCompatActivity() {
                 if(search_setting_image.isChecked) {
                     querytext +=" filter:images"
                 }
-         if ( !search_setting_query_absolute.text.toString().isNullOrBlank()){
+         if ( !search_setting_query_absolute.text.toString().isBlank()){
              querytext +="\"${search_setting_query_absolute.text}\""
          }
 

@@ -116,7 +116,8 @@
         <receiver
             android:name=".view.activity.MusicReceiver"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+           >
             <intent-filter>
                 <action android:name="com.android.music.metachanged" />
                 <action android:name="com.android.music.playstatechanged" />
