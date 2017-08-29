@@ -8,11 +8,13 @@
     <PreferenceScreen
         android:title="ツイート設定"
         android:summary="ツイートに関する設定です">
-        <PreferenceScreen
-            android:title="背景変更"
-            android:summary="ホームタイムラインの背景を変更します。">
-            <intent android:action="xyz.donot.roselin.view.activity.BackImageActivity" />
-        </PreferenceScreen>
+<ListPreference
+    android:title="画像圧縮の設定"
+    android:key="compress_preference"
+    android:entries="@array/compress_quality"
+    android:entryValues="@array/compress_quality_values"
+    >
+</ListPreference>
     </PreferenceScreen>
     <PreferenceScreen
     android:title="デザイン設定"

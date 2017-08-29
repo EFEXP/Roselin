@@ -2,4 +2,5 @@
 <resources>
     <color name="grey">#BDBDBD</color>
 <color name="overlay_background">#c8424242</color>
+    <color name="material_background">@color/material_grey_850</color>
 </resources>

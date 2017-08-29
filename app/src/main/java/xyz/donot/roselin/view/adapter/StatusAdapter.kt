@@ -107,7 +107,6 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
             setText(R.id.textview_date, getRelativeTime(item.createdAt))
             setText(R.id.tv_retweet,item.retweetCount.toString())
             setText(R.id.tv_favorite,item.favoriteCount.toString())
-           // setText(R.id.textview_count, "RT:${item.retweetCount} いいね:${item.favoriteCount}")
             LinkBuilder.on(getView(R.id.textview_text)).addLinks(mContext.getTagURLMention()).build()
             //Listener
             getView<View>(R.id.quote_tweet_holder).onClick {

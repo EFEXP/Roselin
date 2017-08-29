@@ -212,20 +212,12 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         mLastPosition = count;
     }
 
-    /**
-     * Set custom load more
-     *
-     * @param loadingView 加载视图
-     */
+
     public void setLoadMoreView(MyLoadMoreView loadingView) {
         this.mLoadMoreView = loadingView;
     }
 
-    /**
-     * Load more view count
-     *
-     * @return 0 or 1
-     */
+
     private int getLoadMoreViewCount() {
         if (mRequestLoadMoreListener == null || !mLoadMoreEnable) {
             return 0;
@@ -239,36 +231,22 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         return 1;
     }
 
-    /**
-     * Gets to load more locations
-     *
-     * @return
-     */
+
     private int getLoadMoreViewPosition() {
         return getHeaderLayoutCount() + mData.size() + getFooterLayoutCount();
     }
 
-    /**
-     * @return Whether the Adapter is actively showing load
-     * progress.
-     */
+
     public boolean isLoading() {
         return mLoading;
     }
 
 
-    /**
-     * Refresh end, no more data
-     */
     public void loadMoreEnd() {
         loadMoreEnd(false);
     }
 
-    /**
-     * Refresh end, no more data
-     *
-     * @param gone if true gone the load more view
-     */
+
     private void loadMoreEnd(boolean gone) {
         if (getLoadMoreViewCount() == 0) {
             return;
@@ -284,9 +262,6 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         }
     }
 
-    /**
-     * Refresh complete
-     */
     public void loadMoreComplete() {
         if (getLoadMoreViewCount() == 0) {
             return;
@@ -297,9 +272,6 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         notifyItemChanged(getLoadMoreViewPosition());
     }
 
-    /**
-     * Refresh failed
-     */
     public void loadMoreFail() {
         if (getLoadMoreViewCount() == 0) {
             return;
@@ -309,11 +281,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         notifyItemChanged(getLoadMoreViewPosition());
     }
 
-    /**
-     * Set the enabled state of load more.
-     *
-     * @param enable True if load more is enabled, false otherwise.
-     */
+
     public void setEnableLoadMore(boolean enable) {
         int oldLoadMoreCount = getLoadMoreViewCount();
         mLoadMoreEnable = enable;
@@ -331,32 +299,18 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         }
     }
 
-    /**
-     * Returns the enabled status for load more.
-     *
-     * @return True if load more is enabled, false otherwise.
-     */
+
     public boolean isLoadMoreEnable() {
         return mLoadMoreEnable;
     }
 
-    /**
-     * Sets the duration of the animation.
-     *
-     * @param duration The length of the animation, in milliseconds.
-     */
+
     public void setDuration(int duration) {
         mDuration = duration;
     }
 
 
-    /**
-     * Same as QuickAdapter#QuickAdapter(Context,int) but with
-     * some initialization data.
-     *
-     * @param layoutResId The layout resource id of each item.
-     * @param data        A new list is created out of this one to avoid mutable list
-     */
+
     public MyBaseRecyclerAdapter(@LayoutRes int layoutResId, @Nullable List<T> data) {
         this.mData = data == null ? new ArrayList<T>() : data;
         if (layoutResId != 0) {
@@ -372,11 +326,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         this(layoutResId, null);
     }
 
-    /**
-     * setting up a new instance to data;
-     *
-     * @param data
-     */
+
     public void setNewData(@Nullable List<T> data) {
         this.mData = data == null ? new ArrayList<T>() : data;
         if (mRequestLoadMoreListener != null) {
@@ -390,43 +340,26 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
     }
 
 
-    /**
-     * insert  a item associated with the specified position of adapter
-     *
-     * @param position
-     * @param item
-     * @deprecated use {@link #addData(int, Object)} instead
-     */
+
     @Deprecated
     public void add(@IntRange(from = 0) int position, @NonNull T item) {
         addData(position, item);
     }
 
-    /**
-     * add one new data in to certain location
-     *
-     * @param position
-     */
+
     public void addData(@IntRange(from = 0) int position, @NonNull T data) {
         mData.add(position, data);
         notifyItemInserted(position + getHeaderLayoutCount());
        compatibilityDataSizeChanged(1);
     }
 
-    /**
-     * add one new data
-     */
     public void addData(@NonNull T data) {
         mData.add(data);
         notifyItemInserted(mData.size() + getHeaderLayoutCount());
         compatibilityDataSizeChanged(1);
     }
 
-    /**
-     * remove the item associated with the specified position of adapter
-     *
-     * @param position
-     */
+
     public void remove(@IntRange(from = 0) int position) {
         mData.remove(position);
         int internalPosition = position + getHeaderLayoutCount();
@@ -435,43 +368,26 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
      //   notifyItemRangeChanged(internalPosition, mData.size() - internalPosition);
     }
 
-    /**
-     * change data
-     */
+
     public void setData(@IntRange(from = 0) int index, @NonNull T data) {
         mData.set(index, data);
         notifyItemChanged(index + getHeaderLayoutCount());
     }
 
-    /**
-     * add new data in to certain location
-     *
-     * @param position the insert position
-     * @param newData  the new data collection
-     */
+
     public void addData(@IntRange(from = 0) int position, @NonNull Collection<? extends T> newData) {
         mData.addAll(position, newData);
         notifyItemRangeInserted(position + getHeaderLayoutCount(), newData.size());
         compatibilityDataSizeChanged(newData.size());
     }
 
-    /**
-     * add new data to the end of mData
-     *
-     * @param newData the new data collection
-     */
+
     public void addData(@NonNull Collection<? extends T> newData) {
         mData.addAll(newData);
         notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
        compatibilityDataSizeChanged(newData.size());
     }
 
-    /**
-     * use data to replace all item in mData. this method is different {@link #setNewData(List)},
-     * it doesn't change the mData reference
-     *
-     * @param data data collection
-     */
     public void replaceData(@NonNull Collection<? extends T> data) {
         // 不是同一个引用才清空列表
         if (data != mData) {
@@ -481,11 +397,6 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         notifyDataSetChanged();
     }
 
-    /**
-     * compatible getLoadMoreViewCount and getEmptyViewCount may change
-     *
-     * @param size Need compatible data size
-     */
     private void compatibilityDataSizeChanged(int size) {
         final int dataSize = mData == null ? 0 : mData.size();
         if (dataSize == size) {
@@ -493,23 +404,11 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         }
     }
 
-    /**
-     * Get the data of list
-     *
-     * @return 列表数据
-     */
     @NonNull
     public List<T> getData() {
         return mData;
     }
 
-    /**
-     * Get the data item associated with the specified position in the data set.
-     *
-     * @param position Position of the item whose data we want within the adapter's
-     *                 data set.
-     * @return The data at the specified position.
-     */
     @Nullable
     public T getItem(@IntRange(from = 0) int position) {
         if (position < mData.size())
@@ -518,31 +417,17 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
             return null;
     }
 
-    /**
-     * if setHeadView will be return 1 if not will be return 0.
-     * notice: Deprecated! Use {@link ViewGroup#getChildCount()} of {@link #getHeaderLayout()} to replace.
-     *
-     * @return
-     */
     @Deprecated
     public int getHeaderViewsCount() {
         return getHeaderLayoutCount();
     }
 
-    /**
-     * if mFooterLayout will be return 1 or not will be return 0.
-     * notice: Deprecated! Use {@link ViewGroup#getChildCount()} of {@link #getFooterLayout()} to replace.
-     *
-     * @return
-     */
+
     @Deprecated
     public int getFooterViewsCount() {
         return getFooterLayoutCount();
     }
 
-    /**
-     * if addHeaderView will be return 1, if not will be return 0
-     */
     public int getHeaderLayoutCount() {
         if (mHeaderLayout == null || mHeaderLayout.getChildCount() == 0) {
             return 0;
@@ -550,9 +435,6 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         return 1;
     }
 
-    /**
-     * if addFooterView will be return 1, if not will be return 0
-     */
     private int getFooterLayoutCount() {
         if (mFooterLayout == null || mFooterLayout.getChildCount() == 0) {
             return 0;
@@ -560,11 +442,6 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         return 1;
     }
 
-    /**
-     * if show empty view will be return 1 or not will be return 0
-     *
-     * @return
-     */
     private int getEmptyViewCount() {
         if (mEmptyLayout == null || mEmptyLayout.getChildCount() == 0) {
             return 0;
@@ -687,9 +564,6 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         return holder;
     }
 
-    /**
-     * The notification starts the callback and loads more
-     */
     private void notifyLoadMoreToLoading() {
         if (mLoadMoreView.getLoadMoreStatus() == LoadMoreView.STATUS_LOADING) {
             return;
@@ -698,22 +572,11 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         notifyItemChanged(getLoadMoreViewPosition());
     }
 
-    /**
-     * Load more without data when settings are clicked loaded
-     *
-     * @param enable
-     */
     public void enableLoadMoreEndClick(boolean enable) {
         mEnableLoadMoreEndClick = enable;
     }
 
-    /**
-     * Called when a view created by this adapter has been attached to a window.
-     * simple to solve item will layout using all
-     * {@link #setFullSpan(RecyclerView.ViewHolder)}
-     *
-     * @param holder
-     */
+
     @Override
     public void onViewAttachedToWindow(K holder) {
         super.onViewAttachedToWindow(holder);
@@ -725,14 +588,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         }
     }
 
-    /**
-     * When set to true, the item will layout using all span area. That means, if orientation
-     * is vertical, the view will have full width; if orientation is horizontal, the view will
-     * have full height.
-     * if the hold view use StaggeredGridLayoutManager they should using all span area
-     *
-     * @param holder True if this item should traverse all spans.
-     */
+
     private void setFullSpan(RecyclerView.ViewHolder holder) {
         if (holder.itemView.getLayoutParams() instanceof StaggeredGridLayoutManager.LayoutParams) {
             StaggeredGridLayoutManager.LayoutParams params = (StaggeredGridLayoutManager.LayoutParams) holder
@@ -775,10 +631,6 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
                 LOADING_VIEW;
     }
 
-    /**
-     * if asFlow is true, footer/header will arrange like normal item view.
-     * only works when use {@link GridLayoutManager},and it will ignore span size.
-     */
     private boolean headerViewAsFlow, footerViewAsFlow;
 
     public void setHeaderViewAsFlow(boolean headerViewAsFlow) {
@@ -803,20 +655,10 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         int getSpanSize(GridLayoutManager gridLayoutManager, int position);
     }
 
-    /**
-     * @param spanSizeLookup instance to be used to query number of spans occupied by each item
-     */
     public void setSpanSizeLookup(SpanSizeLookup spanSizeLookup) {
         this.mSpanSizeLookup = spanSizeLookup;
     }
 
-    /**
-     * To bind different types of holder and solve different the bind events
-     *
-     * @param holder
-     * @param position
-     * @see #getDefItemViewType(int)
-     */
     @Override
     public void onBindViewHolder(K holder, int position) {
         //Add up fetch logic, almost like load more, but simpler.
@@ -892,13 +734,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         return createBaseViewHolder(getItemView(layoutResId, parent));
     }
 
-    /**
-     * if you want to use subclass of BaseViewHolder in the adapter,
-     * you must override the method to create new ViewHolder.
-     *
-     * @param view view
-     * @return new ViewHolder
-     */
+
     @SuppressWarnings("unchecked")
     private K createBaseViewHolder(View view) {
         Class temp = getClass();
@@ -917,13 +753,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         return k != null ? k : (K) new MyViewHolder(view);
     }
 
-    /**
-     * try to create Generic K instance
-     *
-     * @param z
-     * @param view
-     * @return
-     */
+
     @SuppressWarnings("unchecked")
     private K createGenericKInstance(Class z, View view) {
         try {
@@ -950,12 +780,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         return null;
     }
 
-    /**
-     * get generic parameter K
-     *
-     * @param z
-     * @return
-     */
+
     private Class getInstancedGenericKClass(Class z) {
         Type type = z.getGenericSuperclass();
         if (type instanceof ParameterizedType) {
@@ -972,49 +797,26 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         return null;
     }
 
-    /**
-     * Return root layout of header
-     */
 
     public LinearLayout getHeaderLayout() {
         return mHeaderLayout;
     }
 
-    /**
-     * Return root layout of footer
-     */
     public LinearLayout getFooterLayout() {
         return mFooterLayout;
     }
 
-    /**
-     * Append header to the rear of the mHeaderLayout.
-     *
-     * @param header
-     */
+
     public int addHeaderView(View header) {
         return addHeaderView(header, -1);
     }
 
-    /**
-     * Add header view to mHeaderLayout and set header view position in mHeaderLayout.
-     * When index = -1 or index >= child count in mHeaderLayout,
-     * the effect of this method is the same as that of {@link #addHeaderView(View)}.
-     *
-     * @param header
-     * @param index  the position in mHeaderLayout of this header.
-     *               When index = -1 or index >= child count in mHeaderLayout,
-     *               the effect of this method is the same as that of {@link #addHeaderView(View)}.
-     */
+
     private int addHeaderView(View header, int index) {
         return addHeaderView(header, index, LinearLayout.VERTICAL);
     }
 
-    /**
-     * @param header
-     * @param index
-     * @param orientation
-     */
+
     private int addHeaderView(View header, int index, int orientation) {
         if (mHeaderLayout == null) {
             mHeaderLayout = new LinearLayout(header.getContext());
@@ -1058,11 +860,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         }
     }
 
-    /**
-     * Append footer to the rear of the mFooterLayout.
-     *
-     * @param footer
-     */
+
     public int addFooterView(View footer) {
         return addFooterView(footer, -1, LinearLayout.VERTICAL);
     }
@@ -1071,16 +869,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         return addFooterView(footer, index, LinearLayout.VERTICAL);
     }
 
-    /**
-     * Add footer view to mFooterLayout and set footer view position in mFooterLayout.
-     * When index = -1 or index >= child count in mFooterLayout,
-     * the effect of this method is the same as that of {@link #addFooterView(View)}.
-     *
-     * @param footer
-     * @param index  the position in mFooterLayout of this footer.
-     *               When index = -1 or index >= child count in mFooterLayout,
-     *               the effect of this method is the same as that of {@link #addFooterView(View)}.
-     */
+
     private int addFooterView(View footer, int index, int orientation) {
         if (mFooterLayout == null) {
             mFooterLayout = new LinearLayout(footer.getContext());
@@ -1124,12 +913,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         }
     }
 
-    /**
-     * remove header view from mHeaderLayout.
-     * When the child count of mHeaderLayout is 0, mHeaderLayout will be set to null.
-     *
-     * @param header
-     */
+
     public void removeHeaderView(View header) {
         if (getHeaderLayoutCount() == 0) return;
 
@@ -1142,12 +926,6 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         }
     }
 
-    /**
-     * remove footer view from mFooterLayout,
-     * When the child count of mFooterLayout is 0, mFooterLayout will be set to null.
-     *
-     * @param footer
-     */
     public void removeFooterView(View footer) {
         if (getFooterLayoutCount() == 0) return;
 
@@ -1160,9 +938,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         }
     }
 
-    /**
-     * remove all header view from mHeaderLayout and set null to mHeaderLayout
-     */
+
     public void removeAllHeaderView() {
         if (getHeaderLayoutCount() == 0) return;
 
@@ -1173,9 +949,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         }
     }
 
-    /**
-     * remove all footer view from mFooterLayout and set null to mFooterLayout
-     */
+
     public void removeAllFooterView() {
         if (getFooterLayoutCount() == 0) return;
 
@@ -1326,9 +1100,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         this.mCustomAnimation = animation;
     }
 
-    /**
-     * To open the animation when loading
-     */
+
     public void openLoadAnimation() {
         this.mOpenAnimationEnable = true;
     }
@@ -1494,14 +1266,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         return subItemCount;
     }
 
-    /**
-     * Collapse an expandable item that has been expanded..
-     *
-     * @param position the position of the item, which includes the header layout count.
-     * @param animate  collapse with animation or not.
-     * @param notify   notify the recyclerView refresh UI or not.
-     * @return the number of subItems collapsed.
-     */
+
     private int collapse(@IntRange(from = 0) int position, boolean animate, boolean notify) {
         position -= getHeaderLayoutCount();
 
@@ -1523,22 +1288,12 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         return subItemCount;
     }
 
-    /**
-     * Collapse an expandable item that has been expanded..
-     *
-     * @param position the position of the item, which includes the header layout count.
-     * @return the number of subItems collapsed.
-     */
+
     public int collapse(@IntRange(from = 0) int position) {
         return collapse(position, true, true);
     }
 
-    /**
-     * Collapse an expandable item that has been expanded..
-     *
-     * @param position the position of the item, which includes the header layout count.
-     * @return the number of subItems collapsed.
-     */
+
     public int collapse(@IntRange(from = 0) int position, boolean animate) {
         return collapse(position, animate, true);
     }
@@ -1568,14 +1323,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         }
     }
 
-    /**
-     * Get the parent item position of the IExpandable item
-     *
-     * @return return the closest parent item position of the IExpandable.
-     * if the IExpandable item's level is 0, return itself position.
-     * if the item's level is negative which mean do not implement this, return a negative
-     * if the item is not exist in the data list, return a negative.
-     */
+
     public int getParentPosition(@NonNull T item) {
         int position = getItemPosition(item);
         if (position == -1) {
@@ -1608,144 +1356,67 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         return -1;
     }
 
-    /**
-     * Interface definition for a callback to be invoked when an itemchild in this
-     * view has been clicked
-     */
+
     public interface OnItemChildClickListener {
-        /**
-         * callback method to be invoked when an item in this view has been
-         * click and held
-         *
-         * @param view     The view whihin the ItemView that was clicked
-         * @param position The position of the view int the adapter
-         */
+
         void onItemChildClick(MyBaseRecyclerAdapter adapter, View view, int position);
     }
 
 
-    /**
-     * Interface definition for a callback to be invoked when an childView in this
-     * view has been clicked and held.
-     */
+
     public interface OnItemChildLongClickListener {
-        /**
-         * callback method to be invoked when an item in this view has been
-         * click and held
-         *
-         * @param view     The childView whihin the itemView that was clicked and held.
-         * @param position The position of the view int the adapter
-         * @return true if the callback consumed the long click ,false otherwise
-         */
+
         boolean onItemChildLongClick(MyBaseRecyclerAdapter adapter, View view, int position);
     }
 
-    /**
-     * Interface definition for a callback to be invoked when an item in this
-     * view has been clicked and held.
-     */
+
     public interface OnItemLongClickListener {
-        /**
-         * callback method to be invoked when an item in this view has been
-         * click and held
-         *
-         * @param adapter  the adpater
-         * @param view     The view whihin the RecyclerView that was clicked and held.
-         * @param position The position of the view int the adapter
-         * @return true if the callback consumed the long click ,false otherwise
-         */
+
         boolean onItemLongClick(MyBaseRecyclerAdapter adapter, View view, int position);
     }
 
 
-    /**
-     * Interface definition for a callback to be invoked when an item in this
-     * RecyclerView itemView has been clicked.
-     */
     public interface OnItemClickListener {
 
-        /**
-         * Callback method to be invoked when an item in this RecyclerView has
-         * been clicked.
-         *
-         * @param adapter  the adpater
-         * @param view     The itemView within the RecyclerView that was clicked (this
-         *                 will be a view provided by the adapter)
-         * @param position The position of the view in the adapter.
-         */
+
         void onItemClick(MyBaseRecyclerAdapter adapter, View view, int position);
     }
 
-    /**
-     * Register a callback to be invoked when an item in this RecyclerView has
-     * been clicked.
-     *
-     * @param listener The callback that will be invoked.
-     */
+
     public void setOnItemClickListener(@Nullable OnItemClickListener listener) {
         mOnItemClickListener = listener;
     }
 
-    /**
-     * Register a callback to be invoked when an itemchild in View has
-     * been  clicked
-     *
-     * @param listener The callback that will run
-     */
     public void setOnItemChildClickListener(OnItemChildClickListener listener) {
         mOnItemChildClickListener = listener;
     }
 
-    /**
-     * Register a callback to be invoked when an item in this RecyclerView has
-     * been long clicked and held
-     *
-     * @param listener The callback that will run
-     */
+
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         mOnItemLongClickListener = listener;
     }
 
-    /**
-     * Register a callback to be invoked when an itemchild  in this View has
-     * been long clicked and held
-     *
-     * @param listener The callback that will run
-     */
     public void setOnItemChildLongClickListener(OnItemChildLongClickListener listener) {
         mOnItemChildLongClickListener = listener;
     }
 
 
-    /**
-     * @return The callback to be invoked with an item in this RecyclerView has
-     * been long clicked and held, or null id no callback as been set.
-     */
+
     private OnItemLongClickListener getOnItemLongClickListener() {
         return mOnItemLongClickListener;
     }
 
-    /**
-     * @return The callback to be invoked with an item in this RecyclerView has
-     * been clicked and held, or null id no callback as been set.
-     */
     private OnItemClickListener getOnItemClickListener() {
         return mOnItemClickListener;
     }
 
-    /**
-     * @return The callback to be invoked with an itemchild in this RecyclerView has
-     * been clicked, or null id no callback has been set.
-     */
+
     @Nullable
     public final OnItemChildClickListener getOnItemChildClickListener() {
         return mOnItemChildClickListener;
     }
 
-    /**
-     * @return The callback to be invoked with an itemChild in this RecyclerView has
-     * been long clicked, or null id no callback has been set.
-     */
+
     @Nullable
     public final OnItemChildLongClickListener getOnItemChildLongClickListener() {
         return mOnItemChildLongClickListener;

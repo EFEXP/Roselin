@@ -25,12 +25,10 @@ class TweetPostService : IntentService("TweetPostService") {
             val updateStatus= intent.getByteArrayExtra("StatusUpdate").getDeserialized<StatusUpdate>()
             if(intent.hasExtra("FilePath")){
                filePath=intent.getStringArrayListExtra("FilePath")
-              val compressed =filePath.map { com.setQuality(defaultSharedPreferences.getInt("compress",75))
+              val compressed =filePath.map { com.setQuality(Integer.parseInt(defaultSharedPreferences.getString("compress_preference",75.toString())))
                       .setCompressFormat(Bitmap.CompressFormat.PNG)
                       .setDestinationDirectoryPath(cacheDir.absolutePath)
                       .compressToFile(File(it)) }
-
-
                 notificate(id)
                 val uploadedMediaId = compressed.map {  twitter.uploadMedia(it).mediaId }
                 val array = LongArray(uploadedMediaId.size)

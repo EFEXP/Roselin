@@ -8,8 +8,8 @@
    >
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/iv_notification_icon"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:riv_corner_radius="15dip"

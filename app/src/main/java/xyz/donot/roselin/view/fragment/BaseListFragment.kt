@@ -49,26 +49,23 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
     }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val dividerItemDecoration = DividerItemDecoration( recycler.context,
                 LinearLayoutManager(activity).orientation)
-        recycler.addItemDecoration(dividerItemDecoration)
-        recycler.layoutManager = LinearLayoutManager(activity)
-        adapter.setOnLoadMoreListener({
-            if (shouldLoad){ if (useDefaultLoad){LoadMoreData()} else{LoadMoreData2()} }
-
-        },recycler)
-        recycler.itemAnimator = OvershootInRightAnimator(0.3f)
         adapter.apply {
+            setOnLoadMoreListener({
+                if (shouldLoad){ if (useDefaultLoad){LoadMoreData()} else{LoadMoreData2()} } },recycler)
             setLoadMoreView(MyLoadingView())
            emptyView=View.inflate(activity, R.layout.item_empty,null)
         }
+        recycler.apply {
+            layoutManager = LinearLayoutManager(activity)
+            addItemDecoration(dividerItemDecoration)
 
+            itemAnimator = OvershootInRightAnimator(0.3f)
+        }
         recycler.adapter= AlphaInAnimationAdapter(adapter)
-
-
       if (savedInstanceState==null){
-          if (useDefaultLoad){LoadMoreData()}
+          if (useDefaultLoad){getInitialData()}
           else{LoadMoreData2()}
       }
         else{
@@ -88,6 +85,25 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
                 refresh.isRefreshing=false
             } }
 
+    }
+
+    private fun getInitialData(){
+        async {
+            try {
+                val result=GetData()
+                if (result!=null)
+                {
+                    mainThread {
+                        adapter.setNewData(result)
+                        adapter.loadMoreComplete()
+                    }
+                }
+            } catch (e: Exception) {
+                toast(e.localizedMessage)
+                adapter.loadMoreFail()
+            }
+
+        }
     }
 
     override fun onResume() {
