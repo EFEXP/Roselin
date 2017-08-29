@@ -13,7 +13,7 @@
         tools:context="xyz.donot.roselin.view.activity.MainActivity">
         <View
             android:id="@+id/background_overlay"
-            android:background="@color/text_input_background"
+            android:background="@color/overlay_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
@@ -43,6 +43,8 @@
             </android.support.v7.widget.Toolbar>
             <android.support.design.widget.TabLayout
                 android:id="@+id/tabs_main"
+                app:tabMode="scrollable"
+                app:tabTextAppearance="@style/MineCustomTabText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </android.support.design.widget.AppBarLayout>
@@ -74,7 +76,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:orientation="horizontal"
-            android:background="@color/text_input_background">
+           >
             <android.support.design.widget.TextInputLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

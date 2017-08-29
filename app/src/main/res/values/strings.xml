@@ -711,6 +711,7 @@ Talon はその代わりに TwitPic を使用して画像をアップロード�
     <string name="title_activity_mute_setting">MuteSettingActivity</string>
     <string name="title_mute">ミュート設定</string>
     <string name="title_account">アカウント設定</string>
+    <string name="change_name">別名をつける</string>
 
 
 </resources>

@@ -8,8 +8,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
 import com.klinker.android.link_builder.LinkBuilder
 import com.squareup.picasso.Picasso
 import twitter4j.Status
@@ -17,22 +15,23 @@ import twitter4j.Twitter
 import xyz.donot.roselin.R
 import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.util.*
-import xyz.donot.roselin.util.extraUtils.Bundle
-import xyz.donot.roselin.util.extraUtils.intent
-import xyz.donot.roselin.util.extraUtils.onClick
-import xyz.donot.roselin.util.extraUtils.start
+import xyz.donot.roselin.util.extraUtils.*
 import xyz.donot.roselin.view.activity.PictureActivity
 import xyz.donot.roselin.view.activity.TwitterDetailActivity
 import xyz.donot.roselin.view.activity.UserActivity
 import xyz.donot.roselin.view.activity.VideoActivity
+import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
+import xyz.donot.roselin.view.custom.MyViewHolder
 import java.util.*
 
 
 
 
-class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_tweet)
+
+
+class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_tweet)
 {
-    override fun convert(helper: BaseViewHolder, status: Status) {
+    override fun convert(helper: MyViewHolder, status: Status) {
         val item= if (status.isRetweet){
             helper.setText(R.id.textview_is_retweet,"@${status.user.screenName}がリツイート")
             LinkBuilder.on( helper.getView(R.id.textview_is_retweet)).addLinks(mContext.getMentionLink()).build()
@@ -42,20 +41,19 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
             status }
         //Define Task
         class RetweetTask : SafeAsyncTask<Twitter, Status>(){
-            override fun doTask(arg: Twitter): twitter4j.Status = arg.retweetStatus(item.id)
-
+            override fun doTask(arg: Twitter): twitter4j.Status = arg.retweetStatus(status.id)
             override fun onSuccess(result: twitter4j.Status) = replace(status,result)
             override fun onFailure(exception: Exception) = Unit
         }
         class FavoriteTask : SafeAsyncTask<Twitter, Status>(){
-            override fun doTask(arg: Twitter): twitter4j.Status = arg.createFavorite(item.id)
+            override fun doTask(arg: Twitter): twitter4j.Status = arg.createFavorite(status.id)
 
             override fun onSuccess(result: twitter4j.Status) = replace(status,result)
 
             override fun onFailure(exception: Exception) = Unit
         }
         class DestroyFavoriteTask : SafeAsyncTask<Twitter, Status>(){
-            override fun doTask(arg: Twitter): twitter4j.Status = arg.destroyFavorite(item.id)
+            override fun doTask(arg: Twitter): twitter4j.Status = arg.destroyFavorite(status.id)
 
             override fun onSuccess(result: twitter4j.Status) = replace(status,result)
 
@@ -100,10 +98,8 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
               Picasso.with(mContext).load(item.quotedStatus.user.biggerProfileImageURLHttps).into(  getView<ImageView>(R.id.quoted_icon))
             }
             else{
-                setVisible(R.id.quote_tweet_holder,false)
+                getView<View>(R.id.quote_tweet_holder).hide()
             }
-
-
             //テキスト関係
             setText(R.id.textview_username,item.user.name)
             setText(R.id.textview_screenname,"@"+item.user.screenName)
@@ -112,9 +108,6 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
             setText(R.id.tv_retweet,item.retweetCount.toString())
             setText(R.id.tv_favorite,item.favoriteCount.toString())
            // setText(R.id.textview_count, "RT:${item.retweetCount} いいね:${item.favoriteCount}")
-
-
-
             LinkBuilder.on(getView(R.id.textview_text)).addLinks(mContext.getTagURLMention()).build()
             //Listener
             getView<View>(R.id.quote_tweet_holder).onClick {
@@ -151,9 +144,9 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
                 visibility = View.VISIBLE
                 hasFixedSize()
             }
-            mAdapter.setOnItemClickListener { adapter, _, position ->
+            mAdapter.setOnItemClickListener {  _, _,  _ ->
                 if(item.hasVideo){mContext.startActivity(Intent(mContext,VideoActivity::class.java).putExtra("video_url", item.getVideoURL()))}
-                else{     ( mContext as Activity).start<PictureActivity>(Bundle { putStringArrayList("picture_urls",item.images) })}
+                else{( mContext as Activity).start<PictureActivity>(Bundle { putStringArrayList("picture_urls",item.images) })}
                 }
         }
         else{

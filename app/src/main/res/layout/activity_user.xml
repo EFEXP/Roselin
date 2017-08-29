@@ -15,8 +15,8 @@
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="335dp"
-            app:statusBarScrim="@color/text_input_background"
-            app:contentScrim="@color/text_input_background"
+            app:statusBarScrim="@color/overlay_background"
+            app:contentScrim="@color/overlay_background"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/banner"

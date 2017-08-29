@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import io.realm.OrderedRealmCollection
 import io.realm.Realm
@@ -20,8 +19,8 @@ import xyz.donot.roselin.R
 import xyz.donot.roselin.model.realm.DBMute
 
 class MuteWordFragment :AppCompatDialogFragment(){
-    val realm: Realm by lazy { Realm.getDefaultInstance() }
-   val adapter by lazy {MuteWordAdater(realm.where(DBMute::class.java).isNotNull("text").findAll()) }
+    val realm by lazy { Realm.getDefaultInstance() }
+    val adapter by lazy {MuteWordAdater(realm.where(DBMute::class.java).isNotNull("text").findAll()) }
 
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -44,7 +43,6 @@ class MuteWordFragment :AppCompatDialogFragment(){
                 mute.text=text
                 background.setOnClickListener{
                     AlertDialog.Builder(activity)
-                            .setIcon(android.R.drawable.ic_dialog_info)
                             .setTitle("削除しますか？")
                             .setPositiveButton("OK", { dialog, _ ->
                                 Realm.getDefaultInstance().executeTransaction{
@@ -63,7 +61,7 @@ class MuteWordFragment :AppCompatDialogFragment(){
 
         inner  class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val mute: TextView =view.mute_query
-            val background: LinearLayout =view.mute_background
+            val background=view.mute_background
 
         }
 

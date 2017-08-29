@@ -3,23 +3,28 @@ package xyz.donot.roselin.view.adapter
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import io.realm.Realm
 import xyz.donot.roselin.model.realm.*
 import xyz.donot.roselin.util.extraUtils.Bundle
-import xyz.donot.roselin.view.fragment.status.SearchTimeline
 import xyz.donot.roselin.view.fragment.TrendFragment
+import xyz.donot.roselin.view.fragment.realm.NotificationFragment
 import xyz.donot.roselin.view.fragment.status.HomeTimeLineFragment
 import xyz.donot.roselin.view.fragment.status.ListTimeLine
 import xyz.donot.roselin.view.fragment.status.MentionTimeLine
-import xyz.donot.roselin.view.fragment.realm.NotificationFragment
+import xyz.donot.roselin.view.fragment.status.SearchTimeline
 
 
-class MainTimeLineAdapter(fm: FragmentManager, private val realmResults:ArrayList<DBTabData>) : FragmentPagerAdapter(fm) {
-
-
-
+class MainTimeLineAdapter(fm: FragmentManager, private val realmResults:List<DBTabData>) : FragmentPagerAdapter(fm) {
+    private  val realm= Realm .getDefaultInstance()
     override fun getItem(i: Int): Fragment = when(realmResults[i].type){
-        HOME->HomeTimeLineFragment()
-        MENTION->MentionTimeLine()
+        HOME->HomeTimeLineFragment().apply {
+            val t=   realm.where(DBAccount::class.java).equalTo("id",realmResults[i].accountId).findFirst()
+            arguments= Bundle { putByteArray("twitter",  realm.copyFromRealm(t).twitter) }
+        }
+        MENTION->MentionTimeLine().apply {
+         val t=   realm.where(DBAccount::class.java).equalTo("id",realmResults[i].accountId).findFirst()
+          arguments= Bundle {  putByteArray("twitter",  realm.copyFromRealm(t).twitter) }
+        }
         SEARCH-> SearchTimeline().apply { arguments= Bundle {
             putString("query_text",realmResults[i].searchWord)
             putByteArray("query_bundle",realmResults[i].searchQuery) } }
@@ -31,5 +36,8 @@ class MainTimeLineAdapter(fm: FragmentManager, private val realmResults:ArrayLis
 
     override fun getCount(): Int = realmResults.size
 
-    override fun getPageTitle(position: Int): CharSequence = ConvertToName(realmResults[position].type)
+
+    override fun getPageTitle(position: Int): CharSequence =
+            if (realmResults[position].screenName!=null)"${ConvertToSimpleName(realmResults[position].type)}(${realmResults[position].screenName!!})"
+          else ConvertToSimpleName(realmResults[position].type)
 }

@@ -61,7 +61,7 @@ class AccountSettingActivity : AppCompatActivity() {
         val result=  Realm.getDefaultInstance().where(DBAccount::class.java).findAll()
         val users=result.map { it.user }.map { it?.getDeserialized<User>() }
         adapter.addData(users)
-        fab.setOnClickListener { view ->
+        fab.setOnClickListener { _->
             start<OauthActivity>()
         }
 }

@@ -16,7 +16,7 @@
     <item android:state_checked="false">
         <shape android:shape="rectangle">
             <!-- ボタンの色 -->
-            <solid android:color="@color/text_input_background"/>
+            <solid android:color="@color/overlay_background"/>
             <!-- ボタンの枠線 -->
             <stroke android:width="2dp" android:color="@color/colorPrimary"/>
             <corners android:radius="48dp"/>

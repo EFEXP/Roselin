@@ -11,8 +11,6 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
 import twitter4j.Status
 import xyz.donot.roselin.R
 import xyz.donot.roselin.util.extraUtils.Bundle
@@ -23,6 +21,8 @@ import xyz.donot.roselin.util.getMyId
 import xyz.donot.roselin.view.activity.TweetEditActivity
 import xyz.donot.roselin.view.activity.TwitterDetailActivity
 import xyz.donot.roselin.view.adapter.StatusAdapter
+import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
+import xyz.donot.roselin.view.custom.MyViewHolder
 import xyz.donot.roselin.view.fragment.BaseListFragment
 import xyz.donot.roselin.view.fragment.RetweeterDialog
 
@@ -39,7 +39,7 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
             return field
         }
    private var pagecopy: Int =0
-    override fun adapterFun(): BaseQuickAdapter<Status, BaseViewHolder> =StatusAdapter()
+    override fun adapterFun(): MyBaseRecyclerAdapter<Status, MyViewHolder> =StatusAdapter()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = inflater.inflate(R.layout.content_base_fragment, container, false)
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -70,7 +70,7 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                                     activity.start<TweetEditActivity>(bundle)
                                 }
                                 "削除" -> {
-                                   async {   twitter.destroyStatus(status.id)}
+                                   async {twitter.destroyStatus(status.id)}
                                 }
                                 "会話" -> {
                                     context.startActivity(context.newIntent<TwitterDetailActivity>(Bundle().apply { putSerializable("Status", item) }))
@@ -112,7 +112,6 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
         if (savedInstanceState!=null)
       page=  savedInstanceState.getInt("page",0)
     }
-
 
 
     override fun onSaveInstanceState(outState: Bundle?) {

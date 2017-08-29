@@ -1,16 +1,16 @@
 package xyz.donot.roselin.view.adapter
 
 import android.widget.ImageView
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
 import com.squareup.picasso.Picasso
 import twitter4j.User
 import xyz.donot.roselin.R
+import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
+import xyz.donot.roselin.view.custom.MyViewHolder
 
 
-class UserListAdapter: BaseQuickAdapter<User, BaseViewHolder>(R.layout.item_user) {
+class UserListAdapter: MyBaseRecyclerAdapter<User,MyViewHolder>(R.layout.item_user) {
 
-    override fun convert(helper: BaseViewHolder, item: User) {
+    override fun convert(helper:MyViewHolder, item: User) {
         helper.apply {
         Picasso.with(mContext).load(item.biggerProfileImageURLHttps).into(getView<ImageView>(R.id.iv_icon))
         setText(R.id.tv_username,item.name)

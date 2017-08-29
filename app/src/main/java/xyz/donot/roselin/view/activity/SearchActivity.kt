@@ -33,8 +33,10 @@ class SearchActivity : AppCompatActivity() {
 
     }
  private fun setUpViews(tweetQuery: Query){
-     search_view_pager.adapter = SearchAdapter(tweetQuery,query_text,supportFragmentManager)
+     val ad=SearchAdapter(tweetQuery,query_text,supportFragmentManager)
+     search_view_pager.adapter = ad
      search_tabs.setupWithViewPager(search_view_pager)
+     search_view_pager.offscreenPageLimit=ad.count
  }
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()

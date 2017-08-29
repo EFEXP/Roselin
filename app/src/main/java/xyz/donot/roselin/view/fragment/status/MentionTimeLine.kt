@@ -8,8 +8,6 @@ import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import twitter4j.Paging
 import twitter4j.ResponseList
@@ -18,6 +16,8 @@ import xyz.donot.roselin.util.extraUtils.async
 import xyz.donot.roselin.util.extraUtils.mainThread
 import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getDeserialized
+import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
+import xyz.donot.roselin.view.custom.MyViewHolder
 
 class MentionTimeLine :TimeLineFragment(){
     override fun GetData(): ResponseList<Status>? =twitter.getMentionsTimeline(Paging(page))
@@ -34,7 +34,7 @@ class MentionTimeLine :TimeLineFragment(){
             unregisterReceiver(replyReceiver)
         }
     }
-    override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
+    override fun pullToRefresh(adapter:MyBaseRecyclerAdapter<Status, MyViewHolder>) {
         async {
             try {
                 val result= twitter.getMentionsTimeline(Paging(adapter.data[0].id))

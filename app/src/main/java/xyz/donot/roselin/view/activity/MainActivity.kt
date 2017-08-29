@@ -44,9 +44,9 @@ class MainActivity : AppCompatActivity() {
    private var user:User?=null
     private val disConnectionReceiver by lazy { DisConnectionReceiver() }
     private val connectionReceiver by lazy { ConnectionReceiver() }
+    private  val realm =  Realm.getDefaultInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val realm =  Realm.getDefaultInstance()
         setContentView(R.layout.activity_main)
         if (!haveToken()) {
             startActivity(intent<OauthActivity>())
@@ -196,16 +196,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpView() {
         //pager
-        val realm =  Realm.getDefaultInstance()
-        val list= ArrayList<DBTabData>().apply {
-            realm.where(DBTabData::class.java)
-                    .findAll().forEach {
-                add(realm.copyFromRealm(it))
-            }
-        }
+        val list= realm.copyFromRealm( realm.where(DBTabData::class.java).findAll()).toList()
         val adapter= MainTimeLineAdapter(supportFragmentManager,list)
         main_viewpager.adapter = adapter
         main_viewpager.offscreenPageLimit = adapter.count
+        tabs_main.setupWithViewPager(main_viewpager)
+    //  for ((index,tab) in list.withIndex()){
+     //    tabs_main.getTabAt(index)?.icon = typeToIcon(tab.type)
+    // }
+
         val uriString=defaultSharedPreferences.getString("BackGroundUri","")
         if (!uriString.isNullOrBlank()){
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,Uri.parse(uriString))
@@ -258,5 +257,6 @@ class MainActivity : AppCompatActivity() {
             mainThread {   iv_connected_stream.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_cloud_off,null))}
         }
     }
+
 
 }

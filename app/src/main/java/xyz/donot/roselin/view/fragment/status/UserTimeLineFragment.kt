@@ -4,8 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
 import android.view.View
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
 import com.klinker.android.link_builder.LinkBuilder
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_base_fragment.*
@@ -21,6 +19,8 @@ import xyz.donot.roselin.view.activity.EditProfileActivity
 import xyz.donot.roselin.view.activity.PictureActivity
 import xyz.donot.roselin.view.activity.UserListActivity
 import xyz.donot.roselin.view.activity.UserListsActivity
+import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
+import xyz.donot.roselin.view.custom.MyViewHolder
 import java.text.SimpleDateFormat
 
 class UserTimeLineFragment: TimeLineFragment()
@@ -34,7 +34,7 @@ class UserTimeLineFragment: TimeLineFragment()
        adapter.setHeaderView(v)
     }
 
-    override fun pullToRefresh(adapter: BaseQuickAdapter<Status, BaseViewHolder>) {
+    override fun pullToRefresh(adapter: MyBaseRecyclerAdapter<Status, MyViewHolder>) {
         async {
             try {
                 val result =twitter.getUserTimeline(Paging(adapter.data[0].id))

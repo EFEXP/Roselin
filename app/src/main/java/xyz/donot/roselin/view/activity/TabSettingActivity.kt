@@ -2,7 +2,6 @@ package xyz.donot.roselin.view.activity
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Canvas
 import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AlertDialog
@@ -16,7 +15,6 @@ import com.chad.library.adapter.base.BaseItemDraggableAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
 import com.chad.library.adapter.base.listener.OnItemDragListener
-import com.chad.library.adapter.base.listener.OnItemSwipeListener
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_tab_setting.*
 import twitter4j.Query
@@ -44,24 +42,14 @@ private val REQUEST_LISTS=1
        val onItemDragListener = object : OnItemDragListener {
            override fun onItemDragMoving(source: RecyclerView.ViewHolder?, from: Int, target: RecyclerView.ViewHolder?, to: Int) {
            }
-
            override fun onItemDragStart(viewHolder: RecyclerView.ViewHolder?, pos: Int) {
            }
-
            override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder?, pos: Int) {
                realmRecreate()
            }
        }
         val dividerItemDecoration = DividerItemDecoration( tab_recycler.context, LinearLayoutManager(this@TabSettingActivity).orientation)
-        val onItemSwipeListener = object : OnItemSwipeListener {
-            override fun onItemSwipeMoving(canvas: Canvas?, viewHolder: RecyclerView.ViewHolder?, dX: Float, dY: Float, isCurrentlyActive: Boolean) {
-            }
-            override fun onItemSwipeStart(viewHolder: RecyclerView.ViewHolder, pos: Int) {}
-            override fun clearView(viewHolder: RecyclerView.ViewHolder, pos: Int) {}
-            override fun onItemSwiped(viewHolder: RecyclerView.ViewHolder, pos: Int) {
-                realmRecreate()
-            }
-        }
+
 
         tab_recycler.addItemDecoration(dividerItemDecoration)
         tab_recycler.layoutManager = LinearLayoutManager(this)
@@ -74,10 +62,18 @@ private val REQUEST_LISTS=1
         itemTouchHelper.attachToRecyclerView(tab_recycler)
         //Configure Adapter
         mAdapter.enableSwipeItem()
-        mAdapter.setOnItemSwipeListener(onItemSwipeListener)
         mAdapter.enableDragItem(itemTouchHelper, R.id.iv_draggable, false)
         mAdapter.setOnItemDragListener(onItemDragListener)
 
+        mAdapter.setOnItemClickListener { _, _, position ->
+            AlertDialog.Builder(this@TabSettingActivity)
+                    .setTitle("削除しますか？")
+                    .setPositiveButton("OK", { dialog, _ ->
+                        mAdapter.remove(position)
+                    })
+                    .setNegativeButton("キャンセル",  { dialog, whichButton -> })
+                    .show()
+        }
         tab_recycler.adapter=mAdapter
         fab.setOnClickListener {
             val tab_menu=R.array.add_tab_menu
@@ -123,12 +119,7 @@ private val REQUEST_LISTS=1
                                     screenName= getMyScreenName()
                                 })
                                 realmRecreate()
-
-                            }
-                        }
-
-                    })
-                    .show()
+                            } } }).show()
         }
     }
 

@@ -10,15 +10,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter
+import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import xyz.donot.roselin.R
 import xyz.donot.roselin.util.extraUtils.async
 import xyz.donot.roselin.util.extraUtils.mainThread
 import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getTwitterInstance
+import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselin.view.custom.MyLoadingView
+import xyz.donot.roselin.view.custom.MyViewHolder
 
 abstract class BaseListFragment<T> : AppCompatDialogFragment() {
     val twitter by lazy { getTwitterInstance() }
@@ -34,9 +36,8 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
         field=value
     }
     private val dataStore=ArrayList<T>()
-
-    abstract fun adapterFun():BaseQuickAdapter<T,BaseViewHolder>
-    abstract fun pullToRefresh(adapter: BaseQuickAdapter<T, BaseViewHolder>)
+    abstract fun adapterFun():MyBaseRecyclerAdapter<T,MyViewHolder>
+    abstract fun pullToRefresh(adapter: MyBaseRecyclerAdapter<T, MyViewHolder>)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = inflater.inflate(R.layout.content_base_fragment, container, false)
     fun insertDataBackground(data:List<T>){
         if(!isBackground){adapter.addData(0,data)}
@@ -57,9 +58,13 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
             if (shouldLoad){ if (useDefaultLoad){LoadMoreData()} else{LoadMoreData2()} }
 
         },recycler)
-        adapter.setLoadMoreView(MyLoadingView())
-        adapter.emptyView=View.inflate(activity, R.layout.item_empty,null)
-        recycler.adapter=adapter
+        recycler.itemAnimator = OvershootInRightAnimator(0.3f)
+        adapter.apply {
+            setLoadMoreView(MyLoadingView())
+           emptyView=View.inflate(activity, R.layout.item_empty,null)
+        }
+
+        recycler.adapter= AlphaInAnimationAdapter(adapter)
 
 
       if (savedInstanceState==null){
@@ -89,6 +94,8 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
         super.onResume()
         isBackground=false
         adapter.addData(0,dataStore)
+        val  positionIndex =  (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+        if (positionIndex==0) recycler.smoothScrollToPosition(0)
         dataStore.clear()
     }
 

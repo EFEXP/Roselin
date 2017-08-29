@@ -1,8 +1,6 @@
 package xyz.donot.roselin.util
 
 import android.content.Context
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
 import io.realm.Realm
 import twitter4j.Status
 import twitter4j.Twitter
@@ -14,6 +12,8 @@ import xyz.donot.roselin.model.realm.DBAccount
 import xyz.donot.roselin.model.realm.DBMute
 import xyz.donot.roselin.util.extraUtils.logd
 import xyz.donot.roselin.util.extraUtils.mainThread
+import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
+import xyz.donot.roselin.view.custom.MyViewHolder
 import java.io.*
 
 
@@ -27,11 +27,11 @@ fun<T:Serializable> T.getSerialized():ByteArray = ByteArrayOutputStream().use {
     return bytes
 }
 
-fun<U,T:BaseViewHolder> BaseQuickAdapter<U,T>.remove(item:U){
+fun<U,T:MyViewHolder> MyBaseRecyclerAdapter<U,T>.remove(item:U){
     val int=   data.indexOf(item)
    remove(int)
 }
-fun<U,T:BaseViewHolder> BaseQuickAdapter<U,T>.replace(replacedItem: U,replaceItem: U){
+fun<U,T: MyViewHolder> MyBaseRecyclerAdapter<U,T>.replace(replacedItem: U, replaceItem: U){
     val int=  data.indexOf(replacedItem)
     mainThread {
         data.removeAt(int)

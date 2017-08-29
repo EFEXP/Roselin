@@ -2,17 +2,31 @@ package xyz.donot.roselin.view.fragment
 
 
 
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
+import android.os.Bundle
+import android.view.View
 import twitter4j.User
+import xyz.donot.roselin.util.extraUtils.intent
 import xyz.donot.roselin.util.extraUtils.mainThread
+import xyz.donot.roselin.view.activity.UserActivity
 import xyz.donot.roselin.view.adapter.UserListAdapter
+import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
+import xyz.donot.roselin.view.custom.MyViewHolder
 
 class RetweeterDialog : BaseListFragment<User>() {
     private var cursor: Long = -1L
-    override fun adapterFun(): BaseQuickAdapter<User, BaseViewHolder> = UserListAdapter()
+    override fun adapterFun(): MyBaseRecyclerAdapter<User, MyViewHolder> = UserListAdapter()
 
-    override fun pullToRefresh(adapter: BaseQuickAdapter<User, BaseViewHolder>) {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        adapter.setOnItemClickListener { _, _, position ->
+            val intent=activity.intent<UserActivity>()
+            intent.putExtra("user_id",adapter.getItem(position))
+            activity.startActivity(intent)
+            adapter.getItem(position)
+        }
+    }
+
+    override fun pullToRefresh(adapter: MyBaseRecyclerAdapter<User, MyViewHolder>) {
 
     }
 
@@ -30,6 +44,7 @@ class RetweeterDialog : BaseListFragment<User>() {
             users
         }
         else{
+            shouldLoad=false
             null
         }
 

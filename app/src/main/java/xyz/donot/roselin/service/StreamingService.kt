@@ -30,9 +30,8 @@ class StreamingService : Service() {
     override fun stopService(name: Intent?): Boolean = super.stopService(name)
 
     override fun onCreate() {
-        logd { "Create" }
-        handleActionStream()
         super.onCreate()
+        handleActionStream()
     }
 
     override fun startService(service: Intent?): ComponentName = super.startService(service)
@@ -58,8 +57,8 @@ class StreamingService : Service() {
                 //RT
                 if(onStatus.retweetedStatus.user.id== getMyId()){
                     if (defaultSharedPreferences.getBoolean("notification_retweet",true))    toast("${onStatus.user.name}にRTされました")
-                    val realm= Realm.getDefaultInstance()
                     mainThread {
+                        val realm= Realm.getDefaultInstance()
                         realm.executeTransaction {
                             it.createObject(DBNotification::class.java).apply {
                                 status=onStatus.getSerialized()
@@ -100,6 +99,12 @@ class StreamingService : Service() {
             }
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stream.clearListeners()
+    }
+
     fun replyNotification(onStatus: Status){
         val notification=     newNotification {
             setSmallIcon(R.drawable.wrap_reply)
