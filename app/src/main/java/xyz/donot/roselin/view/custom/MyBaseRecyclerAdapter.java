@@ -329,14 +329,14 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
 
     public void setNewData(@Nullable List<T> data) {
         this.mData = data == null ? new ArrayList<T>() : data;
-        if (mRequestLoadMoreListener != null) {
-            mNextLoadEnable = true;
-            mLoadMoreEnable = true;
-            mLoading = false;
-            mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_DEFAULT);
-        }
-        mLastPosition = -1;
-        notifyDataSetChanged();
+      //  if (mRequestLoadMoreListener != null) {
+     //       mNextLoadEnable = true;
+         //   mLoadMoreEnable = true;
+         //   mLoading = false;
+         //   mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_DEFAULT);
+     //   }
+      //  mLastPosition = -1;
+       notifyDataSetChanged();
     }
 
 

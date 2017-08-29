@@ -28,7 +28,7 @@ class SearchTimeline : TimeLineFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         useDefaultLoad=false
         super.onViewCreated(view, savedInstanceState)
-       if (arguments.getString("query_text")!=null){
+       if (arguments.getString("query_text")!=null&& savedInstanceState==null){
         LocalBroadcastManager.getInstance(activity).apply {
             registerReceiver(receiver, IntentFilter(arguments.getString("query_text")))
         }}
@@ -38,9 +38,7 @@ class SearchTimeline : TimeLineFragment() {
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(activity).apply {
-            unregisterReceiver(receiver)
-        }
-    }
+            unregisterReceiver(receiver) } }
 
     override fun LoadMoreData2() {
         async {
@@ -61,6 +59,28 @@ class SearchTimeline : TimeLineFragment() {
         }catch (e:Exception){
           e.printStackTrace()
       }
+        }
+    }
+
+    override fun getInitialData2() {
+        async {
+            try {
+                val result=twitter.search(query)
+                if (result!=null){
+                    mainThread {
+                        if (result.hasNext()) {
+                            query = result.nextQuery()
+                            adapter.loadMoreComplete()
+                        } else {
+                            query = null
+                            shouldLoad=false
+                        }
+                        adapter.setNewData(result.tweets)
+                    }
+                }
+            }catch (e:Exception){
+                e.printStackTrace()
+            }
         }
     }
 

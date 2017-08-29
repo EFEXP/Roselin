@@ -26,7 +26,7 @@ class TweetPostService : IntentService("TweetPostService") {
             if(intent.hasExtra("FilePath")){
                filePath=intent.getStringArrayListExtra("FilePath")
               val compressed =filePath.map { com.setQuality(Integer.parseInt(defaultSharedPreferences.getString("compress_preference",75.toString())))
-                      .setCompressFormat(Bitmap.CompressFormat.PNG)
+                      .setCompressFormat(Bitmap.CompressFormat.JPEG)
                       .setDestinationDirectoryPath(cacheDir.absolutePath)
                       .compressToFile(File(it)) }
                 notificate(id)

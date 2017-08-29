@@ -17,11 +17,13 @@ class TrendFragment : BaseListFragment<Trend>() {
     override fun pullToRefresh(adapter:MyBaseRecyclerAdapter<Trend, MyViewHolder>) {
 
     }
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        shouldLoad=false
         refresh.isEnabled=false
+        adapter.setEnableLoadMore(false)
         adapter.setOnItemClickListener { _, _, position ->
             if (activity is SearchActivity) {
                 this@TrendFragment.startActivity(Intent(context, SearchActivity::class.java).putExtra("query_text", adapter.data[position].query))
@@ -32,8 +34,9 @@ class TrendFragment : BaseListFragment<Trend>() {
            }
        }
     }
-    override fun GetData(): MutableList<Trend>? {
-      return  twitter.getPlaceTrends(23424856).trends.asList().toMutableList()}
+    override fun GetData(): MutableList<Trend>? =
+            twitter.getPlaceTrends(23424856).trends.asList().toMutableList()
+
     inner class TrendAdapter:MyBaseRecyclerAdapter<Trend,MyViewHolder>(R.layout.item_trend)
     {
         override fun convert(helper: MyViewHolder, item: Trend) {

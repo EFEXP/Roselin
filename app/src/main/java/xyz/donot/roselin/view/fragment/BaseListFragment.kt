@@ -13,19 +13,26 @@ import android.view.ViewGroup
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter
 import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator
 import kotlinx.android.synthetic.main.content_base_fragment.*
+import twitter4j.Twitter
 import xyz.donot.roselin.R
 import xyz.donot.roselin.util.extraUtils.async
 import xyz.donot.roselin.util.extraUtils.mainThread
 import xyz.donot.roselin.util.extraUtils.toast
+import xyz.donot.roselin.util.getDeserialized
 import xyz.donot.roselin.util.getTwitterInstance
 import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselin.view.custom.MyLoadingView
 import xyz.donot.roselin.view.custom.MyViewHolder
 
 abstract class BaseListFragment<T> : AppCompatDialogFragment() {
-    val twitter by lazy { getTwitterInstance() }
+    val twitter by lazy {
+        if (arguments!=null&&arguments.containsKey("twitter")){
+        return@lazy    arguments.getByteArray("twitter").getDeserialized<Twitter>()
+        }else
+        return@lazy     getTwitterInstance() }
+    val main_twitter by lazy { getTwitterInstance() }
     val adapter by lazy { adapterFun() }
-    var isBackground=false
+   private var isBackground=false
     var useDefaultLoad=true
     var shouldLoad =true
     set(value) {
@@ -37,14 +44,26 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
     }
     private val dataStore=ArrayList<T>()
     abstract fun adapterFun():MyBaseRecyclerAdapter<T,MyViewHolder>
-    abstract fun pullToRefresh(adapter: MyBaseRecyclerAdapter<T, MyViewHolder>)
+    open   fun pullToRefresh(adapter: MyBaseRecyclerAdapter<T, MyViewHolder>){}
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = inflater.inflate(R.layout.content_base_fragment, container, false)
     fun insertDataBackground(data:List<T>){
-        if(!isBackground){adapter.addData(0,data)}
+        if(!isBackground){
+            val  positionIndex =  (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+            adapter.addData(0,data)
+            if (positionIndex==0) {
+                (recycler).scrollToPosition(0)
+            }
+        }
         else{dataStore.addAll(0,data)}
     }
     fun insertDataBackground(data:T){
-        if(!isBackground){adapter.addData(0,data)}
+        if(!isBackground){
+            val  positionIndex =  (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+            adapter.addData(0,data)
+            if (positionIndex==0) {
+                (recycler).scrollToPosition(0)
+            }
+        }
         else{dataStore.add(0,data)}
     }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -60,13 +79,12 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
         recycler.apply {
             layoutManager = LinearLayoutManager(activity)
             addItemDecoration(dividerItemDecoration)
-
-            itemAnimator = OvershootInRightAnimator(0.3f)
+            itemAnimator = OvershootInRightAnimator(1.0f)
         }
         recycler.adapter= AlphaInAnimationAdapter(adapter)
       if (savedInstanceState==null){
           if (useDefaultLoad){getInitialData()}
-          else{LoadMoreData2()}
+          else{getInitialData2()}
       }
         else{
           val t=savedInstanceState.getSerializable("data") as ArrayList<T>
@@ -84,6 +102,10 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
                 else{LoadMoreData2()}
                 refresh.isRefreshing=false
             } }
+
+    }
+
+  open fun getInitialData2(){
 
     }
 
@@ -111,7 +133,7 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
         isBackground=false
         adapter.addData(0,dataStore)
         val  positionIndex =  (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-        if (positionIndex==0) recycler.smoothScrollToPosition(0)
+        if (positionIndex==0) recycler.scrollToPosition(0)
         dataStore.clear()
     }
 

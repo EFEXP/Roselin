@@ -93,10 +93,10 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="xyz.donot.roselin.view.activity.BackImageActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".view.activity.UserListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -105,6 +105,7 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="xyz.donot.roselin.view.activity.TabSettingActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -116,8 +117,7 @@
         <receiver
             android:name=".view.activity.MusicReceiver"
             android:enabled="true"
-            android:exported="true"
-           >
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.android.music.metachanged" />
                 <action android:name="com.android.music.playstatechanged" />
@@ -129,19 +129,26 @@
             android:name=".view.activity.AccountSettingActivity"
             android:label="@string/title_activity_account_setting"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <service
             android:name=".service.StreamingService"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
+
         <activity
             android:name=".view.activity.MuteSettingActivity"
             android:label="@string/title_activity_mute_setting"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="xyz.donot.roselin.view.activity.MuteSettingActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".view.activity.HelpActivity"
+            android:label="@string/title_activity_help"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

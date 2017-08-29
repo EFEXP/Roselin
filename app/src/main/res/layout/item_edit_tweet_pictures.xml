@@ -4,8 +4,8 @@
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/iv_picture_edit"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitCenter"
+            android:layout_height="300dp"
+
            />
 
     </RelativeLayout>

@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-   <Preference
-       android:title="注意"
-       android:summary="全ての設定は再起動後に有効になります"
-       />
-
-    <PreferenceScreen
+    <PreferenceCategory
         android:title="ツイート設定"
         android:summary="ツイートに関する設定です">
 <ListPreference
@@ -15,8 +10,8 @@
     android:entryValues="@array/compress_quality_values"
     >
 </ListPreference>
-    </PreferenceScreen>
-    <PreferenceScreen
+    </PreferenceCategory>
+    <PreferenceCategory
     android:title="デザイン設定"
         android:summary="画面の色やデザインに関する設定です">
      <PreferenceScreen
@@ -39,8 +34,8 @@
         android:key="quick_tweet"
         android:summary="ホームタイムラインのツイートバーを有効にします"
         android:title="ツイートバー" />
-</PreferenceScreen>
-    <PreferenceScreen
+</PreferenceCategory>
+    <PreferenceCategory
         android:title="通知設定"
         android:summary="イベントの通知に関する設定です"
         >
@@ -66,8 +61,8 @@
             android:key="notification_favorite"
             android:summary="ポップアップ式のいいね通知を有効にします"
             android:title="いいね通知" />
-    </PreferenceScreen>
-    <PreferenceScreen
+    </PreferenceCategory>
+    <PreferenceCategory
         android:title="ストリーム設定"
         android:summary="自動でツイートを取得する機能に関する設定です"
         >
@@ -81,7 +76,7 @@
             android:key="use_home_stream"
             android:summary="ホームタイムラインにストリームを使用します"
             android:title="ホームストリーム" />
-    </PreferenceScreen>
+    </PreferenceCategory>
 
     <PreferenceScreen
         android:title="タブの設定"

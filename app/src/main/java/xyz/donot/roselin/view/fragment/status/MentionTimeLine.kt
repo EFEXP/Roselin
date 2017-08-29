@@ -24,9 +24,12 @@ class MentionTimeLine :TimeLineFragment(){
     private val replyReceiver by lazy { ReplyReceiver () }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        LocalBroadcastManager.getInstance(activity).apply {
-            registerReceiver(replyReceiver, IntentFilter("NewReply"))
+        if (savedInstanceState==null){
+            LocalBroadcastManager.getInstance(activity).apply {
+                registerReceiver(replyReceiver, IntentFilter("NewReply"))
+            }
         }
+
     }
     override fun onDestroy() {
         super.onDestroy()

@@ -28,7 +28,12 @@ class MainTimeLineAdapter(fm: FragmentManager, private val realmResults:List<DBT
         SEARCH-> SearchTimeline().apply { arguments= Bundle {
             putString("query_text",realmResults[i].searchWord)
             putByteArray("query_bundle",realmResults[i].searchQuery) } }
-        LIST->ListTimeLine().apply { arguments= Bundle { putLong("listId",realmResults[i].listId) } }
+        LIST->ListTimeLine().apply {
+            val t=   realm.where(DBAccount::class.java).equalTo("id",realmResults[i].accountId).findFirst()
+            arguments= Bundle {
+                putLong("listId",realmResults[i].listId)
+                putByteArray("twitter",  realm.copyFromRealm(t).twitter)
+            } }
         NOTIFICATION-> NotificationFragment()
         TREND->TrendFragment()
     else->throw IllegalStateException()
@@ -38,6 +43,6 @@ class MainTimeLineAdapter(fm: FragmentManager, private val realmResults:List<DBT
 
 
     override fun getPageTitle(position: Int): CharSequence =
-            if (realmResults[position].screenName!=null)"${ConvertToSimpleName(realmResults[position].type)}(${realmResults[position].screenName!!})"
+            if (realmResults[position].screenName!=null)"${ConvertToSimpleName(realmResults[position].type)}@${realmResults[position].screenName!!}"
           else ConvertToSimpleName(realmResults[position].type)
 }

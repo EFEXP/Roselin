@@ -68,13 +68,13 @@ class MainActivity : AppCompatActivity() {
                         screenName= getMyScreenName()
                     }
                     it.createObject(DBTabData::class.java).apply {
-                        order=1
+                        order=2
                         type= NOTIFICATION
                         accountId= getMyId()
                         screenName= getMyScreenName()
                     }
                     it.createObject(DBTabData::class.java).apply {
-                        order=2
+                        order=1
                         type= MENTION
                         accountId= getMyId()
                         screenName= getMyScreenName()
@@ -144,6 +144,7 @@ class MainActivity : AppCompatActivity() {
                     drawer_layout.closeDrawers()
                 }
                 R.id.action_help -> {
+                    start<HelpActivity>()
                   //  HelpFragment().show(supportFragmentManager,"")
                     drawer_layout.closeDrawers()
                 }
@@ -160,6 +161,7 @@ class MainActivity : AppCompatActivity() {
                     drawer_layout.closeDrawers()
                 }
             }
+        drawer_layout.isSelected=false
         true
     })
 
@@ -200,7 +202,6 @@ class MainActivity : AppCompatActivity() {
         val adapter= MainTimeLineAdapter(supportFragmentManager,list)
         main_viewpager.adapter = adapter
         main_viewpager.offscreenPageLimit = adapter.count
-        tabs_main.setupWithViewPager(main_viewpager)
     //  for ((index,tab) in list.withIndex()){
      //    tabs_main.getTabAt(index)?.icon = typeToIcon(tab.type)
     // }
@@ -211,7 +212,9 @@ class MainActivity : AppCompatActivity() {
             main_coordinator.background=BitmapDrawable(resources, bitmap)
             background_overlay.show()
         }
-        if (defaultSharedPreferences.getBoolean("use_home_tab",false)){tabs_main.setupWithViewPager(main_viewpager)}
+        if (defaultSharedPreferences.getBoolean("use_home_tab",false)){
+            tabs_main.setupWithViewPager(main_viewpager)}
+        else{tabs_main.hide()}
         //view
         fab.setOnClickListener{start<TweetEditActivity>()}
         button_tweet.setOnClickListener {

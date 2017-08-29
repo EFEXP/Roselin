@@ -70,7 +70,7 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                                     activity.start<TweetEditActivity>(bundle)
                                 }
                                 "削除" -> {
-                                   async {twitter.destroyStatus(status.id)}
+                                   async {main_twitter.destroyStatus(status.id)}
                                 }
                                 "会話" -> {
                                     context.startActivity(context.newIntent<TwitterDetailActivity>(Bundle().apply { putSerializable("Status", item) }))
@@ -101,10 +101,7 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                                             .launchUrl(context, Uri.parse("https://twitter.com/${item.user.screenName}/status/${item.id}"))
                                 }
                             }
-
-
-                        })
-                        .show()
+                        }).show()
             }
         }
         //クリックリスナーEnd

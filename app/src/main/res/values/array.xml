@@ -29,10 +29,10 @@
         <item>トレンド</item>
     </string-array>
     <string-array name="compress_quality_values">
-        <item>80</item>
-        <item>60</item>
+        <item>70</item>
         <item>50</item>
-        <item>30</item>
+        <item>35</item>
+        <item>25</item>
     </string-array>
     <string-array name="compress_quality">
         <item>最高</item>

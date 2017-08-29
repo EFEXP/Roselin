@@ -25,31 +25,24 @@ class UsersListFragment : BaseListFragment<UserList>() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        adapter.setEnableLoadMore(false)
         adapter.setOnItemClickListener { _, _, position ->
             val item=adapter.data[position]
             if(selectList){
                 (activity as UserListsActivity).callbackMethod(item.id,item.name)
-
             }
             else{
                ListTimeLine().apply { arguments=Bundle{putLong("listId",item.id)} }.show(fragmentManager,"")
             }
         }
-        adapter.setEnableLoadMore(false)
         refresh.isEnabled=false
     }
 
-    override fun pullToRefresh(adapter:MyBaseRecyclerAdapter<UserList,MyViewHolder>) {
-
+    override fun GetData(): ResponseList<UserList>?{
+        shouldLoad=false
+        adapter.loadMoreComplete()
+      return  twitter.getUserLists(userId)
     }
-
-    override fun GetData(): ResponseList<UserList>?=  twitter.getUserLists(userId)
-
-
-
-
-
     inner class UserListAdapter:MyBaseRecyclerAdapter<UserList,MyViewHolder>(R.layout.item_list)
     {
         override fun convert(helper:MyViewHolder, item: UserList) {

@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import twitter4j.Paging
@@ -26,9 +25,11 @@ class HomeTimeLineFragment : TimeLineFragment(){
     private val deleteReceiver by lazy { DeleteReceiver() }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        LocalBroadcastManager.getInstance(activity).apply {
-            registerReceiver(receiver, IntentFilter("NewStatus"))
-            registerReceiver(deleteReceiver, IntentFilter("DeleteStatus"))
+        if (savedInstanceState==null&&twitter==main_twitter){
+            LocalBroadcastManager.getInstance(activity).apply {
+                registerReceiver(receiver, IntentFilter("NewStatus"))
+                registerReceiver(deleteReceiver, IntentFilter("DeleteStatus"))
+            }
         }
     }
 
@@ -56,13 +57,9 @@ class HomeTimeLineFragment : TimeLineFragment(){
     //Receiver
     inner class StatusReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-          val  positionIndex =  (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
             val data=intent.extras.getByteArray("Status").getDeserialized<Status>()
             mainThread {
                 insertDataBackground(data)
-                if (positionIndex==0) {
-                    (recycler).smoothScrollToPosition(0)
-                }
             }
         }
     }
