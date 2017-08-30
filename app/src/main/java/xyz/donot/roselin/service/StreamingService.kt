@@ -31,7 +31,10 @@ class StreamingService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        handleActionStream()
+       try {
+           handleActionStream()
+       }
+       catch (e:Exception){tExceptionToast(e)}
     }
 
     override fun startService(service: Intent?): ComponentName = super.startService(service)
@@ -50,7 +53,6 @@ class StreamingService : Service() {
         }
     }
     inner class MyStreamAdapter: UserStreamAdapter(){
-
         override fun onStatus(onStatus: Status) {
             if(onStatus.isRetweet)
             {

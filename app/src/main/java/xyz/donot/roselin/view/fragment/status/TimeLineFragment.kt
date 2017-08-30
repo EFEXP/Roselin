@@ -13,10 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import twitter4j.Status
 import xyz.donot.roselin.R
-import xyz.donot.roselin.util.extraUtils.Bundle
-import xyz.donot.roselin.util.extraUtils.async
-import xyz.donot.roselin.util.extraUtils.newIntent
-import xyz.donot.roselin.util.extraUtils.start
+import xyz.donot.roselin.util.extraUtils.*
 import xyz.donot.roselin.util.getMyId
 import xyz.donot.roselin.view.activity.TweetEditActivity
 import xyz.donot.roselin.view.activity.TwitterDetailActivity
@@ -70,7 +67,14 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                                     activity.start<TweetEditActivity>(bundle)
                                 }
                                 "削除" -> {
-                                   async {main_twitter.destroyStatus(status.id)}
+                                   async {
+                                       try {
+                                           main_twitter.destroyStatus(status.id)
+                                       }catch (e:Exception){
+                                           toast(e.localizedMessage)
+                                       }
+
+                                   }
                                 }
                                 "会話" -> {
                                     context.startActivity(context.newIntent<TwitterDetailActivity>(Bundle().apply { putSerializable("Status", item) }))

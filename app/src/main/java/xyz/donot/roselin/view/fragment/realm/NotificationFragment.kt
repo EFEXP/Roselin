@@ -10,10 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.squareup.picasso.Picasso
-import io.realm.OrderedRealmCollection
-import io.realm.Realm
-import io.realm.RealmRecyclerViewAdapter
-import io.realm.Sort
+import io.realm.*
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import kotlinx.android.synthetic.main.item_notification.view.*
 import twitter4j.Status
@@ -30,30 +27,49 @@ import xyz.donot.roselin.view.activity.UserActivity
 
 class NotificationFragment:AppCompatDialogFragment(){
 
-    val realm by lazy { Realm.getDefaultInstance() }
-    val adapter by lazy { NotificationAdater(realm.where(DBNotification::class.java).findAllSorted("date",Sort.DESCENDING)) }
 
 
-
+    private var isBackground=false
+    private val dataStore=ArrayList<DBNotification>()
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val query= Realm.getDefaultInstance().where(DBNotification::class.java).findAllSorted("date",Sort.DESCENDING)
         val dividerItemDecoration = DividerItemDecoration( recycler.context,
                 LinearLayoutManager(activity).orientation)
         recycler.addItemDecoration(dividerItemDecoration)
         recycler.layoutManager = LinearLayoutManager(activity)
+        val adapter= NotificationAdater(query)
         recycler.adapter=adapter
         refresh.isEnabled=false
-
+       query.addChangeListener(RealmChangeListener<RealmResults<DBNotification>> {
+           itemInserted()
+       })
+    }
+    private fun itemInserted(){
+        if(!isBackground){
+            val  positionIndex =  (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+            if (positionIndex==0) {
+                (recycler).scrollToPosition(0)
+            }
+    }}
+    override fun onResume() {
+        super.onResume()
+        isBackground=false
+        itemInserted()
     }
 
-
+    override fun onStop() {
+        super.onStop()
+        isBackground=true
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = inflater.inflate(R.layout.content_base_fragment, container, false)
 
 
     inner class NotificationAdater(orderedRealmCollection: OrderedRealmCollection<DBNotification>):RealmRecyclerViewAdapter<DBNotification, NotificationAdater.ViewHolder>(orderedRealmCollection,true){
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val item=getItem(position)!!
+            val item=getItem(position)
+            item?.let {
             val status=item.status.getDeserialized<Status>()
             val user=item.sourceUser.getDeserialized<User>()
             holder.apply {
@@ -66,12 +82,11 @@ class NotificationFragment:AppCompatDialogFragment(){
                 Picasso.with(activity).load(user.biggerProfileImageURLHttps).into(icon)
                 screen.text="@"+status.user.screenName
             }
-
+            }
         }
 
         override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder =
                 ViewHolder(layoutInflater.inflate(R.layout.item_notification,parent,false))
-
         inner  class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val name: TextView =view.tv_notification_myname
             val fromText=view.tv_notification_info

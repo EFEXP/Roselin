@@ -713,6 +713,7 @@ Talon はその代わりに TwitPic を使用して画像をアップロード�
     <string name="title_account">アカウント設定</string>
     <string name="change_name">別名をつける</string>
     <string name="title_activity_help">HelpActivity</string>
+    <string name="title_search_setting">検索設定</string>
 
 
 </resources>

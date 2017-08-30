@@ -4,6 +4,7 @@ package xyz.donot.roselin.view.fragment
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatDialogFragment
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
@@ -15,8 +16,7 @@ import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import twitter4j.Twitter
 import xyz.donot.roselin.R
-import xyz.donot.roselin.util.extraUtils.async
-import xyz.donot.roselin.util.extraUtils.mainThread
+import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getDeserialized
 import xyz.donot.roselin.util.getTwitterInstance
@@ -32,7 +32,6 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
         return@lazy     getTwitterInstance() }
     val main_twitter by lazy { getTwitterInstance() }
     val adapter by lazy { adapterFun() }
-   private var isBackground=false
     var useDefaultLoad=true
     var shouldLoad =true
     set(value) {
@@ -42,7 +41,8 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
         }
         field=value
     }
-    private val dataStore=ArrayList<T>()
+    private var isBackground=false
+    private val dataStore:ArrayList<T> =ArrayList()
     abstract fun adapterFun():MyBaseRecyclerAdapter<T,MyViewHolder>
     open   fun pullToRefresh(adapter: MyBaseRecyclerAdapter<T, MyViewHolder>){}
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = inflater.inflate(R.layout.content_base_fragment, container, false)
@@ -77,9 +77,10 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
            emptyView=View.inflate(activity, R.layout.item_empty,null)
         }
         recycler.apply {
+            (itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
             layoutManager = LinearLayoutManager(activity)
             addItemDecoration(dividerItemDecoration)
-            itemAnimator = OvershootInRightAnimator(1.0f)
+            itemAnimator = OvershootInRightAnimator(0.2f)
         }
         recycler.adapter= AlphaInAnimationAdapter(adapter)
       if (savedInstanceState==null){
@@ -105,27 +106,30 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
 
     }
 
+
+
   open fun getInitialData2(){
 
     }
 
     private fun getInitialData(){
-        async {
-            try {
-                val result=GetData()
-                if (result!=null)
-                {
-                    mainThread {
-                        adapter.setNewData(result)
-                        adapter.loadMoreComplete()
-                    }
+        class loadmoreasync :SafeAsyncTask<Unit,MutableList<T>?> (){
+            override fun doTask(arg: Unit): MutableList<T>? {
+                return GetData()
+            }
+
+            override fun onSuccess(result: MutableList<T>?) {
+                result?.let {
+                    adapter.setNewData(result)
                 }
-            } catch (e: Exception) {
-                toast(e.localizedMessage)
-                adapter.loadMoreFail()
+            }
+
+            override fun onFailure(exception: Exception) {
+                toast(exception.localizedMessage)
             }
 
         }
+        loadmoreasync()
     }
 
     override fun onResume() {
@@ -151,22 +155,23 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
     }
     abstract fun GetData(): MutableList<T>?
     private fun LoadMoreData(){
-        async {
-            try {
-                val result=GetData()
-                if (result!=null)
-                {
-                    mainThread {
-                     adapter.addData(result)
-                     adapter.loadMoreComplete()
-                    }
-                }
-            } catch (e: Exception) {
-                toast(e.localizedMessage)
-                adapter.loadMoreFail()
+        class loadmoreasync :SafeAsyncTask<Unit,MutableList<T>?> (){
+            override fun doTask(arg: Unit): MutableList<T>? {
+                return GetData()
+            }
+
+            override fun onSuccess(result: MutableList<T>?) {
+               result?.let {
+                   adapter.addData(result)
+               }
+            }
+
+            override fun onFailure(exception: Exception) {
+                toast(exception.localizedMessage)
             }
 
         }
+        loadmoreasync()
     }
 
 }

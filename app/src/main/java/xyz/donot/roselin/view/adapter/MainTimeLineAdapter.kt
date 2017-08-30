@@ -29,7 +29,7 @@ class MainTimeLineAdapter(fm: FragmentManager, private val realmResults:List<DBT
             putString("query_text",realmResults[i].searchWord)
             putByteArray("query_bundle",realmResults[i].searchQuery) } }
         LIST->ListTimeLine().apply {
-            val t=   realm.where(DBAccount::class.java).equalTo("id",realmResults[i].accountId).findFirst()
+            val t= realm.where(DBAccount::class.java).equalTo("id",realmResults[i].accountId).findFirst()
             arguments= Bundle {
                 putLong("listId",realmResults[i].listId)
                 putByteArray("twitter",  realm.copyFromRealm(t).twitter)

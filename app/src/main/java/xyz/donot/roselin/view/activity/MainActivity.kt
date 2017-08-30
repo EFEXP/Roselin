@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent<OauthActivity>())
             this.finish()
         }
-        else{
+        else if(true){
             //Receiver
             LocalBroadcastManager.getInstance(this).apply {
                 registerReceiver(disConnectionReceiver, IntentFilter("OnDisconnect"))
@@ -123,6 +123,7 @@ class MainActivity : AppCompatActivity() {
 
 }
 
+
     @SuppressLint("NewApi")
     private fun InitialRequestPermission() = fromApi(23){
         val EX_WRITE= ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED
@@ -172,14 +173,19 @@ class MainActivity : AppCompatActivity() {
         val my_profile=view.findViewById<ImageView>(R.id.my_icon)
         val my_name=view.findViewById<TextView>(R.id.my_name_header)
         val my_screenname=view.findViewById<TextView>(R.id.my_screen_name_header)
-        if (user==null){ async { user= getTwitterInstance().verifyCredentials()
-         mainThread {
-             Picasso.with(applicationContext).load(user?.profileBannerIPadRetinaURL).into(my_banner)
-             Picasso.with(applicationContext).load(user?.originalProfileImageURLHttps).into(my_profile)
-             my_name.text= user?.name
-             my_screenname.text = "@${user?.screenName}"
-         }
-        }
+        if (user==null){
+                async {
+                    try {
+                    user= getTwitterInstance().verifyCredentials()
+             mainThread {
+                 Picasso.with(applicationContext).load(user?.profileBannerIPadRetinaURL).into(my_banner)
+                 Picasso.with(applicationContext).load(user?.originalProfileImageURLHttps).into(my_profile)
+                 my_name.text= user?.name
+                 my_screenname.text = "@${user?.screenName}"   }
+             }catch (e:Exception){
+                       toast(e.localizedMessage)
+                    }
+            }
         }
         else{
             Picasso.with(applicationContext).load(user?.profileBannerIPadRetinaURL).into(my_banner)
@@ -199,8 +205,8 @@ class MainActivity : AppCompatActivity() {
     private fun setUpView() {
         //pager
         val list= realm.copyFromRealm( realm.where(DBTabData::class.java).findAll()).toList()
-        val adapter= MainTimeLineAdapter(supportFragmentManager,list)
-        main_viewpager.adapter = adapter
+       val adapter= MainTimeLineAdapter(supportFragmentManager,list)
+       main_viewpager.adapter = adapter
         main_viewpager.offscreenPageLimit = adapter.count
     //  for ((index,tab) in list.withIndex()){
      //    tabs_main.getTabAt(index)?.icon = typeToIcon(tab.type)
@@ -226,7 +232,9 @@ class MainActivity : AppCompatActivity() {
                         editText_status.hideSoftKeyboard()
                         editText_status.setText("")
                     }
-                    override fun onFailure(exception: Exception) = editText_status.hideSoftKeyboard()
+                    override fun onFailure(exception: Exception) {
+                        editText_status.hideSoftKeyboard()
+                    }
                 }
                 SendTask(editText_status.editableText.toString()).execute(getTwitterInstance())
             }

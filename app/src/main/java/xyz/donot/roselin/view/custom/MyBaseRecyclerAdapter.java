@@ -384,7 +384,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
 
     public void addData(@NonNull Collection<? extends T> newData) {
         mData.addAll(newData);
-        notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
+        notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount()+1, newData.size());
        compatibilityDataSizeChanged(newData.size());
     }
 

@@ -36,7 +36,8 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
             helper.setText(R.id.textview_is_retweet,"@${status.user.screenName}がリツイート")
             LinkBuilder.on( helper.getView(R.id.textview_is_retweet)).addLinks(mContext.getMentionLink()).build()
             helper.setVisible(R.id.textview_is_retweet,true)
-            status.retweetedStatus }else{
+            status.retweetedStatus }
+        else{
             helper.setVisible(R.id.textview_is_retweet,false)
             status }
         //Define Task
@@ -89,17 +90,16 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
                 getView<TextView>(R.id.textview_via)
                         .setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, R.drawable.wrap_lock,null),null, null, null)}
             else{getView<TextView>(R.id.textview_via).setCompoundDrawablesWithIntrinsicBounds(null,null, null, null)}
-            //引用
-            if (item.quotedStatus!=null){
-              setVisible(R.id.quote_tweet_holder,true)
+            //引用]
+
+            item.quotedStatus?.let {
+                setVisible(R.id.quote_tweet_holder,true)
                 setText(R.id.quoted_screenname,  item.quotedStatus.user.screenName)
                 setText(R.id.quoted_text,  item.quotedStatus.text)
                 setText(R.id.quoted_name,item.quotedStatus.user.name)
-              Picasso.with(mContext).load(item.quotedStatus.user.biggerProfileImageURLHttps).into(  getView<ImageView>(R.id.quoted_icon))
-            }
-            else{
-                getView<View>(R.id.quote_tweet_holder).hide()
-            }
+                Picasso.with(mContext).load(item.quotedStatus.user.biggerProfileImageURLHttps).resize(100,100).into(  getView<ImageView>(R.id.quoted_icon))
+            }?:  getView<View>(R.id.quote_tweet_holder).hide()
+
             //テキスト関係
             setText(R.id.textview_username,item.user.name)
             setText(R.id.textview_screenname,"@"+item.user.screenName)
