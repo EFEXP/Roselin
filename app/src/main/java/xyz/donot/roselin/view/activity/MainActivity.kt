@@ -23,11 +23,12 @@ import android.widget.TextView
 import com.squareup.picasso.Picasso
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
-import twitter4j.Status
-import twitter4j.Twitter
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import twitter4j.User
 import xyz.donot.roselin.R
-import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.model.realm.*
 import xyz.donot.roselin.service.SearchStreamService
 import xyz.donot.roselin.service.StreamingService
@@ -52,7 +53,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent<OauthActivity>())
             this.finish()
         }
-        else if(true){
+        else if(isConnected()){
             //Receiver
             LocalBroadcastManager.getInstance(this).apply {
                 registerReceiver(disConnectionReceiver, IntentFilter("OnDisconnect"))
@@ -174,24 +175,20 @@ class MainActivity : AppCompatActivity() {
         val my_name=view.findViewById<TextView>(R.id.my_name_header)
         val my_screenname=view.findViewById<TextView>(R.id.my_screen_name_header)
         if (user==null){
-                async {
-                    try {
-                    user= getTwitterInstance().verifyCredentials()
-             mainThread {
-                 Picasso.with(applicationContext).load(user?.profileBannerIPadRetinaURL).into(my_banner)
-                 Picasso.with(applicationContext).load(user?.originalProfileImageURLHttps).into(my_profile)
-                 my_name.text= user?.name
-                 my_screenname.text = "@${user?.screenName}"   }
-             }catch (e:Exception){
-                       toast(e.localizedMessage)
-                    }
-            }
-        }
-        else{
+        launch(UI){
+            user=kotlinx.coroutines.experimental. async(CommonPool) { getTwitterInstance().verifyCredentials() }.await()
             Picasso.with(applicationContext).load(user?.profileBannerIPadRetinaURL).into(my_banner)
             Picasso.with(applicationContext).load(user?.originalProfileImageURLHttps).into(my_profile)
             my_name.text= user?.name
-            my_screenname.text = "@${user?.screenName}" }
+            my_screenname.text = "@${user?.screenName}"
+        }
+        }else{
+            Picasso.with(applicationContext).load(user?.profileBannerIPadRetinaURL).into(my_banner)
+            Picasso.with(applicationContext).load(user?.originalProfileImageURLHttps).into(my_profile)
+            my_name.text= user?.name
+            my_screenname.text = "@${user?.screenName}"
+        }
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -225,18 +222,16 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener{start<TweetEditActivity>()}
         button_tweet.setOnClickListener {
             if (!editText_status.text.isNullOrBlank() && editText_status.text.count() <= 140){
-                class SendTask(val txt:String): SafeAsyncTask<Twitter, Status>(){
-                    override fun doTask(arg: Twitter): twitter4j.Status = arg.updateStatus(txt)
+            launch(UI){
 
-                    override fun onSuccess(result: twitter4j.Status) {
-                        editText_status.hideSoftKeyboard()
-                        editText_status.setText("")
-                    }
-                    override fun onFailure(exception: Exception) {
-                        editText_status.hideSoftKeyboard()
-                    }
+                try {
+                    async(CommonPool){ getTwitterInstance().updateStatus(editText_status.editableText.toString())}.await()
+                    editText_status.hideSoftKeyboard()
+                    editText_status.editableText.clear()
+                } catch (e: Exception) {
+                    editText_status.hideSoftKeyboard()
                 }
-                SendTask(editText_status.editableText.toString()).execute(getTwitterInstance())
+            }
             }
 
         }

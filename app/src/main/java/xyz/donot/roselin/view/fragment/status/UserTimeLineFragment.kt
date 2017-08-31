@@ -8,9 +8,15 @@ import com.klinker.android.link_builder.LinkBuilder
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import kotlinx.android.synthetic.main.person_item.view.*
-import twitter4j.*
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
+import twitter4j.Paging
+import twitter4j.ResponseList
+import twitter4j.Status
+import twitter4j.User
 import xyz.donot.roselin.R
-import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.util.extraUtils.*
 import xyz.donot.roselin.util.getMyId
 import xyz.donot.roselin.util.getTagURLMention
@@ -35,7 +41,7 @@ class UserTimeLineFragment: TimeLineFragment()
     }
 
     override fun pullToRefresh(adapter: MyBaseRecyclerAdapter<Status, MyViewHolder>) {
-        async {
+        asyncDeprecated {
             try {
                 val result =twitter.getUserTimeline(Paging(adapter.data[0].id))
                 if (result.isNotEmpty()){
@@ -55,11 +61,9 @@ class UserTimeLineFragment: TimeLineFragment()
             Picasso.with(activity).load(user.originalProfileImageURLHttps).into(v.iv_icon)
         v.iv_icon.setOnClickListener{startActivity(iconIntent)}
         v.tv_name.text=user.name
-            val verify= ResourcesCompat.getDrawable(activity.resources, R.drawable.wraped_verify,null)
-            if (user.isVerified){  v.tv_name.setCompoundDrawablesWithIntrinsicBounds(null,null,verify,null)}
-        v. tv_description.text=user.description.replace("\n","")
-        v.tv_web.text=user.urlEntity.expandedURL
-        v.tv_geo.text=user.location
+        v. tv_description.text=if (user.description.isNullOrEmpty())" No Description" else user.description.replace("\n","")
+        v.tv_web.text=if (user.urlEntity.expandedURL.isEmpty())" No Url" else user.urlEntity.expandedURL
+        v.tv_geo.text=if(user.location.isEmpty())" No Location" else user.location
         v.tv_tweets.text=user.statusesCount.toString()
         v. tv_date.text= "${SimpleDateFormat("yyyy/MM/dd").format(user.createdAt)}に開始"
         v.tv_follower.text=user.followersCount.toString()
@@ -73,8 +77,7 @@ class UserTimeLineFragment: TimeLineFragment()
         else{v.tv_name.setCompoundDrawablesWithIntrinsicBounds(null,null, null, null)}
         //鍵垢
         if(user.isProtected){
-            v. tv_date
-                    .setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(context.resources, R.drawable.wrap_lock,null),null, null, null)}
+            v. tv_date.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(context.resources, R.drawable.wrap_lock,null),null, null, null)}
         else{     v. tv_date.setCompoundDrawablesWithIntrinsicBounds(null,null, null, null)}
 
 
@@ -100,43 +103,35 @@ class UserTimeLineFragment: TimeLineFragment()
             if(user.id!= getMyId()) {
                 v.tv_isfollowed.show()
                 v.bt_follow.show()
-                class RelationshipTask: SafeAsyncTask<Twitter, Relationship>(){
-                    override fun doTask(arg: Twitter): Relationship =
-                            twitter.showFriendship(getMyId(),user.id)
-
-                    override fun onSuccess(result: Relationship) {
-                        if (result.isSourceFollowingTarget) {
-                            v.bt_follow.isChecked=true
-                            v.bt_follow.onClick {
-                                    if (v.bt_follow.isChecked) {
-                                        async { val t = twitter.destroyFriendship(user.id)
-                                        mainThread { if (t != null) v.bt_follow.isChecked = false }  }
-                                    }
-                                    else{
-                                        async {
-                                            val t= twitter.createFriendship(user.id)
-                                            mainThread { if (t!=null)v.bt_follow.isChecked=true  }
-                                        }
-
+                launch(UI){
+                    try {
+                        val result=    async(CommonPool){  twitter.showFriendship(getMyId(),user.id)}.await()
+                        v.bt_follow.isChecked = result.isSourceFollowingTarget
+                        v.bt_follow.setOnCheckedChangeListener { _, b ->
+                            if (b){
+                                launch(UI){
+                                    async(CommonPool){twitter.createFriendship(user.id)}.await()
+                                    toast("フォローしました")
                                 }
                             }
-
+                            else{
+                                launch(UI){
+                                    async(CommonPool){twitter.destroyFriendship(user.id)}.await()
+                                    toast("フォロー解除しました")
+                                }
+                            }
                         }
-                        else{
-                            v.bt_follow.isChecked=false
-                        }
-
                         if(result.isTargetFollowingSource){
                             v.tv_isfollowed.setText(R.string.follows_you)
                         }
                         else{
                             v.tv_isfollowed.setText(R.string.not_following_you)
                         }
+                    } catch (e: Exception) {
+                        toast(e.localizedMessage)
                     }
 
-                    override fun onFailure(exception: Exception) = Unit
                 }
-                RelationshipTask().execute(twitter)
             }
             else{
               v. bt_edit.show()

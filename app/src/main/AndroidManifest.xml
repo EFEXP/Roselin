@@ -21,7 +21,8 @@
         <activity
             android:name=".view.activity.OauthActivity"
             android:label="OauthActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            />
 
         <meta-data
             android:name="io.fabric.ApiKey"
@@ -30,6 +31,7 @@
         <activity
             android:name=".view.activity.MainActivity"
             android:label="${appName}"
+            android:configChanges="orientation|keyboardHidden"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -52,6 +54,7 @@
         <activity
             android:name=".view.activity.UserActivity"
             android:label="@string/title_activity_user"
+            android:configChanges="orientation|keyboardHidden"
             android:theme="@style/AppTheme.Translucent.User" />
         <activity
             android:name=".view.activity.SettingsActivity"
@@ -79,6 +82,7 @@
 
         <activity
             android:name=".view.activity.SearchActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
@@ -99,6 +103,7 @@
         </activity>
         <activity
             android:name=".view.activity.UserListActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.activity.TabSettingActivity"
@@ -111,6 +116,7 @@
         </activity>
         <activity
             android:name=".view.activity.UserListsActivity"
+            android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_user_lists"
             android:theme="@style/AppTheme.NoActionBar" />
 

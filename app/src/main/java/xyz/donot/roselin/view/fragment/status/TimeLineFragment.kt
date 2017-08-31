@@ -11,9 +11,16 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import twitter4j.Status
 import xyz.donot.roselin.R
-import xyz.donot.roselin.util.extraUtils.*
+import xyz.donot.roselin.util.extraUtils.Bundle
+import xyz.donot.roselin.util.extraUtils.newIntent
+import xyz.donot.roselin.util.extraUtils.start
+import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getMyId
 import xyz.donot.roselin.view.activity.TweetEditActivity
 import xyz.donot.roselin.view.activity.TwitterDetailActivity
@@ -67,14 +74,15 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                                     activity.start<TweetEditActivity>(bundle)
                                 }
                                 "削除" -> {
-                                   async {
-                                       try {
-                                           main_twitter.destroyStatus(status.id)
-                                       }catch (e:Exception){
-                                           toast(e.localizedMessage)
-                                       }
+                                    launch(UI){
+                                        try {
+                                            async(CommonPool){ main_twitter.destroyStatus(status.id)}.await()
+                                            toast("削除しました")
+                                        }catch (e:Exception){
+                                            toast(e.localizedMessage)
+                                        }
+                                    }
 
-                                   }
                                 }
                                 "会話" -> {
                                     context.startActivity(context.newIntent<TwitterDetailActivity>(Bundle().apply { putSerializable("Status", item) }))
@@ -82,6 +90,8 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                                 }
                                 "コピー" -> {
                                     (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip = ClipData.newPlainText(ClipDescription.MIMETYPE_TEXT_URILIST, item.text)
+                                    toast("コピーしました")
+
                                 }
                                 "RTした人" -> {
                                     val rd=RetweeterDialog()

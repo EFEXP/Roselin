@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.content_base_fragment.*
 import twitter4j.Paging
 import twitter4j.ResponseList
 import twitter4j.Status
-import xyz.donot.roselin.util.extraUtils.async
+import xyz.donot.roselin.util.extraUtils.asyncDeprecated
 import xyz.donot.roselin.util.extraUtils.mainThread
 import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getDeserialized
@@ -38,7 +38,7 @@ class MentionTimeLine :TimeLineFragment(){
         }
     }
     override fun pullToRefresh(adapter:MyBaseRecyclerAdapter<Status, MyViewHolder>) {
-        async {
+        asyncDeprecated {
             try {
                 val result= twitter.getMentionsTimeline(Paging(adapter.data[0].id))
                 if (result.isNotEmpty()){

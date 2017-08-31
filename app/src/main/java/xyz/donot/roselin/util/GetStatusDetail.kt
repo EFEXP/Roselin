@@ -28,19 +28,18 @@ fun getClientName(source: String): String {
 }
 fun getExpandedText(status: Status): String {
     var text = status.text
+    if (status.urlEntities.isNotEmpty())
     for (url in status.urlEntities) {
         val p = Pattern.compile(url.url)
         val m = p.matcher(text)
         text = m.replaceAll(url.expandedURL)
     }
     if (status.mediaEntities.isNotEmpty()) {
-        status.mediaEntities.forEach {
+        for (it in   status.mediaEntities) {
             val p = Pattern.compile(it.url)
             val m = p.matcher(text)
             text = m.replaceAll("")
         }
     }
-
-
     return text
 }

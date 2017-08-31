@@ -4,6 +4,9 @@
             android:id="@+id/mute"
             android:title="@string/mute"/>
         <item
-            android:id="@+id/change_name"
-            android:title="@string/change_name"/>
+    android:id="@+id/change_name"
+    android:title="@string/change_name"/>
+        <item
+            android:id="@+id/revert_name"
+            android:title="@string/revert_name"/>
 </menu>

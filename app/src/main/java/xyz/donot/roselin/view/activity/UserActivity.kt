@@ -3,71 +3,69 @@ package xyz.donot.roselin.view.activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import com.squareup.picasso.Picasso
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_user.*
-import twitter4j.Twitter
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import twitter4j.User
 import xyz.donot.roselin.R
-import xyz.donot.roselin.extend.SafeAsyncTask
+import xyz.donot.roselin.model.realm.DBChangeName
 import xyz.donot.roselin.model.realm.DBMute
 import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getSerialized
 import xyz.donot.roselin.util.getTwitterInstance
 import xyz.donot.roselin.view.adapter.UserTimeLineAdapter
 
+
+
+
+
 class UserActivity : AppCompatActivity() {
     private  val userId: Long by lazy { intent.getLongExtra("user_id",0L) }
     private  val screenName: String by lazy { intent.getStringExtra("screen_name") }
-
+    private  var mUser: User?=null
+    private  val realm by lazy { Realm.getDefaultInstance() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { findViewById<View>(android.R.id.content).systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE }
         setContentView(R.layout.activity_user)
-
-        class lookUpUserTask(private val userId:Long):SafeAsyncTask<Twitter,User>(){
-            override fun onSuccess(result: User) = setUp(result)
-
-            override fun onFailure(exception: Exception) = toast(exception.localizedMessage)
-
-            override fun doTask(arg: Twitter): User = arg.showUser(userId)
-        }
-        class lookUpUserNameTask(private val screenName:String):SafeAsyncTask<Twitter,User>(){
-            override fun onSuccess(result: User) = setUp(result)
-
-            override fun onFailure(exception: Exception) = toast(exception.localizedMessage)
-
-            override fun doTask(arg: Twitter): User = arg.showUser(screenName)
-        }
         if(userId==0L) {
-            lookUpUserNameTask(screenName).execute(getTwitterInstance())
+            launch(UI){
+                try {
+                    mUser= async(CommonPool){ getTwitterInstance().showUser(screenName)}.await()
+                    setUp(mUser!!)
+                } catch (e: Exception) {
+                    toast(e.localizedMessage)
+                }
+            }
         }
-        else{ lookUpUserTask(userId).execute(getTwitterInstance())}
+        else{
+            launch(UI){
+                try {
+                    mUser= async(CommonPool){getTwitterInstance().showUser(userId)}.await()
+                    setUp(mUser!!)
+                } catch (e: Exception) {
+                    toast(e.localizedMessage)
+                }
+            }
+
+        }
     }
-    fun setUp(user_: User){
-      Picasso.with(applicationContext).load(user_.profileBannerIPadRetinaURL).into(banner)
+    private fun setUp(user_: User){
+        Picasso.with(applicationContext).load(user_.profileBannerIPadRetinaURL).into(banner)
         banner.setOnClickListener{startActivity(Intent(applicationContext, PictureActivity::class.java)
                 .putStringArrayListExtra("picture_urls",arrayListOf(user_.profileBannerIPadRetinaURL)))}
         toolbar.apply {
             title= user_.screenName
-            setOnMenuItemClickListener {
-                when(it.itemId){
-                    R.id.mute-> {
-                        Realm.getDefaultInstance().executeTransaction {
-                            it.createObject(DBMute::class.java)
-                                    .apply {
-                                        id= user_.id
-                                        user=user_.getSerialized()
-                                    }
-                        }
-                        toast("ミュートしました") }
-                    else->throw Exception()
-                }
-                true
-            }
         }
         val adapter= UserTimeLineAdapter(supportFragmentManager)
         adapter.user= user_
@@ -84,6 +82,48 @@ class UserActivity : AppCompatActivity() {
         onBackPressed()
         return super.onSupportNavigateUp()
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.mute-> {
+                realm.executeTransaction {
+                    it.createObject(DBMute::class.java)
+                            .apply {
+                                id= mUser!!.id
+                                user=mUser!!.getSerialized()
+                            }
+                }
+                toast("ミュートしました") }
+            R.id.change_name->{
+                val editText = EditText(this@UserActivity)
+                AlertDialog.Builder(this@UserActivity)
+                        .setTitle("TLでの表示名を変更します")
+                        .setView(editText)
+                        .setPositiveButton("OK") { _, _ ->
+                            realm.executeTransaction {
+                                it.copyToRealmOrUpdate(
+                                        DBChangeName().apply {
+                                            id=mUser!!.id
+                                            name=editText.text.toString() }
+                                )
+
+                            }
+                            toast("変更しました")
+                        }
+                        .setNegativeButton("キャンセル") {_, _-> }
+                        .show()
+            }
+            R.id.revert_name->{
+                realm.executeTransaction {
+                  it.where(DBChangeName::class.java).findAll().deleteAllFromRealm()
+                }
+                toast("戻しました")
+            }
+            else->onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater

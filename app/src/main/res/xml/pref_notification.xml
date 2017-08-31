@@ -1,0 +1,24 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <RingtonePreference
+      android:key="notifications_ringtone"
+      android:title="通知音"
+      android:summary="通知音を変更します"
+      android:ringtoneType="all"
+      android:showDefault="true"
+      android:showSilent="true" />
+  <SwitchPreference
+      android:defaultValue="true"
+      android:key="notification_reply"
+      android:summary="リプライ通知を有効にします"
+      android:title="リプライ通知" />
+  <SwitchPreference
+      android:defaultValue="true"
+      android:key="notification_retweet"
+      android:summary="ポップアップ式のRT通知を有効にします"
+      android:title="RT通知" />
+  <SwitchPreference
+      android:defaultValue="true"
+      android:key="notification_favorite"
+      android:summary="ポップアップ式のいいね通知を有効にします"
+      android:title="いいね通知" />
+</PreferenceScreen>

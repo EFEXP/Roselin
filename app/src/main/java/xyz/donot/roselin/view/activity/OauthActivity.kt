@@ -14,14 +14,16 @@ import com.twitter.sdk.android.core.TwitterSession
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_oauth.*
 import kotlinx.android.synthetic.main.content_oauth.*
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import twitter4j.Twitter
 import twitter4j.TwitterFactory
 import twitter4j.conf.ConfigurationBuilder
 import xyz.donot.roselin.R
 import xyz.donot.roselin.model.realm.DBAccount
 import xyz.donot.roselin.model.realm.DBMute
-import xyz.donot.roselin.util.extraUtils.async
-import xyz.donot.roselin.util.extraUtils.mainThread
 import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getSerialized
 
@@ -68,62 +70,55 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
 
     fun saveToken(tw: Twitter) {
-        async {
+        launch(UI){
             try {
-                val result=tw.verifyCredentials()
-            mainThread {
-                if(result!=null){
-                    Realm.getDefaultInstance().executeTransaction {
-                        realm ->
-                        val realmAccounts=realm.where(DBAccount::class.java).equalTo("isMain", true)
-                        //Twitterインスタンス保存
-                        if (realmAccounts.findFirst() != null) {
-                            realmAccounts.findFirst().isMain = false
-                        }
-                        if (realm.where(DBAccount::class.java).equalTo("id",result.id).findFirst() == null) {
-                            realm.createObject(DBAccount::class.java,result.id).apply {
-                                isMain = true
-                                twitter = tw.getSerialized()
-                                user=result.getSerialized()
-                            }
+                val result = async(CommonPool){tw.verifyCredentials()}.await()
+                Realm.getDefaultInstance().executeTransaction {
+                    realm ->
+                    val realmAccounts=realm.where(DBAccount::class.java).equalTo("isMain", true)
+                    //Twitterインスタンス保存
+                    if (realmAccounts.findFirst() != null) {
+                        realmAccounts.findFirst().isMain = false
+                    }
+                    if (realm.where(DBAccount::class.java).equalTo("id",result.id).findFirst() == null) {
+                        realm.createObject(DBAccount::class.java,result.id).apply {
+                            isMain = true
+                            twitter = tw.getSerialized()
+                            user=result.getSerialized()
                         }
                     }
-
-                }}
-
-
-            }
-            catch (e:Exception){
+                }
+            } catch (e: Exception) {
                 toast(e.localizedMessage)
             }
+
         }
+
     }
     fun  saveMute(tw: Twitter){
         var cursor: Long = -1L
-            async {
-               val result = tw.getMutesList(cursor)
-                if (result!=null) {
-                    mainThread {
-                    Realm.getDefaultInstance().executeTransaction {
-                        realm ->
-                        result.forEach { muser->
-                            realm.createObject(DBMute::class.java).apply {
-                                user=muser.getSerialized()
-                                id=muser.id
-                            }
+        launch(UI){
+        val result=   async(CommonPool){
+            tw.getMutesList(cursor)
+            }.await()
+            Realm.getDefaultInstance().executeTransaction {
+                realm ->
+                result.forEach { muser->
+                    realm.createObject(DBMute::class.java).apply {
+                        user=muser.getSerialized()
+                        id=muser.id } }
 
-                        }
+            }
+            finish()
+            startActivity(Intent(this@OauthActivity, MainActivity::class.java))
+        }
 
-                    }
-                        finish()
-                        startActivity(Intent(this@OauthActivity, MainActivity::class.java))
-                }
-            }}
+
 
 
     }
     fun logUser(tw: Twitter) {
-        async {
+        async(CommonPool){
             Answers.getInstance().logLogin(LoginEvent()
                     .putMethod("Twitter")
                     .putSuccess(true))
@@ -134,7 +129,6 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
             Crashlytics.setUserIdentifier(tw.id.toString())
             Crashlytics.setUserName(tw.screenName)
-
         }
     }
 

@@ -16,14 +16,13 @@ import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.UCropActivity
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 import kotlinx.android.synthetic.main.content_edit_profile.*
-import twitter4j.Twitter
-import twitter4j.User
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselin.R
-import xyz.donot.roselin.extend.SafeAsyncTask
-import xyz.donot.roselin.util.extraUtils.async
 import xyz.donot.roselin.util.extraUtils.longToast
-import xyz.donot.roselin.util.extraUtils.mainThread
-import xyz.donot.roselin.util.extraUtils.toast
+import xyz.donot.roselin.util.extraUtils.tExceptionToast
 import xyz.donot.roselin.util.getPath
 import xyz.donot.roselin.util.getSerialized
 import xyz.donot.roselin.util.getTwitterInstance
@@ -70,11 +69,10 @@ class EditProfileActivity : AppCompatActivity() {
       setSupportActionBar(toolbar)
       supportActionBar?.setDisplayHomeAsUpEnabled(true)
       supportActionBar?.setDisplayShowHomeEnabled(true)
-    val color=ContextCompat.getColor(this@EditProfileActivity,R.color.colorPrimary)
-      class userTask:SafeAsyncTask<Twitter,User>(){
-          override fun doTask(arg: Twitter): User = arg.verifyCredentials()
-
-          override fun onSuccess(result: User) {
+      val color=ContextCompat.getColor(this@EditProfileActivity,R.color.colorPrimary)
+      launch(UI){
+          try {
+              val result=   async(CommonPool){ getTwitterInstance().verifyCredentials()}.await()
               Picasso.with(this@EditProfileActivity).load(result.profileBannerIPadRetinaURL).into(profile_banner)
               Picasso.with(this@EditProfileActivity).load(result.originalProfileImageURLHttps).into(icon)
               web.text.insert(0,result.urlEntity.expandedURL)
@@ -113,31 +111,29 @@ class EditProfileActivity : AppCompatActivity() {
                           }
 
               }
+          } catch (e: Exception) {
+              tExceptionToast(e)
           }
 
-          override fun onFailure(exception: Exception) = Unit
       }
-      userTask().execute(getTwitterInstance())
-
-
-
 
         fab.setOnClickListener {
-            async{
-                try { val user= getTwitterInstance().updateProfile(
-                            user_name.text.toString(),
-                            web.text.toString(),
-                            geo.text.toString(),
-                            description.text.toString())
-                    if (user!=null){
-                        mainThread {
-                            finish()
-                            val bundle =  Bundle()
-                            bundle.putByteArray("user",user.getSerialized())
-                            setResult(RESULT_OK,Intent().putExtras(bundle))
-                        }
-                    }
-                }catch (e:Exception){toast(e.localizedMessage)}
+            launch(UI){
+                try {
+                    val user=   async(CommonPool){
+                           getTwitterInstance().updateProfile(
+                                   user_name.text.toString(),
+                                   web.text.toString(),
+                                   geo.text.toString(),
+                                   description.text.toString())
+                       }.await()
+                    finish()
+                    val bundle =  Bundle()
+                    bundle.putByteArray("user",user.getSerialized())
+                    setResult(RESULT_OK,Intent().putExtras(bundle))
+                } catch (e: Exception) {
+                    tExceptionToast(e)
+                }
             }
 
             val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -145,34 +141,29 @@ class EditProfileActivity : AppCompatActivity() {
                 val id = Random().nextInt(100) + 1
                 notifiy(id)
                 if (iconUri != null) {
-                    object : SafeAsyncTask<Twitter,User>(){
-                        override fun doTask(arg: Twitter): User = arg.updateProfileImage(File(getPath(this@EditProfileActivity, iconUri!!)))
-
-                        override fun onSuccess(result: User) {
+                    launch(UI){
+                        try {
+                            async(CommonPool){ getTwitterInstance().updateProfileImage(File(getPath(this@EditProfileActivity, iconUri!!)))}.await()
                             longToast("更新しました")
                             mNotificationManager.cancel(id)
-                        }
-
-                        override fun onFailure(exception: Exception) {
-                            longToast("失敗しました")
+                        } catch (e: Exception) {
+                            tExceptionToast(e)
                             mNotificationManager.cancel(id)
                         }
-                    }.execute(getTwitterInstance())
 
+                    }
                 } else if (bannerUri != null) {
-                    object : SafeAsyncTask<Twitter,Unit>(){
-                        override fun doTask(arg: Twitter) = arg.updateProfileBanner(File(getPath(this@EditProfileActivity, bannerUri!!)))
-
-                        override fun onSuccess(result: Unit) {
+                    launch(UI){
+                        try {
+                            async(CommonPool){ getTwitterInstance().updateProfileBanner(File(getPath(this@EditProfileActivity, bannerUri!!)))}.await()
                             longToast("更新しました")
                             mNotificationManager.cancel(id)
-                        }
-
-                        override fun onFailure(exception: Exception) {
-                            longToast("失敗しました")
+                        } catch (e: Exception) {
+                            tExceptionToast(e)
                             mNotificationManager.cancel(id)
                         }
-                    }.execute(getTwitterInstance())
+
+                    }
                 }
 
 

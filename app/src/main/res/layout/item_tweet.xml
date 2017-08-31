@@ -192,6 +192,7 @@
                         android:layout_alignBaseline="@+id/quoted_screenname"
                         android:layout_alignBottom="@+id/quoted_screenname"
                         android:layout_toEndOf="@+id/quoted_icon"
+                        android:textColor="?android:textColorPrimary"
                         tools:text="えふらん" />
 
                     <TextView
@@ -209,6 +210,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_below="@+id/quoted_icon"
+                        android:textColor="?android:textColorPrimary"
                         android:layout_margin="8dp"
                         tools:text="りんごんりんごーん 私ベルエンジェル シャドウバース知ってる 本格カードゲームがスマホで楽しめちゃうの カードの進化が勝負の鍵 進化したら私だってこんなに強くなっちゃうんだから どすこーい❗ お前に負けるなら悔いはないさ…！ シャドウバース！" />
                 </RelativeLayout>

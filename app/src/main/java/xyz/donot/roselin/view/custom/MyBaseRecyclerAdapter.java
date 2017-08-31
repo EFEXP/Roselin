@@ -327,17 +327,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
     }
 
 
-    public void setNewData(@Nullable List<T> data) {
-        this.mData = data == null ? new ArrayList<T>() : data;
-      //  if (mRequestLoadMoreListener != null) {
-     //       mNextLoadEnable = true;
-         //   mLoadMoreEnable = true;
-         //   mLoading = false;
-         //   mLoadMoreView.setLoadMoreStatus(LoadMoreView.STATUS_DEFAULT);
-     //   }
-      //  mLastPosition = -1;
-       notifyDataSetChanged();
-    }
+
 
 
 
@@ -365,7 +355,6 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         int internalPosition = position + getHeaderLayoutCount();
         notifyItemRemoved(internalPosition);
         compatibilityDataSizeChanged(0);
-     //   notifyItemRangeChanged(internalPosition, mData.size() - internalPosition);
     }
 
 

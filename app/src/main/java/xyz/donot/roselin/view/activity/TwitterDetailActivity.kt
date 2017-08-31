@@ -6,13 +6,15 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_twitter_detail.*
 import kotlinx.android.synthetic.main.content_a_recycler.*
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import twitter4j.Query
-import twitter4j.QueryResult
 import twitter4j.Status
-import twitter4j.Twitter
 import xyz.donot.roselin.R
-import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.util.extraUtils.logd
+import xyz.donot.roselin.util.extraUtils.tExceptionToast
 import xyz.donot.roselin.util.getTwitterInstance
 import xyz.donot.roselin.view.adapter.StatusAdapter
 
@@ -38,41 +40,38 @@ class TwitterDetailActivity : AppCompatActivity() {
 
 
     fun loadReply(long: Long){
-        class ConvTask:SafeAsyncTask<Twitter,Status>(){
-            override fun doTask(arg: Twitter): twitter4j.Status = arg.showStatus(long)
-
-            override fun onSuccess(result: twitter4j.Status) {
+        launch(UI){
+            try {
+                val result= async(CommonPool){ getTwitterInstance().showStatus(long)}.await()
                 mAdapter.addData(0,result)
                 val voo=result.inReplyToStatusId>0
                 if(voo){
                     loadReply(result.inReplyToStatusId)
                 }
+            } catch (e: Exception) {
+                tExceptionToast(e)
             }
-
-            override fun onFailure(exception: Exception) = Unit
         }
-    ConvTask().execute(getTwitterInstance())
     }
 
 
     private fun getDiscuss(status: Status){
         val twitter by lazy { getTwitterInstance() }
-        val id = status.id
         val screenname = status.user.screenName
-        val query= Query("@$screenname since_id:$id")
+        val query= Query("@$screenname since_id:${status.id}")
         query.count=100
-        logd("Tag",query.count.toString())
+        logd("ReplyQuery",query.count.toString())
+        launch(UI){
+            try {
+                val result= async(CommonPool){ twitter.search(query)}.await()
+                for (tweet in result.tweets){
+                    if (tweet.inReplyToStatusId == status.id){mAdapter.addData(tweet)}
+                }
 
-        class DiscussTask:SafeAsyncTask<Twitter,QueryResult>(){
-            override fun doTask(arg: Twitter): QueryResult = twitter.search(query)
-
-            override fun onSuccess(result: QueryResult) = result.tweets.forEach {
-                if (it.inReplyToStatusId == id){mAdapter.addData(it)}
+            } catch (e: Exception) {
+              tExceptionToast(e)
             }
-
-            override fun onFailure(exception: Exception) = Unit
         }
-        DiscussTask().execute(getTwitterInstance())
     }
 
     }

@@ -14,9 +14,12 @@ import android.view.ViewGroup
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter
 import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator
 import kotlinx.android.synthetic.main.content_base_fragment.*
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import twitter4j.Twitter
 import xyz.donot.roselin.R
-import xyz.donot.roselin.extend.SafeAsyncTask
 import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getDeserialized
 import xyz.donot.roselin.util.getTwitterInstance
@@ -51,7 +54,7 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
             val  positionIndex =  (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
             adapter.addData(0,data)
             if (positionIndex==0) {
-                (recycler).scrollToPosition(0)
+                recycler.layoutManager.scrollToPosition(0)
             }
         }
         else{dataStore.addAll(0,data)}
@@ -61,15 +64,14 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
             val  positionIndex =  (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
             adapter.addData(0,data)
             if (positionIndex==0) {
-                (recycler).scrollToPosition(0)
+                recycler.layoutManager.scrollToPosition(0)
             }
         }
         else{dataStore.add(0,data)}
     }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val dividerItemDecoration = DividerItemDecoration( recycler.context,
-                LinearLayoutManager(activity).orientation)
+        val dividerItemDecoration = DividerItemDecoration( recycler.context, LinearLayoutManager(activity).orientation)
         adapter.apply {
             setOnLoadMoreListener({
                 if (shouldLoad){ if (useDefaultLoad){LoadMoreData()} else{LoadMoreData2()} } },recycler)
@@ -80,7 +82,7 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
             (itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
             layoutManager = LinearLayoutManager(activity)
             addItemDecoration(dividerItemDecoration)
-            itemAnimator = OvershootInRightAnimator(0.2f)
+            itemAnimator = OvershootInRightAnimator()
         }
         recycler.adapter= AlphaInAnimationAdapter(adapter)
       if (savedInstanceState==null){
@@ -104,41 +106,40 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
                 refresh.isRefreshing=false
             } }
 
+
     }
 
+    private fun returnDataAsync() = async(CommonPool) {
+        return@async GetData()
+    }
 
 
   open fun getInitialData2(){
-
     }
 
     private fun getInitialData(){
-        class loadmoreasync :SafeAsyncTask<Unit,MutableList<T>?> (){
-            override fun doTask(arg: Unit): MutableList<T>? {
-                return GetData()
-            }
-
-            override fun onSuccess(result: MutableList<T>?) {
-                result?.let {
-                    adapter.setNewData(result)
-                }
-            }
-
-            override fun onFailure(exception: Exception) {
-                toast(exception.localizedMessage)
-            }
-
-        }
-        loadmoreasync()
+       launch(UI){
+           try {
+               val result =returnDataAsync().await()
+               result?.let {
+                   adapter.addData(result)
+               }
+               adapter.loadMoreComplete()
+           } catch (e: Exception) {
+               toast(e.localizedMessage)
+           }
+       }
     }
 
     override fun onResume() {
         super.onResume()
         isBackground=false
-        adapter.addData(0,dataStore)
-        val  positionIndex =  (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-        if (positionIndex==0) recycler.scrollToPosition(0)
-        dataStore.clear()
+        if(dataStore.isNotEmpty()) {
+            adapter.addData(0, dataStore)
+            val positionIndex = (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+            if (positionIndex == 0) recycler.layoutManager.scrollToPosition(0)
+            dataStore.clear()
+        }
     }
 
     override fun onStop() {
@@ -154,24 +155,17 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
         outState?.putSerializable("data",l)
     }
     abstract fun GetData(): MutableList<T>?
-    private fun LoadMoreData(){
-        class loadmoreasync :SafeAsyncTask<Unit,MutableList<T>?> (){
-            override fun doTask(arg: Unit): MutableList<T>? {
-                return GetData()
+    private fun LoadMoreData(){  launch(UI){
+        try {
+            val result =returnDataAsync().await()
+            result?.let {
+                adapter.addData(result)
             }
-
-            override fun onSuccess(result: MutableList<T>?) {
-               result?.let {
-                   adapter.addData(result)
-               }
-            }
-
-            override fun onFailure(exception: Exception) {
-                toast(exception.localizedMessage)
-            }
-
+            adapter.loadMoreComplete()
+        } catch (e: Exception) {
+            toast(e.localizedMessage)
         }
-        loadmoreasync()
+    }
     }
 
 }

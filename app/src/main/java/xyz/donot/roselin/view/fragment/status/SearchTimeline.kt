@@ -11,7 +11,7 @@ import android.view.View
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import twitter4j.Query
 import twitter4j.Status
-import xyz.donot.roselin.util.extraUtils.async
+import xyz.donot.roselin.util.extraUtils.asyncDeprecated
 import xyz.donot.roselin.util.extraUtils.mainThread
 import xyz.donot.roselin.util.getDeserialized
 import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
@@ -41,7 +41,7 @@ class SearchTimeline : TimeLineFragment() {
             unregisterReceiver(receiver) } }
 
     override fun LoadMoreData2() {
-        async {
+        asyncDeprecated {
       try {
             val result=twitter.search(query)
             if (result!=null){
@@ -63,7 +63,7 @@ class SearchTimeline : TimeLineFragment() {
     }
 
     override fun getInitialData2() {
-        async {
+        asyncDeprecated {
             try {
                 val result=twitter.search(query)
                 if (result!=null){
@@ -75,7 +75,7 @@ class SearchTimeline : TimeLineFragment() {
                             query = null
                             shouldLoad=false
                         }
-                        adapter.setNewData(result.tweets)
+                        adapter.addData(result.tweets)
                     }
                 }
             }catch (e:Exception){

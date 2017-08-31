@@ -35,10 +35,9 @@
         android:summary="ホームタイムラインのツイートバーを有効にします"
         android:title="ツイートバー" />
 </PreferenceCategory>
-    <PreferenceCategory
+    <PreferenceScreen
         android:title="通知設定"
-        android:summary="イベントの通知に関する設定です"
-        >
+        android:summary="イベントの通知に関する設定です">
         <RingtonePreference
             android:key="notifications_ringtone"
             android:title="通知音"
@@ -61,7 +60,7 @@
             android:key="notification_favorite"
             android:summary="ポップアップ式のいいね通知を有効にします"
             android:title="いいね通知" />
-    </PreferenceCategory>
+    </PreferenceScreen>
     <PreferenceCategory
         android:title="ストリーム設定"
         android:summary="自動でツイートを取得する機能に関する設定です"

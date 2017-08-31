@@ -10,10 +10,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.klinker.android.link_builder.LinkBuilder
 import com.squareup.picasso.Picasso
+import io.realm.Realm
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import twitter4j.Status
-import twitter4j.Twitter
 import xyz.donot.roselin.R
-import xyz.donot.roselin.extend.SafeAsyncTask
+import xyz.donot.roselin.model.realm.DBChangeName
 import xyz.donot.roselin.util.*
 import xyz.donot.roselin.util.extraUtils.*
 import xyz.donot.roselin.view.activity.PictureActivity
@@ -22,14 +26,13 @@ import xyz.donot.roselin.view.activity.UserActivity
 import xyz.donot.roselin.view.activity.VideoActivity
 import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselin.view.custom.MyViewHolder
-import java.util.*
 
 
 
 
 
 
-class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_tweet)
+class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_classic_tweet)
 {
     override fun convert(helper: MyViewHolder, status: Status) {
         val item= if (status.isRetweet){
@@ -40,33 +43,25 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
         else{
             helper.setVisible(R.id.textview_is_retweet,false)
             status }
-        //Define Task
-        class RetweetTask : SafeAsyncTask<Twitter, Status>(){
-            override fun doTask(arg: Twitter): twitter4j.Status = arg.retweetStatus(status.id)
-            override fun onSuccess(result: twitter4j.Status) = replace(status,result)
-            override fun onFailure(exception: Exception) = Unit
-        }
-        class FavoriteTask : SafeAsyncTask<Twitter, Status>(){
-            override fun doTask(arg: Twitter): twitter4j.Status = arg.createFavorite(status.id)
-
-            override fun onSuccess(result: twitter4j.Status) = replace(status,result)
-
-            override fun onFailure(exception: Exception) = Unit
-        }
-        class DestroyFavoriteTask : SafeAsyncTask<Twitter, Status>(){
-            override fun doTask(arg: Twitter): twitter4j.Status = arg.destroyFavorite(status.id)
-
-            override fun onSuccess(result: twitter4j.Status) = replace(status,result)
-
-            override fun onFailure(exception: Exception) = Unit
-        }
         //Viewの初期化
         helper.apply {
-            //キチツイ
-            if(item.user.screenName==""){
-                val array= mContext.resources.getStringArray(R.array.ARRAY_KITITSUI)
-                setText(R.id.textview_text,array[Random().nextInt(array.count())])}
-            else{ setText(R.id.textview_text, getExpandedText(item))}
+            //テキスト関係
+            launch(UI){
+                val relative=  async(CommonPool){getRelativeTime(item.createdAt)}.await()
+                val text= async(CommonPool){ getExpandedText(item)}.await()
+                setText(R.id.textview_date,relative)
+                setText(R.id.textview_text,text)
+                LinkBuilder.on(getView(R.id.textview_text)).addLinks(mContext.getTagURLMention()).build()
+            }
+            Realm.getDefaultInstance().where(DBChangeName::class.java).equalTo("id",item.user.id).findFirst()?.let {
+                setText(R.id.textview_username,it.name)
+            }?:setText(R.id.textview_username,item.user.name)
+            setText(R.id.textview_screenname,"@"+item.user.screenName)
+            setText(R.id.textview_via, getClientName(item.source))
+            setText(R.id.tv_retweet,item.retweetCount.toString())
+            setText(R.id.tv_favorite,item.favoriteCount.toString())
+            //    val array= mContext.resources.getStringArray(R.array.ARRAY_KITITSUI)
+            //      setText(R.id.textview_text,array[Random().nextInt(array.count())])
             //ふぁぼ済み
             val fav= getView<TextView>(R.id.tv_favorite)
             if (item.isFavorited){
@@ -90,24 +85,14 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
                 getView<TextView>(R.id.textview_via)
                         .setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, R.drawable.wrap_lock,null),null, null, null)}
             else{getView<TextView>(R.id.textview_via).setCompoundDrawablesWithIntrinsicBounds(null,null, null, null)}
-            //引用]
-
+            //引用
             item.quotedStatus?.let {
                 setVisible(R.id.quote_tweet_holder,true)
-                setText(R.id.quoted_screenname,  item.quotedStatus.user.screenName)
+                setText(R.id.quoted_screenname, "@"+ item.quotedStatus.user.screenName)
                 setText(R.id.quoted_text,  item.quotedStatus.text)
                 setText(R.id.quoted_name,item.quotedStatus.user.name)
                 Picasso.with(mContext).load(item.quotedStatus.user.biggerProfileImageURLHttps).resize(100,100).into(  getView<ImageView>(R.id.quoted_icon))
             }?:  getView<View>(R.id.quote_tweet_holder).hide()
-
-            //テキスト関係
-            setText(R.id.textview_username,item.user.name)
-            setText(R.id.textview_screenname,"@"+item.user.screenName)
-            setText(R.id.textview_via, getClientName(item.source))
-            setText(R.id.textview_date, getRelativeTime(item.createdAt))
-            setText(R.id.tv_retweet,item.retweetCount.toString())
-            setText(R.id.tv_favorite,item.favoriteCount.toString())
-            LinkBuilder.on(getView(R.id.textview_text)).addLinks(mContext.getTagURLMention()).build()
             //Listener
             getView<View>(R.id.quote_tweet_holder).onClick {
                 ( mContext as Activity).start<TwitterDetailActivity>(Bundle { putSerializable("Status",item.quotedStatus) })
@@ -118,16 +103,42 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
                 mContext.startActivity(intent)
             }
             getView<TextView>(R.id.tv_favorite).setOnClickListener{
-                if(!item.isFavorited) {
-                    FavoriteTask().execute(getTwitterInstance())
+                if(item.isFavorited) {
+                    launch(UI){
+                        try {
+                            val result= async(CommonPool){getTwitterInstance().destroyFavorite(status.id)}.await()
+                            replace(status,result)
+                        } catch (e: Exception) {
+                            mContext.tExceptionToast(e)
+                        }
+                    }
                 }
                 else{
-                    DestroyFavoriteTask().execute(getTwitterInstance())
+                    launch(UI){
+                        try {
+                            val result= async(CommonPool){getTwitterInstance().createFavorite(status.id)}.await()
+                            replace(status,result)
+                        } catch (e: Exception) {
+                            mContext.tExceptionToast(e)
+                        }
+                    }
                 }
                 }
             getView<TextView>(R.id.tv_retweet).setOnClickListener{
                 if(!status.isRetweeted){
-                RetweetTask().execute(getTwitterInstance())}}
+                    launch(UI){
+                        try {
+                            val result= async(CommonPool){getTwitterInstance().retweetStatus(status.id)}.await()
+                            replace(status,result)
+                           mContext. toast("RTしました")
+                        } catch (e: Exception) {
+                            mContext.tExceptionToast(e)
+                        }
+                    }
+                }
+
+
+                  }
             }
 
         //mediaType
