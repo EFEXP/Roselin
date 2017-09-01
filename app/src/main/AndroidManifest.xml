@@ -120,17 +120,6 @@
             android:label="@string/title_activity_user_lists"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <receiver
-            android:name=".view.activity.MusicReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.android.music.metachanged" />
-                <action android:name="com.android.music.playstatechanged" />
-                <action android:name="com.android.music.playbackcomplete" />
-            </intent-filter>
-        </receiver>
-
         <activity
             android:name=".view.activity.AccountSettingActivity"
             android:label="@string/title_activity_account_setting"

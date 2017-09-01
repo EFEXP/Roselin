@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter
 import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import kotlinx.coroutines.experimental.CommonPool
@@ -84,7 +83,7 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
             addItemDecoration(dividerItemDecoration)
             itemAnimator = OvershootInRightAnimator()
         }
-        recycler.adapter= AlphaInAnimationAdapter(adapter)
+        recycler.adapter= adapter
       if (savedInstanceState==null){
           if (useDefaultLoad){getInitialData()}
           else{getInitialData2()}

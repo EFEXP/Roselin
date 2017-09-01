@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
@@ -26,6 +27,8 @@ import xyz.donot.roselin.view.activity.UserActivity
 import xyz.donot.roselin.view.activity.VideoActivity
 import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselin.view.custom.MyViewHolder
+
+
 
 
 
@@ -148,12 +151,13 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
             val manager = LinearLayoutManager(mContext).apply {
                 orientation = LinearLayoutManager.HORIZONTAL
             }
-            helper.getView<RecyclerView>(R.id.recyclerview_picture).apply {
+            val recycler =helper.getView<RecyclerView>(R.id.recyclerview_picture)
+            if (recycler.onFlingListener==null) LinearSnapHelper().attachToRecyclerView(recycler)
+            recycler.apply {
                 adapter=mAdapter
                 layoutManager=manager
                 visibility = View.VISIBLE
-                hasFixedSize()
-            }
+                hasFixedSize() }
             mAdapter.setOnItemClickListener {  _, _,  _ ->
                 if(item.hasVideo){mContext.startActivity(Intent(mContext,VideoActivity::class.java).putExtra("video_url", item.getVideoURL()))}
                 else{( mContext as Activity).start<PictureActivity>(Bundle { putStringArrayList("picture_urls",item.images) })}
