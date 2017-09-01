@@ -10,7 +10,7 @@ import xyz.donot.roselin.view.custom.MyViewHolder
 
 class UserListAdapter: MyBaseRecyclerAdapter<User,MyViewHolder>(R.layout.item_user) {
 
-    override fun convert(helper:MyViewHolder, item: User) {
+    override fun convert(helper:MyViewHolder, item: User,position:Int) {
         helper.apply {
         Picasso.with(mContext).load(item.biggerProfileImageURLHttps).into(getView<ImageView>(R.id.iv_icon))
         setText(R.id.tv_username,item.name)

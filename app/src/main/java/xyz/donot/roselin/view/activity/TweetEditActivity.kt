@@ -1,16 +1,12 @@
 package xyz.donot.roselin.view.activity
 
 import android.Manifest
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -45,23 +41,12 @@ class TweetEditActivity : AppCompatActivity() {
     private val mAdapter= TwitterImageAdapter()
     private var screenName :String=""
     private var dialog: DialogFragment?=null
-    private val receiver= MusicReceiver()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tweet_edit)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        if (savedInstanceState==null){
-            val intentFilter = IntentFilter().apply {
-                addAction("com.android.music.metachanged")
-                addAction("com.android.music.playstatechanged")
-                addAction("com.android.music.playbackcomplete")
-            }
-            LocalBroadcastManager.getInstance(this@TweetEditActivity).apply {
-                registerReceiver(receiver, intentFilter)
-            }
-        }
        tvTextCounter.setEditText(editText_status)
         tvTextCounter.setCharCountChangedListener {_, b ->
            if (b){send_status.isEnabled=false}
@@ -224,16 +209,4 @@ class TweetEditActivity : AppCompatActivity() {
         }
     }
 }
-class MusicReceiver : BroadcastReceiver(){
-    override fun onReceive(context: Context, intent: Intent) {
-        val  bundle = intent.extras
-        val prefs= context.defaultSharedPreferences
-        prefs.edit().apply {
-            putString("track",bundle.getString("track"))
-            putString("artist", bundle.getString("artist"))
-            putString("album",bundle.getString("album"))
-        }.apply()
 
-    }
-
-}

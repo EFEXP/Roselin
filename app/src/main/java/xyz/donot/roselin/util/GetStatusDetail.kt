@@ -3,7 +3,6 @@ package xyz.donot.roselin.util
 import twitter4j.Status
 import java.util.*
 import java.util.concurrent.TimeUnit
-import java.util.regex.Pattern
 
 
 fun getRelativeTime(create: Date): String {
@@ -27,19 +26,8 @@ fun getClientName(source: String): String {
     }
 }
 fun getExpandedText(status: Status): String {
-    var text = status.text
-    if (status.urlEntities.isNotEmpty())
-    for (url in status.urlEntities) {
-        val p = Pattern.compile(url.url)
-        val m = p.matcher(text)
-        text = m.replaceAll(url.expandedURL)
-    }
-    if (status.mediaEntities.isNotEmpty()) {
-        for (it in   status.mediaEntities) {
-            val p = Pattern.compile(it.url)
-            val m = p.matcher(text)
-            text = m.replaceAll("")
-        }
-    }
+    var text =status.text
+    if (status.displayTextRangeStart>=0&&status.displayTextRangeEnd>=0)
+   text=status.text.substring(status.displayTextRangeStart,status.displayTextRangeEnd)
     return text
 }

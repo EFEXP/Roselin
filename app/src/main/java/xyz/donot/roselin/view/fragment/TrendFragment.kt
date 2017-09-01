@@ -39,7 +39,7 @@ class TrendFragment : BaseListFragment<Trend>() {
 
     inner class TrendAdapter:MyBaseRecyclerAdapter<Trend,MyViewHolder>(R.layout.item_trend)
     {
-        override fun convert(helper: MyViewHolder, item: Trend) {
+        override fun convert(helper: MyViewHolder, item: Trend,position:Int) {
             helper.setText(R.id.trend_txt,item.name)
         }
     }

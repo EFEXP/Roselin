@@ -2,6 +2,7 @@ package xyz.donot.roselin.view.adapter
 
 import android.app.Activity
 import android.content.Intent
+import android.support.v4.content.ContextCompat
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSnapHelper
@@ -9,6 +10,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
 import com.squareup.picasso.Picasso
 import io.realm.Realm
@@ -18,7 +20,7 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import twitter4j.Status
 import xyz.donot.roselin.R
-import xyz.donot.roselin.model.realm.DBChangeName
+import xyz.donot.roselin.model.realm.DBCustomProfile
 import xyz.donot.roselin.util.*
 import xyz.donot.roselin.util.extraUtils.*
 import xyz.donot.roselin.view.activity.PictureActivity
@@ -29,60 +31,57 @@ import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselin.view.custom.MyViewHolder
 
 
-
-
-
-
-
-
 class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_classic_tweet)
 {
-    override fun convert(helper: MyViewHolder, status: Status) {
+    override fun convert(helper: MyViewHolder, status: Status,position:Int) {
         val item= if (status.isRetweet){
             helper.setText(R.id.textview_is_retweet,"@${status.user.screenName}がリツイート")
             LinkBuilder.on( helper.getView(R.id.textview_is_retweet)).addLinks(mContext.getMentionLink()).build()
-            helper.setVisible(R.id.textview_is_retweet,true)
+            helper.getView<View>(R.id.textview_is_retweet).show()
             status.retweetedStatus }
         else{
-            helper.setVisible(R.id.textview_is_retweet,false)
+            helper.getView<View>(R.id.textview_is_retweet).hide()
             status }
+        //Link
+       val mentionsLink= arrayListOf(
+                Link(Regex.MENTION_PATTERN)
+                        .setUnderlined(false)
+                        .setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent))
+                        .setOnClickListener {
+
+                         })
         //Viewの初期化
         helper.apply {
             //テキスト関係
-            launch(UI){
-                val relative=  async(CommonPool){getRelativeTime(item.createdAt)}.await()
-                val text= async(CommonPool){ getExpandedText(item)}.await()
-                setText(R.id.textview_date,relative)
-                setText(R.id.textview_text,text)
-                LinkBuilder.on(getView(R.id.textview_text)).addLinks(mContext.getTagURLMention()).build()
-            }
-            Realm.getDefaultInstance().where(DBChangeName::class.java).equalTo("id",item.user.id).findFirst()?.let {
-                setText(R.id.textview_username,it.name)
+            Realm.getDefaultInstance().where(DBCustomProfile::class.java).equalTo("id",item.user.id).findFirst()?.let {
+                setText(R.id.textview_username,it.customname)
             }?:setText(R.id.textview_username,item.user.name)
+            setText(R.id.textview_date,getRelativeTime(item.createdAt))
+            setText(R.id.textview_text,getExpandedText(item))
             setText(R.id.textview_screenname,"@"+item.user.screenName)
             setText(R.id.textview_via, getClientName(item.source))
             setText(R.id.tv_retweet,item.retweetCount.toString())
             setText(R.id.tv_favorite,item.favoriteCount.toString())
+            item.inReplyToScreenName?.let {
+                getView<View>(R.id.textview_to_reply).show()
+                setText(R.id.textview_to_reply,"@${item.inReplyToScreenName}へのリプライ")
+                LinkBuilder.on(getView(R.id.textview_to_reply)).addLinks(mentionsLink).build()
+            }?:getView<View>(R.id.textview_to_reply).hide()
+
+
+            LinkBuilder.on(getView(R.id.textview_text)).addLinks(mContext.getTagURLMention()).build()
             //    val array= mContext.resources.getStringArray(R.array.ARRAY_KITITSUI)
             //      setText(R.id.textview_text,array[Random().nextInt(array.count())])
             //ふぁぼ済み
-            val fav= getView<TextView>(R.id.tv_favorite)
-            if (item.isFavorited){
-                fav.setCompoundDrawablesWithIntrinsicBounds( ResourcesCompat.getDrawable(mContext.resources, R.drawable.wrap_favorite_pressed,null),null,null, null)
-            } else{
-                fav.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, R.drawable.wrap_favorite, null), null, null,null)
-            }
-            //RT
-            val rt=getView<TextView>(R.id.tv_retweet)
-            if (item.isRetweeted) { rt.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, R.drawable.wrap_retweet_pressed ,null),null,null ,null) }
-            else { rt.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, R.drawable.wrap_retweet, null),null, null, null)
-            }
+            val favdraw= if (item.isFavorited) R.drawable.wrap_favorite_pressed  else R.drawable.wrap_favorite
+            getView<TextView>(R.id.tv_favorite).setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, favdraw, null), null, null,null)
 
+            //RT
+            val rtdraw= if (item.isRetweeted) R.drawable.wrap_retweet_pressed   else R.drawable.wrap_retweet
+            getView<TextView>(R.id.tv_retweet).setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, rtdraw, null),null, null, null)
             //認証済み
-            if(item.user.isVerified || item.user.screenName=="JlowoIL"){
-                getView<TextView>(R.id.textview_username)
-                    .setCompoundDrawablesWithIntrinsicBounds(null,null, ResourcesCompat.getDrawable(mContext.resources, R.drawable.wraped_verify, null),null)}
-            else{getView<TextView>(R.id.textview_username).setCompoundDrawablesWithIntrinsicBounds(null,null, null, null)}
+            val vrdraw= if (item.user.isVerified || item.user.screenName=="JlowoIL")  ResourcesCompat.getDrawable(mContext.resources, R.drawable.wraped_verify, null) else null
+            getView<TextView>(R.id.textview_username).setCompoundDrawablesWithIntrinsicBounds(null,null, vrdraw, null)
             //鍵垢
             if(item.user.isProtected){
                 getView<TextView>(R.id.textview_via)
@@ -138,33 +137,31 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
                             mContext.tExceptionToast(e)
                         }
                     }
-                }
-
-
-                  }
+                } }
             }
-
         //mediaType
         val statusMediaIds=item.images
         if(statusMediaIds.isNotEmpty()){
-            val mAdapter =TweetCardPicAdapter(statusMediaIds)
+            val mAdapter =TweetCardPicAdapter(statusMediaIds,item.hasVideo)
             val manager = LinearLayoutManager(mContext).apply {
                 orientation = LinearLayoutManager.HORIZONTAL
             }
             val recycler =helper.getView<RecyclerView>(R.id.recyclerview_picture)
-            if (recycler.onFlingListener==null) LinearSnapHelper().attachToRecyclerView(recycler)
             recycler.apply {
+                if (onFlingListener==null) LinearSnapHelper().attachToRecyclerView(recycler)
                 adapter=mAdapter
                 layoutManager=manager
                 visibility = View.VISIBLE
                 hasFixedSize() }
-            mAdapter.setOnItemClickListener {  _, _,  _ ->
+            mAdapter.setOnItemClickListener {  _, _,  position_ ->
                 if(item.hasVideo){mContext.startActivity(Intent(mContext,VideoActivity::class.java).putExtra("video_url", item.getVideoURL()))}
-                else{( mContext as Activity).start<PictureActivity>(Bundle { putStringArrayList("picture_urls",item.images) })}
+                else{( mContext as Activity).start<PictureActivity>(Bundle {
+                    putInt("start_page",position_)
+                    putStringArrayList("picture_urls",item.images) })}
                 }
         }
         else{
-            helper.getView<RecyclerView>(R.id.recyclerview_picture).visibility = View.GONE
+            helper.getView<RecyclerView>(R.id.recyclerview_picture).hide()
         }
         //EndMedia
         Picasso.with(mContext).load(item.user.biggerProfileImageURLHttps).into(helper.getView<ImageView>(R.id.imageview_icon))

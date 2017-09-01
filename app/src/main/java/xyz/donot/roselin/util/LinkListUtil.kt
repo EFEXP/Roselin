@@ -61,4 +61,5 @@ fun Context.getMentionLink() :MutableList<Link> = arrayListOf(
                 .setOnClickListener {
                     this.startActivity(Intent(this, UserActivity::class.java).putExtra("screen_name", it.replace("@","")))
                 }
+
 )

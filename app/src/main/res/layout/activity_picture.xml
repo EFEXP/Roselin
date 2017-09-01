@@ -6,19 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="xyz.donot.roselin.view.activity.PictureActivity">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@android:color/transparent"
-            app:title="@string/title_picture"
-            />
-    </android.support.design.widget.AppBarLayout>
-
     <include layout="@layout/content_picture" />
 
 

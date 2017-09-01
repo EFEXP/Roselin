@@ -9,12 +9,15 @@ import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import kotlinx.android.synthetic.main.content_base_fragment.*
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import twitter4j.Paging
 import twitter4j.ResponseList
 import twitter4j.Status
-import xyz.donot.roselin.util.extraUtils.asyncDeprecated
 import xyz.donot.roselin.util.extraUtils.mainThread
-import xyz.donot.roselin.util.extraUtils.toast
+import xyz.donot.roselin.util.extraUtils.tExceptionToast
 import xyz.donot.roselin.util.getDeserialized
 import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselin.view.custom.MyViewHolder
@@ -38,16 +41,15 @@ class MentionTimeLine :TimeLineFragment(){
         }
     }
     override fun pullToRefresh(adapter:MyBaseRecyclerAdapter<Status, MyViewHolder>) {
-        asyncDeprecated {
+        launch(UI){
             try {
-                val result= twitter.getMentionsTimeline(Paging(adapter.data[0].id))
-                if (result.isNotEmpty()){
-                    mainThread {
-                        insertDataBackground(result)
-                        recycler.smoothScrollToPosition(0) }
-                }
+                val result=    async(CommonPool){twitter.getMentionsTimeline(Paging(adapter.data[0].id))}.await()
+                    insertDataBackground(result)
             }
-            catch (e:Exception){ toast(e.localizedMessage)}
+            catch (e:Exception){
+                activity.tExceptionToast(e)
+
+            }
         }
       }
     inner class ReplyReceiver : BroadcastReceiver() {

@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
@@ -81,12 +80,12 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
             (itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
             layoutManager = LinearLayoutManager(activity)
             addItemDecoration(dividerItemDecoration)
-            itemAnimator = OvershootInRightAnimator()
+
         }
         recycler.adapter= adapter
       if (savedInstanceState==null){
-          if (useDefaultLoad){getInitialData()}
-          else{getInitialData2()}
+          if (useDefaultLoad){LoadMoreData()}
+          else{LoadMoreData2()}
       }
         else{
           val t=savedInstanceState.getSerializable("data") as ArrayList<T>
@@ -112,23 +111,6 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
         return@async GetData()
     }
 
-
-  open fun getInitialData2(){
-    }
-
-    private fun getInitialData(){
-       launch(UI){
-           try {
-               val result =returnDataAsync().await()
-               result?.let {
-                   adapter.addData(result)
-               }
-               adapter.loadMoreComplete()
-           } catch (e: Exception) {
-               toast(e.localizedMessage)
-           }
-       }
-    }
 
     override fun onResume() {
         super.onResume()
@@ -157,11 +139,12 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
     private fun LoadMoreData(){  launch(UI){
         try {
             val result =returnDataAsync().await()
+            adapter.loadMoreComplete()
             result?.let {
                 adapter.addData(result)
             }
-            adapter.loadMoreComplete()
         } catch (e: Exception) {
+            adapter.loadMoreFail()
             toast(e.localizedMessage)
         }
     }

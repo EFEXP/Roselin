@@ -30,7 +30,6 @@ class NotificationFragment:AppCompatDialogFragment(){
 
 
     private var isBackground=false
-    private val dataStore=ArrayList<DBNotification>()
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val query= Realm.getDefaultInstance().where(DBNotification::class.java).findAllSorted("date",Sort.DESCENDING)
@@ -38,7 +37,7 @@ class NotificationFragment:AppCompatDialogFragment(){
                 LinearLayoutManager(activity).orientation)
         recycler.addItemDecoration(dividerItemDecoration)
         recycler.layoutManager = LinearLayoutManager(activity)
-        val adapter= NotificationAdater(query)
+        val adapter= NotificationAdapter(query)
         recycler.adapter=adapter
         refresh.isEnabled=false
        query.addChangeListener(RealmChangeListener<RealmResults<DBNotification>> {
@@ -66,21 +65,22 @@ class NotificationFragment:AppCompatDialogFragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = inflater.inflate(R.layout.content_base_fragment, container, false)
 
 
-    inner class NotificationAdater(orderedRealmCollection: OrderedRealmCollection<DBNotification>):RealmRecyclerViewAdapter<DBNotification, NotificationAdater.ViewHolder>(orderedRealmCollection,true){
+    inner class NotificationAdapter(orderedRealmCollection: OrderedRealmCollection<DBNotification>):RealmRecyclerViewAdapter<DBNotification, NotificationAdapter.ViewHolder>(orderedRealmCollection,true){
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val item=getItem(position)
-            item?.let {
-            val status=item.status.getDeserialized<Status>()
-            val user=item.sourceUser.getDeserialized<User>()
+            getItem(position)?.let {
+              val s=  it.status.getDeserialized<Status>()
+                val item= s.retweetedStatus?:s
+
+            val user=it.sourceUser.getDeserialized<User>()
             holder.apply {
-                card.setOnClickListener{activity.start<TwitterDetailActivity>(Bundle { putSerializable("Status",status) })}
+                card.setOnClickListener{activity.start<TwitterDetailActivity>(Bundle { putSerializable("Status",item) })}
                 icon.setOnClickListener{activity.start<UserActivity>(Bundle { putLong("user_id",user.id)})}
-                name.text=status.user.name
-                if (item.type== NRETWEET){fromText.text="${user.name}さんがあなたのツイートをリツイートしました" }
+                name.text=item.user.name
+                if (it.type== NRETWEET){fromText.text="${user.name}さんがあなたのツイートをリツイートしました" }
                 else{fromText.text="${user.name}さんがあなたのツイートをいいねしました"}
-                text.text= getExpandedText(status)
+                text.text= getExpandedText(item)
                 Picasso.with(activity).load(user.biggerProfileImageURLHttps).into(icon)
-                screen.text="@"+status.user.screenName
+                screen.text="@"+item.user.screenName
             }
             }
         }

@@ -373,8 +373,8 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
 
     public void addData(@NonNull Collection<? extends T> newData) {
         mData.addAll(newData);
-        notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount()+1, newData.size());
-       compatibilityDataSizeChanged(newData.size());
+        notifyItemRangeInserted(mData.size() - newData.size() + getHeaderLayoutCount(), newData.size());
+        compatibilityDataSizeChanged(newData.size());
     }
 
     public void replaceData(@NonNull Collection<? extends T> data) {
@@ -658,7 +658,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
 
         switch (viewType) {
             case 0:
-                convert(holder, getItem(position - getHeaderLayoutCount()));
+                convert(holder, getItem(position - getHeaderLayoutCount()),position);
                 break;
             case LOADING_VIEW:
                 mLoadMoreView.convert(holder);
@@ -670,7 +670,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
             case FOOTER_VIEW:
                 break;
             default:
-                convert(holder, getItem(position - getHeaderLayoutCount()));
+                convert(holder, getItem(position - getHeaderLayoutCount()),position);
                 break;
         }
     }
@@ -1100,7 +1100,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
     }
 
 
-    protected abstract void convert(K helper, T item);
+    protected abstract void convert(K helper, T item,int position);
 
 
     @Nullable

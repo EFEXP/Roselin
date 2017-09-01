@@ -1,11 +1,9 @@
 package xyz.donot.roselin.util
 
-import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 
 
-@Suppress
 object Regex {
     /**
      * Regular expression pattern to match all IANA top-level domains.
@@ -101,8 +99,6 @@ object Regex {
                     + "[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}"
                     + "|[1-9][0-9]|[0-9]))")
 
-    var DOMAIN_NAME_PATTERN: Pattern = Pattern.compile(
-            "(((([a-zA-Z0-9][a-zA-Z0-9\\-]*)*[a-zA-Z0-9]\\.)+$TOP_LEVEL_DOMAIN_PATTERN)|$IP_ADDRESS_PATTERN)")
 
     val EMAIL_ADDRESS_PATTERN: Pattern = Pattern.compile(
             "[a-zA-Z0-9\\+\\.\\_\\%\\-]{1,256}" +
@@ -136,59 +132,6 @@ object Regex {
 
                     + "([0-9][0-9\\- \\.][0-9\\- \\.]+[0-9])") // <digit><digit|sdd>+<digit>
 
-    /**
-     * Convenience method to take all of the non-null matching groups in a
-     * regex Matcher and return them as a concatenated string.
-
-     * @param matcher The Matcher object from which grouped text will
-     * *                be extracted
-     * *
-     * @return A String comprising all of the non-null matched
-     * *         groups concatenated together
-     */
-    fun concatGroups(matcher: Matcher): String {
-        val b = StringBuilder()
-        val numGroups = matcher.groupCount()
-
-        for (i in 1..numGroups) {
-            val s = matcher.group(i)
-
-            System.err.println("Group($i) : $s")
-
-            if (s != null) {
-                b.append(s)
-            }
-        }
-
-        return b.toString()
-    }
-
-    /**
-     * Convenience method to return only the digits and plus signs
-     * in the matching string.
-
-     * @param matcher The Matcher object from which digits and plus will
-     * *                be extracted
-     * *
-     * @return A String comprising all of the digits and plus in
-     * *         the match
-     */
-    fun digitsAndPlusOnly(matcher: Matcher): String {
-        val buffer = StringBuilder()
-        val matchingRegion = matcher.group()
-
-        var i = 0
-        val size = matchingRegion.length
-        while (i < size) {
-            val character = matchingRegion[i]
-
-            if (character == '+' || Character.isDigit(character)) {
-                buffer.append(character)
-            }
-            i++
-        }
-        return buffer.toString()
-    }
 
 
     // Twitters own regex patterns
@@ -346,8 +289,6 @@ object Regex {
     val VALID_URL_GROUP_PATH = 7
     val VALID_URL_GROUP_QUERY_STRING = 8
 
-    val VALID_TCO_URL: Pattern = Pattern.compile("^https?://tInstance\\.co/[a-z0-9]+", Pattern.CASE_INSENSITIVE)
-    val INVALID_URL_WITHOUT_PROTOCOL_MATCH_BEGIN: Pattern = Pattern.compile("[-_./]$")
 
     val CASHTAG_PATTERN: Pattern = Pattern.compile("($DOLLAR_SIGN_CHAR)($CASHTAG)(?=$|\\s|\\p{Punct})", Pattern.CASE_INSENSITIVE)
     val VALID_CASHTAG_GROUP_BEFORE = 1

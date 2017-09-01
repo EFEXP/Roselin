@@ -45,7 +45,7 @@ class UsersListFragment : BaseListFragment<UserList>() {
     }
     inner class UserListAdapter:MyBaseRecyclerAdapter<UserList,MyViewHolder>(R.layout.item_list)
     {
-        override fun convert(helper:MyViewHolder, item: UserList) {
+        override fun convert(helper:MyViewHolder, item: UserList,position:Int) {
             helper.getView<View>(R.id.item_list_root).apply {
                 tv_author.text=item.user.name
                 Picasso.with(context).load(item.user.biggerProfileImageURLHttps).into(iv_icon)

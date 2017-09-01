@@ -1,13 +1,13 @@
 package xyz.donot.roselin.view.custom
 
 import android.content.Context
-import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.widget.TextView
 import com.klinker.android.link_builder.TouchableMovementMethod
 
 
-class CustomLinkTextView : AppCompatTextView {
+class CustomLinkTextView : TextView {
 
     constructor(context: Context) : super(context)
 

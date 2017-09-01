@@ -18,7 +18,7 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import twitter4j.User
 import xyz.donot.roselin.R
-import xyz.donot.roselin.model.realm.DBChangeName
+import xyz.donot.roselin.model.realm.DBCustomProfile
 import xyz.donot.roselin.model.realm.DBMute
 import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getSerialized
@@ -102,9 +102,9 @@ class UserActivity : AppCompatActivity() {
                         .setPositiveButton("OK") { _, _ ->
                             realm.executeTransaction {
                                 it.copyToRealmOrUpdate(
-                                        DBChangeName().apply {
+                                        DBCustomProfile().apply {
                                             id=mUser!!.id
-                                            name=editText.text.toString() }
+                                            customname=editText.text.toString() }
                                 )
 
                             }
@@ -115,7 +115,7 @@ class UserActivity : AppCompatActivity() {
             }
             R.id.revert_name->{
                 realm.executeTransaction {
-                  it.where(DBChangeName::class.java).findAll().deleteAllFromRealm()
+                  it.where(DBCustomProfile::class.java).findAll().deleteAllFromRealm()
                 }
                 toast("戻しました")
             }

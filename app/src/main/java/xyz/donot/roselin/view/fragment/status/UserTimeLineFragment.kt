@@ -6,7 +6,6 @@ import android.support.v4.content.res.ResourcesCompat
 import android.view.View
 import com.klinker.android.link_builder.LinkBuilder
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.content_base_fragment.*
 import kotlinx.android.synthetic.main.person_item.view.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
@@ -41,18 +40,14 @@ class UserTimeLineFragment: TimeLineFragment()
     }
 
     override fun pullToRefresh(adapter: MyBaseRecyclerAdapter<Status, MyViewHolder>) {
-        asyncDeprecated {
+        launch(UI){
             try {
                 val result =twitter.getUserTimeline(Paging(adapter.data[0].id))
-                if (result.isNotEmpty()){
-                    mainThread {
-                        insertDataBackground(result)
-                        recycler.smoothScrollToPosition(0) }
-                }
+                insertDataBackground(result)
+            } catch (e: Exception) {
+                activity.tExceptionToast(e)
             }
-            catch (e:Exception){ toast(e.localizedMessage)}
         }
-
     }
 
     private fun setUpViews():View{

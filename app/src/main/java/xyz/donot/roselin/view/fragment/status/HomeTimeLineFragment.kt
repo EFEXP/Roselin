@@ -7,14 +7,14 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.view.View
-import kotlinx.android.synthetic.main.content_base_fragment.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import twitter4j.Paging
 import twitter4j.ResponseList
 import twitter4j.Status
 import twitter4j.StatusDeletionNotice
-import xyz.donot.roselin.util.extraUtils.asyncDeprecated
 import xyz.donot.roselin.util.extraUtils.mainThread
-import xyz.donot.roselin.util.extraUtils.toast
+import xyz.donot.roselin.util.extraUtils.tExceptionToast
 import xyz.donot.roselin.util.getDeserialized
 import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselin.view.custom.MyViewHolder
@@ -34,16 +34,13 @@ class HomeTimeLineFragment : TimeLineFragment(){
     }
 
     override fun pullToRefresh(adapter: MyBaseRecyclerAdapter<Status, MyViewHolder>) {
-        asyncDeprecated {
+        launch(UI){
             try {
-            val result =twitter.getHomeTimeline(Paging(adapter.data[0].id))
-            if (result.isNotEmpty()){
-             mainThread {
+                val result =twitter.getHomeTimeline(Paging(adapter.data[0].id))
                 insertDataBackground(result)
-                 recycler.smoothScrollToPosition(0) }
-             }
+            } catch (e: Exception) {
+               activity.tExceptionToast(e)
             }
-            catch (e:Exception){ toast(e.localizedMessage)}
         }
 
     }

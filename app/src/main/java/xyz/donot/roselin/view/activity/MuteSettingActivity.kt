@@ -25,12 +25,12 @@ class MuteSettingActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowHomeEnabled(true)
         mute_pager.adapter=MuteViewPager(supportFragmentManager)
         mute_tab.setupWithViewPager(mute_pager)
-        fab.setOnClickListener { view ->
+        fab.setOnClickListener { _ ->
             val editView = EditText(this@MuteSettingActivity)
             AlertDialog.Builder(this@MuteSettingActivity)
                     .setTitle("ミュートワードを入力してください")
                     .setView(editView)
-                    .setPositiveButton("OK", { dialog, _ ->
+                    .setPositiveButton("OK", { _ , _ ->
                       Realm.getDefaultInstance().executeTransaction{
                           it.createObject(DBMute::class.java)
                                   .apply {
@@ -38,7 +38,7 @@ class MuteSettingActivity : AppCompatActivity() {
                                   }
                       }
                     })
-                    .setNegativeButton("キャンセル",  { dialog, whichButton -> })
+                    .setNegativeButton("キャンセル",  { _ , _ -> })
                     .show()
         }
     }

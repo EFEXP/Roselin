@@ -43,6 +43,7 @@ import xyz.donot.roselin.view.adapter.MainTimeLineAdapter
 class MainActivity : AppCompatActivity() {
    private val REQUEST_WRITE_READ=0
    private var user:User?=null
+    private val receiver by lazy { MusicReceiver()}
     private val disConnectionReceiver by lazy { DisConnectionReceiver() }
     private val connectionReceiver by lazy { ConnectionReceiver() }
     private  val realm =  Realm.getDefaultInstance()
@@ -55,10 +56,17 @@ class MainActivity : AppCompatActivity() {
         }
         else if(isConnected()){
             //Receiver
+            val intentFilter = IntentFilter().apply {
+                addAction("com.android.music.metachanged")
+                addAction("com.android.music.playstatechanged")
+                addAction("com.android.music.playbackcomplete")
+            }
+            registerReceiver(receiver, intentFilter)
             LocalBroadcastManager.getInstance(this).apply {
                 registerReceiver(disConnectionReceiver, IntentFilter("OnDisconnect"))
                 registerReceiver(connectionReceiver, IntentFilter("OnConnect"))
             }
+
             //initial tabdata
             if (realm.where(DBTabData::class.java).count()==0L){
                 realm.executeTransaction {
@@ -118,10 +126,6 @@ class MainActivity : AppCompatActivity() {
             setUpView()
             InitialRequestPermission()
          }
-
-
-
-
 }
 
 
@@ -263,6 +267,17 @@ class MainActivity : AppCompatActivity() {
             mainThread {   iv_connected_stream.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_cloud_off,null))}
         }
     }
+    inner class MusicReceiver : BroadcastReceiver(){
+        override fun onReceive(context: Context, intent: Intent) {
+            val  bundle = intent.extras
+            toast(bundle.getString("track"))
+            context.defaultSharedPreferences.edit().apply {
+                putString("track",bundle.getString("track"))
+                putString("artist", bundle.getString("artist"))
+                putString("album",bundle.getString("album"))
+            }.apply()
+
+        }}
 
 
 }
