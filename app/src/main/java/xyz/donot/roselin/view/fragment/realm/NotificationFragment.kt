@@ -1,7 +1,9 @@
 package xyz.donot.roselin.view.fragment.realm
 
 import android.os.Bundle
+import android.support.text.emoji.widget.EmojiTextView
 import android.support.v7.app.AppCompatDialogFragment
+import android.support.v7.widget.CardView
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -9,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.makeramen.roundedimageview.RoundedImageView
 import com.squareup.picasso.Picasso
 import io.realm.*
 import kotlinx.android.synthetic.main.content_base_fragment.*
@@ -89,11 +92,11 @@ class NotificationFragment:AppCompatDialogFragment(){
                 ViewHolder(layoutInflater.inflate(R.layout.item_notification,parent,false))
         inner  class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val name: TextView =view.tv_notification_myname
-            val fromText=view.tv_notification_info
-            val text=view.tv_notification_text
-            val icon=view.iv_notification_icon
-            val screen=view.tv_notification_myscreen
-            val card=view.cardView
+            val fromText: TextView =view.tv_notification_info
+            val text: EmojiTextView =view.tv_notification_text
+            val icon: RoundedImageView =view.iv_notification_icon
+            val screen: TextView =view.tv_notification_myscreen
+            val card: CardView =view.cardView
 
         }
 

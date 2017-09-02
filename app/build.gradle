@@ -22,13 +22,11 @@ repositories {
     maven { url "http://dl.bintray.com/kotlin/kotlin-eap-1.1" }
 }
 
-
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
     android.defaultConfig.vectorDrawables.useSupportLibrary = true
     defaultConfig {
-        resConfigs "en", "ja"
         applicationId "xyz.donot.roselin"
         minSdkVersion 17
         targetSdkVersion 26
@@ -78,7 +76,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${support}"
     implementation "com.android.support:design:${support}"
     implementation "com.android.support:support-v4:${support}"
-    implementation "com.android.support:support-emoji-bundled:${support}"
+    implementation "com.android.support:support-emoji:${support}"
     implementation "com.android.support:cardview-v7:${support}"
     implementation "com.android.support:customtabs:${support}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"

@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.LinearSnapHelper
 import com.mlsdev.rximagepicker.RxImagePicker
 import com.mlsdev.rximagepicker.Sources
 import com.yalantis.ucrop.UCrop
@@ -53,16 +54,21 @@ class TweetEditActivity : AppCompatActivity() {
            if (b){send_status.isEnabled=false}
         }
         val manager = LinearLayoutManager(this@TweetEditActivity).apply { orientation = LinearLayoutManager.HORIZONTAL }
-        pic_recycler_view.hasFixedSize()
-        pic_recycler_view.layoutManager = manager
-        pic_recycler_view.adapter=mAdapter
+
+        pic_recycler_view.apply {
+	        if (onFlingListener==null) LinearSnapHelper().attachToRecyclerView(pic_recycler_view)
+	        hasFixedSize()
+	        layoutManager = manager
+	        pic_recycler_view.adapter=mAdapter
+        }
+
         //View#Set
         if(intent.getStringExtra("user_screen_name")!=null) {
             screenName ="@${intent.getStringExtra("user_screen_name")}"
         }
         editText_status.setText(screenName)
         editText_status.setSelection(editText_status.editableText.count())
-        if (!statusTxt.isNullOrBlank()) {  reply_for_status.text=statusTxt
+        if (!statusTxt.isBlank()) {  reply_for_status.text=statusTxt
             reply_for_status.show()
         }
 

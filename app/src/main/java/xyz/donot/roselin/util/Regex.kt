@@ -260,7 +260,7 @@ object Regex {
 
     /* Begin public constants */
 
-    val HASHTAG_PATTERN: Pattern = Pattern.compile("(#|\uFF03)($HASHTAG_ALPHA_NUMERIC*$HASHTAG_ALPHA$HASHTAG_ALPHA_NUMERIC*)", Pattern.CASE_INSENSITIVE)
+    val HASHTAG_PATTERN: Pattern = Pattern.compile("(#)($HASHTAG_ALPHA_NUMERIC*$HASHTAG_ALPHA$HASHTAG_ALPHA_NUMERIC*)", Pattern.CASE_INSENSITIVE)
     val VALID_HASHTAG_GROUP_BEFORE = 1
     val VALID_HASHTAG_GROUP_HASH = 2
     val VALID_HASHTAG_GROUP_TAG = 3
@@ -290,8 +290,5 @@ object Regex {
     val VALID_URL_GROUP_QUERY_STRING = 8
 
 
-    val CASHTAG_PATTERN: Pattern = Pattern.compile("($DOLLAR_SIGN_CHAR)($CASHTAG)(?=$|\\s|\\p{Punct})", Pattern.CASE_INSENSITIVE)
-    val VALID_CASHTAG_GROUP_BEFORE = 1
-    val VALID_CASHTAG_GROUP_DOLLAR = 2
-    val VALID_CASHTAG_GROUP_CASHTAG = 3
+
 }

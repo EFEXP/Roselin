@@ -211,10 +211,9 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
      * @param visible True for VISIBLE, false for INVISIBLE.
      * @return The MyViewHolder for chaining.
      */
-    public MyViewHolder setVisible(@IdRes int viewId, boolean visible) {
+    public void setVisible(@IdRes int viewId, boolean visible) {
         View view = getView(viewId);
         view.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
-        return this;
     }
 
     /**
@@ -344,7 +343,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
      * or if you can use  recyclerView.addOnItemTouch(listerer)  wo also support this menthod
      */
     @SuppressWarnings("unchecked")
-    private MyViewHolder addOnClickListener(@IdRes final int viewId) {
+    private void addOnClickListener(@IdRes final int viewId) {
         childClickViewIds.add(viewId);
         final View view = getView(viewId);
         if (view != null) {
@@ -361,7 +360,6 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
             });
         }
 
-        return this;
     }
 
 
@@ -520,9 +518,8 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
      * @param adapter The adapter;
      * @return The MyViewHolder for chaining.
      */
-    MyViewHolder setAdapter(MyBaseRecyclerAdapter adapter) {
+    void setAdapter(MyBaseRecyclerAdapter adapter) {
         this.adapter = adapter;
-        return this;
     }
 
     @SuppressWarnings("unchecked")

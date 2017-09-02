@@ -15,33 +15,34 @@ import xyz.donot.roselin.model.realm.DBDraft
 import xyz.donot.roselin.util.extraUtils.inflater
 
 class DraftAdapter(val context: Context,
-                   val  realmResults: OrderedRealmCollection<DBDraft>) : RealmBaseAdapter<DBDraft>(realmResults), ListAdapter {
+                   val realmResults: OrderedRealmCollection<DBDraft>) : RealmBaseAdapter<DBDraft>(realmResults), ListAdapter {
 
-    override fun getView(position: Int, convertView_: View?, parent: ViewGroup): View {
-        var convertView = convertView_
-        val viewHolder: ViewHolder
-        if (convertView == null) {
-            convertView = context.inflater.inflate(R.layout.item_draft,parent, false)
-            viewHolder = ViewHolder()
-            viewHolder.draft_text= convertView.findViewById(R.id.draft_txt)
-            viewHolder.delete_draft= convertView.findViewById(R.id.delete_draft)
-            convertView.tag = viewHolder
-        } else {
-            viewHolder = convertView.tag as ViewHolder
-        }
-        val item = realmResults[position]
-        viewHolder.draft_text?.text = item.text
-        viewHolder.delete_draft?.setOnClickListener {
-            Realm .getDefaultInstance().executeTransaction {
-                item.deleteFromRealm()
-            }
-        }
-        Log.d("Realm", item.toString())
-        return convertView!!
-    }
-    inner class  ViewHolder {
-        var draft_text: TextView?=null
-        var delete_draft: AppCompatImageButton?=null
+	override fun getView(position: Int, convertView_: View?, parent: ViewGroup): View {
+		var convertView = convertView_
+		val viewHolder: ViewHolder
+		if (convertView == null) {
+			convertView = context.inflater.inflate(R.layout.item_draft, parent, false)
+			viewHolder = ViewHolder()
+			viewHolder.draft_text = convertView.findViewById(R.id.draft_txt)
+			viewHolder.delete_draft = convertView.findViewById(R.id.delete_draft)
+			convertView.tag = viewHolder
+		} else {
+			viewHolder = convertView.tag as ViewHolder
+		}
+		val item = realmResults[position]
+		viewHolder.draft_text?.text = item.text
+		viewHolder.delete_draft?.setOnClickListener {
+			Realm.getDefaultInstance().executeTransaction {
+				item.deleteFromRealm()
+			}
+		}
+		Log.d("Realm", item.toString())
+		return convertView!!
+	}
 
-    }
+	inner class ViewHolder {
+		var draft_text: TextView? = null
+		var delete_draft: AppCompatImageButton? = null
+
+	}
 }

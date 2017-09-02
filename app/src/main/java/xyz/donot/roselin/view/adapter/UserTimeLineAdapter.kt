@@ -9,38 +9,35 @@ import xyz.donot.roselin.view.fragment.status.FavoriteTimeLine
 import xyz.donot.roselin.view.fragment.status.UserTimeLineFragment
 
 
-class UserTimeLineAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm)
-{
-var user: User?=null
-override fun getItem(position: Int): Fragment = when(position){
-  0->
-  {
-      val fragment= UserTimeLineFragment()
-      val bundle= Bundle()
-      bundle.putSerializable("user",user)
-      fragment.arguments= bundle
-      fragment
-  }
-    1->
-    {
-        val fragment= FavoriteTimeLine()
-        val bundle= Bundle()
-        bundle.putSerializable("user",user)
-        fragment.arguments= bundle
-        fragment
-    }
+class UserTimeLineAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+	var user: User? = null
+	override fun getItem(position: Int): Fragment = when (position) {
+		0 -> {
+			val fragment = UserTimeLineFragment()
+			val bundle = Bundle()
+			bundle.putSerializable("user", user)
+			fragment.arguments = bundle
+			fragment
+		}
+		1 -> {
+			val fragment = FavoriteTimeLine()
+			val bundle = Bundle()
+			bundle.putSerializable("user", user)
+			fragment.arguments = bundle
+			fragment
+		}
 
-  else->throw  IllegalStateException()
-}
+		else -> throw  IllegalStateException()
+	}
 
 
-override fun getPageTitle(position: Int): CharSequence = when(position){
-  0->"Info"
-    1->"Favorite"
-  else->throw IllegalStateException()
-}
+	override fun getPageTitle(position: Int): CharSequence = when (position) {
+		0 -> "Info"
+		1 -> "Favorite"
+		else -> throw IllegalStateException()
+	}
 
-override fun getCount(): Int = 2
+	override fun getCount(): Int = 2
 
 
 }

@@ -67,10 +67,7 @@ public abstract class MyLoadMoreView {
     }
 
     public final boolean isLoadEndMoreGone() {
-        if (getLoadEndViewId() == 0) {
-            return true;
-        }
-        return mLoadMoreEndGone;
+        return getLoadEndViewId() == 0 || mLoadMoreEndGone;
     }
 
 

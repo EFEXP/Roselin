@@ -8,14 +8,15 @@ import xyz.donot.roselin.view.fragment.PictureFragment
 
 class PicturePagerAdapter(fm: FragmentManager, private var pictureUrls: ArrayList<String>) : DynamicViewPager(fm) {
 
-    override fun getItem(i: Int): Fragment {
-        val p = PictureFragment()
-        val bundle = Bundle()
-        bundle.putString("url", pictureUrls[i])
-        p.arguments = bundle
-        return p
-    }
-    override fun getCount(): Int = pictureUrls.count()
-    override fun getPageTitle(position: Int): CharSequence = position.toString()
+	override fun getItem(i: Int): Fragment {
+		val p = PictureFragment()
+		val bundle = Bundle()
+		bundle.putString("url", pictureUrls[i])
+		p.arguments = bundle
+		return p
+	}
+
+	override fun getCount(): Int = pictureUrls.count()
+	override fun getPageTitle(position: Int): CharSequence = position.toString()
 
 }

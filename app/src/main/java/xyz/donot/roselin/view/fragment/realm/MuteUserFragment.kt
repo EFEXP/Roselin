@@ -1,8 +1,11 @@
 package xyz.donot.roselin.view.fragment.realm
 
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
+import android.support.text.emoji.widget.EmojiTextView
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatDialogFragment
+import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -23,7 +26,7 @@ import xyz.donot.roselin.util.getDeserialized
 
 
 class MuteUserFragment : AppCompatDialogFragment(){
-    val realm by lazy { Realm.getDefaultInstance() }
+    val realm: Realm by lazy { Realm.getDefaultInstance() }
     val adapter by lazy {MuteUserAdater(realm.where(DBMute::class.java).notEqualTo("id",0L).findAll()) }
 
 
@@ -69,10 +72,10 @@ class MuteUserFragment : AppCompatDialogFragment(){
 
         inner  class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val icon:ImageView=view.iv_icon
-            val screenname=view.tv_screenname
-            val username=view.tv_username
-            val description=view.tv_description
-            val background=view.item_user_background
+            val screenname: AppCompatTextView =view.tv_screenname
+            val username: EmojiTextView =view.tv_username
+            val description: EmojiTextView =view.tv_description
+            val background: ConstraintLayout =view.item_user_background
         }
 
 

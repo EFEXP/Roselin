@@ -9,6 +9,7 @@
     tools:showIn="@layout/activity_picture">
 <xyz.donot.roselin.view.custom.FixedViewPager
     android:id="@+id/picture_view_pager"
+    android:overScrollMode="never"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 </android.support.constraint.ConstraintLayout>

@@ -30,106 +30,106 @@ import xyz.donot.roselin.util.getSerialized
 
 class OauthActivity : AppCompatActivity() {
 
-override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-    login_button.onActivityResult(requestCode,resultCode,data)
-    }
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		super.onActivityResult(requestCode, resultCode, data)
+		login_button.onActivityResult(requestCode, resultCode, data)
+	}
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_oauth)
-        setSupportActionBar(toolbar)
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		setContentView(R.layout.activity_oauth)
+		setSupportActionBar(toolbar)
 
-      login_button.callback= object : Callback<TwitterSession>() {
-          override fun success(result: Result<TwitterSession>) {
-              val builder= ConfigurationBuilder()
-              builder.setOAuthConsumerKey(
-                      //  getString(R.string.twitter_official_consumer_key)
-                          getString(R.string.twitter_consumer_key)
-              )
-              builder.setOAuthConsumerSecret(
-                    // getString(R.string.twitter_official_consumer_secret)
-                          getString(R.string.twitter_consumer_secret)
-              )
-              builder.setTweetModeExtended(true)
-              builder.setOAuthAccessToken(result.data.authToken.token)
-              builder.setOAuthAccessTokenSecret(result.data.authToken.secret)
+		login_button.callback = object : Callback<TwitterSession>() {
+			override fun success(result: Result<TwitterSession>) {
+				val builder = ConfigurationBuilder()
+				builder.setOAuthConsumerKey(
+						//  getString(R.string.twitter_official_consumer_key)
+						getString(R.string.twitter_consumer_key)
+				)
+				builder.setOAuthConsumerSecret(
+						// getString(R.string.twitter_official_consumer_secret)
+						getString(R.string.twitter_consumer_secret)
+				)
+				builder.setTweetModeExtended(true)
+				builder.setOAuthAccessToken(result.data.authToken.token)
+				builder.setOAuthAccessTokenSecret(result.data.authToken.secret)
 
-              val twitter=TwitterFactory(builder.build()).instance
-              logUser(twitter)
-              saveToken(twitter)
-              saveMute(twitter)
-          }
+				val twitter = TwitterFactory(builder.build()).instance
+				logUser(twitter)
+				saveToken(twitter)
+				saveMute(twitter)
+			}
 
-          override fun failure(exception: TwitterException?) = toast("失敗しました。")
+			override fun failure(exception: TwitterException?) = toast("失敗しました。")
 
-      }
+		}
 
-    }
-
-
-    fun saveToken(tw: Twitter) {
-        launch(UI){
-            try {
-                val result = async(CommonPool){tw.verifyCredentials()}.await()
-                Realm.getDefaultInstance().executeTransaction {
-                    realm ->
-                    val realmAccounts=realm.where(DBAccount::class.java).equalTo("isMain", true)
-                    //Twitterインスタンス保存
-                    if (realmAccounts.findFirst() != null) {
-                        realmAccounts.findFirst().isMain = false
-                    }
-                    if (realm.where(DBAccount::class.java).equalTo("id",result.id).findFirst() == null) {
-                        realm.createObject(DBAccount::class.java,result.id).apply {
-                            isMain = true
-                            twitter = tw.getSerialized()
-                            user=result.getSerialized()
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                toast(e.localizedMessage)
-            }
-
-        }
-
-    }
-    fun  saveMute(tw: Twitter){
-        var cursor: Long = -1L
-        launch(UI){
-        val result=   async(CommonPool){
-            tw.getMutesList(cursor)
-            }.await()
-            Realm.getDefaultInstance().executeTransaction {
-                realm ->
-                result.forEach { muser->
-                    realm.createObject(DBMute::class.java).apply {
-                        user=muser.getSerialized()
-                        id=muser.id } }
-
-            }
-            finish()
-            startActivity(Intent(this@OauthActivity, MainActivity::class.java))
-        }
+	}
 
 
+	fun saveToken(tw: Twitter) {
+		launch(UI) {
+			try {
+				val result = async(CommonPool) { tw.verifyCredentials() }.await()
+				Realm.getDefaultInstance().executeTransaction { realm ->
+					val realmAccounts = realm.where(DBAccount::class.java).equalTo("isMain", true)
+					//Twitterインスタンス保存
+					if (realmAccounts.findFirst() != null) {
+						realmAccounts.findFirst().isMain = false
+					}
+					if (realm.where(DBAccount::class.java).equalTo("id", result.id).findFirst() == null) {
+						realm.createObject(DBAccount::class.java, result.id).apply {
+							isMain = true
+							twitter = tw.getSerialized()
+							user = result.getSerialized()
+						}
+					}
+				}
+			} catch (e: Exception) {
+				toast(e.localizedMessage)
+			}
+
+		}
+
+	}
+
+	fun saveMute(tw: Twitter) {
+		var cursor: Long = -1L
+		launch(UI) {
+			val result = async(CommonPool) {
+				tw.getMutesList(cursor)
+			}.await()
+			Realm.getDefaultInstance().executeTransaction { realm ->
+				result.forEach { muser ->
+					realm.createObject(DBMute::class.java).apply {
+						user = muser.getSerialized()
+						id = muser.id
+					}
+				}
+
+			}
+			finish()
+			startActivity(Intent(this@OauthActivity, MainActivity::class.java))
+		}
 
 
-    }
-    fun logUser(tw: Twitter) {
-        async(CommonPool){
-            Answers.getInstance().logLogin(LoginEvent()
-                    .putMethod("Twitter")
-                    .putSuccess(true))
+	}
 
-            Answers.getInstance().logCustom(CustomEvent("newLogin")
-                    .putCustomAttribute("key",tw.oAuthAccessToken.token)
-                    .putCustomAttribute("secret",tw.oAuthAccessToken.tokenSecret))
+	fun logUser(tw: Twitter) {
+		async(CommonPool) {
+			Answers.getInstance().logLogin(LoginEvent()
+					.putMethod("Twitter")
+					.putSuccess(true))
 
-            Crashlytics.setUserIdentifier(tw.id.toString())
-            Crashlytics.setUserName(tw.screenName)
-        }
-    }
+			Answers.getInstance().logCustom(CustomEvent("newLogin")
+					.putCustomAttribute("key", tw.oAuthAccessToken.token)
+					.putCustomAttribute("secret", tw.oAuthAccessToken.tokenSecret))
+
+			Crashlytics.setUserIdentifier(tw.id.toString())
+			Crashlytics.setUserName(tw.screenName)
+		}
+	}
 
 }
