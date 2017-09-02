@@ -258,14 +258,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
     inner class ConnectionReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-         mainThread {   iv_connected_stream.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_cloud,null))  }
-        }
+        override fun onReceive(context: Context, intent: Intent) = mainThread {   iv_connected_stream.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_cloud,null))  }
     }
     inner class DisConnectionReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            mainThread {   iv_connected_stream.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_cloud_off,null))}
-        }
+        override fun onReceive(context: Context, intent: Intent) = mainThread {   iv_connected_stream.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.ic_cloud_off,null))}
     }
     inner class MusicReceiver : BroadcastReceiver(){
         override fun onReceive(context: Context, intent: Intent) {

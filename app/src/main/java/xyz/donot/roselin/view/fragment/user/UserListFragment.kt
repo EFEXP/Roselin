@@ -26,7 +26,7 @@ abstract class UserListFragment:BaseListFragment<User>()
     private var cursor: Long = -1L
     private val userId by lazy { arguments.getLong("userId")}
     abstract fun getUserData(userId:Long,cursor:Long): PagableResponseList<User>?
-    override fun pullToRefresh(adapter: MyBaseRecyclerAdapter<User, MyViewHolder>) {}
+    override fun pullToRefresh(adapter: MyBaseRecyclerAdapter<User, MyViewHolder>) = Unit
     override fun adapterFun(): MyBaseRecyclerAdapter<User,MyViewHolder> =UserListAdapter()
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

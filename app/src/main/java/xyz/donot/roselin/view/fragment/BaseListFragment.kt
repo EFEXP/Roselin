@@ -45,7 +45,7 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
     private var isBackground=false
     private val dataStore:ArrayList<T> =ArrayList()
     abstract fun adapterFun():MyBaseRecyclerAdapter<T,MyViewHolder>
-    open   fun pullToRefresh(adapter: MyBaseRecyclerAdapter<T, MyViewHolder>){}
+    open   fun pullToRefresh(adapter: MyBaseRecyclerAdapter<T, MyViewHolder>) = Unit
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = inflater.inflate(R.layout.content_base_fragment, container, false)
     fun insertDataBackground(data:List<T>){
         if(!isBackground){
@@ -127,7 +127,7 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
         super.onStop()
         isBackground=true
     }
-    open  fun LoadMoreData2(){}
+    open  fun LoadMoreData2() = Unit
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
        val l=ArrayList<T>()

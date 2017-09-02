@@ -29,17 +29,11 @@ class PictureFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_picture, container, false)
         Picasso.with(activity).load(stringURL).into(object : Target {
-            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+            override fun onPrepareLoad(placeHolderDrawable: Drawable?) = Unit
 
-            }
+            override fun onBitmapFailed(errorDrawable: Drawable?) = Unit
 
-            override fun onBitmapFailed(errorDrawable: Drawable?) {
-
-            }
-
-            override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
-              v.iv_picture.setImage(ImageSource.bitmap(bitmap))
-            }
+            override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) = v.iv_picture.setImage(ImageSource.bitmap(bitmap))
         })
         v.bt_download.onClick {
             Save(stringURL)

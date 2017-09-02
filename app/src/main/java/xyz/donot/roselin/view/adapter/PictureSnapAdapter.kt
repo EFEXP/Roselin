@@ -15,9 +15,7 @@ class PictureSnapAdapter : LinearSnapHelper() {
     private var mHorizontalHelper: OrientationHelper? = null
 
     @Throws(IllegalStateException::class)
-    override fun attachToRecyclerView(recyclerView: RecyclerView?) {
-        super.attachToRecyclerView(recyclerView)
-    }
+    override fun attachToRecyclerView(recyclerView: RecyclerView?) = super.attachToRecyclerView(recyclerView)
 
     override fun calculateDistanceToFinalSnap(layoutManager: RecyclerView.LayoutManager,
                                               targetView: View): IntArray? {
@@ -37,22 +35,16 @@ class PictureSnapAdapter : LinearSnapHelper() {
         return out
     }
 
-    override fun findSnapView(layoutManager: RecyclerView.LayoutManager): View? {
+    override fun findSnapView(layoutManager: RecyclerView.LayoutManager): View? = if (layoutManager is LinearLayoutManager) {
 
-        return if (layoutManager is LinearLayoutManager) {
+        if (layoutManager.canScrollHorizontally()) {
+            getStartView(layoutManager, getHorizontalHelper(layoutManager))
+        } else {
+            getStartView(layoutManager, getVerticalHelper(layoutManager))
+        }
+    } else super.findSnapView(layoutManager)
 
-            if (layoutManager.canScrollHorizontally()) {
-                getStartView(layoutManager, getHorizontalHelper(layoutManager))
-            } else {
-                getStartView(layoutManager, getVerticalHelper(layoutManager))
-            }
-        } else super.findSnapView(layoutManager)
-
-    }
-
-    private fun distanceToStart(targetView: View, helper: OrientationHelper): Int {
-        return helper.getDecoratedStart(targetView) - helper.startAfterPadding
-    }
+    private fun distanceToStart(targetView: View, helper: OrientationHelper): Int = helper.getDecoratedStart(targetView) - helper.startAfterPadding
 
     private fun getStartView(layoutManager: RecyclerView.LayoutManager,
                              helper: OrientationHelper): View? {

@@ -26,9 +26,7 @@ class RetweeterDialog : BaseListFragment<User>() {
         }
     }
 
-    override fun pullToRefresh(adapter: MyBaseRecyclerAdapter<User, MyViewHolder>) {
-
-    }
+    override fun pullToRefresh(adapter: MyBaseRecyclerAdapter<User, MyViewHolder>) = Unit
 
     override fun GetData(): MutableList<User>? {
         val result=twitter.getRetweeterIds(tweetId, cursor)

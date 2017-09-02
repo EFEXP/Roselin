@@ -1,6 +1,7 @@
 package xyz.donot.roselin.view.custom;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.Fragment;
@@ -41,6 +42,7 @@ public abstract class DynamicViewPager extends PagerAdapter {
     public void startUpdate(ViewGroup container) {
     }
 
+    @SuppressLint("CommitTransaction")
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         // If we already have this item instantiated, there is nothing

@@ -14,12 +14,8 @@ import xyz.donot.roselin.view.custom.MyViewHolder
 class TrendFragment : BaseListFragment<Trend>() {
     override fun adapterFun(): MyBaseRecyclerAdapter<Trend, MyViewHolder> =
        TrendAdapter()
-    override fun pullToRefresh(adapter:MyBaseRecyclerAdapter<Trend, MyViewHolder>) {
-
-    }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    override fun pullToRefresh(adapter:MyBaseRecyclerAdapter<Trend, MyViewHolder>) = Unit
+    override fun onCreate(savedInstanceState: Bundle?) = super.onCreate(savedInstanceState)
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         refresh.isEnabled=false

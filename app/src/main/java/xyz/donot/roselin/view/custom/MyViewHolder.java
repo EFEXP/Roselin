@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
@@ -14,7 +13,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.util.Linkify;
 import android.util.SparseArray;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Checkable;
@@ -23,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -54,7 +51,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     /**
      * Package private field to retain the associated user object and detect a change
      */
-    Object associatedObject;
+    private Object associatedObject;
 
 
     public MyViewHolder(final View view) {
@@ -190,15 +187,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
      * Alpha between 0-1.
      */
     public MyViewHolder setAlpha(@IdRes int viewId, float value) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getView(viewId).setAlpha(value);
-        } else {
-            // Pre-honeycomb hack to set Alpha value
-            AlphaAnimation alpha = new AlphaAnimation(value, value);
-            alpha.setDuration(0);
-            alpha.setFillAfter(true);
-            getView(viewId).startAnimation(alpha);
-        }
+        getView(viewId).setAlpha(value);
         return this;
     }
 
@@ -355,7 +344,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
      * or if you can use  recyclerView.addOnItemTouch(listerer)  wo also support this menthod
      */
     @SuppressWarnings("unchecked")
-    public MyViewHolder addOnClickListener(@IdRes final int viewId) {
+    private MyViewHolder addOnClickListener(@IdRes final int viewId) {
         childClickViewIds.add(viewId);
         final View view = getView(viewId);
         if (view != null) {
@@ -531,7 +520,7 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
      * @param adapter The adapter;
      * @return The MyViewHolder for chaining.
      */
-    protected MyViewHolder setAdapter(MyBaseRecyclerAdapter adapter) {
+    MyViewHolder setAdapter(MyBaseRecyclerAdapter adapter) {
         this.adapter = adapter;
         return this;
     }

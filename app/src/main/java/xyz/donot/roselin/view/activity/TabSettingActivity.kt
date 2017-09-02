@@ -40,13 +40,9 @@ private val REQUEST_LISTS=1
         supportActionBar?.setDisplayShowHomeEnabled(true)
         //Listener
        val onItemDragListener = object : OnItemDragListener {
-           override fun onItemDragMoving(source: RecyclerView.ViewHolder?, from: Int, target: RecyclerView.ViewHolder?, to: Int) {
-           }
-           override fun onItemDragStart(viewHolder: RecyclerView.ViewHolder?, pos: Int) {
-           }
-           override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder?, pos: Int) {
-               realmRecreate()
-           }
+           override fun onItemDragMoving(source: RecyclerView.ViewHolder?, from: Int, target: RecyclerView.ViewHolder?, to: Int) = Unit
+           override fun onItemDragStart(viewHolder: RecyclerView.ViewHolder?, pos: Int) = Unit
+           override fun onItemDragEnd(viewHolder: RecyclerView.ViewHolder?, pos: Int) = realmRecreate()
        }
         val dividerItemDecoration = DividerItemDecoration( tab_recycler.context, LinearLayoutManager(this@TabSettingActivity).orientation)
 
@@ -136,27 +132,25 @@ private val REQUEST_LISTS=1
         realmRecreate()
     }
     fun realmRecreate()
-    {
-        Realm.getDefaultInstance().executeTransaction {
-            realm->
-            realm.where(DBTabData::class.java).findAll().deleteAllFromRealm()
-            for (i in 0 until mAdapter.data.size)
-            {
-                val data=mAdapter.data[i]
-                realm.createObject(DBTabData::class.java).apply {
-                    type=data.type
-                    order =i
-                    screenName=data.screenName
-                    listId=data.listId
-                    listName=data.listName
-                    accountId=data.accountId
-                    searchQuery=data.searchQuery
-                    searchWord=data.searchWord
-                }
+		    = Realm.getDefaultInstance().executeTransaction {
+		        realm->
+		        realm.where(DBTabData::class.java).findAll().deleteAllFromRealm()
+		        for (i in 0 until mAdapter.data.size)
+		        {
+		            val data=mAdapter.data[i]
+		            realm.createObject(DBTabData::class.java).apply {
+		                type=data.type
+		                order =i
+		                screenName=data.screenName
+		                listId=data.listId
+		                listName=data.listName
+		                accountId=data.accountId
+		                searchQuery=data.searchQuery
+		                searchWord=data.searchWord
+		            }
 
-            }
-        }
-    }
+		        }
+		    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
