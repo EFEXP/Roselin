@@ -85,7 +85,7 @@
                 android:focusable="true"
                 android:theme="@style/AppTheme.Design"
                 >
-                <android.support.v7.widget.AppCompatEditText
+                <android.support.text.emoji.widget.EmojiEditText
                     android:id="@+id/editText_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -15,9 +15,4 @@ private val uiHandler = Handler(Looper.getMainLooper())
   uiHandler.post(runnable)
 }
 
-
-@Deprecated("Old")
- fun asyncDeprecated(runnable: () -> Unit) = Thread(runnable).start()
-
-
  fun asyncDeprecated(runnable: () -> Unit, executor: ExecutorService): Future<out Any?> = executor.submit(runnable)

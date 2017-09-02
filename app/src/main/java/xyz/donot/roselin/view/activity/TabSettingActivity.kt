@@ -68,10 +68,10 @@ private val REQUEST_LISTS=1
         mAdapter.setOnItemClickListener { _, _, position ->
             AlertDialog.Builder(this@TabSettingActivity)
                     .setTitle("削除しますか？")
-                    .setPositiveButton("OK", { dialog, _ ->
+                    .setPositiveButton("OK", {  _, _ ->
                         mAdapter.remove(position)
                     })
-                    .setNegativeButton("キャンセル",  { dialog, whichButton -> })
+                    .setNegativeButton("キャンセル",  {  _,  _ -> })
                     .show()
         }
         tab_recycler.adapter=mAdapter

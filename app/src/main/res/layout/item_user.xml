@@ -28,7 +28,7 @@
         app:layout_constraintVertical_bias="0.0"
         app:riv_corner_radius="30dip" />
 
-    <android.support.v7.widget.AppCompatTextView
+  <android.support.text.emoji.widget.EmojiTextView
         android:id="@+id/tv_username"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -37,8 +37,6 @@
         android:layout_marginTop="8dp"
         app:layout_constraintLeft_toRightOf="@+id/iv_icon"
         android:layout_marginLeft="8dp" />
-<!-- android:drawableEnd="@{user.verified ? @drawable/ic_check_circle_black_18dp : null}"
-        android:drawableRight="@{user.verified ? @drawable/ic_check_circle_black_18dp : null}"-->
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/tv_screenname"
       android:layout_width="wrap_content"
@@ -50,7 +48,7 @@
         app:layout_constraintLeft_toRightOf="@+id/tv_username"
         android:layout_marginLeft="8dp" />
 
-    <android.support.v7.widget.AppCompatTextView
+  <android.support.text.emoji.widget.EmojiTextView
         android:id="@+id/tv_description"
         android:layout_width="0dp"
       android:layout_height="wrap_content"

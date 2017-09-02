@@ -42,7 +42,7 @@ import xyz.donot.roselin.view.adapter.MainTimeLineAdapter
 
 class MainActivity : AppCompatActivity() {
    private val REQUEST_WRITE_READ=0
-   private var user:User?=null
+   private var user: User?=null
     private val receiver by lazy { MusicReceiver()}
     private val disConnectionReceiver by lazy { DisConnectionReceiver() }
     private val connectionReceiver by lazy { ConnectionReceiver() }
@@ -215,8 +215,8 @@ class MainActivity : AppCompatActivity() {
 
         val uriString=defaultSharedPreferences.getString("BackGroundUri","")
         if (!uriString.isNullOrBlank()){
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,Uri.parse(uriString))
-            main_coordinator.background=BitmapDrawable(resources, bitmap)
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.parse(uriString))
+            main_coordinator.background= BitmapDrawable(resources, bitmap)
             background_overlay.show()
         }
         if (defaultSharedPreferences.getBoolean("use_home_tab",false)){
@@ -225,7 +225,7 @@ class MainActivity : AppCompatActivity() {
         //view
         fab.setOnClickListener{start<TweetEditActivity>()}
         button_tweet.setOnClickListener {
-            if (!editText_status.text.isNullOrBlank() && editText_status.text.count() <= 140){
+            if (!editText_status.text.isNullOrBlank() && editText_status.editableText.count() <= 140){
             launch(UI){
 
                 try {

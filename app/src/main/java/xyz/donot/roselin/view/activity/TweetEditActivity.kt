@@ -23,6 +23,7 @@ import xyz.donot.roselin.model.realm.DBDraft
 import xyz.donot.roselin.service.TweetPostService
 import xyz.donot.roselin.util.extraUtils.defaultSharedPreferences
 import xyz.donot.roselin.util.extraUtils.newIntent
+import xyz.donot.roselin.util.extraUtils.show
 import xyz.donot.roselin.util.getMyId
 import xyz.donot.roselin.util.getPath
 import xyz.donot.roselin.util.getSerialized
@@ -61,7 +62,10 @@ class TweetEditActivity : AppCompatActivity() {
         }
         editText_status.setText(screenName)
         editText_status.setSelection(editText_status.editableText.count())
-        reply_for_status.text=statusTxt
+        if (!statusTxt.isNullOrBlank()) {  reply_for_status.text=statusTxt
+            reply_for_status.show()
+        }
+
         send_status.setOnClickListener{
                 val updateStatus= StatusUpdate(editText_status.text.toString())
                 updateStatus.inReplyToStatusId=statusId

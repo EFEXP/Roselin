@@ -4,16 +4,19 @@ import android.app.Application
 import android.app.UiModeManager
 import android.os.StrictMode
 import android.preference.PreferenceManager
+import android.support.text.emoji.EmojiCompat
+import android.support.text.emoji.bundled.BundledEmojiCompatConfig
 import android.support.v7.app.AppCompatDelegate
 import com.crashlytics.android.Crashlytics
 import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
-
 import io.fabric.sdk.android.Fabric
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import xyz.donot.roselin.model.realm.MyRealmMigration
+
+
 
 
 
@@ -48,9 +51,11 @@ class Roselin : Application() {
         }
         catch(e: Exception){}
         Realm.setDefaultConfiguration(config)
-
         val design= if(PreferenceManager.getDefaultSharedPreferences(this).getBoolean("night",true)){ AppCompatDelegate.MODE_NIGHT_YES}
         else{AppCompatDelegate.MODE_NIGHT_NO}
+        val conf=BundledEmojiCompatConfig(this)
+        conf.setReplaceAll(true)
+        EmojiCompat.init(conf)
 
         AppCompatDelegate.setDefaultNightMode(design)
         (getSystemService(UI_MODE_SERVICE)as UiModeManager).nightMode = UiModeManager.MODE_NIGHT_AUTO
