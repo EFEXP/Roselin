@@ -8,7 +8,6 @@ import twitter4j.Query
 import xyz.donot.roselin.R
 import xyz.donot.roselin.util.extraUtils.hideSoftKeyboard
 import xyz.donot.roselin.util.extraUtils.start
-import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getSerialized
 import xyz.donot.roselin.view.fragment.DatePickFragment
 
@@ -36,10 +35,12 @@ class SearchSettingActivity : AppCompatActivity() {
                 bt_search.performClick()
             }
             return@setOnEditorActionListener true }
-
-
-
-
+	    search_setting_query_absolute.setOnEditorActionListener { view, i,_ ->
+		    if (i == EditorInfo.IME_ACTION_SEARCH) {
+			    view.hideSoftKeyboard()
+			    bt_search.performClick()
+		    }
+		    return@setOnEditorActionListener true }
         day_from.setOnClickListener {
             DatePickFragment()
                 .apply { arguments= Bundle().apply { putBoolean("isFrom",true) } }
@@ -47,7 +48,10 @@ class SearchSettingActivity : AppCompatActivity() {
         day_to.setOnClickListener {DatePickFragment()
                 .apply { arguments= Bundle().apply { putBoolean("isFrom",false) } }
                 .show(supportFragmentManager,"") }
+
         bt_search.setOnClickListener{
+            if (search_setting_query.text.isBlank()&&search_setting_query_absolute.text.isBlank())
+                return@setOnClickListener
             var querytext=search_setting_query.text.toString()
                 val query=Query()
                 if(!search_setting_from.text.isNullOrEmpty()) {
@@ -85,7 +89,6 @@ class SearchSettingActivity : AppCompatActivity() {
                 querytext +=" -rt"
               query.resultType=Query.MIXED
             query.query=querytext
-            toast(querytext)
             start<SearchActivity>(Bundle().apply {
                 putByteArray("query_bundle",query.getSerialized())
                 putString("query_text",search_setting_query.text.toString())

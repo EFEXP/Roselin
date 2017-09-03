@@ -210,7 +210,5 @@
             android:gravity="center"
             tools:text="20000" />
     </LinearLayout>
-
-
 </android.support.constraint.ConstraintLayout>
 

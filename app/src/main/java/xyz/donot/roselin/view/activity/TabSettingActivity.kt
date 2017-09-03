@@ -104,6 +104,14 @@ private val REQUEST_LISTS=1
                                 })
                                 realmRecreate()
                             }
+	                        "ダイレクトメール"->{
+		                        mAdapter.addData( DBTabData().apply {
+			                        type= DM
+			                        accountId= getMyId()
+			                        screenName= getMyScreenName()
+		                        })
+		                        realmRecreate()
+	                        }
                             "検索"->{
                                 SearchSettingFragment().show(supportFragmentManager,"")
                             }
@@ -129,6 +137,7 @@ private val REQUEST_LISTS=1
             searchQuery=query.getSerialized()
            searchWord= querytext
         })
+
         realmRecreate()
     }
     fun realmRecreate()
@@ -161,6 +170,8 @@ private val REQUEST_LISTS=1
                     type= LIST
                     listName=data.getStringExtra("listName")
                     listId=data.getLongExtra("listId",0L)
+	                accountId=data.getLongExtra("userId",0L)
+
                 })
             }
             realmRecreate()
@@ -181,7 +192,8 @@ private val REQUEST_LISTS=1
                     NOTIFICATION->{setText(R.id.tv_tabname,text)}
                     TREND->{setText(R.id.tv_tabname,text)}
                     SEARCH->{setText(R.id.tv_tabname,item.searchWord)}
-                    else->{throw Exception()}
+                    DM->{setText(R.id.tv_tabname,text)}
+                    else->{throw IllegalArgumentException()}
                 }
             val image= ResourcesCompat.getDrawable(resources, when (item.type){
                     HOME->{R.drawable.ic_home}
@@ -190,7 +202,8 @@ private val REQUEST_LISTS=1
                     NOTIFICATION->{R.drawable.ic_notifications}
                    TREND->{R.drawable.ic_trending}
                 SEARCH->{R.drawable.ic_search}
-                 else->{throw Exception()}
+	            DM->{R.drawable.ic_mail}
+                 else->{throw IllegalArgumentException()}
                 },null)
                 getView<ImageView>(R.id.iv_icon).setImageDrawable(image)
 

@@ -2,11 +2,12 @@ package xyz.donot.roselin.model.realm
 
 
 import io.realm.RealmObject
-import io.realm.annotations.RealmClass
+import io.realm.annotations.Required
 
-@RealmClass
+
 open class DBDraft : RealmObject() {
     open  var accountId:Long =0
+	@Required
     open  var text:String =""
     open  var replyToStatusId:Long =0
     open var replyToScreenName:String=""

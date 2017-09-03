@@ -14,7 +14,6 @@ import twitter4j.ResponseList
 import twitter4j.Status
 import twitter4j.StatusDeletionNotice
 import xyz.donot.roselin.util.extraUtils.mainThread
-import xyz.donot.roselin.util.extraUtils.tExceptionToast
 import xyz.donot.roselin.util.getDeserialized
 import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselin.view.custom.MyViewHolder
@@ -31,6 +30,7 @@ class HomeTimeLineFragment : TimeLineFragment(){
                 registerReceiver(deleteReceiver, IntentFilter("DeleteStatus"))
             }
         }
+
     }
 
     override fun pullToRefresh(adapter: MyBaseRecyclerAdapter<Status, MyViewHolder>) {
@@ -39,7 +39,7 @@ class HomeTimeLineFragment : TimeLineFragment(){
                 val result =twitter.getHomeTimeline(Paging(adapter.data[0].id))
                 insertDataBackground(result)
             } catch (e: Exception) {
-               activity.tExceptionToast(e)
+             //  activity.tExceptionToast(e)
             }
         }
 

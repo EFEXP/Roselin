@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 
 class FixedViewPager : ViewPager {
-	private var mStartDragX: Float = 100F
+	private var mStartDragX: Float = 130F
 	var mListener: OnSwipeOutListener? = null
 
 	constructor(context: Context) : super(context)
@@ -29,7 +29,7 @@ class FixedViewPager : ViewPager {
 
 			val x = ev.x
 			when (ev.action) {
-				MotionEvent.ACTION_DOWN -> mStartDragX = x+100F
+				MotionEvent.ACTION_DOWN -> mStartDragX = x +  130F
 				MotionEvent.ACTION_MOVE -> if (mStartDragX < x && currentItem == 0) {
 					mListener?.onSwipeOutAtStart()
 				} else if (mStartDragX > x && currentItem == adapter.count - 1) {

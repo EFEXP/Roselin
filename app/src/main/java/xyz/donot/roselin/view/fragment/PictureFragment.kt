@@ -25,49 +25,51 @@ import java.util.*
 
 
 class PictureFragment : Fragment() {
-    private   val stringURL by lazy {  arguments.getString("url") }
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val v = inflater.inflate(R.layout.fragment_picture, container, false)
-        Picasso.with(activity).load(stringURL).into(object : Target {
-            override fun onPrepareLoad(placeHolderDrawable: Drawable?) = Unit
+	private val stringURL by lazy { arguments.getString("url") }
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+		val v = inflater.inflate(R.layout.fragment_picture, container, false)
+		Picasso.with(activity).load(stringURL).into(object : Target {
+			override fun onPrepareLoad(placeHolderDrawable: Drawable?) = Unit
 
-            override fun onBitmapFailed(errorDrawable: Drawable?) = Unit
+			override fun onBitmapFailed(errorDrawable: Drawable?) = Unit
 
-            override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) = v.iv_picture.setImage(ImageSource.bitmap(bitmap))
-        })
-        v.bt_download.onClick {
-            Save(stringURL)
-        }
+			override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) = v.iv_picture.setImage(ImageSource.bitmap(bitmap))
+		})
+		v.bt_download.onClick {
+			Save(stringURL)
+		}
 
 
-        return v }
-    //実際のセーブ処理
-    private fun Save(stringURL:String) = Picasso.with(activity).load( stringURL).into(object :com.squareup.picasso.Target{
-        override fun onBitmapFailed(p0: Drawable?) = Unit
-        override fun onBitmapLoaded(p0: Bitmap, p1: Picasso.LoadedFrom?) {
-            val file  = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-            try{
-                val name= Date().time
-                val attachName = File("$file/", "$name.jpg")
-                FileOutputStream(attachName).use {
-                    p0.compress(Bitmap.CompressFormat.JPEG,100,it)
-                    it.flush()
-                    toast("保存しました")
-                }
+		return v
+	}
 
-                val values=  ContentValues().apply {
-                    put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-                    put(MediaStore.Images.Media.TITLE,"$file/$name.jpg")
-                    put("_data",attachName.absolutePath )
-                }
-               activity. contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-            }
-            catch(ex: IOException){
-                ex.printStackTrace()
-            }
-        }
-        override fun onPrepareLoad(p0: Drawable?) = Unit
+	//実際のセーブ処理
+	private fun Save(stringURL: String) = Picasso.with(activity).load(stringURL).into(object : com.squareup.picasso.Target {
+		override fun onBitmapFailed(p0: Drawable?) = Unit
+		override fun onBitmapLoaded(p0: Bitmap, p1: Picasso.LoadedFrom?) {
+			val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+			try {
+				val name = Date().time
+				val attachName = File("$file/", "$name.jpg")
+				FileOutputStream(attachName).use {
+					p0.compress(Bitmap.CompressFormat.JPEG, 100, it)
+					it.flush()
+					toast("保存しました")
+				}
 
-    })
+				val values = ContentValues().apply {
+					put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+					put(MediaStore.Images.Media.TITLE, "$file/$name.jpg")
+					put("_data", attachName.absolutePath)
+				}
+				activity.contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+			} catch (ex: IOException) {
+				ex.printStackTrace()
+			}
+		}
+
+		override fun onPrepareLoad(p0: Drawable?) = Unit
+
+	})
 
 }

@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <android.support.constraint.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/constraintLayout_tw_edit"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_width="match_parent"
-        tools:showIn="@layout/activity_tweet_edit"
-        android:layout_height="match_parent">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout_tw_edit"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_tweet_edit">
 
-        <android.support.text.emoji.widget.EmojiTextView
-            android:id="@+id/reply_for_status"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <android.support.text.emoji.widget.EmojiAppCompatTextView
+        android:id="@+id/reply_for_status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.text.emoji.widget.EmojiEditText
+    <android.support.text.emoji.widget.EmojiAppCompatEditText
         android:id="@+id/editText_status"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -36,31 +35,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reply_for_status" />
 
-        <com.wafflecopter.charcounttextview.CharCountTextView
-            android:id="@+id/tvTextCounter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText_status"
-            app:maxCharacters="140" />
+    <com.wafflecopter.charcounttextview.CharCountTextView
+        android:id="@+id/tvTextCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText_status"
+        app:maxCharacters="140" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/pic_recycler_view"
-            android:layout_width="0dp"
-            android:layout_height="300dp"
-            android:layout_marginTop="8dp"
-            android:scrollbars="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:overScrollMode="never"
-            app:layout_constraintTop_toBottomOf="@+id/tools_layout"
-            tools:layout_height="@dimen/dp_72" />
-
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/pic_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="8dp"
+        android:overScrollMode="never"
+        android:scrollbars="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTextCounter"
+        tools:layout_height="@dimen/dp_72" />
     <LinearLayout
         android:id="@+id/tools_layout"
         android:layout_width="match_parent"
@@ -130,5 +128,7 @@
     </LinearLayout>
 
 
-    </android.support.constraint.ConstraintLayout>
+
+
+</android.support.constraint.ConstraintLayout>
 

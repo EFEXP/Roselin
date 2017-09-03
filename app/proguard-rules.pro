@@ -7,10 +7,10 @@
 }
 
 -dontwarn com.bumptech.glide.**
+-dontwarn xyz.donot.roselin.view.**
 
 -keep class android.support.text.emoji.widget.*{ *; }
--keep class android.support.v7.widget.SearchView { *; }
--keep class android.support.v7.widget.Toolbar { *; }
+-keep class  android.support.v7.widget.* { *; }
 -keep public class  * extends io.realm.RealmRecyclerViewAdapter {*;}
 -dontwarn com.yalantis.**
 -dontwarn okio.**
@@ -18,7 +18,7 @@
 -dontwarn io.github.kexanie.**
 -keep class android.support.v4.content{*;}
 
-
+-keep public class  * extends RecyclerView.ViewHolder{ *; }
 #twitter4j
 -dontwarn twitter4j.**
 -keep class twitter4j.** { *; }

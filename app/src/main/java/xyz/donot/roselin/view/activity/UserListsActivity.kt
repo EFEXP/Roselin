@@ -34,6 +34,7 @@ class UserListsActivity : AppCompatActivity() {
 		val intent = Intent().apply {
 			putExtra("listId", listId)
 			putExtra("listName", listName)
+			putExtra("userId", intent.getLongExtra("userId", 0L))
 		}
 		setResult(Activity.RESULT_OK, intent)
 		finish()

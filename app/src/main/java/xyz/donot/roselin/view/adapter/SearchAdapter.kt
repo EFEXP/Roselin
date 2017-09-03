@@ -51,7 +51,7 @@ class SearchAdapter(private val query: Query, private val queryText: String, fm:
 			super.onViewCreated(view, savedInstanceState)
 			adapter.setOnItemClickListener { _, _, position ->
 				val intent = activity.intent<UserActivity>()
-				intent.putExtra("user_id", adapter.getItem(position))
+				intent.putExtra("user_id", adapter.getItem(position)?.id)
 				activity.startActivity(intent)
 				adapter.getItem(position)
 

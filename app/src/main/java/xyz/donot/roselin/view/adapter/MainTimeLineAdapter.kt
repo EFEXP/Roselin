@@ -12,6 +12,7 @@ import xyz.donot.roselin.view.fragment.status.HomeTimeLineFragment
 import xyz.donot.roselin.view.fragment.status.ListTimeLine
 import xyz.donot.roselin.view.fragment.status.MentionTimeLine
 import xyz.donot.roselin.view.fragment.status.SearchTimeline
+import xyz.donot.roselin.view.fragment.user.DMListFragment
 
 
 class MainTimeLineAdapter(fm: FragmentManager, private val realmResults: List<DBTabData>) : FragmentPagerAdapter(fm) {
@@ -19,11 +20,11 @@ class MainTimeLineAdapter(fm: FragmentManager, private val realmResults: List<DB
 	override fun getItem(i: Int): Fragment = when (realmResults[i].type) {
 		HOME -> HomeTimeLineFragment().apply {
 			val t = realm.where(DBAccount::class.java).equalTo("id", realmResults[i].accountId).findFirst()
-			arguments = Bundle { putByteArray("twitter", realm.copyFromRealm(t).twitter) }
+			arguments = Bundle { putByteArray("twitter", realm.copyFromRealm(t)?.twitter) }
 		}
 		MENTION -> MentionTimeLine().apply {
 			val t = realm.where(DBAccount::class.java).equalTo("id", realmResults[i].accountId).findFirst()
-			arguments = Bundle { putByteArray("twitter", realm.copyFromRealm(t).twitter) }
+			arguments = Bundle { putByteArray("twitter", realm.copyFromRealm(t)?.twitter) }
 		}
 		SEARCH -> SearchTimeline().apply {
 			arguments = Bundle {
@@ -35,11 +36,14 @@ class MainTimeLineAdapter(fm: FragmentManager, private val realmResults: List<DB
 			val t = realm.where(DBAccount::class.java).equalTo("id", realmResults[i].accountId).findFirst()
 			arguments = Bundle {
 				putLong("listId", realmResults[i].listId)
-				putByteArray("twitter", realm.copyFromRealm(t).twitter)
-			}
+				putByteArray("twitter", realm.copyFromRealm(t)?.twitter) }
 		}
 		NOTIFICATION -> NotificationFragment()
 		TREND -> TrendFragment()
+		DM -> DMListFragment().apply {
+			val t = realm.where(DBAccount::class.java).equalTo("id", realmResults[i].accountId).findFirst()
+			arguments = Bundle { putByteArray("twitter", realm.copyFromRealm(t)?.twitter) }
+		}
 		else -> throw IllegalStateException()
 	}
 

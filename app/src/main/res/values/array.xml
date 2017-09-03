@@ -27,6 +27,7 @@
         <item>通知</item>
         <item>検索</item>
         <item>トレンド</item>
+       <!-- <item>ダイレクトメール</item>-->
     </string-array>
     <string-array name="compress_quality_values">
         <item>70</item>

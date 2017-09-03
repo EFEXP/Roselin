@@ -716,6 +716,6 @@ Talon はその代わりに TwitPic を使用して画像をアップロード�
     <string name="title_search_setting">検索設定</string>
     <string name="revert_name">名前を戻す</string>
     <string name="title_about">このアプリについて</string>
-
-
+    <string name="banner_ad_unit_id">ca-app-pub-1408046229935275/9441889060</string>
+    <string name="app_ad_id">ca-app-pub-1408046229935275~9469809223</string>
 </resources>

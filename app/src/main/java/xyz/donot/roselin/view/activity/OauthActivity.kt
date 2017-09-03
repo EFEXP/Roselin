@@ -40,7 +40,6 @@ class OauthActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_oauth)
 		setSupportActionBar(toolbar)
-
 		login_button.callback = object : Callback<TwitterSession>() {
 			override fun success(result: Result<TwitterSession>) {
 				val builder = ConfigurationBuilder()
@@ -77,7 +76,7 @@ class OauthActivity : AppCompatActivity() {
 					val realmAccounts = realm.where(DBAccount::class.java).equalTo("isMain", true)
 					//Twitterインスタンス保存
 					if (realmAccounts.findFirst() != null) {
-						realmAccounts.findFirst().isMain = false
+						realmAccounts.findFirst()?.isMain = false
 					}
 					if (realm.where(DBAccount::class.java).equalTo("id", result.id).findFirst() == null) {
 						realm.createObject(DBAccount::class.java, result.id).apply {
@@ -118,7 +117,7 @@ class OauthActivity : AppCompatActivity() {
 	}
 
 	fun logUser(tw: Twitter) {
-		async(CommonPool) {
+		Thread{ Runnable {
 			Answers.getInstance().logLogin(LoginEvent()
 					.putMethod("Twitter")
 					.putSuccess(true))
@@ -129,7 +128,8 @@ class OauthActivity : AppCompatActivity() {
 
 			Crashlytics.setUserIdentifier(tw.id.toString())
 			Crashlytics.setUserName(tw.screenName)
-		}
+
+		}}.start()
 	}
 
 }

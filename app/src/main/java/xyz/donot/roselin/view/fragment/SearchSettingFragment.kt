@@ -66,6 +66,7 @@ class SearchSettingFragment:DialogFragment(){
                     toast(querytext)
 
                     (activity as TabSettingActivity).setSearchWord(query,text)
+                    dismiss()
 
                 }
 

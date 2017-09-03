@@ -20,7 +20,6 @@ class UserListActivity : AppCompatActivity() {
 					FriendUserList()
 				else
 					FollowerUserList()
-
 		fragment.arguments = bundle
 		supportFragmentManager.beginTransaction().apply {
 			add(R.id.container, fragment)

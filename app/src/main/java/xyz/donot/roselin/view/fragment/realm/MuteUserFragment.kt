@@ -2,7 +2,7 @@ package xyz.donot.roselin.view.fragment.realm
 
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
-import android.support.text.emoji.widget.EmojiTextView
+import android.support.text.emoji.widget.EmojiAppCompatTextView
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatDialogFragment
 import android.support.v7.widget.AppCompatTextView
@@ -73,8 +73,8 @@ class MuteUserFragment : AppCompatDialogFragment(){
         inner  class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val icon:ImageView=view.iv_icon
             val screenname: AppCompatTextView =view.tv_screenname
-            val username: EmojiTextView =view.tv_username
-            val description: EmojiTextView =view.tv_description
+            val username: EmojiAppCompatTextView =view.tv_username
+            val description: EmojiAppCompatTextView =view.tv_description
             val background: ConstraintLayout =view.item_user_background
         }
 

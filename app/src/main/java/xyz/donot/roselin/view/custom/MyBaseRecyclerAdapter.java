@@ -38,7 +38,6 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 
-
 public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends RecyclerView.Adapter<K> {
 
     //load more
@@ -48,7 +47,6 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
     private MyLoadMoreView mLoadMoreView = new MySimpleLoadMoreView();
     private RequestLoadMoreListener mRequestLoadMoreListener;
     private boolean mEnableLoadMoreEndClick = false;
-
 
 
     private OnItemClickListener mOnItemClickListener;
@@ -99,6 +97,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
             throw new RuntimeException("please bind recyclerView first!");
         }
     }
+
     private void openLoadMore(RequestLoadMoreListener requestLoadMoreListener) {
         this.mRequestLoadMoreListener = requestLoadMoreListener;
         mNextLoadEnable = true;
@@ -310,7 +309,6 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
     }
 
 
-
     public MyBaseRecyclerAdapter(@LayoutRes int layoutResId, @Nullable List<T> data) {
         this.mData = data == null ? new ArrayList<T>() : data;
         if (layoutResId != 0) {
@@ -327,10 +325,6 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
     }
 
 
-
-
-
-
     @Deprecated
     public void add(@IntRange(from = 0) int position, @NonNull T item) {
         addData(position, item);
@@ -340,7 +334,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
     public void addData(@IntRange(from = 0) int position, @NonNull T data) {
         mData.add(position, data);
         notifyItemInserted(position + getHeaderLayoutCount());
-       compatibilityDataSizeChanged(1);
+        compatibilityDataSizeChanged(1);
     }
 
     public void addData(@NonNull T data) {
@@ -534,7 +528,8 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
                 bindViewClickListener(baseViewHolder);
         }
         baseViewHolder.setAdapter(this);
-        return baseViewHolder;}
+        return baseViewHolder;
+    }
 
     private K getLoadingView(ViewGroup parent) {
         View view = getItemView(mLoadMoreView.getLayoutId(), parent);
@@ -658,7 +653,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
 
         switch (viewType) {
             case 0:
-                convert(holder, getItem(position - getHeaderLayoutCount()),position);
+                convert(holder, getItem(position - getHeaderLayoutCount()), position);
                 break;
             case LOADING_VIEW:
                 mLoadMoreView.convert(holder);
@@ -670,7 +665,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
             case FOOTER_VIEW:
                 break;
             default:
-                convert(holder, getItem(position - getHeaderLayoutCount()),position);
+                convert(holder, getItem(position - getHeaderLayoutCount()), position);
                 break;
         }
     }
@@ -1084,6 +1079,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         void onLoadMoreRequested();
 
     }
+
     public void openLoadAnimation(BaseAnimation animation) {
         this.mOpenAnimationEnable = true;
         this.mCustomAnimation = animation;
@@ -1100,7 +1096,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
     }
 
 
-    protected abstract void convert(K helper, T item,int position);
+    protected abstract void convert(K helper, T item, int position);
 
 
     @Nullable
@@ -1120,6 +1116,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         }
         return viewHolder.getView(viewId);
     }
+
     @Override
     public long getItemId(int position) {
         return position;
@@ -1180,6 +1177,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
     public int expand(@IntRange(from = 0) int position, boolean animate) {
         return expand(position, animate, true);
     }
+
     public int expand(@IntRange(from = 0) int position) {
         return expand(position, true, true);
     }
@@ -1352,7 +1350,6 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
     }
 
 
-
     public interface OnItemChildLongClickListener {
 
         boolean onItemChildLongClick(MyBaseRecyclerAdapter adapter, View view, int position);
@@ -1388,7 +1385,6 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
     public void setOnItemChildLongClickListener(OnItemChildLongClickListener listener) {
         mOnItemChildLongClickListener = listener;
     }
-
 
 
     private OnItemLongClickListener getOnItemLongClickListener() {

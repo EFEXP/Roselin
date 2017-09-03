@@ -20,6 +20,7 @@ import twitter4j.User
 import xyz.donot.roselin.R
 import xyz.donot.roselin.model.realm.DBCustomProfile
 import xyz.donot.roselin.model.realm.DBMute
+import xyz.donot.roselin.util.extraUtils.logd
 import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getSerialized
 import xyz.donot.roselin.util.getTwitterInstance
@@ -27,8 +28,6 @@ import xyz.donot.roselin.view.adapter.UserTimeLineAdapter
 
 
 class UserActivity : AppCompatActivity() {
-	private val userId: Long by lazy { intent.getLongExtra("user_id", 0L) }
-	private val screenName: String by lazy { intent.getStringExtra("screen_name") }
 	private var mUser: User? = null
 	private val realm by lazy { Realm.getDefaultInstance() }
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,19 +36,21 @@ class UserActivity : AppCompatActivity() {
 			findViewById<View>(android.R.id.content).systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 		}
 		setContentView(R.layout.activity_user)
-		if (userId == 0L) {
+		if (intent.hasExtra("screen_name")) {
 			launch(UI) {
 				try {
-					mUser = async(CommonPool) { getTwitterInstance().showUser(screenName) }.await()
+					mUser = async(CommonPool) { getTwitterInstance().showUser(intent.getStringExtra("screen_name")) }.await()
 					setUp(mUser!!)
 				} catch (e: Exception) {
 					toast(e.localizedMessage)
 				}
 			}
 		} else {
+			val t=intent.getLongExtra("user_id", 0L)
+			logd { t.toString() }
 			launch(UI) {
 				try {
-					mUser = async(CommonPool) { getTwitterInstance().showUser(userId) }.await()
+					mUser = async(CommonPool) { getTwitterInstance().showUser(t) }.await()
 					setUp(mUser!!)
 				} catch (e: Exception) {
 					toast(e.localizedMessage)
@@ -109,7 +110,6 @@ class UserActivity : AppCompatActivity() {
 											customname = editText.text.toString()
 										}
 								)
-
 							}
 							toast("変更しました")
 						}

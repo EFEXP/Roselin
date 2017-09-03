@@ -23,7 +23,6 @@ class ListTimeLine:TimeLineFragment(){
                 }
             catch (e:Exception){
                 activity.tExceptionToast(e)
-
             }
         }
 

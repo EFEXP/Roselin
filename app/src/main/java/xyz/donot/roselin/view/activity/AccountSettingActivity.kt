@@ -35,7 +35,7 @@ class AccountSettingActivity : AppCompatActivity() {
 		adapter.setOnItemLongClickListener { _, _, position ->
 			Realm.getDefaultInstance().use {
 				it.executeTransaction {
-					it.where(DBAccount::class.java).equalTo("id", adapter.data[position].id).findFirst().deleteFromRealm()
+					it.where(DBAccount::class.java).equalTo("id", adapter.data[position].id).findFirst()?.deleteFromRealm()
 
 				}
 				toast("削除しました")
@@ -46,8 +46,8 @@ class AccountSettingActivity : AppCompatActivity() {
 		adapter.setOnItemClickListener { _, _, position ->
 			Realm.getDefaultInstance().use {
 				it.executeTransaction {
-					it.where(DBAccount::class.java).equalTo("isMain", true).findFirst().isMain = false
-					it.where(DBAccount::class.java).equalTo("id", adapter.data[position].id).findFirst().apply {
+					it.where(DBAccount::class.java).equalTo("isMain", true).findFirst()?.isMain = false
+					it.where(DBAccount::class.java).equalTo("id", adapter.data[position].id).findFirst()?.apply {
 						isMain = true
 					}
 				}

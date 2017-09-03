@@ -28,6 +28,12 @@ fun getClientName(source: String): String {
 fun getExpandedText(status: Status): String {
     var text =status.text
     if (status.displayTextRangeStart>=0&&status.displayTextRangeEnd>=0)
-   text=status.text.substring(status.displayTextRangeStart,status.displayTextRangeEnd)
+    try {
+	    text=status.text.substring(status.displayTextRangeStart,status.displayTextRangeEnd)
+    }
+    catch(e:Exception){
+        e.printStackTrace()
+        return text
+    }
     return text
 }

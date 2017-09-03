@@ -15,11 +15,13 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
 
 
+
 repositories {
     maven { url 'https://maven.fabric.io/public' }
     mavenCentral()
     maven { url "https://jitpack.io" }
     maven { url "http://dl.bintray.com/kotlin/kotlin-eap-1.1" }
+    maven { url 'https://github.com/uPhyca/stetho-realm/raw/master/maven-repo' }
 }
 
 android {
@@ -33,28 +35,28 @@ android {
         versionCode 1
         versionName "0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
             shrinkResources true
             minifyEnabled true
-            manifestPlaceholders = [appName: "@string/app_name"]
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            shrinkResources false
+            shrinkResources  false
             minifyEnabled false
-            applicationIdSuffix ".debug"
-            manifestPlaceholders = [appName: "Roselin α"]
+           // useProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
     }
     project.ext.versionCodes = ['armeabi': 1, 'armeabi-v7a': 2, 'arm64-v8a': 3, 'mips': 5, 'mips64': 6, 'x86': 8, 'x86_64': 9]
     splits {
         abi {
             enable true
             reset()
-            include 'armeabi-v7a', 'x86'
+            include 'x86', 'armeabi-v7a'
             universalApk false
 
         }
@@ -67,7 +69,6 @@ android {
     }
 }
 dependencies {
-
     def twitter4j = "4.0.6"
     implementation "org.twitter4j:twitter4j-core:${twitter4j}"
     implementation "org.twitter4j:twitter4j-media-support:${twitter4j}"
@@ -76,7 +77,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${support}"
     implementation "com.android.support:design:${support}"
     implementation "com.android.support:support-v4:${support}"
-    implementation "com.android.support:support-emoji:${support}"
+    implementation "com.android.support:support-emoji-appcompat:${support}"
     implementation "com.android.support:cardview-v7:${support}"
     implementation "com.android.support:customtabs:${support}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
@@ -96,8 +97,12 @@ dependencies {
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.6.0'
     implementation 'com.klinkerapps:link_builder:1.6.1'
     implementation 'com.github.xbroak:CharCountTextView:v1.0'
-    implementation 'com.github.bassaer:chatmessageview:1.3.4'
     def coroutine_version = '0.18'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+    implementation 'com.google.firebase:firebase-ads:11.2.0'
+    implementation 'com.facebook.stetho:stetho:1.5.0'
+    implementation 'com.uphyca:stetho_realm:2.1.0'
+    implementation 'com.android.support:multidex:1.0.2'
 }
+apply plugin: 'com.google.gms.google-services'

@@ -44,7 +44,7 @@ import xyz.donot.roselin.view.custom.FixedViewPager
 class MainActivity : AppCompatActivity() {
 	private val REQUEST_WRITE_READ = 0
 	private var user: User? = null
-	private val receiver by lazy { MusicReceiver() }
+	private var receiver :BroadcastReceiver?=null
 	private val disConnectionReceiver by lazy { DisConnectionReceiver() }
 	private val connectionReceiver by lazy { ConnectionReceiver() }
 	private val realm = Realm.getDefaultInstance()
@@ -56,16 +56,17 @@ class MainActivity : AppCompatActivity() {
 			this.finish()
 		} else if (isConnected()) {
 			//Receiver
+			LocalBroadcastManager.getInstance(this).apply {
+				registerReceiver(disConnectionReceiver, IntentFilter("OnDisconnect"))
+				registerReceiver(connectionReceiver, IntentFilter("OnConnect"))
+			}
 			val intentFilter = IntentFilter().apply {
 				addAction("com.android.music.metachanged")
 				addAction("com.android.music.playstatechanged")
 				addAction("com.android.music.playbackcomplete")
 			}
+			receiver=MusicReceiver()
 			registerReceiver(receiver, intentFilter)
-			LocalBroadcastManager.getInstance(this).apply {
-				registerReceiver(disConnectionReceiver, IntentFilter("OnDisconnect"))
-				registerReceiver(connectionReceiver, IntentFilter("OnConnect"))
-			}
 
 			//initial tabdata
 			if (realm.where(DBTabData::class.java).count() == 0L) {
@@ -90,7 +91,6 @@ class MainActivity : AppCompatActivity() {
 					}
 				}
 			}
-
 			toolbar.apply {
 				title = context.getString(R.string.title_home)
 				inflateMenu(R.menu.menu_main)
@@ -106,7 +106,6 @@ class MainActivity : AppCompatActivity() {
 			// stream&savedInstance
 			if (savedInstanceState == null) {
 				if (defaultSharedPreferences.getBoolean("use_home_stream", true)) {
-
 					startService<StreamingService>()
 				}
 				if (defaultSharedPreferences.getBoolean("use_search_stream", false)) {
@@ -123,6 +122,10 @@ class MainActivity : AppCompatActivity() {
 			if (!defaultSharedPreferences.getBoolean("quick_tweet", false)) {
 				editText_layout.visibility = View.GONE
 			}
+
+			realm.where(DBAccount::class.java).findAll().addChangeListener( { t, changeSet ->
+				t.forEach { toast((it.twitter!=null).toString()) }})
+
 			setUpHeader()
 			setUpDrawerEvent()
 			setUpView()
@@ -271,6 +274,7 @@ class MainActivity : AppCompatActivity() {
 			unregisterReceiver(connectionReceiver)
 			unregisterReceiver(disConnectionReceiver)
 		}
+		if (receiver!=null)unregisterReceiver(receiver)
 	}
 
 	inner class ConnectionReceiver : BroadcastReceiver() {
@@ -284,7 +288,6 @@ class MainActivity : AppCompatActivity() {
 	inner class MusicReceiver : BroadcastReceiver() {
 		override fun onReceive(context: Context, intent: Intent) {
 			val bundle = intent.extras
-			toast(bundle.getString("track"))
 			context.defaultSharedPreferences.edit().apply {
 				putString("track", bundle.getString("track"))
 				putString("artist", bundle.getString("artist"))

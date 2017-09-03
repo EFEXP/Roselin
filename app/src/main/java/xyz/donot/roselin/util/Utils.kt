@@ -49,7 +49,7 @@ fun<T> ByteArray.getDeserialized():T{
 
 fun getTwitterInstance(): twitter4j.Twitter = Realm.getDefaultInstance().use {
     val ac= it.where(DBAccount::class.java).equalTo("isMain",true).findFirst()
-    return ac.twitter?.getDeserialized<Twitter>()?:throw IllegalStateException()
+    return ac?.twitter?.getDeserialized<Twitter>()?:throw IllegalStateException()
 }
 fun getOfficialInstance(context: Context): twitter4j.Twitter {
     val builder= ConfigurationBuilder()
@@ -60,11 +60,11 @@ fun getOfficialInstance(context: Context): twitter4j.Twitter {
 
 
 fun getMyScreenName(): String = Realm.getDefaultInstance().use {
-  val b=  it.where(DBAccount::class.java).equalTo("isMain",true).findFirst().user!!.getDeserialized<User>()
+  val b=  it.where(DBAccount::class.java).equalTo("isMain",true).findFirst()?.user!!.getDeserialized<User>()
     return  b.screenName
 }
 fun getMyId(): Long = Realm.getDefaultInstance().use {
-    return  it.where(DBAccount::class.java).equalTo("isMain",true).findFirst().id
+    return  it.where(DBAccount::class.java).equalTo("isMain",true).findFirst()!!.id
 }
 fun haveToken(): Boolean = Realm.getDefaultInstance().use {
     logd( "AddedAccounts","You have ${it.where(DBAccount::class.java).count()} accounts!")

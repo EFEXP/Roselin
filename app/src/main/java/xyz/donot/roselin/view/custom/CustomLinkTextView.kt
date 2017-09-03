@@ -1,13 +1,13 @@
 package xyz.donot.roselin.view.custom
 
 import android.content.Context
-import android.support.text.emoji.widget.EmojiTextView
+import android.support.text.emoji.widget.EmojiAppCompatTextView
 import android.util.AttributeSet
 import android.view.MotionEvent
 import com.klinker.android.link_builder.TouchableMovementMethod
 
 
-class CustomLinkTextView : EmojiTextView {
+class CustomLinkTextView : EmojiAppCompatTextView {
 
     constructor(context: Context) : super(context)
 
