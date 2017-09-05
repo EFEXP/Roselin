@@ -55,12 +55,12 @@ class MuteUserFragment : AppCompatDialogFragment(){
                 background.setOnClickListener {
                     AlertDialog.Builder(activity)
                             .setTitle("削除しますか？")
-                            .setPositiveButton("OK", { dialog, _ ->
+                            .setPositiveButton("OK", {_, _ ->
                                 Realm.getDefaultInstance().executeTransaction{
                                     item.deleteFromRealm()
                                 }
                             })
-                            .setNegativeButton("キャンセル",  { dialog, whichButton -> })
+                            .setNegativeButton("キャンセル",  { _,_ -> })
                             .show()
                 }
             }

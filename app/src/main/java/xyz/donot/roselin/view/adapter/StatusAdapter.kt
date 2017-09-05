@@ -28,10 +28,13 @@ import xyz.donot.roselin.view.activity.UserActivity
 import xyz.donot.roselin.view.activity.VideoActivity
 import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselin.view.custom.MyViewHolder
+import kotlin.properties.Delegates
 
 
 class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_classic_tweet) {
+	var realm:Realm by Delegates.notNull()
 	override fun convert(helper: MyViewHolder, status: Status, position: Int) {
+		realm = Realm.getDefaultInstance()
 		helper.getView<ViewGroup>(R.id.item_tweet_root).apply {
 			val item = if (status.isRetweet) {
 				textview_is_retweet.text = "@${status.user.screenName}がリツイート"
@@ -51,8 +54,6 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
 
 							})
 			//テキスト関係
-
-			val realm = Realm.getDefaultInstance()
 			val query = realm.where(DBCustomProfile::class.java).equalTo("id", item.user.id)
 			if (query.count() > 0) {
 				textview_username.text = query.findFirst()?.customname }
@@ -110,7 +111,7 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
 							val result = async(CommonPool) { getTwitterInstance().destroyFavorite(status.id) }.await()
 							replace(status, result)
 						} catch (e: Exception) {
-							mContext.tExceptionToast(e)
+							mContext.twitterExceptionToast(e)
 						}
 					}
 				} else {
@@ -119,7 +120,7 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
 							val result = async(CommonPool) { getTwitterInstance().createFavorite(status.id) }.await()
 							replace(status, result)
 						} catch (e: Exception) {
-							mContext.tExceptionToast(e)
+							mContext.twitterExceptionToast(e)
 						}
 					}
 				}
@@ -132,14 +133,12 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
 							replace(status, result)
 							mContext.toast("RTしました")
 						} catch (e: Exception) {
-							mContext.tExceptionToast(e)
+							mContext.twitterExceptionToast(e)
 						}
 
 					}
 				}
 			}
-
-
 			//mediaType
 			val statusMediaIds = item.images
 			if (statusMediaIds.isNotEmpty()) {
@@ -168,7 +167,7 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
 			} else {
 				recyclerview_picture.hide()
 			}
-			Picasso.with(mContext).load(item.user.biggerProfileImageURLHttps).into(imageview_icon)
+			Picasso.with(mContext).load(item.user.originalProfileImageURLHttps).into(imageview_icon)
 
 
 		}

@@ -2,7 +2,6 @@ package xyz.donot.roselin.service
 
 import android.app.IntentService
 import android.content.Intent
-import android.graphics.Bitmap
 import android.support.v4.app.NotificationCompat
 import twitter4j.StatusUpdate
 import xyz.donot.roselin.R
@@ -26,8 +25,6 @@ class TweetPostService : IntentService("TweetPostService") {
             if(intent.hasExtra("FilePath")){
                filePath=intent.getStringArrayListExtra("FilePath")
               val compressed =filePath.map { com.setQuality(Integer.parseInt(defaultSharedPreferences.getString("compress_preference",75.toString())))
-                      .setCompressFormat(Bitmap.CompressFormat.JPEG)
-                      .setDestinationDirectoryPath(cacheDir.absolutePath)
                       .compressToFile(File(it)) }
                 notificate(id)
                 val uploadedMediaId = compressed.map {  twitter.uploadMedia(it).mediaId }

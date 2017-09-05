@@ -63,23 +63,11 @@ fun logw(tag: String, exception: Throwable?) {
  }
 }
 
-fun logf(tag: String, exception: Throwable?) {
- if (RoselinConfig.logLevel <= Log.ERROR) {
-  Log.wtf(tag, logMessageWithThreadName("wtf"), exception)
- }
-}
-
-inline fun Context.logv(lazyMessage: () -> Any?) = logv(javaClass.simpleName, lazyMessage)
-
 inline fun Context.logd(lazyMessage: () -> Any?) = logd(javaClass.simpleName, lazyMessage)
 
 inline fun Context.logi(lazyMessage: () -> Any?) = logi(javaClass.simpleName, lazyMessage)
 
 inline fun Context.logw(lazyMessage: () -> Any?) = logw(javaClass.simpleName, lazyMessage)
-
-inline fun Context.loge(lazyMessage: () -> Any?) = loge(javaClass.simpleName, lazyMessage)
-
-inline fun Context.logf(lazyMessage: () -> Any?) = logf(javaClass.simpleName, lazyMessage)
 
 inline fun logv(tag: String, lazyMessage: () -> Any?, exception: Throwable? = null) {
  if (RoselinConfig.logLevel <= Log.VERBOSE) {

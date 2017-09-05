@@ -138,32 +138,32 @@
             android:id="@+id/search_setting_only_japanese"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_4"
-            android:layout_marginStart="@dimen/dp_4"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
             android:text="@string/use_only_japanese" />
 
         <CheckBox
             android:id="@+id/search_setting_links"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_4"
-            android:layout_marginStart="@dimen/dp_4"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
             android:text="@string/links" />
 
         <CheckBox
             android:id="@+id/search_setting_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_4"
-            android:layout_marginStart="@dimen/dp_4"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
             android:text="@string/pictures" />
 
         <CheckBox
             android:id="@+id/search_setting_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_4"
-            android:layout_marginStart="@dimen/dp_4"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
             android:text="@string/title_video" />
     </android.support.v7.widget.LinearLayoutCompat>
 

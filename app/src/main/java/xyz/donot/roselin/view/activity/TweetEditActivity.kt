@@ -34,6 +34,7 @@ import xyz.donot.roselin.view.fragment.DraftFragment
 import xyz.donot.roselin.view.fragment.TrendFragment
 import java.io.File
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class TweetEditActivity : AppCompatActivity() {
@@ -73,7 +74,6 @@ class TweetEditActivity : AppCompatActivity() {
 			reply_for_status.text = intent.getStringExtra("status_txt")
 			reply_for_status.show()
 		}
-
 		send_status.setOnClickListener {
 			val updateStatus = StatusUpdate(editText_status.text.toString())
 			updateStatus.inReplyToStatusId = statusId
@@ -88,19 +88,25 @@ class TweetEditActivity : AppCompatActivity() {
 			val item = mAdapter.getItem(position)
 			val color = ContextCompat.getColor(this@TweetEditActivity, R.color.colorPrimary)
 			AlertDialog.Builder(this@TweetEditActivity).setTitle("写真")
-					.setMessage("何をしますか？").setPositiveButton("編集", { _, _ ->
-				croppingUri = item
-				UCrop.of(item!!, Uri.fromFile(File(cacheDir, "${Date().time}.jpg")))
-						.withOptions(UCrop.Options().apply {
-							setImageToCropBoundsAnimDuration(100)
-							setFreeStyleCropEnabled(true)
-							setToolbarColor(color)
-							setActiveWidgetColor(color)
-							setStatusBarColor(color)
-							setAllowedGestures(UCropActivity.SCALE, UCropActivity.SCALE, UCropActivity.SCALE)
-						})
-						.start(this@TweetEditActivity)
-			}).setNegativeButton("削除", { _, _ ->
+					.setMessage("何をしますか？")
+					/*	.setNegativeButton("確認", { _, _ ->
+							start<PictureActivity>(Bundle {
+								putStringArrayList("picture_urls", arrayListOf(mAdapter.data[position].toString()))
+							})
+						})*/
+					.setPositiveButton("編集", { _, _ ->
+						croppingUri = item
+						UCrop.of(item!!, Uri.fromFile(File(cacheDir, "${Date().time}.jpg")))
+								.withOptions(UCrop.Options().apply {
+									setImageToCropBoundsAnimDuration(100)
+									setFreeStyleCropEnabled(true)
+									setToolbarColor(color)
+									setActiveWidgetColor(color)
+									setStatusBarColor(color)
+									setAllowedGestures(UCropActivity.SCALE, UCropActivity.SCALE, UCropActivity.SCALE)
+								})
+								.start(this@TweetEditActivity)
+					}).setNeutralButton("削除", { _, _ ->
 				mAdapter.remove(position)
 			})
 					.show()

@@ -16,7 +16,7 @@ import kotlinx.coroutines.experimental.launch
 import twitter4j.Query
 import twitter4j.Status
 import xyz.donot.roselin.util.extraUtils.mainThread
-import xyz.donot.roselin.util.extraUtils.tExceptionToast
+import xyz.donot.roselin.util.extraUtils.twitterExceptionToast
 import xyz.donot.roselin.util.getDeserialized
 import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselin.view.custom.MyViewHolder
@@ -60,7 +60,7 @@ class SearchTimeline : TimeLineFragment() {
 				}
 				adapter.addData(result.tweets)
 			} catch (e: Exception) {
-				activity.tExceptionToast(e)
+				activity.twitterExceptionToast(e)
 
 			}
 		}

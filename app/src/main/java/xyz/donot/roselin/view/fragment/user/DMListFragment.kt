@@ -25,10 +25,6 @@ class DMListFragment: BaseListFragment<DirectMessage>()
 		super.onViewCreated(view, savedInstanceState)
 	}
 
-	override fun GetData(): MutableList<DirectMessage>? {
-		val result=twitter.getDirectMessages(Paging(page))
-
-		return result
-	}
+	override fun GetData(): MutableList<DirectMessage>? = twitter.getDirectMessages(Paging(page))
 
 }

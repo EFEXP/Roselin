@@ -17,7 +17,7 @@ import twitter4j.Paging
 import twitter4j.ResponseList
 import twitter4j.Status
 import xyz.donot.roselin.util.extraUtils.mainThread
-import xyz.donot.roselin.util.extraUtils.tExceptionToast
+import xyz.donot.roselin.util.extraUtils.twitterExceptionToast
 import xyz.donot.roselin.util.getDeserialized
 import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselin.view.custom.MyViewHolder
@@ -43,12 +43,11 @@ class MentionTimeLine :TimeLineFragment(){
     override fun pullToRefresh(adapter:MyBaseRecyclerAdapter<Status, MyViewHolder>) {
         launch(UI){
             try {
-                val result=    async(CommonPool){twitter.getMentionsTimeline(Paging(adapter.data[0].id))}.await()
+                val result=    async(CommonPool){ twitter.getMentionsTimeline(Paging(adapter.data[0].id)) }.await()
                     insertDataBackground(result)
             }
             catch (e:Exception){
-                activity.tExceptionToast(e)
-
+                activity.twitterExceptionToast(e)
             }
         }
       }

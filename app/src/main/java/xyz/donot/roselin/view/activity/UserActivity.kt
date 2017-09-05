@@ -20,15 +20,15 @@ import twitter4j.User
 import xyz.donot.roselin.R
 import xyz.donot.roselin.model.realm.DBCustomProfile
 import xyz.donot.roselin.model.realm.DBMute
-import xyz.donot.roselin.util.extraUtils.logd
 import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getSerialized
 import xyz.donot.roselin.util.getTwitterInstance
 import xyz.donot.roselin.view.adapter.UserTimeLineAdapter
+import kotlin.properties.Delegates
 
 
 class UserActivity : AppCompatActivity() {
-	private var mUser: User? = null
+	private var mUser: User by Delegates.notNull()
 	private val realm by lazy { Realm.getDefaultInstance() }
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -40,18 +40,16 @@ class UserActivity : AppCompatActivity() {
 			launch(UI) {
 				try {
 					mUser = async(CommonPool) { getTwitterInstance().showUser(intent.getStringExtra("screen_name")) }.await()
-					setUp(mUser!!)
+					setUp(mUser)
 				} catch (e: Exception) {
 					toast(e.localizedMessage)
 				}
 			}
 		} else {
-			val t=intent.getLongExtra("user_id", 0L)
-			logd { t.toString() }
 			launch(UI) {
 				try {
-					mUser = async(CommonPool) { getTwitterInstance().showUser(t) }.await()
-					setUp(mUser!!)
+					mUser = async(CommonPool) { getTwitterInstance().showUser(intent.getLongExtra("user_id", 0L)) }.await()
+					setUp(mUser)
 				} catch (e: Exception) {
 					toast(e.localizedMessage)
 				}
@@ -91,8 +89,8 @@ class UserActivity : AppCompatActivity() {
 				realm.executeTransaction {
 					it.createObject(DBMute::class.java)
 							.apply {
-								id = mUser!!.id
-								user = mUser!!.getSerialized()
+								id = mUser.id
+								user = mUser.getSerialized()
 							}
 				}
 				toast("ミュートしました")
@@ -106,7 +104,7 @@ class UserActivity : AppCompatActivity() {
 							realm.executeTransaction {
 								it.copyToRealmOrUpdate(
 										DBCustomProfile().apply {
-											id = mUser!!.id
+											id = mUser.id
 											customname = editText.text.toString()
 										}
 								)

@@ -33,9 +33,7 @@ class VideoActivity : AppCompatActivity() {
 		val id = item.itemId
 		when (id) {
 			R.id.save_it -> {
-
 				SaveVideo()
-
 			}
 		}
 		return super.onOptionsItemSelected(item)

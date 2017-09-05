@@ -19,7 +19,6 @@
         android:theme="@style/AppTheme"
         tools:replace="android:label"
        >
-
         <activity
             android:name=".view.activity.OauthActivity"
             android:label="OauthActivity"
@@ -43,7 +42,7 @@
         <activity
             android:name=".view.activity.PictureActivity"
             android:label="@string/title_activity_picture"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.TranslucentStatusBar" />
         <activity
             android:name=".view.activity.VideoActivity"
             android:theme="@style/AppTheme.NoActionBar" />

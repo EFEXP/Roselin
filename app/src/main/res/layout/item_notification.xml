@@ -8,7 +8,7 @@
     android:descendantFocusability="blocksDescendants"
    >
     <com.makeramen.roundedimageview.RoundedImageView
-        android:id="@+id/iv_notification_icon"
+        android:id="@+id/iv_notification_sender_icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
@@ -19,11 +19,14 @@
 
     <TextView
         android:id="@+id/tv_notification_info"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toEndOf="@+id/iv_notification_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/iv_notification_sender_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="~さんがツイートをいいねしました。" />
 
@@ -38,19 +41,31 @@
         app:cardCornerRadius="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_notification_icon"
-        app:layout_constraintTop_toBottomOf="@+id/iv_notification_icon">
+        app:layout_constraintStart_toEndOf="@+id/iv_notification_sender_icon"
+        app:layout_constraintTop_toBottomOf="@+id/iv_notification_sender_icon">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/iv_notification_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:riv_corner_radius="25dip"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <android.support.text.emoji.widget.EmojiTextView
                 android:id="@+id/tv_notification_myname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBaseline_toBaselineOf="@+id/tv_notification_myscreen"
-                app:layout_constraintStart_toStartOf="@+id/tv_notification_text"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toEndOf="@+id/iv_notification_icon"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="えふ" />
 
             <TextView
@@ -58,6 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintStart_toEndOf="@+id/tv_notification_myname"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="\@JlowoiL" />
@@ -67,12 +83,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginEnd="0dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_notification_icon"
                 app:layout_constraintTop_toBottomOf="@+id/tv_notification_myscreen"
                 tools:text="りんごんりんごーん 私ベルエンジェル シャドウバース知ってる 本格カードゲームがスマホで楽しめちゃうの カードの進化が勝負の鍵 進化したら私だってこんなに強くなっちゃうんだから どすこーい❗ お前に負けるなら悔いはないさ…！ シャドウバース！" />
         </android.support.constraint.ConstraintLayout>

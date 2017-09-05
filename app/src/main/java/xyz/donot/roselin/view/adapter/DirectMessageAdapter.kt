@@ -22,8 +22,6 @@ class DirectMessageAdapter : MyBaseRecyclerAdapter<DirectMessage, MyViewHolder>(
 				tv_sender_username.text = item.recipient.name
 				Picasso.with(mContext).load(item.sender.originalProfileImageURLHttps).into(iv_sender_icon)
 			}
-
-
 		}
 
 

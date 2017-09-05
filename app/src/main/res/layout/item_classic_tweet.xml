@@ -10,8 +10,8 @@
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/imageview_icon"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_margin="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -205,7 +205,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/quoted_screenname"
                 android:layout_alignBottom="@+id/quoted_screenname"
-                android:layout_margin="@dimen/dp_4"
+                android:layout_margin="4dp"
                 android:layout_toEndOf="@+id/quoted_icon"
                 android:textColor="?android:textColorPrimary"
                 tools:text="えふらん" />
@@ -215,7 +215,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/quoted_icon"
-                android:layout_margin="@dimen/dp_4"
+                android:layout_margin="4dp"
                 android:layout_toEndOf="@+id/quoted_name"
                 android:ellipsize="end"
                 android:maxLines="1"

@@ -132,7 +132,7 @@ class ConversationFragment : Fragment(){
                     loadReply(result.inReplyToStatusId)
                 }
             } catch (e: Exception) {
-                activity. tExceptionToast(e)
+                activity. twitterExceptionToast(e)
             }
         }
     }
@@ -152,7 +152,7 @@ class ConversationFragment : Fragment(){
                 }
 
             } catch (e: Exception) {
-               activity. tExceptionToast(e)
+               activity. twitterExceptionToast(e)
             }
         }
 }}

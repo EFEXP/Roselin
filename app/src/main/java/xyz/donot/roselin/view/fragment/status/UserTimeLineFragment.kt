@@ -44,7 +44,7 @@ class UserTimeLineFragment : TimeLineFragment() {
 				val result = twitter.getUserTimeline(Paging(adapter.data[0].id))
 				insertDataBackground(result)
 			} catch (e: Exception) {
-				activity.tExceptionToast(e)
+				activity.twitterExceptionToast(e)
 			}
 		}
 	}

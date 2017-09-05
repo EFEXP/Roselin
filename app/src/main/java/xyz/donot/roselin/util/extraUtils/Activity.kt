@@ -6,16 +6,6 @@ import android.view.View
 import android.support.v4.app.Fragment as SupportFragment
 
 
-
-
-fun Activity.getActivity(): Activity = this
-
-fun View.getActivity(): Activity = context as Activity
-
-fun Fragment.finish() = activity?.finish()
-
-fun SupportFragment.finish() = activity?.finish()
-
 fun Activity.restart() {
     val intent = this.intent
     this.overridePendingTransition(0, 0)

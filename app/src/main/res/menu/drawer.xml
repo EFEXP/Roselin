@@ -25,10 +25,5 @@
             android:id="@+id/action_help"
             android:icon="@drawable/ic_help_outline_grey_400_36dp"
             android:title="@string/whats_this_app" />
-        <item
-            android:id="@+id/action_whats_new"
-            android:icon="@drawable/ic_info_outline_grey_400_36dp"
-            android:title="@string/whats_new" />
-
     </group>
 </menu>

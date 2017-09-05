@@ -7,7 +7,7 @@ import twitter4j.TwitterException
 
 fun Context.toast(messageResId: Int) = mainThread { Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show() }
 
-fun Context.tExceptionToast(exception: Exception) = mainThread {
+fun Context.twitterExceptionToast(exception: Exception) = mainThread {
     if (exception is TwitterException) {
         val text = when (exception.errorCode) {
             32 -> {

@@ -567,8 +567,6 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         int type = holder.getItemViewType();
         if (type == EMPTY_VIEW || type == HEADER_VIEW || type == FOOTER_VIEW || type == LOADING_VIEW) {
             setFullSpan(holder);
-        } else {
-
         }
     }
 

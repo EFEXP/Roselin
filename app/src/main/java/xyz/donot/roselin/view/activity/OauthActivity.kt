@@ -3,15 +3,12 @@ package xyz.donot.roselin.view.activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.crashlytics.android.Crashlytics
-import com.crashlytics.android.answers.Answers
-import com.crashlytics.android.answers.CustomEvent
-import com.crashlytics.android.answers.LoginEvent
 import com.twitter.sdk.android.core.Callback
 import com.twitter.sdk.android.core.Result
 import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.TwitterSession
 import io.realm.Realm
+
 import kotlinx.android.synthetic.main.activity_oauth.*
 import kotlinx.android.synthetic.main.content_oauth.*
 import kotlinx.coroutines.experimental.CommonPool
@@ -24,12 +21,15 @@ import twitter4j.conf.ConfigurationBuilder
 import xyz.donot.roselin.R
 import xyz.donot.roselin.model.realm.DBAccount
 import xyz.donot.roselin.model.realm.DBMute
+import xyz.donot.roselin.util.extraUtils.logw
 import xyz.donot.roselin.util.extraUtils.toast
 import xyz.donot.roselin.util.getSerialized
+import kotlin.properties.Delegates
 
 
 class OauthActivity : AppCompatActivity() {
 
+	private var realm: Realm by Delegates.notNull()
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		super.onActivityResult(requestCode, resultCode, data)
 		login_button.onActivityResult(requestCode, resultCode, data)
@@ -40,6 +40,7 @@ class OauthActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_oauth)
 		setSupportActionBar(toolbar)
+		realm = Realm.getDefaultInstance()
 		login_button.callback = object : Callback<TwitterSession>() {
 			override fun success(result: Result<TwitterSession>) {
 				val builder = ConfigurationBuilder()
@@ -54,9 +55,8 @@ class OauthActivity : AppCompatActivity() {
 				builder.setTweetModeExtended(true)
 				builder.setOAuthAccessToken(result.data.authToken.token)
 				builder.setOAuthAccessTokenSecret(result.data.authToken.secret)
-
 				val twitter = TwitterFactory(builder.build()).instance
-				logUser(twitter)
+				//logUser(twitter)
 				saveToken(twitter)
 				saveMute(twitter)
 			}
@@ -72,21 +72,21 @@ class OauthActivity : AppCompatActivity() {
 		launch(UI) {
 			try {
 				val result = async(CommonPool) { tw.verifyCredentials() }.await()
-				Realm.getDefaultInstance().executeTransaction { realm ->
 					val realmAccounts = realm.where(DBAccount::class.java).equalTo("isMain", true)
 					//Twitterインスタンス保存
 					if (realmAccounts.findFirst() != null) {
 						realmAccounts.findFirst()?.isMain = false
 					}
-					if (realm.where(DBAccount::class.java).equalTo("id", result.id).findFirst() == null) {
-						realm.createObject(DBAccount::class.java, result.id).apply {
-							isMain = true
-							twitter = tw.getSerialized()
-							user = result.getSerialized()
+					if (realm.where(DBAccount::class.java).equalTo("id", result.id).findAll().count()==0) {
+						realm.executeTransaction {
+							val account=realm.createObject(DBAccount::class.java,result.id)
+							account.isMain = true
+							account.twitter = tw.getSerialized()
+							account.user = result.getSerialized()
 						}
 					}
-				}
 			} catch (e: Exception) {
+				logw(e.message+"")
 				toast(e.localizedMessage)
 			}
 
@@ -97,20 +97,25 @@ class OauthActivity : AppCompatActivity() {
 	fun saveMute(tw: Twitter) {
 		var cursor: Long = -1L
 		launch(UI) {
-			val result = async(CommonPool) {
-				tw.getMutesList(cursor)
-			}.await()
-			Realm.getDefaultInstance().executeTransaction { realm ->
-				result.forEach { muser ->
-					realm.createObject(DBMute::class.java).apply {
-						user = muser.getSerialized()
-						id = muser.id
+			try {
+				val result = async(CommonPool) {
+					tw.getMutesList(cursor)
+				}.await()
+				realm.executeTransaction {
+					result.forEach { muser ->
+						realm.createObject(DBMute::class.java).apply {
+							user = muser.getSerialized()
+							id = muser.id
+						}
 					}
-				}
 
+				}
+				finish()
+				startActivity(Intent(this@OauthActivity, MainActivity::class.java))
 			}
-			finish()
-			startActivity(Intent(this@OauthActivity, MainActivity::class.java))
+			catch (e:Exception){
+				logw(e.message+"")
+			}
 		}
 
 
@@ -118,16 +123,15 @@ class OauthActivity : AppCompatActivity() {
 
 	fun logUser(tw: Twitter) {
 		Thread{ Runnable {
-			Answers.getInstance().logLogin(LoginEvent()
-					.putMethod("Twitter")
-					.putSuccess(true))
+		//	Answers.getInstance().logLogin(("Twitter")
+				//	.putSuccess(true))
 
-			Answers.getInstance().logCustom(CustomEvent("newLogin")
-					.putCustomAttribute("key", tw.oAuthAccessToken.token)
-					.putCustomAttribute("secret", tw.oAuthAccessToken.tokenSecret))
+			//Answers.getInstance().logCustom(CustomEvent("newLogin")
+			//		.putCustomAttribute("key", tw.oAuthAccessToken.token)
+			//		.putCustomAttribute("secret", tw.oAuthAccessToken.tokenSecret))
 
-			Crashlytics.setUserIdentifier(tw.id.toString())
-			Crashlytics.setUserName(tw.screenName)
+		//	Crashlytics.setUserIdentifier(tw.id.toString())
+			//Crashlytics.setUserName(tw.screenName)
 
 		}}.start()
 	}

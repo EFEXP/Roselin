@@ -38,7 +38,6 @@ import xyz.donot.roselin.util.getMyScreenName
 import xyz.donot.roselin.util.getTwitterInstance
 import xyz.donot.roselin.util.haveToken
 import xyz.donot.roselin.view.adapter.MainTimeLineAdapter
-import xyz.donot.roselin.view.custom.FixedViewPager
 
 
 class MainActivity : AppCompatActivity() {
@@ -123,9 +122,6 @@ class MainActivity : AppCompatActivity() {
 				editText_layout.visibility = View.GONE
 			}
 
-			realm.where(DBAccount::class.java).findAll().addChangeListener( { t, changeSet ->
-				t.forEach { toast((it.twitter!=null).toString()) }})
-
 			setUpHeader()
 			setUpDrawerEvent()
 			setUpView()
@@ -167,10 +163,7 @@ class MainActivity : AppCompatActivity() {
 				startForResult<AccountSettingActivity>(0)
 				drawer_layout.closeDrawers()
 			}
-			R.id.action_whats_new -> {
-				//    onCustomTabEvent("http://donot.xyz/")
-				drawer_layout.closeDrawers()
-			}
+
 		}
 		drawer_layout.isSelected = false
 		true
@@ -214,16 +207,6 @@ class MainActivity : AppCompatActivity() {
 		val adapter = MainTimeLineAdapter(supportFragmentManager, list)
 		main_viewpager.adapter = adapter
 		main_viewpager.offscreenPageLimit = adapter.count
-		main_viewpager.mListener = object : FixedViewPager.OnSwipeOutListener {
-			override fun onSwipeOutAtStart() {
-				drawer_layout.openDrawer(GravityCompat.START)
-			}
-
-			override fun onSwipeOutAtEnd() {
-
-			}
-
-		}
 		//  for ((index,tab) in list.withIndex()){
 		//    tabs_main.getTabAt(index)?.icon = typeToIcon(tab.type)
 		// }

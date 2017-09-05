@@ -7,7 +7,7 @@ import kotlinx.coroutines.experimental.launch
 import twitter4j.Paging
 import twitter4j.ResponseList
 import twitter4j.Status
-import xyz.donot.roselin.util.extraUtils.tExceptionToast
+import xyz.donot.roselin.util.extraUtils.twitterExceptionToast
 import xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselin.view.custom.MyViewHolder
 
@@ -22,7 +22,7 @@ class ListTimeLine:TimeLineFragment(){
                     insertDataBackground(result)
                 }
             catch (e:Exception){
-                activity.tExceptionToast(e)
+                activity.twitterExceptionToast(e)
             }
         }
 

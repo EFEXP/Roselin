@@ -1,26 +1,22 @@
 package xyz.donot.roselin
 
+import android.app.Application
 import android.app.UiModeManager
 import android.preference.PreferenceManager
-import android.support.multidex.MultiDexApplication
 import android.support.text.emoji.EmojiCompat
 import android.support.text.emoji.FontRequestEmojiCompatConfig
 import android.support.v4.provider.FontRequest
 import android.support.v7.app.AppCompatDelegate
 import android.webkit.WebView
-import com.crashlytics.android.Crashlytics
-import com.facebook.stetho.Stetho
 import com.google.android.gms.ads.MobileAds
 import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
-import com.uphyca.stetho_realm.RealmInspectorModulesProvider
-import io.fabric.sdk.android.Fabric
 import io.realm.Realm
 import io.realm.RealmConfiguration
 
 
-class Roselin : MultiDexApplication() {
+class Roselin : Application() {
 	private val TWITTER_KEY by lazy {
 		//     resources.getString(R.string.twitter_official_consumer_key)
 		getString(R.string.twitter_consumer_key)
@@ -35,10 +31,9 @@ class Roselin : MultiDexApplication() {
 		//Twitter
 		val twitterConfig = TwitterConfig.Builder(this).twitterAuthConfig(TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET)).build()
 		Twitter.initialize(twitterConfig)
-		Fabric.with(this, Crashlytics())
 		//realm
 		Realm.init(this)
-		val config  = RealmConfiguration.Builder()
+		val config = RealmConfiguration.Builder()
 				.deleteRealmIfMigrationNeeded()
 				.build()
 		Realm.setDefaultConfiguration(config)
@@ -73,12 +68,7 @@ class Roselin : MultiDexApplication() {
 		}
 		AppCompatDelegate.setDefaultNightMode(design)
 		(getSystemService(UI_MODE_SERVICE) as UiModeManager).nightMode = UiModeManager.MODE_NIGHT_AUTO
-		//Stetho
-		Stetho.initialize(
-				Stetho.newInitializerBuilder(this)
-						.enableDumpapp(Stetho.defaultDumperPluginsProvider(this))
-						.enableWebKitInspector(RealmInspectorModulesProvider.builder(this).build())
-						.build())
+
 
 	}
 
