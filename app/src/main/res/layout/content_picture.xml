@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="xyz.donot.roselin.view.activity.PictureActivity"
+    tools:context="xyz.donot.roselinx.view.activity.PictureActivity"
     tools:showIn="@layout/activity_picture">
-<xyz.donot.roselin.view.custom.FixedViewPager
+<xyz.donot.roselinx.view.custom.FixedViewPager
     android:id="@+id/picture_view_pager"
     android:overScrollMode="never"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"

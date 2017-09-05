@@ -17,7 +17,7 @@
      <PreferenceScreen
             android:title="背景変更"
             android:summary="ホームタイムラインの背景を変更します。">
-            <intent android:action="xyz.donot.roselin.view.activity.BackImageActivity" />
+            <intent android:action="xyz.donot.roselinx.view.activity.BackImageActivity" />
         </PreferenceScreen>
         <SwitchPreference
             android:defaultValue="false"
@@ -81,12 +81,12 @@
     <PreferenceScreen
         android:title="タブの設定"
         android:summary="ホーム画面のタブに関する設定です">
-        <intent android:action="xyz.donot.roselin.view.activity.TabSettingActivity" />
+        <intent android:action="xyz.donot.roselinx.view.activity.TabSettingActivity" />
     </PreferenceScreen>
     <PreferenceScreen
         android:title="ミュートの設定"
         android:summary="ミュートに関する設定です">
-        <intent android:action="xyz.donot.roselin.view.activity.MuteSettingActivity"/>
+        <intent android:action="xyz.donot.roselinx.view.activity.MuteSettingActivity"/>
     </PreferenceScreen>
     </PreferenceCategory>
 </PreferenceScreen>

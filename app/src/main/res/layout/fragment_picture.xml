@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="xyz.donot.roselin.view.fragment.PictureFragment">
+    tools:context="xyz.donot.roselinx.view.fragment.PictureFragment">
 
     <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
         android:id="@+id/iv_picture"

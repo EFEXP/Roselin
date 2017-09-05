@@ -34,7 +34,7 @@
         app:layout_goneMarginTop="8dp"
         tools:text="えふらん" />
 
-    <xyz.donot.roselin.view.custom.CustomLinkTextView
+    <xyz.donot.roselinx.view.custom.CustomLinkTextView
         android:id="@+id/textview_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -97,7 +97,7 @@
         tools:text="18秒前" />
 
 
-    <xyz.donot.roselin.view.custom.CustomLinkTextView
+    <xyz.donot.roselinx.view.custom.CustomLinkTextView
         android:id="@+id/textview_is_retweet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

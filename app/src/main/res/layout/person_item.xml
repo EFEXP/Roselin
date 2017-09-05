@@ -50,7 +50,7 @@
             android:drawableStart="@drawable/wrap_link"
             android:ellipsize="end"
             android:maxLines="1"
-            tools:text="https://github.com/EFEXP/Roselin" />
+            tools:text="https://github.com/EFEXP/roselinx" />
 
         <android.support.text.emoji.widget.EmojiTextView
             android:id="@+id/tv_geo"

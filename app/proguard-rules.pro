@@ -7,9 +7,7 @@
 }
 
 -dontwarn com.bumptech.glide.**
--dontwarn xyz.donot.roselin.view.**
--keep class android.support.text.emoji.widget.*{ *; }
--keep class  android.support.v7.widget.* { *; }
+-dontwarn xyz.donot.roselinx.view.**
 -keep public class  * extends io.realm.RealmRecyclerViewAdapter {*;}
 -dontwarn com.yalantis.**
 -dontwarn okio.**
@@ -21,8 +19,8 @@
 -dontwarn twitter4j.**
 -keep class twitter4j.** { *; }
 -dontwarn javax.**
--keepclassmembers public class * extends xyz.donot.roselin.view.custom.MyViewHolder{ <init>(android.view.View); }
--keep public class * extends xyz.donot.roselin.view.custom.MyBaseRecyclerAdapter
+-keepclassmembers public class * extends xyz.donot.roselinx.view.custom.MyViewHolder{ <init>(android.view.View); }
+-keep public class * extends xyz.donot.roselinx.view.custom.MyBaseRecyclerAdapter
 -keepclassmembernames class kotlinx.** {
     volatile <fields>;
 }
