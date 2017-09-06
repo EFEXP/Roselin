@@ -28,7 +28,6 @@ import xyz.donot.roselinx.util.extraUtils.show
 import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.util.getPath
 import xyz.donot.roselinx.util.getSerialized
-import xyz.donot.roselinx.util.replace
 import xyz.donot.roselinx.view.adapter.TwitterImageAdapter
 import xyz.donot.roselinx.view.fragment.DraftFragment
 import xyz.donot.roselinx.view.fragment.TrendFragment
@@ -178,7 +177,7 @@ class TweetEditActivity : AppCompatActivity() {
 			when (requestCode) {
 				UCrop.REQUEST_CROP -> {
 					val resultUri = UCrop.getOutput(data)
-					mAdapter.replace(croppingUri!!, resultUri!!)
+					mAdapter.setData(resultUri!!,croppingUri!!)
 				}
 			}
 		}

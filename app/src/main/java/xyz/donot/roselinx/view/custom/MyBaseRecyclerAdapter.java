@@ -331,7 +331,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
     }
 
 
-    public void addData(@IntRange(from = 0) int position, @NonNull T data) {
+       public void addData(@IntRange(from = 0) int position, @NonNull T data) {
         mData.add(position, data);
         notifyItemInserted(position + getHeaderLayoutCount());
         compatibilityDataSizeChanged(1);
@@ -355,6 +355,11 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
     public void setData(@IntRange(from = 0) int index, @NonNull T data) {
         mData.set(index, data);
         notifyItemChanged(index + getHeaderLayoutCount());
+    }
+    public void setData(@NonNull T replaceData, @NonNull T replacedData) {
+        int i = mData.indexOf(replacedData);
+        mData.set(i,replaceData);
+        notifyItemChanged(i + getHeaderLayoutCount());
     }
 
 
