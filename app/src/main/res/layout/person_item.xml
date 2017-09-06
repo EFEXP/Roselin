@@ -22,7 +22,6 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:textColor="?android:textColorPrimary"
@@ -31,43 +30,44 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="えふらん" />
 
-    <LinearLayout
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/tv_web"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/tv_description"
+        android:autoLink="web"
+        android:drawableStart="@drawable/wrap_link"
+        android:ellipsize="end"
+        android:maxLines="1"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/iv_icon"
-        app:layout_constraintTop_toBottomOf="@+id/tv_name">
+        app:layout_constraintTop_toBottomOf="@+id/tv_name"
+        tools:text="https://github.com/EFEXP/roselinx" />
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/tv_web"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableStart="@drawable/wrap_link"
-            android:ellipsize="end"
-            android:maxLines="1"
-            tools:text="https://github.com/EFEXP/roselinx" />
+    <android.support.text.emoji.widget.EmojiTextView
+        android:id="@+id/tv_geo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:drawableStart="@drawable/wrap_location_on"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/iv_icon"
+        app:layout_constraintTop_toBottomOf="@+id/tv_web"
+        tools:text="XXXXX県" />
 
-        <android.support.text.emoji.widget.EmojiTextView
-            android:id="@+id/tv_geo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableStart="@drawable/wrap_location_on"
-            android:ellipsize="end"
-            android:maxLines="1"
-            tools:text="XXXXX県" />
-    </LinearLayout>
 
     <android.support.text.emoji.widget.EmojiTextView
         android:id="@+id/tv_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:textColor="?android:textColorPrimary"
@@ -97,7 +97,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginTop="0dp"
         android:layout_weight="1"
-
         android:textOff="@string/follow"
         android:textOn="@string/following"
         android:visibility="gone"
