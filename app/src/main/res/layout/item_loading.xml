@@ -11,6 +11,7 @@
         android:orientation="horizontal">
 
         <ProgressBar
+            android:id="@+id/animation_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"

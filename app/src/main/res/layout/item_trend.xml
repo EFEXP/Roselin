@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:background="?android:attr/selectableItemBackground"
+    android:descendantFocusability="blocksDescendants"
+    android:layout_height="wrap_content">
+  <android.support.text.emoji.widget.EmojiTextView
+      android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="40sp"
+    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+    android:id="@+id/trend_txt"
+    android:drawableStart="@drawable/wrap_whats_hot"
+    tools:text="This is Trend"
+    />
+</LinearLayout>
+

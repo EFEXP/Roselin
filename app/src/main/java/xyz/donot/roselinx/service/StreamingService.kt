@@ -67,15 +67,15 @@ class StreamingService : Service() {
 				//RT
 				if (onStatus.retweetedStatus.user.id == getMyId()) {
 					if (defaultSharedPreferences.getBoolean("notification_retweet", true)) toast("${onStatus.user.name}にRTされました")
-						Realm.getDefaultInstance().use {
-							realm->
-							realm.executeTransaction {
-								it.createObject(DBNotification::class.java).apply {
-									status = onStatus.getSerialized()
-									sourceUser = onStatus.user.getSerialized()
-									type = NRETWEET
-								}
+					mainThread {
+						val realm = Realm.getDefaultInstance()
+						realm.executeTransaction {
+							it.createObject(DBNotification::class.java).apply {
+								status = onStatus.getSerialized()
+								sourceUser = onStatus.user.getSerialized()
+								type = NRETWEET
 							}
+						}
 					}
 				}
 			} else {
@@ -102,17 +102,14 @@ class StreamingService : Service() {
 			super.onFavorite(source, target, favoritedStatus)
 			if (source.id != getMyId()) {
 				if (defaultSharedPreferences.getBoolean("notification_favorite", true)) toast("${source.name}にいいねされました")
-				 Realm.getDefaultInstance().use {
-					 realm->
-					 realm.executeTransaction {
-						 it.createObject(DBNotification::class.java).apply {
-							 status = favoritedStatus.getSerialized()
-							 sourceUser = source.getSerialized()
-							 type = NFAVORITE
-						 }
-					 }
-				 }
-
+				val realm = Realm.getDefaultInstance()
+				realm.executeTransaction {
+					it.createObject(DBNotification::class.java).apply {
+						status = favoritedStatus.getSerialized()
+						sourceUser = source.getSerialized()
+						type = NFAVORITE
+					}
+				}
 			}
 		}
 	}

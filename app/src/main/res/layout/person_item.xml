@@ -44,6 +44,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_name">
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_web"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/wrap_link"
@@ -52,6 +53,7 @@
             tools:text="https://github.com/EFEXP/roselinx" />
 
         <android.support.text.emoji.widget.EmojiTextView
+            android:id="@+id/tv_geo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/wrap_location_on"
@@ -89,6 +91,7 @@
         tools:text="18日にTwitterを開始" />
 
     <ToggleButton
+        android:id="@+id/bt_follow"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginEnd="8dp"
@@ -103,6 +106,7 @@
         tools:visibility="visible" />
 
     <Button
+        android:id="@+id/bt_edit"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginBottom="8dp"
@@ -129,6 +133,7 @@
         tools:layout_height="48dp">
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_friends"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -138,6 +143,7 @@
             tools:text="follow" />
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_follower"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -161,6 +167,7 @@
 
 
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginEnd="8dp"
@@ -176,6 +183,7 @@
         tools:layout_height="40dp">
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_tweets"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -184,6 +192,7 @@
             tools:text="Tweets" />
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_fav"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -192,6 +201,7 @@
             tools:text="Fav" />
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_list"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

@@ -6,12 +6,15 @@
      <init>(android.view.View);
 }
 
--dontwarn xyz.donot.roselinx.view.fragment.realm.**
+-dontwarn com.bumptech.glide.**
+-dontwarn xyz.donot.roselinx.view.**
 -keep public class  * extends io.realm.RealmRecyclerViewAdapter {*;}
 -dontwarn com.yalantis.**
 -dontwarn okio.**
 -dontwarn com.squareup.okhttp.**
 -dontwarn io.github.kexanie.**
+-keep class android.support.v4.content{*;}
+-keep public class  * extends RecyclerView.ViewHolder{ *; }
 #twitter4j
 -dontwarn twitter4j.**
 -keep class twitter4j.** { *; }

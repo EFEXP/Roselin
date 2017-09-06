@@ -15,56 +15,57 @@ import xyz.donot.roselinx.view.fragment.realm.MuteUserFragment
 import xyz.donot.roselinx.view.fragment.realm.MuteWordFragment
 
 
+
 class MuteSettingActivity : AppCompatActivity() {
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_mute_setting)
-		setSupportActionBar(toolbar)
-		supportActionBar?.setDisplayHomeAsUpEnabled(true)
-		supportActionBar?.setDisplayShowHomeEnabled(true)
-		mute_pager.adapter = MuteViewPager(supportFragmentManager)
-		mute_tab.setupWithViewPager(mute_pager)
-		fab.setOnClickListener { _ ->
-			val editView = EditText(this@MuteSettingActivity)
-			AlertDialog.Builder(this@MuteSettingActivity)
-					.setTitle("ミュートワードを入力してください")
-					.setView(editView)
-					.setPositiveButton("OK", { _, _ ->
-						Realm.getDefaultInstance().use {
-							it.executeTransaction {
-								it.createObject(DBMute::class.java)
-										.apply {
-											text = editView.text.toString()
-										}
-							}
-						}
-					})
-					.setNegativeButton("キャンセル", { _, _ -> })
-					.show()
-		}
-	}
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_mute_setting)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        mute_pager.adapter=MuteViewPager(supportFragmentManager)
+        mute_tab.setupWithViewPager(mute_pager)
+        fab.setOnClickListener { _ ->
+            val editView = EditText(this@MuteSettingActivity)
+            AlertDialog.Builder(this@MuteSettingActivity)
+                    .setTitle("ミュートワードを入力してください")
+                    .setView(editView)
+                    .setPositiveButton("OK", { _ , _ ->
+                      Realm.getDefaultInstance().executeTransaction{
+                          it.createObject(DBMute::class.java)
+                                  .apply {
+                                      text=editView.text.toString()
+                                  }
+                      }
+                    })
+                    .setNegativeButton("キャンセル",  { _ , _ -> })
+                    .show()
+        }
+    }
 
 
-	inner class MuteViewPager(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-		override fun getCount(): Int = 2
 
-		override fun getItem(position: Int): Fragment = when (position) {
-			0 -> MuteUserFragment()
-			1 -> MuteWordFragment()
-			else -> throw Exception()
-		}
+    inner class MuteViewPager(fm: FragmentManager): FragmentPagerAdapter(fm) {
+        override fun getCount(): Int =2
 
-		override fun getPageTitle(position: Int): CharSequence = when (position) {
-			0 -> "ユーザー"
-			1 -> "ワード"
-			else -> throw Exception()
-		}
-	}
+        override fun getItem(position: Int): Fragment =when(position)
+        {
+            0->MuteUserFragment()
+            1->MuteWordFragment()
+            else-> throw Exception()
+        }
 
-	override fun onSupportNavigateUp(): Boolean {
-		onBackPressed()
-		return super.onSupportNavigateUp()
-	}
+        override fun getPageTitle(position: Int): CharSequence=when(position)
+        {
+            0->"ユーザー"
+            1->"ワード"
+            else-> throw Exception()
+        }
+    }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
 
 
 }
