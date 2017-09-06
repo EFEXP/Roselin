@@ -4,12 +4,10 @@
     android:layout_height="wrap_content"
     android:minHeight="70dp"
     android:gravity="center"
-    android:id="@+id/mute_background"
     android:background="?android:attr/selectableItemBackground"
     xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
-        android:id="@+id/mute_query"
         android:layout_margin="4dp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

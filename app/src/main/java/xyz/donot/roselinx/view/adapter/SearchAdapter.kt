@@ -21,13 +21,11 @@ class SearchAdapter(private val query: Query, private val queryText: String, fm:
 	override fun getItem(position: Int): Fragment = when (position) {
 		0 -> {
 			SearchTimeline().apply { arguments = Bundle { putByteArray("query_bundle", query.getSerialized()) } }
-
 		}
 		1 -> {
 			UserSearch().apply { arguments = Bundle { putString("query_text", queryText) } }
 		}
 		2 -> TrendFragment()
-
 		else -> throw  IllegalStateException()
 	}
 

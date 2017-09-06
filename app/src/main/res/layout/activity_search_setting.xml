@@ -36,7 +36,6 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2">
 
         <android.support.text.emoji.widget.EmojiEditText
-            android:id="@+id/search_setting_query"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -57,7 +56,6 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
 
         <android.support.text.emoji.widget.EmojiEditText
-            android:id="@+id/search_setting_query_absolute"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -86,7 +84,6 @@
             android:layout_weight="1"
             android:layout_height="wrap_content">
             <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/search_setting_from"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -98,7 +95,6 @@
             android:layout_weight="1"
             android:layout_height="wrap_content">
             <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/search_setting_to"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1" />
@@ -117,7 +113,6 @@
         tools:layout_height="40dp">
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/day_from"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -126,7 +121,6 @@
             android:textSize="18sp" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/day_to"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -151,7 +145,6 @@
         tools:layout_height="40dp">
 
         <CheckBox
-            android:id="@+id/search_setting_only_japanese"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
@@ -159,7 +152,6 @@
             android:text="@string/use_only_japanese" />
 
         <CheckBox
-            android:id="@+id/search_setting_links"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
@@ -167,7 +159,6 @@
             android:text="@string/links" />
 
         <CheckBox
-            android:id="@+id/search_setting_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
@@ -175,7 +166,6 @@
             android:text="@string/pictures" />
 
         <CheckBox
-            android:id="@+id/search_setting_video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
@@ -196,7 +186,6 @@
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout3"/>
 
     <Button
-        android:id="@+id/bt_search"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

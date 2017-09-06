@@ -38,7 +38,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.v4.view.ViewPager
-            android:id="@+id/mute_pager"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -49,7 +48,6 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
