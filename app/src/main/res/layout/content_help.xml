@@ -11,6 +11,7 @@
     tools:showIn="@layout/activity_help">
 
     <android.support.v7.widget.CardView
+        android:id="@+id/cardView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -56,6 +57,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:id="@+id/tv_version_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
@@ -68,6 +70,7 @@
             </android.support.constraint.ConstraintLayout>
 
             <LinearLayout
+                android:id="@+id/contact_support"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -86,6 +89,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/whats_new"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -105,6 +109,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/rate_this_app"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -123,6 +128,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/show_licenses"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"

@@ -41,7 +41,8 @@
 <android.support.design.widget.TextInputEditText
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-    android:hint="@string/name_char_length"
+  android:id="@+id/user_name"
+  android:hint="@string/name_char_length"
   />
   </android.support.design.widget.TextInputLayout>
 
@@ -59,7 +60,8 @@
   <android.support.design.widget.TextInputEditText
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-      android:hint="@string/optional_url"
+    android:id="@+id/web"
+    android:hint="@string/optional_url"
     />
   </android.support.design.widget.TextInputLayout>
   <android.support.design.widget.TextInputLayout
@@ -76,7 +78,8 @@
   <android.support.design.widget.TextInputEditText
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-      android:hint="@string/optional_location"
+    android:id="@+id/geo"
+    android:hint="@string/optional_location"
     />
 
   </android.support.design.widget.TextInputLayout>
@@ -97,7 +100,8 @@
     android:inputType="textMultiLine"
     android:ems="10"
     android:minLines="3"
-      app:counterEnabled="true"
+    android:id="@+id/description"
+    app:counterEnabled="true"
     app:counterMaxLength="160"
     android:hint="@string/optional_description"
     />
