@@ -11,8 +11,6 @@ import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.realm.DBAccount
 import xyz.donot.roselinx.model.realm.DBMute
 import xyz.donot.roselinx.util.extraUtils.logd
-import xyz.donot.roselinx.view.custom.MyBaseRecyclerAdapter
-import xyz.donot.roselinx.view.custom.MyViewHolder
 import java.io.*
 
 
@@ -24,10 +22,6 @@ fun <T : Serializable> T.getSerialized(): ByteArray = ByteArrayOutputStream().us
 	return bytes
 }
 
-fun <U, T : MyViewHolder> MyBaseRecyclerAdapter<U, T>.remove(item: U) {
-	val int = data.indexOf(item)+ headerLayoutCount
-	remove(int)
-}
 
 
 
@@ -65,17 +59,16 @@ fun haveToken(): Boolean = Realm.getDefaultInstance().use {
 }
 
 fun canPass(status: Status): Boolean {
-	val realm = Realm.getDefaultInstance()
 	val userId = status.user.id
 	val text = status.text
-
+	Realm.getDefaultInstance().use { realm->
 	if (realm.where(DBMute::class.java).equalTo("id", userId).count() > 0) {
 		return false
 	}
 	if (realm.where(DBMute::class.java).equalTo("text", text).count() > 0) {
 		return false
 	}
-
+	}
 	return true
 
 }

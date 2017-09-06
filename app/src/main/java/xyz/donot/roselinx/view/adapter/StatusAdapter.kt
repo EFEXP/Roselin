@@ -170,7 +170,8 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
 		}
 		//    val array= mContext.resources.getStringArray(R.array.ARRAY_KITITSUI)
 		//      setText(R.id.textview_text,array[Random().nextInt(array.count())])
-
 	}
+
+
 }
 

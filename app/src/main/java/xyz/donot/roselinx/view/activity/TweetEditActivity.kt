@@ -181,8 +181,6 @@ class TweetEditActivity : AppCompatActivity() {
 				}
 			}
 		}
-
-
 	}
 
 	override fun onSupportNavigateUp(): Boolean {

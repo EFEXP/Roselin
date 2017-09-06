@@ -3,15 +3,62 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            app:layout_constraintBottom_toTopOf="@+id/editText_layout"
+            app:layout_constraintRight_toRightOf="parent"
+            app:srcCompat="@drawable/ic_edit_white_24dp" />
+
+        <LinearLayout
+            android:id="@+id/editText_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/material_background"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:focusable="true"
+                android:theme="@style/AppTheme.Design">
+
+                <android.support.text.emoji.widget.EmojiEditText
+                    android:id="@+id/editText_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/what_is_happening"
+                    android:inputType="textMultiLine|textNoSuggestions"
+
+                    />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/button_tweet"
+                android:layout_width="70sp"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:gravity="end"
+                app:srcCompat="@drawable/ic_send_primary_24dp" />
+        </LinearLayout>
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/main_coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="xyz.donot.roselinx.view.activity.MainActivity">
-
         <View
             android:id="@+id/background_overlay"
             android:layout_width="match_parent"
@@ -42,7 +89,7 @@
                     android:background="@android:color/transparent" />
             </android.support.v7.widget.Toolbar>
 
-            <android.support.design.widget.TabLayout
+           <android.support.design.widget.TabLayout
                 android:id="@+id/tabs_main"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -57,65 +104,14 @@
             android:layout_height="match_parent"
             android:overScrollMode="never"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/fab_margin"
-                app:layout_constraintBottom_toTopOf="@+id/editText_layout"
-                app:layout_constraintRight_toRightOf="parent"
-                app:srcCompat="@drawable/ic_edit_white_24dp" />
-
-            <LinearLayout
-                android:id="@+id/editText_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/material_background"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent">
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:focusable="true"
-                    android:theme="@style/AppTheme.Design">
-
-                    <android.support.text.emoji.widget.EmojiEditText
-                        android:id="@+id/editText_status"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/what_is_happening"
-                        android:inputType="textMultiLine|textNoSuggestions"
-
-                        />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.v7.widget.AppCompatImageButton
-                    android:id="@+id/button_tweet"
-                    android:layout_width="70sp"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/transparent"
-                    android:gravity="right"
-                    app:srcCompat="@drawable/ic_send_primary_24dp" />
-            </LinearLayout>
-        </android.support.constraint.ConstraintLayout>
-
     </android.support.design.widget.CoordinatorLayout>
-
-
+    </android.support.constraint.ConstraintLayout>
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_drawer"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/navigation_header"
-        app:menu="@menu/drawer" />
+        app:menu="@menu/drawer"
+        />
 </android.support.v4.widget.DrawerLayout>

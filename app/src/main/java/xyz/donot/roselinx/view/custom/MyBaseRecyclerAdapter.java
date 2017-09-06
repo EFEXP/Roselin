@@ -350,7 +350,11 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         notifyItemRemoved(internalPosition);
         compatibilityDataSizeChanged(0);
     }
-
+    public void remove(@NonNull T shouldRemove) {
+        int i = mData.indexOf(shouldRemove);
+        mData.remove(i);
+        notifyItemChanged(i + getHeaderLayoutCount());
+    }
 
     public void setData(@IntRange(from = 0) int index, @NonNull T data) {
         mData.set(index, data);
@@ -361,8 +365,6 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
         mData.set(i,replaceData);
         notifyItemChanged(i + getHeaderLayoutCount());
     }
-
-
     public void addData(@IntRange(from = 0) int position, @NonNull Collection<? extends T> newData) {
         mData.addAll(position, newData);
         notifyItemRangeInserted(position + getHeaderLayoutCount(), newData.size());
