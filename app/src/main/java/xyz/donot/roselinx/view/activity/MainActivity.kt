@@ -258,6 +258,7 @@ class MainActivity : AppCompatActivity() {
 			unregisterReceiver(disConnectionReceiver)
 		}
 		if (receiver!=null)unregisterReceiver(receiver)
+		realm.close()
 	}
 
 	inner class ConnectionReceiver : BroadcastReceiver() {

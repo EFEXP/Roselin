@@ -28,13 +28,11 @@ import xyz.donot.roselinx.view.activity.UserActivity
 import xyz.donot.roselinx.view.activity.VideoActivity
 import xyz.donot.roselinx.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselinx.view.custom.MyViewHolder
-import kotlin.properties.Delegates
 
 
 class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_classic_tweet) {
-	var realm:Realm by Delegates.notNull()
+
 	override fun convert(helper: MyViewHolder, status: Status, position: Int) {
-		realm = Realm.getDefaultInstance()
 		helper.getView<ViewGroup>(R.id.item_tweet_root).apply {
 			val item = if (status.isRetweet) {
 				textview_is_retweet.text = "@${status.user.screenName}がリツイート"
@@ -51,14 +49,16 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
 							.setUnderlined(false)
 							.setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent))
 							.setOnClickListener {
-
+								(mContext as Activity).startActivity(mContext.newIntent<UserActivity>(Bundle { putString("screen_name", it.replace("@","")) }))
 							})
 			//テキスト関係
-			val query = realm.where(DBCustomProfile::class.java).equalTo("id", item.user.id)
-			if (query.count() > 0) {
-				textview_username.text = query.findFirst()?.customname }
-			else
-				textview_username.text = item.user.name
+			Realm.getDefaultInstance().use {realm->
+				val query = realm.where(DBCustomProfile::class.java).equalTo("id", item.user.id)
+				if (query.count() > 0) {
+					textview_username.text = query.findFirst()?.customname }
+				else
+					textview_username.text = item.user.name
+			}
 			textview_date.text = getRelativeTime(item.createdAt)
 			textview_text.text = getExpandedText(item)
 			textview_screenname.text = "@" + item.user.screenName
@@ -168,11 +168,7 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
 				recyclerview_picture.hide()
 			}
 			Picasso.with(mContext).load(item.user.originalProfileImageURLHttps).into(imageview_icon)
-
-
 		}
-
-
 		//    val array= mContext.resources.getStringArray(R.array.ARRAY_KITITSUI)
 		//      setText(R.id.textview_text,array[Random().nextInt(array.count())])
 

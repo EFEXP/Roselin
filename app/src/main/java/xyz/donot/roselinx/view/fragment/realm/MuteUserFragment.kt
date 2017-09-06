@@ -26,8 +26,7 @@ import xyz.donot.roselinx.util.getDeserialized
 
 
 class MuteUserFragment : AppCompatDialogFragment(){
-    val realm: Realm by lazy { Realm.getDefaultInstance() }
-    val adapter by lazy {MuteUserAdater(realm.where(DBMute::class.java).notEqualTo("id",0L).findAll()) }
+    val adapter by lazy {MuteUserAdater(Realm.getDefaultInstance().where(DBMute::class.java).notEqualTo("id",0L).findAll()) }
 
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

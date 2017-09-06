@@ -77,6 +77,10 @@ class UserActivity : AppCompatActivity() {
 		supportActionBar?.setDisplayShowHomeEnabled(true)
 	}
 
+	override fun onDestroy() {
+		super.onDestroy()
+		realm.close()
+	}
 
 	override fun onSupportNavigateUp(): Boolean {
 		onBackPressed()

@@ -121,6 +121,10 @@ class OauthActivity : AppCompatActivity() {
 
 	}
 
+	override fun onDestroy() {
+		super.onDestroy()
+		realm.close()
+	}
 	fun logUser(tw: Twitter) {
 		Thread{ Runnable {
 		//	Answers.getInstance().logLogin(("Twitter")

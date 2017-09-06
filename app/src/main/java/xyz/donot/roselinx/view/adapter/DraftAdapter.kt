@@ -32,8 +32,10 @@ class DraftAdapter(val context: Context,
 		val item = realmResults[position]
 		viewHolder.draft_text?.text = item.text
 		viewHolder.delete_draft?.setOnClickListener {
-			Realm.getDefaultInstance().executeTransaction {
-				item.deleteFromRealm()
+			Realm.getDefaultInstance().use {
+				it.executeTransaction {
+					item.deleteFromRealm()
+				}
 			}
 		}
 		Log.d("Realm", item.toString())

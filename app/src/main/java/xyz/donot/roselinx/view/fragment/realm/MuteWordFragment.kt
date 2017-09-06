@@ -20,8 +20,7 @@ import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.realm.DBMute
 
 class MuteWordFragment :AppCompatDialogFragment(){
-    val realm: Realm by lazy { Realm.getDefaultInstance() }
-    val adapter by lazy {MuteWordAdater(realm.where(DBMute::class.java).isNotNull("text").findAll()) }
+    val adapter by lazy {MuteWordAdater(Realm.getDefaultInstance().where(DBMute::class.java).isNotNull("text").findAll()) }
 
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -46,9 +45,9 @@ class MuteWordFragment :AppCompatDialogFragment(){
                     AlertDialog.Builder(activity)
                             .setTitle("削除しますか？")
                             .setPositiveButton("OK", { _ , _ ->
-                                Realm.getDefaultInstance().executeTransaction{
+                                Realm.getDefaultInstance().use { it.executeTransaction{
                                     item.deleteFromRealm()
-                                }
+                                }}
                             })
                             .setNegativeButton("キャンセル",  {  _ ,  _ -> })
                             .show()
