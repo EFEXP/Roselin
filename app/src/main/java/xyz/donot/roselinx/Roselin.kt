@@ -34,7 +34,6 @@ class Roselin : Application() {
 		//realm
 		Realm.init(this)
 		val config = RealmConfiguration.Builder()
-				.deleteRealmIfMigrationNeeded()
 				.build()
 		Realm.setDefaultConfiguration(config)
 		/*

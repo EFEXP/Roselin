@@ -3,7 +3,6 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout_tw_edit"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -46,7 +45,6 @@
         app:maxCharacters="140" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/pic_recycler_view"
         android:layout_width="0dp"
         android:layout_height="300dp"
         android:layout_marginTop="8dp"
@@ -60,7 +58,6 @@
         app:layout_constraintTop_toBottomOf="@+id/tvTextCounter"
         tools:layout_height="@dimen/dp_72" />
     <LinearLayout
-        android:id="@+id/tools_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -72,7 +69,6 @@
         app:layout_constraintRight_toRightOf="parent">
 
         <android.support.v7.widget.AppCompatImageButton
-            android:id="@+id/add_picture"
             android:layout_width="0sp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -81,7 +77,6 @@
             app:srcCompat="@drawable/ic_add_to_photos_primary_18dp" />
 
         <android.support.v7.widget.AppCompatImageButton
-            android:id="@+id/use_camera"
             android:layout_width="0sp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -90,7 +85,6 @@
             app:srcCompat="@drawable/ic_camera_alt_primary_18dp" />
 
         <android.support.v7.widget.AppCompatImageButton
-            android:id="@+id/trend_hashtag"
             android:layout_width="0sp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -99,7 +93,6 @@
             app:srcCompat="@drawable/ic_whatshot_vector" />
 
         <android.support.v7.widget.AppCompatImageButton
-            android:id="@+id/show_drafts"
             android:layout_width="0sp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -108,7 +101,6 @@
             app:srcCompat="@drawable/ic_format_align_justify_primary_18dp" />
 
         <android.support.v7.widget.AppCompatImageButton
-            android:id="@+id/text_tools"
             android:layout_width="0sp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -117,7 +109,6 @@
             app:srcCompat="@drawable/ic_insert_emoticon_primary_24dp" />
 
         <android.support.v7.widget.AppCompatImageButton
-            android:id="@+id/send_status"
             android:layout_width="0sp"
             android:layout_height="match_parent"
             android:layout_weight="2"

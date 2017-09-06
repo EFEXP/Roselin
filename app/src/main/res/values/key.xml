@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="twitter_official_consumer_key">3rJOl1ODzm9yZy63FACdg</string>
-    <string name="twitter_official_consumer_secret">5jPoQ5kQvMJFDYRNE8bQ4rHuds4xJqhvgNJM4awaE8</string>
     <string name="twitter_consumer_key">7xOlLdaG8XVaxfM20XvwyxQZY</string>
     <string name="twitter_consumer_secret">hPM1wU4wW5L0zQYpRuYOKZUsfjmUYWlzROPoHbf4y27EtMWnJo</string>
 </resources>
