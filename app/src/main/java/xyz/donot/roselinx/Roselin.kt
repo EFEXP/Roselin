@@ -14,6 +14,7 @@ import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import xyz.donot.roselinx.util.extraUtils.roselinxConfig
 
 
 class Roselin : Application() {
@@ -36,6 +37,7 @@ class Roselin : Application() {
 		val config = RealmConfiguration.Builder()
 				.build()
 		Realm.setDefaultConfiguration(config)
+		roselinxConfig.logEnabled=true
 		/*
 		val config = RealmConfiguration.Builder().schemaVersion(0L)
 				.migration(MyRealmMigration())

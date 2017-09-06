@@ -13,7 +13,6 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.widget.ImageView
 import com.chad.library.adapter.base.BaseItemDraggableAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback
 import com.chad.library.adapter.base.listener.OnItemDragListener
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_tab_setting.*
@@ -24,6 +23,7 @@ import xyz.donot.roselinx.util.extraUtils.newIntent
 import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.util.getMyScreenName
 import xyz.donot.roselinx.util.getSerialized
+import xyz.donot.roselinx.view.custom.MyItemDragAndSwipeCallback
 import xyz.donot.roselinx.view.fragment.SearchSettingFragment
 
 
@@ -51,7 +51,7 @@ class TabSettingActivity : AppCompatActivity() {
 		data.forEach {
 			mAdapter.addData(Realm.getDefaultInstance().copyFromRealm(it))
 		}
-		val itemDragAndSwipeCallback = ItemDragAndSwipeCallback(mAdapter)
+		val itemDragAndSwipeCallback = MyItemDragAndSwipeCallback(mAdapter)
 		val itemTouchHelper = ItemTouchHelper(itemDragAndSwipeCallback)
 		itemTouchHelper.attachToRecyclerView(tab_recycler)
 		//Configure Adapter

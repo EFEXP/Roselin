@@ -127,6 +127,7 @@ abstract class BaseListFragment<T> : AppCompatDialogFragment() {
 		val v = View.inflate(activity, R.layout.item_ad, FrameLayout(activity))
 		v.adView.loadAd(AdRequest.Builder().setGender(AdRequest.GENDER_MALE).build())
 		adapter.addHeaderView(v)
+
 	}
 
 	private fun returnDataAsync() = async(CommonPool) {
