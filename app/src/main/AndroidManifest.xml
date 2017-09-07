@@ -1,146 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="xyz.donot.roselinx">
+  xmlns:tools="http://schemas.android.com/tools"
+  package="xyz.donot.roselinx">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
-    <application
-        android:name=".Roselin"
-        android:allowBackup="true"
-        android:fullBackupContent="@xml/backup_descriptor"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        tools:replace="android:label"
-       >
-        <activity
-            android:name=".view.activity.OauthActivity"
-            android:label="OauthActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+  <application
+    android:allowBackup="true"
+    android:fullBackupContent="@xml/backup_descriptor"
+    android:icon="@drawable/ic_launcher"
+    android:label="@string/app_name"
+    android:name=".Roselin"
+    android:supportsRtl="true"
+    android:theme="@style/AppTheme"
+    tools:replace="android:label">
+    <activity
+      android:label="OauthActivity"
+      android:name=".view.activity.OauthActivity"
+      android:theme="@style/AppTheme.NoActionBar"/>
 
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="6a54bc1be9e7f263796a0d1ea143f2f29dcbd3fe" />
+    <meta-data
+      android:name="io.fabric.ApiKey"
+      android:value="6a54bc1be9e7f263796a0d1ea143f2f29dcbd3fe"/>
 
-        <activity
-            android:name=".view.activity.MainActivity"
-            android:label="@string/app_name"
-            android:configChanges="orientation|keyboardHidden"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".view.activity.PictureActivity"
-            android:label="@string/title_activity_picture"
-            android:theme="@style/AppTheme.TranslucentStatusBar" />
-        <activity
-            android:name=".view.activity.VideoActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+    <activity
+      android:configChanges="orientation|keyboardHidden"
+      android:label="@string/app_name"
+      android:name=".view.activity.MainActivity"
+      android:theme="@style/AppTheme.NoActionBar">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
 
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
+    <activity
+      android:label="@string/title_activity_picture"
+      android:name=".view.activity.PictureActivity"
+      android:theme="@style/AppTheme.TranslucentStatusBar"/>
+    <activity
+      android:name=".view.activity.VideoActivity"
+      android:theme="@style/AppTheme.NoActionBar"/>
+    <activity
+      android:configChanges="orientation|keyboardHidden"
+      android:label="@string/title_activity_user"
+      android:name=".view.activity.UserActivity"
+      android:theme="@style/AppTheme.Translucent.User"/>
+    <activity
+      android:label="SettingsActivity"
+      android:name=".view.activity.SettingsActivity"
+      android:theme="@style/AppTheme.NoActionBar"/>
+    <activity
+      android:label="@string/title_activity_tweet_edit"
+      android:name=".view.activity.TweetEditActivity"
+      android:theme="@style/AppTheme.NoActionBar"/>
+    <activity
+      android:label="@string/title_activity_twitter_detail"
+      android:name=".view.activity.TwitterDetailActivity"
+      android:theme="@style/AppTheme.NoActionBar"/>
+    <activity
+      android:label="EditProfileActivity"
+      android:name=".view.activity.EditProfileActivity"
+      android:theme="@style/AppTheme.NoActionBar"/>
 
-        <activity
-            android:name=".view.activity.UserActivity"
-            android:label="@string/title_activity_user"
-            android:configChanges="orientation|keyboardHidden"
-            android:theme="@style/AppTheme.Translucent.User" />
-        <activity
-            android:name=".view.activity.SettingsActivity"
-            android:label="SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".view.activity.TweetEditActivity"
-            android:label="@string/title_activity_tweet_edit"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".view.activity.TwitterDetailActivity"
-            android:label="@string/title_activity_twitter_detail"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".view.activity.EditProfileActivity"
-            android:label="EditProfileActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+    <service
+      android:exported="false"
+      android:name=".service.TweetPostService"/>
+    <service
+      android:exported="false"
+      android:name=".service.SearchStreamService"/>
 
-        <service
-            android:name=".service.TweetPostService"
-            android:exported="false" />
-        <service
-            android:name=".service.SearchStreamService"
-            android:exported="false" />
+    <activity
+      android:configChanges="orientation|keyboardHidden"
+      android:name=".view.activity.SearchActivity"
+      android:theme="@style/AppTheme.NoActionBar"/>
+    <activity
+      android:name="com.yalantis.ucrop.UCropActivity"
+      android:screenOrientation="portrait"
+      android:theme="@style/AppTheme.NoActionBar"/>
+    <activity
+      android:name=".view.activity.SearchSettingActivity"
+      android:theme="@style/AppTheme.NoActionBar"/>
+    <activity
+      android:label="@string/title_activity_back_image"
+      android:name=".view.activity.BackImageActivity"
+      android:theme="@style/AppTheme.NoActionBar">
+      <intent-filter>
+        <action android:name="xyz.donot.roselinx.view.activity.BackImageActivity"/>
 
-        <activity
-            android:name=".view.activity.SearchActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".view.activity.SearchSettingActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".view.activity.BackImageActivity"
-            android:label="@string/title_activity_back_image"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="xyz.donot.roselinx.view.activity.BackImageActivity" />
+        <category android:name="android.intent.category.DEFAULT"/>
+      </intent-filter>
+    </activity>
+    <activity
+      android:configChanges="orientation|keyboardHidden"
+      android:name=".view.activity.UserListActivity"
+      android:theme="@style/AppTheme.NoActionBar"/>
+    <activity
+      android:name=".view.activity.TabSettingActivity"
+      android:theme="@style/AppTheme.NoActionBar">
+      <intent-filter>
+        <action android:name="xyz.donot.roselinx.view.activity.TabSettingActivity"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".view.activity.UserListActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".view.activity.TabSettingActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="xyz.donot.roselinx.view.activity.TabSettingActivity" />
+        <category android:name="android.intent.category.DEFAULT"/>
+      </intent-filter>
+    </activity>
+    <activity
+      android:configChanges="orientation|keyboardHidden"
+      android:label="@string/title_activity_user_lists"
+      android:name=".view.activity.UserListsActivity"
+      android:theme="@style/AppTheme.NoActionBar"/>
+    <activity
+      android:label="@string/title_activity_account_setting"
+      android:name=".view.activity.AccountSettingActivity"
+      android:theme="@style/AppTheme.NoActionBar"/>
 
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".view.activity.UserListsActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/title_activity_user_lists"
-            android:theme="@style/AppTheme.NoActionBar" />
+    <service
+      android:enabled="true"
+      android:exported="false"
+      android:name=".service.StreamingService"/>
 
-        <activity
-            android:name=".view.activity.AccountSettingActivity"
-            android:label="@string/title_activity_account_setting"
-            android:theme="@style/AppTheme.NoActionBar" />
+    <activity
+      android:label="@string/title_activity_mute_setting"
+      android:name=".view.activity.MuteSettingActivity"
+      android:theme="@style/AppTheme.NoActionBar">
+      <intent-filter>
+        <action android:name="xyz.donot.roselinx.view.activity.MuteSettingActivity"/>
 
-        <service
-            android:name=".service.StreamingService"
-            android:enabled="true"
-            android:exported="false" />
+        <category android:name="android.intent.category.DEFAULT"/>
+      </intent-filter>
+    </activity>
+    <activity
+      android:label="@string/title_activity_help"
+      android:name=".view.activity.HelpActivity"
+      android:theme="@style/AppTheme.NoActionBar"/>
 
-        <activity
-            android:name=".view.activity.MuteSettingActivity"
-            android:label="@string/title_activity_mute_setting"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="xyz.donot.roselinx.view.activity.MuteSettingActivity" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".view.activity.HelpActivity"
-            android:label="@string/title_activity_help"
-            android:theme="@style/AppTheme.NoActionBar"/>
-    </application>
+  </application>
 
 </manifest>

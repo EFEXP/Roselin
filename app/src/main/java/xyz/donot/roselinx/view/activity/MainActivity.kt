@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
             viewmodel.isConnectedStream.observe(this, Observer {
                 it?.let {
                     mainThread {
-                            iv_connected_stream.setImageDrawable(ResourcesCompat.getDrawable(resources, if (it)R.drawable.ic_cloud else R.drawable.ic_cloud_off, null))
+                        iv_connected_stream.setImageDrawable(ResourcesCompat.getDrawable(resources, if (it) R.drawable.ic_cloud else R.drawable.ic_cloud_off, null))
                     }
                 }
             })
@@ -66,21 +66,20 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
                 }
             }
             // stream&savedInstance
-                /*if (defaultSharedPreferences.getBoolean("use_search_stream", false)) {
-                    val result = realm.where(DBTabData::class.java).equalTo("type", SEARCH).findAll()
-                    result.forEach {
-                        startService(newIntent<SearchStreamService>(Bundle {
-                            putString("query_text", it.searchWord)
-                        }))
-                    }
-                }*/
-           if (savedInstanceState==null) viewmodel.initStream()
+            /*if (defaultSharedPreferences.getBoolean("use_search_stream", false)) {
+                val result = realm.where(DBTabData::class.java).equalTo("type", SEARCH).findAll()
+                result.forEach {
+                    startService(newIntent<SearchStreamService>(Bundle {
+                        putString("query_text", it.searchWord)
+                    }))
+                }
+            }*/
+            if (savedInstanceState == null) viewmodel.initStream()
             if (!defaultSharedPreferences.getBoolean("quick_tweet", false)) {
                 editText_layout.visibility = View.GONE
             }
             viewmodel.user.observe(this, Observer {
-                it?.let {
-                    user->
+                it?.let { user ->
                     navigation_drawer.getHeaderView(0).also {
                         Picasso.with(applicationContext).load(user.profileBannerIPadRetinaURL).into(it.my_header)
                         Picasso.with(applicationContext).load(user.originalProfileImageURLHttps).into(it.my_icon)
@@ -136,9 +135,9 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
         }
         viewmodel.postSucceed.observe(this, Observer {
             editText_status.hideSoftKeyboard()
-            it?.let {status->
+            it?.let { status ->
                 editText_status.editableText.clear()
-                Snackbar.make(window.decorView.rootView,"投稿しました", Snackbar.LENGTH_LONG).setAction("取り消し",{viewmodel.deleteTweet(status.id)}).show()
+                Snackbar.make(main_coordinator, "投稿しました", Snackbar.LENGTH_LONG).setAction("取り消し", { viewmodel.deleteTweet(status.id) }).show()
             }
         })
         viewmodel.deleteSucceed.observe(this, Observer { toast("削除しました") })
@@ -160,8 +159,10 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
             viewmodel.sendTweet(text = editText_status.editableText.toString())
         }
     }
+
     //Permission
     private val REQUEST_WRITE_READ = 0
+
     @SuppressLint("NewApi")
     private fun InitialRequestPermission() = fromApi(23) {
         val EX_WRITE = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
@@ -187,7 +188,7 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
     private val life by lazy { LifecycleRegistry(this) }
     override fun getLifecycle(): LifecycleRegistry {
-        return  life
+        return life
     }
 
 }

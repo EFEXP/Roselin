@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="250sp">
+  android:layout_height="@dimen/nav_header_height"
+  >
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/my_header"

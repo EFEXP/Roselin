@@ -24,6 +24,7 @@
 -keepclassmembernames class kotlinx.** {
     volatile <fields>;
 }
+-keep class com.android.vending.billing.**
 
 
 # Add this global rule

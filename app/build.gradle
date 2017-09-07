@@ -1,4 +1,5 @@
 import com.android.build.OutputFile
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -65,6 +66,12 @@ dependencies {
     compile "com.android.support:support-emoji-appcompat:${support}"
     compile "com.android.support:cardview-v7:${support}"
     compile "com.android.support:customtabs:${support}"
+    def coroutine_version = '0.18'
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+    def firebase='11.2.2'
+    compile "com.google.firebase:firebase-ads:$firebase"
+    compile "com.google.firebase:firebase-core:$firebase"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile 'com.twitter.sdk.android:twitter-core:3.1.1'
     compile 'id.zelory:compressor:2.1.0'
@@ -77,10 +84,6 @@ dependencies {
     compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.6.0'
     compile 'com.klinkerapps:link_builder:1.6.1'
     compile 'com.github.xbroak:CharCountTextView:v1.0'
-    def coroutine_version = '0.18'
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
-    compile 'com.google.firebase:firebase-ads:11.2.0'
     compile 'com.dinuscxj:recyclerrefreshlayout:2.0.5'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile "android.arch.lifecycle:runtime:1.0.0-alpha9"
