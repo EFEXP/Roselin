@@ -20,7 +20,7 @@ android {
         applicationId "xyz.donot.roselinx"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 3
+        versionCode 4
         versionName "1.0-beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -83,5 +83,8 @@ dependencies {
     compile 'com.google.firebase:firebase-ads:11.2.0'
     compile 'com.dinuscxj:recyclerrefreshlayout:2.0.5'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile "android.arch.lifecycle:runtime:1.0.0-alpha9"
+    compile "android.arch.lifecycle:extensions:1.0.0-alpha9"
+    kapt "android.arch.lifecycle:compiler:1.0.0-alpha9"
 }
 apply plugin: 'com.google.gms.google-services'

@@ -15,8 +15,6 @@ class CustomLinkTextView : EmojiAppCompatTextView {
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-
-
     override fun hasFocusable(): Boolean = false
 
     override fun onTouchEvent(event: MotionEvent): Boolean {

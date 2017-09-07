@@ -54,7 +54,7 @@ class Roselin : Application() {
 				"com.google.android.gms",
 				"Noto Color Emoji Compat",
 				R.array.com_google_android_gms_fonts_certs)
-		val conf = FontRequestEmojiCompatConfig(this@Roselin, fontRequest)
+		val conf = FontRequestEmojiCompatConfig(this, fontRequest)
 				.setReplaceAll(true)
 		EmojiCompat.init(conf)
 		//Ad

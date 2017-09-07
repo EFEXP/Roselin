@@ -18,6 +18,57 @@
             app:layout_constraintBottom_toTopOf="@+id/editText_layout"
             app:layout_constraintRight_toRightOf="parent"
             app:srcCompat="@drawable/ic_edit_white_24dp" />
+        <android.support.design.widget.CoordinatorLayout
+          android:id="@+id/main_coordinator"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          tools:context="xyz.donot.roselinx.view.activity.MainActivity">
+            <View
+              android:id="@+id/background_overlay"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/overlay_background"
+              android:visibility="gone" />
+
+            <android.support.design.widget.AppBarLayout
+              android:id="@+id/appBarLayout"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:theme="@style/AppTheme.AppBarOverlay">
+
+                <android.support.v7.widget.Toolbar
+                  android:id="@+id/toolbar"
+                  android:layout_width="match_parent"
+                  android:layout_height="?attr/actionBarSize"
+                  android:background="?attr/colorPrimary"
+                  app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+                  app:navigationIcon="@drawable/ic_menu_white_24dp"
+                  app:popupTheme="@style/AppTheme.PopupOverlay"
+                  app:title="@string/title_home">
+
+                    <ImageView
+                      android:id="@+id/iv_connected_stream"
+                      android:layout_width="wrap_content"
+                      android:layout_height="?attr/actionBarSize"
+                      android:background="@android:color/transparent" />
+                </android.support.v7.widget.Toolbar>
+
+                <android.support.design.widget.TabLayout
+                  android:id="@+id/tabs_main"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  app:tabMode="scrollable"
+                  app:tabTextAppearance="@style/MineCustomTabText" />
+            </android.support.design.widget.AppBarLayout>
+
+
+            <xyz.donot.roselinx.view.custom.FixedViewPager
+              android:id="@+id/main_viewpager"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:overScrollMode="never"
+              app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        </android.support.design.widget.CoordinatorLayout>
 
         <LinearLayout
             android:id="@+id/editText_layout"
@@ -54,57 +105,6 @@
                 android:gravity="end"
                 app:srcCompat="@drawable/ic_send_primary_24dp" />
         </LinearLayout>
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/main_coordinator"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="xyz.donot.roselinx.view.activity.MainActivity">
-        <View
-            android:id="@+id/background_overlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/overlay_background"
-            android:visibility="gone" />
-
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/appBarLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
-                app:navigationIcon="@drawable/ic_menu_white_24dp"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:title="@string/title_home">
-
-                <ImageView
-                    android:id="@+id/iv_connected_stream"
-                    android:layout_width="wrap_content"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@android:color/transparent" />
-            </android.support.v7.widget.Toolbar>
-
-           <android.support.design.widget.TabLayout
-                android:id="@+id/tabs_main"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:tabMode="scrollable"
-                app:tabTextAppearance="@style/MineCustomTabText" />
-        </android.support.design.widget.AppBarLayout>
-
-
-        <xyz.donot.roselinx.view.custom.FixedViewPager
-            android:id="@+id/main_viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-    </android.support.design.widget.CoordinatorLayout>
     </android.support.constraint.ConstraintLayout>
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_drawer"
