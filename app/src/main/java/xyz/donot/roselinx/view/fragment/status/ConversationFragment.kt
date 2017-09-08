@@ -5,15 +5,11 @@ import android.content.*
 import android.net.Uri
 import android.os.Bundle
 import android.support.customtabs.CustomTabsIntent
-import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.content_base_fragment.*
-import kotlinx.android.synthetic.main.content_base_fragment.view.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -27,19 +23,19 @@ import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.activity.TweetEditActivity
 import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.adapter.StatusAdapter
+import xyz.donot.roselinx.view.fragment.ARecyclerFragment
 import xyz.donot.roselinx.view.fragment.RetweeterDialog
 
 
-class ConversationFragment : Fragment(){
+class ConversationFragment : ARecyclerFragment(){
     val status by lazy {arguments.getSerializable("status") as Status }
     val adapter by lazy { StatusAdapter() }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadReply(status.id)
         getDiscuss(status)
-        refresh.isEnabled=false
-        view.recycler.adapter = adapter
-        view.recycler.layoutManager = LinearLayoutManager(activity)
+        recycler.adapter = adapter
+     //   view.recycler.layoutManager = LinearLayoutManager(activity)
         //クリックリスナー
         adapter.setOnItemClickListener { adapter, _, position ->
             val status = adapter.data[position] as Status

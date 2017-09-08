@@ -18,37 +18,36 @@ class RetweeterDialog : BaseListFragment<User>() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter.setOnItemClickListener { _, _, position ->
+        viewmodel .adapter.setOnItemClickListener { _, _, position ->
             val intent=activity.intent<UserActivity>()
-            intent.putExtra("user_id",adapter.getItem(position))
+            intent.putExtra("user_id",    viewmodel .adapter.getItem(position))
             activity.startActivity(intent)
-            adapter.getItem(position)
+            viewmodel . adapter.getItem(position)
         }
     }
 
-    override fun pullToRefresh(adapter: MyBaseRecyclerAdapter<User, MyViewHolder>) = Unit
 
     override fun GetData(): MutableList<User>? {
-        val result=twitter.getRetweeterIds(tweetId, cursor)
-        val users=twitter.users().lookupUsers(*result.iDs)
+        val result=viewmodel.twitter.getRetweeterIds(tweetId, cursor)
+        val users=viewmodel.twitter.users().lookupUsers(*result.iDs)
         return if (users != null) {
             mainThread {
                 if (result.hasNext()){cursor=result.nextCursor}
                 else{
-                    adapter.loadMoreComplete()
-                    shouldLoad=false
+                    viewmodel . adapter.loadMoreComplete()
+                    viewmodel . shouldLoad=false
                     }
             }
             users
         }
         else{
-            shouldLoad=false
+            viewmodel . shouldLoad=false
             null
         }
 
     }
 
-    val tweetId by lazy { arguments.getLong("tweetId") }
+    private val tweetId by lazy { arguments.getLong("tweetId") }
 
 
 

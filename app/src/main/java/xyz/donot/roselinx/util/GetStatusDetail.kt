@@ -67,7 +67,7 @@ private fun emojiSubString(target:String, startIndex: Int, endIndex: Int): Strin
     // 繰り返し用開始位置
     var start = bi.first()
     // 繰り返し用終了位置
-    var end = 0
+    var end :Int
     // 文字数
     var count = 0
     // 文字の最後まで繰り返し

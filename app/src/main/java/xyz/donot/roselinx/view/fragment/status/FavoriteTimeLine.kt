@@ -6,5 +6,5 @@ import twitter4j.User
 
 class FavoriteTimeLine:TimeLineFragment(){
     val user by lazy {arguments.getSerializable("user") as User }
-    override fun GetData(): MutableList<Status> =twitter.getFavorites(user.id, Paging(page))
+    override fun GetData(): MutableList<Status> =viewmodel.twitter.getFavorites(user.id, Paging(page))
 }

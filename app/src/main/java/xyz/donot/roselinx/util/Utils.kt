@@ -23,8 +23,6 @@ fun <T : Serializable> T.getSerialized(): ByteArray = ByteArrayOutputStream().us
 }
 
 
-
-
 fun <T> ByteArray.getDeserialized(): T {
 	@Suppress("UNCHECKED_CAST")
 	return ObjectInputStream(ByteArrayInputStream(this)).readObject() as T

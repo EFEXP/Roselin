@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="xyz.donot.quetzal.view.fragment.DraftFragment">
+    tools:context="xyz.donot.roselinx.view.activity.TweetEditActivity">
 
   <ListView
       android:id="@+id/draft_list_view"

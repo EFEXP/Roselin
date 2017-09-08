@@ -4,7 +4,6 @@ package xyz.donot.roselinx.view.fragment.status
 import android.os.Bundle
 import android.view.View
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.content_base_fragment.*
 import kotlinx.android.synthetic.main.item_list.view.*
 import twitter4j.ResponseList
 import twitter4j.UserList
@@ -25,9 +24,9 @@ class UsersListFragment : BaseListFragment<UserList>() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter.setEnableLoadMore(false)
-        adapter.setOnItemClickListener { _, _, position ->
-            val item=adapter.data[position]
+        viewmodel .adapter.setEnableLoadMore(false)
+        viewmodel .adapter.setOnItemClickListener { _, _, position ->
+            val item=viewmodel .adapter.data[position]
             if(selectList){
                 (activity as UserListsActivity).callbackMethod(item.id,item.name)
             }
@@ -35,13 +34,12 @@ class UsersListFragment : BaseListFragment<UserList>() {
                ListTimeLine().apply { arguments=Bundle{putLong("listId",item.id)} }.show(fragmentManager,"")
             }
         }
-        refresh.isEnabled=false
     }
 
     override fun GetData(): ResponseList<UserList>?{
-        shouldLoad=false
-        adapter.loadMoreComplete()
-      return  twitter.getUserLists(userId)
+        viewmodel . shouldLoad=false
+        viewmodel .adapter.loadMoreComplete()
+      return  viewmodel.twitter.getUserLists(userId)
     }
     inner class UserListAdapter:MyBaseRecyclerAdapter<UserList,MyViewHolder>(R.layout.item_list)
     {

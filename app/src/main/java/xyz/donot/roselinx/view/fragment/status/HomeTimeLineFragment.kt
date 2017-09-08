@@ -8,45 +8,35 @@ import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.view.View
 import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
 import twitter4j.Paging
 import twitter4j.ResponseList
 import twitter4j.Status
 import twitter4j.StatusDeletionNotice
 import xyz.donot.roselinx.util.extraUtils.mainThread
-import xyz.donot.roselinx.util.extraUtils.twitterExceptionToast
 import xyz.donot.roselinx.util.getDeserialized
-import xyz.donot.roselinx.view.custom.MyBaseRecyclerAdapter
-import xyz.donot.roselinx.view.custom.MyViewHolder
+
 
 class HomeTimeLineFragment : TimeLineFragment(){
-    override fun GetData(): ResponseList<Status>? =twitter.getHomeTimeline(Paging(page))
+    override fun GetData(): ResponseList<Status>? =viewmodel.twitter.getHomeTimeline(Paging(page))
     private val receiver by lazy { StatusReceiver() }
     private val deleteReceiver by lazy { DeleteReceiver() }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (savedInstanceState==null&&twitter==main_twitter){
+        if (savedInstanceState==null&&viewmodel.twitter==viewmodel.main_twitter){
             LocalBroadcastManager.getInstance(activity).apply {
                 registerReceiver(receiver, IntentFilter("NewStatus"))
                 registerReceiver(deleteReceiver, IntentFilter("DeleteStatus"))
             }
         }
-
-    }
-
-    override fun pullToRefresh(adapter: MyBaseRecyclerAdapter<Status, MyViewHolder>) {
-        launch(UI){
-            try {
-                val result = async(CommonPool){ twitter.getHomeTimeline(Paging(adapter.data[0].id))}.await()
-                insertDataBackground(result)
-            } catch (e: Exception) {
-              activity.twitterExceptionToast(e)
-            }
+        viewmodel.pullToRefresh= {twitter->
+            async(CommonPool){ twitter.getHomeTimeline(Paging(viewmodel.adapter.data[0].id))}
         }
-
     }
+
+
+
+
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(activity).apply {
@@ -59,7 +49,7 @@ class HomeTimeLineFragment : TimeLineFragment(){
         override fun onReceive(context: Context, intent: Intent) {
             val data=intent.extras.getByteArray("Status").getDeserialized<Status>()
             mainThread {
-                insertDataBackground(data)
+                viewmodel.insertDataBackground(data)
             }
         }
     }
@@ -67,9 +57,9 @@ class HomeTimeLineFragment : TimeLineFragment(){
         override fun onReceive(context: Context, intent: Intent) {
             val data=intent.extras.getByteArray("StatusDeletionNotice").getDeserialized<StatusDeletionNotice>()
             mainThread {
-                adapter.data.filter { de -> de.id == data.statusId }.mapNotNull {
-                    val int=   adapter.data.indexOf(it)
-                    adapter.remove(int)
+                viewmodel . adapter.data.filter { de -> de.id == data.statusId }.mapNotNull {
+                    val int=   viewmodel .adapter.data.indexOf(it)
+                    viewmodel .  adapter.remove(int)
                 }
 
             }

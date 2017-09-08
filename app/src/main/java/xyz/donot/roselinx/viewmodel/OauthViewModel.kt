@@ -29,7 +29,9 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
         //val result = async(CommonPool) { tw.verifyCredentials() }.await()
         val realmAccounts = realm.where(DBAccount::class.java).equalTo("isMain", true)
         if (realmAccounts.findFirst() != null) {
-            realmAccounts.findFirst()?.isMain = false
+           realm.executeTransaction {
+               realmAccounts.findFirst()?.isMain = false
+           }
         }
         if (realm.where(DBAccount::class.java).equalTo("id", user.id).findAll().count() == 0) {
             realm.executeTransaction {

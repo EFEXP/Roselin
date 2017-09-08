@@ -29,24 +29,24 @@ class UserListActivity : AppCompatActivity() {
 }
 
 class FriendUserList : UserListFragment() {
-	override fun getUserData(userId: Long, cursor: Long): PagableResponseList<User>? = twitter.getFriendsList(userId, cursor)
+	override fun getUserData(userId: Long, cursor: Long): PagableResponseList<User>? = viewmodel.twitter.getFriendsList(userId, cursor)
 	override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		adapter.setOnItemClickListener { _, _, position ->
+        viewmodel .adapter.setOnItemClickListener { _, _, position ->
 			val intent = activity.intent<UserActivity>()
-			intent.putExtra("user_id", adapter.data[position].id)
+			intent.putExtra("user_id", viewmodel .adapter.data[position].id)
 			activity.startActivity(intent)
 		}
 	}
 }
 
 class FollowerUserList : UserListFragment() {
-	override fun getUserData(userId: Long, cursor: Long): PagableResponseList<User>? = twitter.getFollowersList(userId, cursor)
+	override fun getUserData(userId: Long, cursor: Long): PagableResponseList<User>? = viewmodel.twitter.getFollowersList(userId, cursor)
 	override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		adapter.setOnItemClickListener { _, _, position ->
+        viewmodel .adapter.setOnItemClickListener { _, _, position ->
 			val intent = activity.intent<UserActivity>()
-			intent.putExtra("user_id", adapter.data[position].id)
+			intent.putExtra("user_id", viewmodel .adapter.data[position].id)
 			activity.startActivity(intent)
 		}
 	}

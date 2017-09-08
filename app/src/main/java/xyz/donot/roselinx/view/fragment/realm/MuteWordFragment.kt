@@ -2,11 +2,7 @@ package xyz.donot.roselinx.view.fragment.realm
 
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatDialogFragment
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -14,27 +10,20 @@ import android.widget.TextView
 import io.realm.OrderedRealmCollection
 import io.realm.Realm
 import io.realm.RealmRecyclerViewAdapter
-import kotlinx.android.synthetic.main.content_base_fragment.*
 import kotlinx.android.synthetic.main.item_mute.view.*
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.realm.DBMute
+import xyz.donot.roselinx.view.fragment.ARecyclerFragment
 
-class MuteWordFragment :AppCompatDialogFragment(){
+class MuteWordFragment :ARecyclerFragment(){
     val adapter by lazy {MuteWordAdater(Realm.getDefaultInstance().where(DBMute::class.java).isNotNull("text").findAll()) }
 
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val dividerItemDecoration = DividerItemDecoration( recycler.context,
-                LinearLayoutManager(activity).orientation)
-        recycler.addItemDecoration(dividerItemDecoration)
-        recycler.layoutManager = LinearLayoutManager(activity)
         recycler.adapter=adapter
-        refresh.isEnabled=false
-
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View = inflater.inflate(R.layout.content_base_fragment, container, false)
     inner class MuteWordAdater(orderedRealmCollection: OrderedRealmCollection<DBMute>): RealmRecyclerViewAdapter<DBMute, MuteWordAdater.ViewHolder>(orderedRealmCollection,true){
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item=getItem(position)!!

@@ -9,22 +9,21 @@ import xyz.donot.roselinx.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselinx.view.custom.MyViewHolder
 import xyz.donot.roselinx.view.fragment.BaseListFragment
 
-class DMListFragment: BaseListFragment<DirectMessage>()
-{
-	override fun adapterFun(): MyBaseRecyclerAdapter<DirectMessage, MyViewHolder> =DirectMessageAdapter()
-	var page: Int = 0
-		set(value) {
-			field=value
-		}
-		get() {
-			field++
-			return field
-		}
+class DMListFragment : BaseListFragment<DirectMessage>() {
+    override fun adapterFun(): MyBaseRecyclerAdapter<DirectMessage, MyViewHolder> = DirectMessageAdapter()
+    var page: Int = 0
+        set(value) {
+            field = value
+        }
+        get() {
+            field++
+            return field
+        }
 
-	override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-		super.onViewCreated(view, savedInstanceState)
-	}
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
 
-	override fun GetData(): MutableList<DirectMessage>? = twitter.getDirectMessages(Paging(page))
+    override fun GetData(): MutableList<DirectMessage>? = viewmodel.twitter.getDirectMessages(Paging(page))
 
 }

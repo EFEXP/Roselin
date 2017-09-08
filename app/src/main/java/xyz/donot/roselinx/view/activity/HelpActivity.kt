@@ -50,7 +50,7 @@ class featuresFragment:BaseListFragment<ChangeLog>(){
 	override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		refresh.isEnabled=false
-		adapter.setEnableLoadMore(false)
+        viewmodel .adapter.setEnableLoadMore(false)
 	}
 
 	override fun GetData(): MutableList<ChangeLog>? = mutableListOf(

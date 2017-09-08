@@ -1,102 +1,102 @@
 package xyz.donot.roselinx.view.activity
 
+import android.arch.lifecycle.LifecycleRegistry
+import android.arch.lifecycle.LifecycleRegistryOwner
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.inputmethod.EditorInfo
 import kotlinx.android.synthetic.main.activity_search_setting.*
-import twitter4j.Query
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.hideSoftKeyboard
 import xyz.donot.roselinx.util.extraUtils.start
 import xyz.donot.roselinx.util.getSerialized
 import xyz.donot.roselinx.view.fragment.DatePickFragment
+import xyz.donot.roselinx.viewmodel.QueryBundle
+import xyz.donot.roselinx.viewmodel.SearchSettingViewModel
 
 
-class SearchSettingActivity : AppCompatActivity() {
-   fun dateSet(year: Int, monthOfYear: Int, dayOfMonth: Int,isFrom:Boolean) = if(isFrom){
-       day_from.text = "$year/$monthOfYear/$dayOfMonth/～"
-       day_from.tag=" since:$year-$monthOfYear-$dayOfMonth"
-   }
-   else {
-       day_to.text = "～$year/$monthOfYear/$dayOfMonth/"
-       day_to.tag=" until:$year-$monthOfYear-$dayOfMonth"
-   }
+class SearchSettingActivity : AppCompatActivity(), LifecycleRegistryOwner {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_setting)
         toolbar.inflateMenu(R.menu.menu_search_setting)
-       setSupportActionBar(toolbar)
-       supportActionBar?.setDisplayHomeAsUpEnabled(true)
-       supportActionBar?.setDisplayShowHomeEnabled(true)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        val viewmodel=
+        ViewModelProviders.of(this).get(SearchSettingViewModel::class.java)
+        viewmodel.dayFrom.observe(this, Observer {
+            it?.let {
+            day_from.text = "${it.y}/${it.m}/${it.d}~"
+        }}
+        )
+        viewmodel.dayTo.observe(this, Observer {
+            it?.let {
+            day_to.text = "~${it.y}/${it.m}/${it.d}"
+        }})
+        viewmodel.mQuery.observe(this, Observer {
+          it?.let {
+              start<SearchActivity>(Bundle().apply {
+                  putByteArray("query_bundle", it.getSerialized())
+                  putString("query_text", search_setting_query.text.toString())
+              })
+          }
+        })
 
-        search_setting_query.setOnEditorActionListener { view, i,_ ->
+        search_setting_query.setOnEditorActionListener { view, i, _ ->
             if (i == EditorInfo.IME_ACTION_SEARCH) {
                 view.hideSoftKeyboard()
                 bt_search.performClick()
             }
-            return@setOnEditorActionListener true }
-	    search_setting_query_absolute.setOnEditorActionListener { view, i,_ ->
-		    if (i == EditorInfo.IME_ACTION_SEARCH) {
-			    view.hideSoftKeyboard()
-			    bt_search.performClick()
-		    }
-		    return@setOnEditorActionListener true }
+            return@setOnEditorActionListener true
+        }
+        search_setting_query_absolute.setOnEditorActionListener { view, i, _ ->
+            if (i == EditorInfo.IME_ACTION_SEARCH) {
+                view.hideSoftKeyboard()
+                bt_search.performClick()
+            }
+            return@setOnEditorActionListener true
+        }
         day_from.setOnClickListener {
             DatePickFragment()
-                .apply { arguments= Bundle().apply { putBoolean("isFrom",true) } }
-                .show(supportFragmentManager,"") }
-        day_to.setOnClickListener {DatePickFragment()
-                .apply { arguments= Bundle().apply { putBoolean("isFrom",false) } }
-                .show(supportFragmentManager,"") }
+                    .apply { arguments = Bundle().apply { putBoolean("isFrom", true) } }
+                    .show(supportFragmentManager, "")
+        }
+        day_to.setOnClickListener {
+            DatePickFragment()
+                    .apply { arguments = Bundle().apply { putBoolean("isFrom", false) } }
+                    .show(supportFragmentManager, "")
+        }
 
-        bt_search.setOnClickListener{
-            if (search_setting_query.text.isBlank()&&search_setting_query_absolute.text.isBlank())
+        bt_search.setOnClickListener {
+            if (search_setting_query.text.isBlank() && search_setting_query_absolute.text.isBlank())
                 return@setOnClickListener
-            var querytext=search_setting_query.text.toString()
-                val query=Query()
-                if(!search_setting_from.text.isNullOrEmpty()) {
-                    querytext +=" from:${search_setting_from.text}"
-                }
-                if(!search_setting_to.text.isNullOrEmpty()) {
-                    querytext +=" to:${search_setting_to.text}"
-                }
+            viewmodel.setQuery(
+                    QueryBundle(
+                            query = search_setting_query.text.toString(),
+                            queryAbsolute = "\"${search_setting_query_absolute.text}\"",
+                            dayFrom = viewmodel.dayFrom.value,
+                            dayTo = viewmodel.dayTo.value,
+                            videos = search_setting_video.isChecked,
+                            pictures = search_setting_image.isChecked,
+                            links = search_setting_links.isChecked,
+                            japanese = search_setting_only_japanese.isChecked,
+                            replyFrom = search_setting_from.text.toString(),
+                            replyTo = search_setting_to.text.toString())
+            )
 
-                if(search_setting_video.isChecked) {
-                    querytext +=" filter:videos"
-                }
+        }
+    }
 
-                if(search_setting_image.isChecked) {
-                    querytext +=" filter:images"
-                }
-         if ( !search_setting_query_absolute.text.toString().isBlank()){
-             querytext +="\"${search_setting_query_absolute.text}\""
-         }
-
-
-            if(search_setting_links.isChecked) {
-            querytext +=" filter:links"
-              }
-
-                if(day_from.tag!=null&&day_from.tag is String){
-                    querytext +=day_from.tag
-                }
-            if(search_setting_only_japanese.isChecked){
-                query.lang="jpn"
-            }
-            if(day_to.tag!=null&&day_to.tag is String){
-                querytext +=day_to.tag
-            }
-                querytext +=" -rt"
-              query.resultType=Query.MIXED
-            query.query=querytext
-            start<SearchActivity>(Bundle().apply {
-                putByteArray("query_bundle",query.getSerialized())
-                putString("query_text",search_setting_query.text.toString())
-            })
-    }}
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()
     }
 
+    private val life by lazy { LifecycleRegistry(this) }
+    override fun getLifecycle(): LifecycleRegistry {
+        return life
+    }
 }

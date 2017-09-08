@@ -8,7 +8,7 @@
     tools:context="xyz.donot.roselinx.view.activity.TwitterDetailActivity"
     tools:showIn="@layout/activity_twitter_detail">
 <android.support.v7.widget.RecyclerView
-    android:id="@+id/a_recycler_view"
+    android:id="@+id/recycler"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 </android.support.constraint.ConstraintLayout>
