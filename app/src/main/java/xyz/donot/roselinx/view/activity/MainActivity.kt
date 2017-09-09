@@ -35,36 +35,46 @@ import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
     private var viewmodel by Delegates.notNull<MainViewModel>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         if (!haveToken()) {
             startActivity(intent<OauthActivity>())
             this.finish()
         } else if (isConnected()) {
-            viewmodel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-            viewmodel.registerReceivers()
-            viewmodel.initTab()
-            viewmodel.isConnectedStream.observe(this, Observer {
-                it?.let {
-                    mainThread {
-                        iv_connected_stream.setImageDrawable(ResourcesCompat.getDrawable(resources, if (it) R.drawable.ic_cloud else R.drawable.ic_cloud_off, null))
+            setContentView(R.layout.activity_main)
+            viewmodel =ViewModelProviders.of(this).get(MainViewModel::class.java)
+            viewmodel.apply {
+
+                registerReceivers()
+
+                initTab()
+
+                initUser()
+
+                isConnectedStream.observe(this@MainActivity, Observer {
+                    it?.let {
+                        mainThread {
+                            iv_connected_stream.setImageDrawable(ResourcesCompat.getDrawable(resources, if (it) R.drawable.ic_cloud else R.drawable.ic_cloud_off, null))
+                        }
                     }
-                }
-            })
-            toolbar.apply {
-                title = context.getString(R.string.title_home)
-                inflateMenu(R.menu.menu_main)
-                setNavigationOnClickListener { drawer_layout.openDrawer(GravityCompat.START) }
-                setOnMenuItemClickListener {
-                    when (it.itemId) {
-                        R.id.menu_search -> start<SearchSettingActivity>()
-                        else -> throw Exception()
+                })
+
+                if (savedInstanceState == null) {initStream()}
+
+                viewmodel.user.observe(this@MainActivity, Observer {
+                    it?.let { user ->
+                        navigation_drawer.getHeaderView(0).also {
+                            Picasso.with(applicationContext).load(user.profileBannerIPadRetinaURL).into(it.my_header)
+                            Picasso.with(applicationContext).load(user.originalProfileImageURLHttps).into(it.my_icon)
+                            it.my_name_header.text = user.name
+                            it.my_screen_name_header.text = "@${user.screenName}"
+                        }
                     }
-                    true
-                }
+                })
             }
+            setUpDrawerEvent()
+            setUpView()
+            InitialRequestPermission()
             // stream&savedInstance
             /*if (defaultSharedPreferences.getBoolean("use_search_stream", false)) {
                 val result = realm.where(DBTabData::class.java).equalTo("type", SEARCH).findAll()
@@ -74,24 +84,7 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
                     }))
                 }
             }*/
-            if (savedInstanceState == null) viewmodel.initStream()
-            if (!defaultSharedPreferences.getBoolean("quick_tweet", false)) {
-                editText_layout.visibility = View.GONE
-            }
-            viewmodel.user.observe(this, Observer {
-                it?.let { user ->
-                    navigation_drawer.getHeaderView(0).also {
-                        Picasso.with(applicationContext).load(user.profileBannerIPadRetinaURL).into(it.my_header)
-                        Picasso.with(applicationContext).load(user.originalProfileImageURLHttps).into(it.my_icon)
-                        it.my_name_header.text = user.name
-                        it.my_screen_name_header.text = "@${user.screenName}"
-                    }
-                }
-            })
-            viewmodel.initUser()
-            setUpDrawerEvent()
-            setUpView()
-            InitialRequestPermission()
+
         }
     }
 
@@ -120,18 +113,30 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
         true
     })
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-    }
-
     private fun setUpView() {
+
+        if (!defaultSharedPreferences.getBoolean("quick_tweet", false)) {
+            editText_layout.visibility = View.GONE
+        }
+        toolbar.apply {
+            title = context.getString(R.string.title_home)
+            inflateMenu(R.menu.menu_main)
+            setNavigationOnClickListener { drawer_layout.openDrawer(GravityCompat.START) }
+            setOnMenuItemClickListener {
+                when (it.itemId) {
+                    R.id.menu_search -> start<SearchSettingActivity>()
+                    else -> throw Exception()
+                }
+                true
+            }
+        }
         //pager
         Realm.getDefaultInstance().use {
             val list = it.copyFromRealm(it.where(DBTabData::class.java).findAll()).toList()
             val adapter = MainTimeLineAdapter(supportFragmentManager, list)
             main_viewpager.adapter = adapter
             main_viewpager.offscreenPageLimit = adapter.count
+            main_viewpager.currentItem=1
         }
         viewmodel.postSucceed.observe(this, Observer {
             editText_status.hideSoftKeyboard()
@@ -185,6 +190,7 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
             }
         }
     }
+
 
     private val life by lazy { LifecycleRegistry(this) }
     override fun getLifecycle(): LifecycleRegistry {

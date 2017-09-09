@@ -6,6 +6,7 @@ import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import twitter4j.Twitter
+import xyz.donot.roselinx.util.extraUtils.mainThread
 import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselinx.view.custom.MyViewHolder
@@ -13,7 +14,7 @@ import kotlin.properties.Delegates
 
 
 class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
-    var isBackground = MutableLiveData<Boolean>()
+    var isBackground = MutableLiveData<Boolean>().apply { value=false }
     var twitter by Delegates.notNull<Twitter>()
     val main_twitter by lazy { getTwitterInstance() }
     val dataInserted = MutableLiveData<Unit>()
@@ -32,39 +33,39 @@ class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
         }
 
     private fun insertDataBackground(data: List<T>) {
-        isBackground.let {
-            if (!isBackground.value!!) {
-                adapter.addData(0, data)
-                dataInserted.value = Unit
-            } else {
-                dataStore.addAll(0, data)
-            }
+        mainThread {
+                if (isBackground.value!!) {
+                    dataStore.addAll(0, data)
+                } else {
+                    adapter.addData(0, data)
+                    dataInserted.value = Unit
+                }
         }
     }
 
 
     fun insertDataBackground(data: T) {
-        isBackground.let {
-            if (!isBackground.value!!) {
-                adapter.addData(0, data)
-                dataInserted.value = Unit
-            } else {
-                dataStore.add(0, data)
+        mainThread {
+                if (isBackground.value!!) {
+                    dataStore.add(0, data)
+                } else {
+                    adapter.addData(0, data)
+                    dataInserted.value = Unit
             }
         }
     }
 
-    var  pullToRefresh :(Twitter)-> Deferred<List<T>>? by Delegates.notNull()
+    var pullToRefresh: (Twitter) -> Deferred<List<T>>? by Delegates.notNull()
 
     fun pullDown() {
         if (adapter.data.isNotEmpty()) {
-            launch(UI){
-              pullToRefresh(twitter)?.await()?.let { insertDataBackground(it) }
-                dataRefreshed
+            launch(UI) {
+                pullToRefresh(twitter)?.await()?.let { insertDataBackground(it) }
+                dataRefreshed.value = Unit
             }
 
         } else {
-            dataRefreshed
+            dataRefreshed.value = Unit
         }
     }
 
@@ -74,7 +75,6 @@ class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
 
     override fun onCleared() {
         super.onCleared()
-
     }
 
 }

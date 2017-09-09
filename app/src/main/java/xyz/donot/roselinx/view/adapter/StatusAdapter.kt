@@ -91,10 +91,10 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
 //引用
             item.quotedStatus?.let {
                 quote_tweet_holder.show()
-                quoted_screenname.text = "@" + item.quotedStatus.user.screenName
+                quoted_screenname.text = "@${item.quotedStatus.user.screenName}"
                 quoted_text.text = item.quotedStatus.text
                 quoted_name.text = item.quotedStatus.user.name
-                Picasso.with(mContext).load(item.quotedStatus.user.biggerProfileImageURLHttps).resize(100, 100).into(quoted_icon)
+                Picasso.with(mContext).load(item.quotedStatus.user.biggerProfileImageURLHttps).fit().into(quoted_icon)
             } ?: quote_tweet_holder.hide()
 
             //Listener
@@ -168,7 +168,7 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
             } else {
                 recyclerview_picture.hide()
             }
-            Picasso.with(mContext).load(item.user.originalProfileImageURLHttps).into(imageview_icon)
+            Picasso.with(mContext).load(item.user.originalProfileImageURLHttps).fit().into(imageview_icon)
         }
         //    val array= mContext.resources.getStringArray(R.array.ARRAY_KITITSUI)
         //      setText(R.id.textview_text,array[Random().nextInt(array.count())])

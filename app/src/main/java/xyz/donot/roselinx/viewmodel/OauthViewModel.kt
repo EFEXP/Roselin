@@ -27,22 +27,19 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
 
     private fun saveToken(tw: Twitter, user: User) {
         //val result = async(CommonPool) { tw.verifyCredentials() }.await()
-        val realmAccounts = realm.where(DBAccount::class.java).equalTo("isMain", true)
-        if (realmAccounts.findFirst() != null) {
-           realm.executeTransaction {
-               realmAccounts.findFirst()?.isMain = false
-           }
-        }
         if (realm.where(DBAccount::class.java).equalTo("id", user.id).findAll().count() == 0) {
+
+            val realmAccounts = realm.where(DBAccount::class.java).equalTo("isMain", true)
             realm.executeTransaction {
+                if (realmAccounts.findFirst() != null) {
+                    realmAccounts.findFirst()?.isMain = false
+                }
                 val account = realm.createObject(DBAccount::class.java, user.id)
                 account.isMain = true
                 account.twitter = tw.getSerialized()
                 account.user = user.getSerialized()
             }
         }
-
-
     }
 
     private fun saveMute(tw: Twitter) {

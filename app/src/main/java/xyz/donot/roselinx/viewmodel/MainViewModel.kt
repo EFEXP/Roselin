@@ -81,19 +81,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         if (realm.where(DBTabData::class.java).count() == 0L) {
             realm.executeTransaction {
                 it.createObject(DBTabData::class.java).apply {
-                    order = 0
+                    order = 1
                     type = HOME
                     accountId = getMyId()
                     screenName = getMyScreenName()
                 }
                 it.createObject(DBTabData::class.java).apply {
-                    order = 2
+                    order = 3
                     type = NOTIFICATION
                     accountId = getMyId()
                     screenName = getMyScreenName()
                 }
                 it.createObject(DBTabData::class.java).apply {
-                    order = 1
+                    order = 2
                     type = MENTION
                     accountId = getMyId()
                     screenName = getMyScreenName()
@@ -129,6 +129,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     //User
      val user: MutableLiveData<User> =MutableLiveData()
     fun initUser() {
+        if (user.value==null)
         launch(UI){
             user.value=  async(CommonPool){twitter.verifyCredentials()}.await()
         }

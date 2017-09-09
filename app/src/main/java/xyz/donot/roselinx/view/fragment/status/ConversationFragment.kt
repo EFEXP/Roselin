@@ -118,7 +118,7 @@ class ConversationFragment : ARecyclerFragment(){
             inflater.inflate(R.layout.content_base_fragment, container, false)
 
 
-    fun loadReply(long: Long){
+    private fun loadReply(long: Long){
         launch(UI){
             try {
                 val result= async(CommonPool){ getTwitterInstance().showStatus(long)}.await()
@@ -136,8 +136,8 @@ class ConversationFragment : ARecyclerFragment(){
 
     private fun getDiscuss(status: Status){
         val twitter by lazy { getTwitterInstance() }
-        val screenname = status.user.screenName
-        val query= Query("@$screenname since_id:${status.id}")
+        val query= Query("to:" + status.user.screenName)
+                // Query("@$screenname since_id:${status.id}")
         query.count=100
         context.logd {  query.count.toString()}
         launch(UI){

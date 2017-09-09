@@ -34,12 +34,12 @@ class SearchTimeline : TimeLineFragment() {
                 registerReceiver(receiver, IntentFilter(arguments.getString("query_text")))
             }
         }
-        viewmodel.pullToRefresh= {twitter->
-            viewmodel. adapter.data.clear()
-            viewmodel. adapter.notifyDataSetChanged()
+        viewmodel.pullToRefresh = { twitter ->
+            viewmodel.adapter.data.clear()
+            viewmodel.adapter.notifyDataSetChanged()
             query = arguments.getByteArray("query_bundle").getDeserialized<Query>()
             LoadMoreData2()
-            viewmodel. dataRefreshed
+            viewmodel.dataRefreshed.value = Unit
             null
 
         }
@@ -72,6 +72,7 @@ class SearchTimeline : TimeLineFragment() {
             }
         }
     }
+
     //Receiver
     inner class SearchReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {

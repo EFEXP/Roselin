@@ -19,6 +19,7 @@ fun Context.typeToIcon(type: Int): Drawable {
 		NOTIFICATION -> R.drawable.ic_notifications
 		TREND -> R.drawable.ic_trending
 		DM -> R.drawable.ic_mail
+        SETTING -> R.drawable.ic_settings_grey_400_36dp
 		else -> throw IllegalStateException()
 	}
 	val d2 = DrawableCompat.wrap(ContextCompat.getDrawable(this, d))
@@ -34,6 +35,7 @@ const val NOTIFICATION = 3
 const val TREND = 4
 const val SEARCH = 5
 const val DM = 6
+const val SETTING = 7
 fun ConvertToName(int: Int): String = when (int) {
 	HOME -> "Home"
 	LIST -> "List"
@@ -41,7 +43,8 @@ fun ConvertToName(int: Int): String = when (int) {
 	NOTIFICATION -> "Notification"
 	SEARCH -> "Search"
 	TREND -> "Trend"
-	DM -> "DirectMessage"
+    DM -> "DirectMessage"
+    SETTING -> "Setting"
 	else -> throw Exception()
 }
 
@@ -53,6 +56,7 @@ fun ConvertToSimpleName(int: Int): String = when (int) {
 	SEARCH -> "Search"
 	TREND -> "Trend"
 	DM -> "DM"
+    SETTING -> "Setting"
 	else -> throw Exception()
 }
 

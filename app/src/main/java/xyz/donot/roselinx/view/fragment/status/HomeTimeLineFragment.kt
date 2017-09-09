@@ -13,7 +13,6 @@ import twitter4j.Paging
 import twitter4j.ResponseList
 import twitter4j.Status
 import twitter4j.StatusDeletionNotice
-import xyz.donot.roselinx.util.extraUtils.mainThread
 import xyz.donot.roselinx.util.getDeserialized
 
 
@@ -33,10 +32,6 @@ class HomeTimeLineFragment : TimeLineFragment(){
             async(CommonPool){ twitter.getHomeTimeline(Paging(viewmodel.adapter.data[0].id))}
         }
     }
-
-
-
-
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(activity).apply {
@@ -48,20 +43,15 @@ class HomeTimeLineFragment : TimeLineFragment(){
     inner class StatusReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val data=intent.extras.getByteArray("Status").getDeserialized<Status>()
-            mainThread {
                 viewmodel.insertDataBackground(data)
-            }
         }
     }
     inner class DeleteReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val data=intent.extras.getByteArray("StatusDeletionNotice").getDeserialized<StatusDeletionNotice>()
-            mainThread {
                 viewmodel . adapter.data.filter { de -> de.id == data.statusId }.mapNotNull {
                     val int=   viewmodel .adapter.data.indexOf(it)
                     viewmodel .  adapter.remove(int)
-                }
-
             }
         }
     }
