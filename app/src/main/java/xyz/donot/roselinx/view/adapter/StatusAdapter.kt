@@ -157,7 +157,13 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
                 }
                 mAdapter.setOnItemClickListener { _, _, position_ ->
                     if (item.hasVideo) {
-                        mContext.startActivity(Intent(mContext, VideoActivity::class.java).putExtra("video_url", item.getVideoURL()))
+                        mContext.startActivity(Intent(mContext, VideoActivity::class.java).apply {
+                            putExtra("video_url", item.getVideoURL())
+                            putExtra("thumbUrl",item.mediaEntities[0].mediaURLHttps)
+                        }
+
+
+                        )
                     } else {
                         (mContext as Activity).start<PictureActivity>(Bundle {
                             putInt("start_page", position_)

@@ -34,7 +34,7 @@ class SearchTimeline : TimeLineFragment() {
                 registerReceiver(receiver, IntentFilter(arguments.getString("query_text")))
             }
         }
-        viewmodel.pullToRefresh = { twitter ->
+        viewmodel.pullToRefresh = { _ ->
             viewmodel.adapter.data.clear()
             viewmodel.adapter.notifyDataSetChanged()
             query = arguments.getByteArray("query_bundle").getDeserialized<Query>()

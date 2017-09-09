@@ -1,15 +1,13 @@
 package xyz.donot.roselinx.view.activity
 
 import android.app.DownloadManager
-import android.app.ProgressDialog
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.support.v7.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
 import android.webkit.MimeTypeMap
-import android.widget.MediaController
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer
+import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
 import kotlinx.android.synthetic.main.activity_video.*
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.getDownloadManager
@@ -18,72 +16,55 @@ import java.util.*
 
 
 class VideoActivity : AppCompatActivity() {
-	private val url by lazy { intent.getStringExtra("video_url") }
-	override fun onSupportNavigateUp(): Boolean {
-		onBackPressed()
-		return super.onSupportNavigateUp()
-	}
-
-	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-		menuInflater.inflate(R.menu.menu_videos, menu)
-		return true
-	}
-
-	override fun onOptionsItemSelected(item: MenuItem): Boolean {
-		val id = item.itemId
-		when (id) {
-			R.id.save_it -> {
-				SaveVideo()
-			}
-		}
-		return super.onOptionsItemSelected(item)
-	}
-
-	private fun SaveVideo() {
-		val request = DownloadManager.Request(Uri.parse(url))
-		request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Date().time.toString() + ".mp4")
-		request.setTitle(resources.getString(R.string.downloading))
-		request.setMimeType(getMimeType(url))
-		logd { Environment.DIRECTORY_DOWNLOADS + "/" + Date().time.toString() + ".mp4" }
-		getDownloadManager().enqueue(request)
-	}
-
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_video)
-		setSupportActionBar(toolbar)
-		supportActionBar?.setDisplayHomeAsUpEnabled(true)
-		supportActionBar?.setDisplayShowHomeEnabled(true)
-		val mp = MediaController(this@VideoActivity)
-		val pDialog = ProgressDialog(this@VideoActivity)
-		pDialog.setMessage("読み込み中" + "...")
-		pDialog.isIndeterminate = true
-		pDialog.setCancelable(false)
-		pDialog.show()
-
-		videoView.apply {
-			setVideoURI(Uri.parse(url))
-			setMediaController(mp)
-			setOnPreparedListener {
-				pDialog.dismiss()
-			}
-			setOnCompletionListener {
-				videoView.seekTo(0)
-				start()
-			}
-			start()
-
-		}
-	}
+    private val url by lazy { intent.getStringExtra("video_url") }
+    private val thumbUrl by lazy { intent.getStringExtra("thumbUrl") }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
 
 
-	private fun getMimeType(url: String): String? {
-		var type: String? = null
-		val extension = MimeTypeMap.getFileExtensionFromUrl(url)
-		if (extension != null) {
-			type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
-		}
-		return type
-	}
+    override fun onBackPressed() {
+        if (JCVideoPlayer.backPress()) {
+            return
+        }
+        super.onBackPressed()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        JCVideoPlayer.releaseAllVideos()
+    }
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_video)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        videoView.apply {
+            setUp(url, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "Video")
+            thumbImageView.setImageURI(Uri.parse(thumbUrl))
+        }
+        videoView.loop=true
+    }
+
+    private fun SaveVideo() {
+        val request = DownloadManager.Request(Uri.parse(url))
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, Date().time.toString() + ".mp4")
+        request.setTitle(resources.getString(R.string.downloading))
+        request.setMimeType(getMimeType(url))
+        logd { Environment.DIRECTORY_DOWNLOADS + "/" + Date().time.toString() + ".mp4" }
+        getDownloadManager().enqueue(request)
+    }
+
+    private fun getMimeType(url: String): String? {
+        var type: String? = null
+        val extension = MimeTypeMap.getFileExtensionFromUrl(url)
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+        }
+        return type
+    }
 
 }

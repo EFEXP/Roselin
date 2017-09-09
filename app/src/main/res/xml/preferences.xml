@@ -1,92 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:title="ツイート設定"
-        android:summary="ツイートに関する設定です">
-<ListPreference
-    android:title="アップロード画質の設定"
-    android:key="compress_preference"
-    android:entries="@array/compress_quality"
-    android:entryValues="@array/compress_quality_values"
+  <PreferenceCategory
+    android:summary="ツイートに関する設定です"
+    android:title="ツイート設定">
+    <ListPreference
+      android:entries="@array/compress_quality"
+      android:entryValues="@array/compress_quality_values"
+      android:key="compress_preference"
+      android:title="アップロード画質の設定"
+      >
+    </ListPreference>
+  </PreferenceCategory>
+  <PreferenceCategory
+    android:summary="画面の色やデザインに関する設定です"
+    android:title="デザイン設定">
+    <PreferenceScreen
+      android:summary="ホームタイムラインの背景を変更します。"
+      android:title="背景変更">
+      <intent android:action="xyz.donot.roselinx.view.activity.BackImageActivity"/>
+    </PreferenceScreen>
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="night"
+      android:summary="夜間モードを使用します"
+      android:title="夜間モード"/>
+    <SwitchPreference
+      android:defaultValue="false"
+      android:key="quick_tweet"
+      android:summary="ホームタイムラインのツイートバーを有効にします"
+      android:title="ツイートバー"/>
+  </PreferenceCategory>
+  <PreferenceScreen
+    android:summary="イベントの通知に関する設定です"
+    android:title="通知設定">
+    <RingtonePreference
+      android:key="notifications_ringtone"
+      android:ringtoneType="all"
+      android:showDefault="true"
+      android:showSilent="true"
+      android:summary="通知音を変更します"
+      android:title="通知音"/>
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="notification_reply"
+      android:summary="リプライ通知を有効にします"
+      android:title="リプライ通知"/>
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="notification_retweet"
+      android:summary="ポップアップ式のRT通知を有効にします"
+      android:title="RT通知"/>
+    <SwitchPreference
+      android:defaultValue="true"
+      android:key="notification_favorite"
+      android:summary="ポップアップ式のいいね通知を有効にします"
+      android:title="いいね通知"/>
+  </PreferenceScreen>
+  <PreferenceCategory
+    android:summary="自動でツイートを取得する機能に関する設定です"
+    android:title="ストリーム設定"
     >
-</ListPreference>
-    </PreferenceCategory>
-    <PreferenceCategory
-    android:title="デザイン設定"
-        android:summary="画面の色やデザインに関する設定です">
-     <PreferenceScreen
-            android:title="背景変更"
-            android:summary="ホームタイムラインの背景を変更します。">
-            <intent android:action="xyz.donot.roselinx.view.activity.BackImageActivity" />
-        </PreferenceScreen>
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="use_home_tab"
-            android:summary="ホームタイムラインのタブの名前を表示します"
-            android:title="ホームタブを表示"/>
+    <!--   <SwitchPreference
+           android:defaultValue="false"
+           android:key="use_search_stream"
+           android:summary="検索タブにストリームを使用します。大量のデータと電池を消費することがあります。通常はオフにしてください。"
+           android:title="検索ストリーム" />-->
     <SwitchPreference
-        android:defaultValue="true"
-        android:key="night"
-        android:summary="夜間モードを使用します"
-        android:title="夜間モード" />
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="quick_tweet"
-        android:summary="ホームタイムラインのツイートバーを有効にします"
-        android:title="ツイートバー" />
-</PreferenceCategory>
+      android:defaultValue="true"
+      android:key="use_home_stream"
+      android:summary="ホームタイムラインにストリームを使用します"
+      android:title="ホームストリーム"/>
+  </PreferenceCategory>
+  <PreferenceCategory
+    android:title="その他">
     <PreferenceScreen
-        android:title="通知設定"
-        android:summary="イベントの通知に関する設定です">
-        <RingtonePreference
-            android:key="notifications_ringtone"
-            android:title="通知音"
-            android:summary="通知音を変更します"
-            android:ringtoneType="all"
-            android:showDefault="true"
-            android:showSilent="true" />
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="notification_reply"
-            android:summary="リプライ通知を有効にします"
-            android:title="リプライ通知" />
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="notification_retweet"
-            android:summary="ポップアップ式のRT通知を有効にします"
-            android:title="RT通知" />
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="notification_favorite"
-            android:summary="ポップアップ式のいいね通知を有効にします"
-            android:title="いいね通知" />
-    </PreferenceScreen>
-    <PreferenceCategory
-        android:title="ストリーム設定"
-        android:summary="自動でツイートを取得する機能に関する設定です"
-        >
-     <!--   <SwitchPreference
-            android:defaultValue="false"
-            android:key="use_search_stream"
-            android:summary="検索タブにストリームを使用します。大量のデータと電池を消費することがあります。通常はオフにしてください。"
-            android:title="検索ストリーム" />-->
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="use_home_stream"
-            android:summary="ホームタイムラインにストリームを使用します"
-            android:title="ホームストリーム" />
-    </PreferenceCategory>
-    <PreferenceCategory
-        android:title="その他">
-    <PreferenceScreen
-        android:title="タブの設定"
-        android:summary="ホーム画面のタブに関する設定です">
-        <intent android:action="xyz.donot.roselinx.view.activity.TabSettingActivity" />
+      android:summary="ホーム画面のタブに関する設定です"
+      android:title="タブの設定">
+      <intent android:action="xyz.donot.roselinx.view.activity.TabSettingActivity"/>
     </PreferenceScreen>
     <PreferenceScreen
-        android:title="ミュートの設定"
-        android:summary="ミュートに関する設定です">
-        <intent android:action="xyz.donot.roselinx.view.activity.MuteSettingActivity"/>
+      android:summary="ミュートに関する設定です"
+      android:title="ミュートの設定">
+      <intent android:action="xyz.donot.roselinx.view.activity.MuteSettingActivity"/>
     </PreferenceScreen>
-    </PreferenceCategory>
+  </PreferenceCategory>
 </PreferenceScreen>

@@ -16,10 +16,7 @@ import kotlinx.coroutines.experimental.launch
 import twitter4j.Status
 import twitter4j.User
 import xyz.donot.roselinx.Roselin
-import xyz.donot.roselinx.model.realm.DBTabData
-import xyz.donot.roselinx.model.realm.HOME
-import xyz.donot.roselinx.model.realm.MENTION
-import xyz.donot.roselinx.model.realm.NOTIFICATION
+import xyz.donot.roselinx.model.realm.*
 import xyz.donot.roselinx.service.StreamingService
 import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
 import xyz.donot.roselinx.util.extraUtils.newIntent
@@ -80,6 +77,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun initTab() {
         if (realm.where(DBTabData::class.java).count() == 0L) {
             realm.executeTransaction {
+                it.createObject(DBTabData::class.java).apply {
+                    order = 0
+                    type = SETTING
+                }
                 it.createObject(DBTabData::class.java).apply {
                     order = 1
                     type = HOME

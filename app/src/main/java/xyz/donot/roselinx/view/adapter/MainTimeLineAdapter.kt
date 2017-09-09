@@ -17,41 +17,39 @@ import xyz.donot.roselinx.view.fragment.user.DMListFragment
 
 
 class MainTimeLineAdapter(fm: FragmentManager, private val realmResults: List<DBTabData>) : FragmentPagerAdapter(fm) {
-    private val realm = Realm.getDefaultInstance()
+
     override fun getItem(i: Int): Fragment {
-        if (i==0) return RoselinFragment()
-        else {
-        return   when (realmResults[i].type) {
-                HOME -> HomeTimeLineFragment().apply {
-                    val t = realm.where(DBAccount::class.java).equalTo("id", realmResults[i].accountId).findFirst()
-                    arguments = Bundle { putByteArray("twitter", realm.copyFromRealm(t)?.twitter) }
-                }
-                MENTION -> MentionTimeLine().apply {
-                    val t = realm.where(DBAccount::class.java).equalTo("id", realmResults[i].accountId).findFirst()
-                    arguments = Bundle { putByteArray("twitter", realm.copyFromRealm(t)?.twitter) }
-                }
-                SEARCH -> SearchTimeline().apply {
-                    arguments = Bundle {
-                        putString("query_text", realmResults[i].searchWord)
-                        putByteArray("query_bundle", realmResults[i].searchQuery)
+        Realm.getDefaultInstance().use { realm ->
+                return when (realmResults[i].type) {
+                    HOME -> HomeTimeLineFragment().apply {
+                        val t = realm.where(DBAccount::class.java).equalTo("id", realmResults[i].accountId).findFirst()
+                        arguments = Bundle { putByteArray("twitter", realm.copyFromRealm(t)?.twitter) }
                     }
-                }
-                LIST -> ListTimeLine().apply {
-                    val t = realm.where(DBAccount::class.java).equalTo("id", realmResults[i].accountId).findFirst()
-                    arguments = Bundle {
-                        putLong("listId", realmResults[i].listId)
-                        putByteArray("twitter", realm.copyFromRealm(t)?.twitter)
+                    MENTION -> MentionTimeLine().apply {
+                        val t = realm.where(DBAccount::class.java).equalTo("id", realmResults[i].accountId).findFirst()
+                        arguments = Bundle { putByteArray("twitter", realm.copyFromRealm(t)?.twitter) }
                     }
-                }
-                NOTIFICATION -> NotificationFragment()
-                TREND -> TrendFragment()
-                DM -> DMListFragment().apply {
-                    val t = realm.where(DBAccount::class.java).equalTo("id", realmResults[i].accountId).findFirst()
-                    arguments = Bundle { putByteArray("twitter", realm.copyFromRealm(t)?.twitter) }
-                }
-                SETTING -> RoselinFragment()
-                else -> throw IllegalStateException()
-            }
+                    SEARCH -> SearchTimeline().apply {
+                        arguments = Bundle {
+                            putString("query_text", realmResults[i].searchWord)
+                            putByteArray("query_bundle", realmResults[i].searchQuery)
+                        }
+                    }
+                    LIST -> ListTimeLine().apply {
+                        val t = realm.where(DBAccount::class.java).equalTo("id", realmResults[i].accountId).findFirst()
+                        arguments = Bundle {
+                            putLong("listId", realmResults[i].listId)
+                            putByteArray("twitter", realm.copyFromRealm(t)?.twitter)
+                        }
+                    }
+                    NOTIFICATION -> NotificationFragment()
+                    TREND -> TrendFragment()
+                    DM -> DMListFragment().apply {
+                        val t = realm.where(DBAccount::class.java).equalTo("id", realmResults[i].accountId).findFirst()
+                        arguments = Bundle { putByteArray("twitter", realm.copyFromRealm(t)?.twitter) }
+                    }
+                    SETTING -> RoselinFragment()
+                    else -> throw IllegalStateException()}
         }
     }
 

@@ -15,18 +15,13 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v4.view.GravityCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import com.squareup.picasso.Picasso
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.navigation_header.view.*
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.realm.DBTabData
 import xyz.donot.roselinx.util.extraUtils.*
-import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.util.haveToken
 import xyz.donot.roselinx.view.adapter.MainTimeLineAdapter
 import xyz.donot.roselinx.viewmodel.MainViewModel
@@ -51,43 +46,16 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
                 initUser()
 
-                isConnectedStream.observe(this@MainActivity, Observer {
-                    it?.let {
-                        mainThread {
-                            iv_connected_stream.setImageDrawable(ResourcesCompat.getDrawable(resources, if (it) R.drawable.ic_cloud else R.drawable.ic_cloud_off, null))
-                        }
-                    }
-                })
-
                 if (savedInstanceState == null) {initStream()}
-
-                viewmodel.user.observe(this@MainActivity, Observer {
-                    it?.let { user ->
-                        navigation_drawer.getHeaderView(0).also {
-                            Picasso.with(applicationContext).load(user.profileBannerIPadRetinaURL).into(it.my_header)
-                            Picasso.with(applicationContext).load(user.originalProfileImageURLHttps).into(it.my_icon)
-                            it.my_name_header.text = user.name
-                            it.my_screen_name_header.text = "@${user.screenName}"
-                        }
-                    }
-                })
             }
-            setUpDrawerEvent()
+           // setUpDrawerEvent()
             setUpView()
             InitialRequestPermission()
             // stream&savedInstance
-            /*if (defaultSharedPreferences.getBoolean("use_search_stream", false)) {
-                val result = realm.where(DBTabData::class.java).equalTo("type", SEARCH).findAll()
-                result.forEach {
-                    startService(newIntent<SearchStreamService>(Bundle {
-                        putString("query_text", it.searchWord)
-                    }))
-                }
-            }*/
-
         }
     }
 
+    /*
     private fun setUpDrawerEvent() = navigation_drawer.setNavigationItemSelectedListener({
         when (it.itemId) {
             R.id.my_profile -> {
@@ -111,25 +79,14 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
         }
         drawer_layout.isSelected = false
         true
-    })
+    })*/
 
     private fun setUpView() {
 
         if (!defaultSharedPreferences.getBoolean("quick_tweet", false)) {
             editText_layout.visibility = View.GONE
         }
-        toolbar.apply {
-            title = context.getString(R.string.title_home)
-            inflateMenu(R.menu.menu_main)
-            setNavigationOnClickListener { drawer_layout.openDrawer(GravityCompat.START) }
-            setOnMenuItemClickListener {
-                when (it.itemId) {
-                    R.id.menu_search -> start<SearchSettingActivity>()
-                    else -> throw Exception()
-                }
-                true
-            }
-        }
+
         //pager
         Realm.getDefaultInstance().use {
             val list = it.copyFromRealm(it.where(DBTabData::class.java).findAll()).toList()
@@ -153,11 +110,13 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
             main_coordinator.background = BitmapDrawable(resources, bitmap)
             background_overlay.show()
         }
-        if (defaultSharedPreferences.getBoolean("use_home_tab", false)) {
+
+
+        //if (defaultSharedPreferences.getBoolean("use_home_tab", false)) {
             tabs_main.setupWithViewPager(main_viewpager)
-        } else {
-            tabs_main.hide()
-        }
+       // } else {
+           // tabs_main.hide()
+        //}
         //view
         fab.setOnClickListener { start<TweetEditActivity>() }
         button_tweet.setOnClickListener {

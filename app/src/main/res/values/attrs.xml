@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="Emojicon">
-        <attr name="emojiconSize" format="dimension" />
-        <attr name="emojiconAlignment" format="enum">
-            <enum name="bottom" value="0" />
-            <enum name="baseline" value="1" />
-        </attr>
-        <attr name="emojiconTextStart" format="integer" />
-        <attr name="emojiconTextLength" format="integer" />
-        <attr name="emojiconUseSystemDefault" format="boolean" />
-    </declare-styleable>
+  <declare-styleable name="my_button">
+    <attr format="reference" name="buttonSrc"/>
+    <attr format="string" name="buttonText"/>
+  </declare-styleable>
 </resources>

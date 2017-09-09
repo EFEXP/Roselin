@@ -59,6 +59,7 @@ class TabSettingActivity : AppCompatActivity() {
         mAdapter.enableDragItem(itemTouchHelper, R.id.iv_draggable, false)
         mAdapter.setOnItemDragListener(onItemDragListener)
         mAdapter.setOnItemClickListener { _, _, position ->
+            if (mAdapter.getItem(position)?.type!= SETTING)
             AlertDialog.Builder(this@TabSettingActivity)
                     .setTitle("削除しますか？")
                     .setPositiveButton("OK", { _, _ ->
@@ -176,7 +177,6 @@ class TabSettingActivity : AppCompatActivity() {
                 })
             }
             realmRecreate()
-
         }
 
     }
