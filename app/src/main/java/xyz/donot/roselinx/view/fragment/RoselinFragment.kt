@@ -28,7 +28,6 @@ class RoselinFragment : LifecycleFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.content_roselin, null, false)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewmodel = ViewModelProviders.of(activity).get(MainViewModel::class.java)
-
         viewmodel.user.observe(this@RoselinFragment, Observer {
                     it?.let {
                         val iconIntent = Intent(activity, PictureActivity::class.java).putStringArrayListExtra("picture_urls", arrayListOf(it.originalProfileImageURLHttps))
@@ -69,7 +68,6 @@ class RoselinFragment : LifecycleFragment() {
                         }
                     }
                 })
-
         viewmodel.isConnectedStream.observe(this@RoselinFragment, Observer {
             it?.let {
                 mainThread {
@@ -79,11 +77,8 @@ class RoselinFragment : LifecycleFragment() {
         })
         view.bt_profile.onClick= { activity. start<UserActivity>(Bundle().apply { putLong("user_id", getMyId()) })}
         view.bt_setting.onClick= { activity.start<SettingsActivity>() }
-
         view.bt_account.onClick={  activity.startForResult<AccountSettingActivity>(0) }
-
         view.bt_search.onClick={  activity.start<SearchSettingActivity>() }
-
         super.onViewCreated(view, savedInstanceState)
     }
 }

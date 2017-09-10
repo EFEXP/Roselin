@@ -78,6 +78,7 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
     fun onSuccess(key: String, secret: String, result: Result<TwitterSession>) {
         val builder = ConfigurationBuilder()
                 .apply {
+                    setJSONStoreEnabled(true)
                     setOAuthConsumerKey(key)
                     setOAuthConsumerSecret(secret)
                     setTweetModeExtended(true)

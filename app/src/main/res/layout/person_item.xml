@@ -11,8 +11,8 @@
 
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/iv_icon"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_margin="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -133,23 +133,20 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_isfollowed"
         tools:layout_height="48dp">
 
-        <android.support.v7.widget.AppCompatTextView
+        <xyz.donot.roselinx.view.custom.CustomButton
             android:id="@+id/tv_friends"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableStart="@drawable/wrap_align_bottom"
-            android:gravity="center"
-            android:textAlignment="center"
+          app:buttonSrc="@drawable/wrap_align_bottom"
             tools:text="follow" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <xyz.donot.roselinx.view.custom.CustomButton
             android:id="@+id/tv_follower"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableStart="@drawable/wrap_align_top"
-            android:gravity="center"
+          app:buttonSrc="@drawable/wrap_align_top"
             tools:text="followed" />
 
     </LinearLayout>
@@ -183,32 +180,28 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
         tools:layout_height="40dp">
 
-        <android.support.v7.widget.AppCompatTextView
+        <xyz.donot.roselinx.view.custom.CustomButton
             android:id="@+id/tv_tweets"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableStart="@drawable/wrap_comment"
-            android:gravity="center"
+            app:buttonSrc="@drawable/wrap_comment"
             tools:text="Tweets" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <xyz.donot.roselinx.view.custom.CustomButton
             android:id="@+id/tv_fav"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:drawableStart="@drawable/wrap_favorite"
-            android:gravity="center"
+          app:buttonSrc="@drawable/wrap_favorite"
             tools:text="Fav" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <xyz.donot.roselinx.view.custom.CustomButton
             android:id="@+id/tv_list"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:drawableStart="@drawable/wrap_list"
-            android:gravity="center"
+            app:buttonSrc="@drawable/wrap_list"
             tools:text="20000" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

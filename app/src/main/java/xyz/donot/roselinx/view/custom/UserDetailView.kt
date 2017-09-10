@@ -18,51 +18,54 @@ import xyz.donot.roselinx.util.getURLLink
 import java.text.SimpleDateFormat
 import kotlin.properties.Delegates
 
-class UserDetailView(context:Context,attributeSet: AttributeSet?):ConstraintLayout(context,attributeSet){
-    constructor(context:Context):this(context,null)
+class UserDetailView(context: Context, attributeSet: AttributeSet?) : ConstraintLayout(context, attributeSet) {
+    constructor(context: Context) : this(context, null)
 
     var view by Delegates.notNull<View>()
-    var iconClick :()->Unit={}
-    var friendClick:()->Unit={}
-    var followerClick :()->Unit={}
-    var listClick :()->Unit={}
-    var destroyFollowClick :()->Unit={}
-    var followClick :()->Unit={}
-    var editClick:()->Unit={}
-    init { view=LayoutInflater.from(context).inflate(R.layout.person_item,this) }
+    var iconClick: () -> Unit = {}
+    var friendClick: () -> Unit = {}
+    var followerClick: () -> Unit = {}
+    var listClick: () -> Unit = {}
+    var destroyFollowClick: () -> Unit = {}
+    var followClick: () -> Unit = {}
+    var editClick: () -> Unit = {}
 
-    fun setRelation(relationship: Relationship?,isMe:Boolean){
-        if (isMe){
+    init {
+        view = LayoutInflater.from(context).inflate(R.layout.person_item, this)
+    }
+
+    fun setRelation(relationship: Relationship?, isMe: Boolean) {
+        if (isMe) {
             bt_edit.show()
-        }
-        else{
-          relationship?.let {
-              view.apply {
-                  tv_isfollowed.show()
-                  bt_follow.show()
-                  bt_follow.isChecked = relationship.isSourceFollowingTarget
-                  if (relationship.isTargetFollowingSource) {
-                      tv_isfollowed.setText(R.string.follows_you)
-                  } else {
-                      tv_isfollowed.setText(R.string.not_following_you)
-                  }
-              }
-          }
+        } else {
+            relationship?.let {
+                view.apply {
+                    tv_isfollowed.show()
+                    bt_follow.show()
+                    bt_follow.isChecked = relationship.isSourceFollowingTarget
+                    if (relationship.isTargetFollowingSource) {
+                        tv_isfollowed.setText(R.string.follows_you)
+                    } else {
+                        tv_isfollowed.setText(R.string.not_following_you)
+                    }
+                }
+            }
         }
     }
-    fun setUser(user:User){
+
+    fun setUser(user: User) {
         view.apply {
             Picasso.with(context).load(user.originalProfileImageURLHttps).into(iv_icon)
             tv_name.text = user.name
             tv_description.text = if (user.description.isNullOrEmpty()) " No Description" else user.description.replace("\n", "")
             tv_web.text = if (user.urlEntity.expandedURL.isEmpty()) " No Url" else user.urlEntity.expandedURL
             tv_geo.text = if (user.location.isEmpty()) " No Location" else user.location
-            tv_tweets.text = user.statusesCount.toString()
             tv_date.text = "${SimpleDateFormat("yyyy/MM/dd").format(user.createdAt)}に開始"
-            tv_follower.text = user.followersCount.toString()
-            tv_friends.text = user.friendsCount.toString()
-            tv_fav.text = user.favouritesCount.toString()
-            tv_list.text = user.listedCount.toString()
+            tv_follower.setText(user.followersCount.toString())
+            tv_friends.setText(user.friendsCount.toString())
+            tv_list.setText( user.listedCount.toString())
+            tv_tweets.setText(user.statusesCount.toString())
+            tv_fav.setText(user.favouritesCount.toString())
             //認証済み
             if (user.isVerified) {
                 tv_name
@@ -80,9 +83,10 @@ class UserDetailView(context:Context,attributeSet: AttributeSet?):ConstraintLayo
             LinkBuilder.on(tv_web).addLinks(context.getURLLink()).build()
             LinkBuilder.on(tv_description).addLinks(context.getTagURLMention()).build()
             iv_icon.setOnClickListener { iconClick() }
-            tv_list.setOnClickListener{listClick()}
-            tv_follower.setOnClickListener{ friendClick()}
-            tv_friends.setOnClickListener{followerClick()}
+            tv_list.setOnClickListener { listClick() }
+            tv_friends.setOnClickListener { friendClick() }
+            tv_follower.setOnClickListener { followerClick() }
+            bt_edit.setOnClickListener{editClick()}
         }
 
     }

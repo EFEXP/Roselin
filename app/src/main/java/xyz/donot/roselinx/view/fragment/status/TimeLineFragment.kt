@@ -64,11 +64,18 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                             val selectedItem = context.resources.getStringArray(tweetItem)[int]
                             when (selectedItem) {
                                 "返信" -> {
-                                    val bundle = Bundle()
-                                    bundle.putString("status_txt", item.text)
-                                    bundle.putLong("status_id", item.id)
-                                    bundle.putString("user_screen_name", item.user.screenName)
-                                    activity.start<TweetEditActivity>(bundle)
+                                    xyz.donot.roselinx.util.extraUtils.Bundle {
+                                        putString("status_txt", item.text)
+                                        putLong("status_id", item.id)
+                                        putString("user_screen_name", item.user.screenName)
+                                    }
+                                    activity.start<TweetEditActivity>(
+                                            xyz.donot.roselinx.util.extraUtils.Bundle {
+                                                putString("status_txt", item.text)
+                                                putLong("status_id", item.id)
+                                                putString("user_screen_name", item.user.screenName)
+                                            }
+                                    )
                                 }
                                 "削除" -> {
                                     launch(UI) {

@@ -7,6 +7,6 @@ import io.realm.annotations.Required
 
 
 open class DBStatus : RealmObject() {
-	@Required
+  @Required
   open  var status: ByteArray?=null
 }

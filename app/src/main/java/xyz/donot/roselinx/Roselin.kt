@@ -9,23 +9,21 @@ import android.support.v4.provider.FontRequest
 import android.support.v7.app.AppCompatDelegate
 import android.webkit.WebView
 import com.google.android.gms.ads.MobileAds
-import com.squareup.leakcanary.LeakCanary
 import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import xyz.donot.roselinx.util.extraUtils.roselinxConfig
 
 
 class Roselin : Application() {
     private val TWITTER_KEY by lazy {
-        resources.getString(R.string.twitter_official_consumer_key)
-        //	getString(R.string.twitter_consumer_key)
+        //resources.getString(R.string.twitter_official_consumer_key)
+        	getString(R.string.twitter_consumer_key)
     }
     private val TWITTER_SECRET by lazy {
-        resources.getString(R.string.twitter_official_consumer_secret)
-        //resources.getString(R.string.twitter_consumer_secret)
+        //resources.getString(R.string.twitter_official_consumer_secret)
+        resources.getString(R.string.twitter_consumer_secret)
     }
 
     override fun onCreate() {
@@ -36,9 +34,10 @@ class Roselin : Application() {
         //realm
         Realm.init(this)
         val config = RealmConfiguration.Builder()
+                .deleteRealmIfMigrationNeeded()
                 .build()
         Realm.setDefaultConfiguration(config)
-        roselinxConfig.logEnabled = true
+        ///roselinxConfig.logEnabled = true
         /*
         val config = RealmConfiguration.Builder().schemaVersion(0L)
                 .migration(MyRealmMigration())
@@ -70,7 +69,6 @@ class Roselin : Application() {
         }
         AppCompatDelegate.setDefaultNightMode(design)
         (getSystemService(UI_MODE_SERVICE) as UiModeManager).nightMode = UiModeManager.MODE_NIGHT_AUTO
-        LeakCanary.install(this)
 
     }
 

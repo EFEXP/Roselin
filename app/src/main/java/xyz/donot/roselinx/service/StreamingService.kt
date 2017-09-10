@@ -15,121 +15,130 @@ import xyz.donot.roselinx.model.realm.NFAVORITE
 import xyz.donot.roselinx.model.realm.NRETWEET
 import xyz.donot.roselinx.util.*
 import xyz.donot.roselinx.util.extraUtils.*
+import kotlin.concurrent.thread
 
 
 const val REPLY_ID = 10
 const val REPLY_GROUP_KEY = "Reply"
 
 class StreamingService : Service() {
-	private val twitter by lazy { getTwitterInstance() }
-	private val stream: TwitterStream by lazy { TwitterStreamFactory().getInstance(twitter.authorization) }
-	private fun handleActionStream() {
-		StreamCreateUtil.addStatusListener(stream, MyStreamAdapter())
-		stream.addConnectionLifeCycleListener(MyConnectionListener())
-		stream.user()
-	}
+    private val twitter by lazy { getTwitterInstance() }
+    private val stream: TwitterStream by lazy { TwitterStreamFactory().getInstance(twitter.authorization) }
+    private fun handleActionStream() {
+        StreamCreateUtil.addStatusListener(stream, MyStreamAdapter())
+        stream.addConnectionLifeCycleListener(MyConnectionListener())
+        stream.user()
+    }
 
-	override fun stopService(name: Intent?): Boolean = super.stopService(name)
+    override fun stopService(name: Intent?): Boolean = super.stopService(name)
 
-	override fun onCreate() {
-		super.onCreate()
-		try {
-			handleActionStream()
-		} catch (e: Exception) {
-			twitterExceptionToast(e)
-		}
-	}
+    override fun onCreate() {
+        super.onCreate()
+        try {
+            handleActionStream()
+        } catch (e: Exception) {
+            twitterExceptionToast(e)
+        }
+    }
 
-	override fun startService(service: Intent?): ComponentName = super.startService(service)
-	override fun onBind(intent: Intent): IBinder? = null
-	inner class MyConnectionListener : ConnectionLifeCycleListener {
-		override fun onConnect() {
-			LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("OnConnect"))
-		}
+    override fun startService(service: Intent?): ComponentName = super.startService(service)
+    override fun onBind(intent: Intent): IBinder? = null
+    inner class MyConnectionListener : ConnectionLifeCycleListener {
+        override fun onConnect() {
+            LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("OnConnect"))
+        }
 
-		override fun onCleanUp() {
-			LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("OnCleanUp"))
-		}
+        override fun onCleanUp() {
+            LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("OnCleanUp"))
+        }
 
-		override fun onDisconnect() {
-			LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("OnDisconnect"))
-		}
-	}
+        override fun onDisconnect() {
+            LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("OnDisconnect"))
+        }
+    }
 
-	inner class MyStreamAdapter : UserStreamAdapter() {
-		override fun onDirectMessage(directMessage: DirectMessage) {
-			super.onDirectMessage(directMessage)
-			LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewMessage").putExtra("Status",directMessage.getSerialized()))
-		}
+    inner class MyStreamAdapter : UserStreamAdapter() {
+        override fun onDirectMessage(directMessage: DirectMessage) {
+            super.onDirectMessage(directMessage)
+            LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewMessage").putExtra("Status", directMessage.getSerialized()))
+        }
 
-		override fun onStatus(onStatus: Status) {
-			if (onStatus.isRetweet) {
-				//RT
-				if (onStatus.retweetedStatus.user.id == getMyId()) {
-					if (defaultSharedPreferences.getBoolean("notification_retweet", true)) toast("${onStatus.user.name}にRTされました")
-					mainThread {
-						val realm = Realm.getDefaultInstance()
-						realm.executeTransaction {
-							it.createObject(DBNotification::class.java).apply {
-								status = onStatus.getSerialized()
-								sourceUser = onStatus.user.getSerialized()
-								type = NRETWEET
-							}
-						}
-					}
-				}
-			} else {
-				if (onStatus.inReplyToUserId == getMyId()) {
-					if (defaultSharedPreferences.getBoolean("notification_reply", true)) replyNotification(onStatus)
-					LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewReply").putExtra("Status", onStatus.getSerialized()))
-				}
-			}
-			if (canPass(onStatus)) {
-				LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewStatus").putExtra("Status", onStatus.getSerialized()))
-			}
-		}
+        override fun onStatus(onStatus: Status) {
+            if (onStatus.isRetweet) {
+                //RT
+                if (onStatus.retweetedStatus.user.id == getMyId()) {
+                    if (defaultSharedPreferences.getBoolean("notification_retweet", true)) toast("${onStatus.user.name}にRTされました")
+                    mainThread {
+                        val realm = Realm.getDefaultInstance()
+                        realm.executeTransaction {
+                            it.createObject(DBNotification::class.java).apply {
+                                status = onStatus.getSerialized()
+                                sourceUser = onStatus.user.getSerialized()
+                                type = NRETWEET
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (onStatus.inReplyToUserId == getMyId()) {
+                    if (defaultSharedPreferences.getBoolean("notification_reply", true)) replyNotification(onStatus)
+                    LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewReply").putExtra("Status", onStatus.getSerialized()))
+                }
+            }
+            if (canPass(onStatus)) {
+                LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewStatus").putExtra("Status", onStatus.getSerialized()))
+            }
+        }
 
-		override fun onException(ex: Exception) {
-			super.onException(ex)
-			ex.printStackTrace()
-		}
+        override fun onException(ex: Exception) {
+            super.onException(ex)
+            ex.printStackTrace()
+        }
 
-		override fun onDeletionNotice(statusDeletionNotice: StatusDeletionNotice) {
-			LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("DeleteStatus").putExtra("StatusDeletionNotice", statusDeletionNotice.getSerialized()))
-		}
+        override fun onDeletionNotice(statusDeletionNotice: StatusDeletionNotice) {
+            LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("DeleteStatus").putExtra("StatusDeletionNotice", statusDeletionNotice.getSerialized()))
+        }
 
-		override fun onFavorite(source: User, target: User, favoritedStatus: Status) {
-			super.onFavorite(source, target, favoritedStatus)
-			if (source.id != getMyId()) {
-				if (defaultSharedPreferences.getBoolean("notification_favorite", true)) toast("${source.name}にいいねされました")
-				val realm = Realm.getDefaultInstance()
-				realm.executeTransaction {
-					it.createObject(DBNotification::class.java).apply {
-						status = favoritedStatus.getSerialized()
-						sourceUser = source.getSerialized()
-						type = NFAVORITE
-					}
-				}
-			}
-		}
-	}
+        override fun onFavorite(source: User, target: User, favoritedStatus: Status) {
+            super.onFavorite(source, target, favoritedStatus)
+            if (source.id != getMyId()) {
+                if (defaultSharedPreferences.getBoolean("notification_favorite", true)) toast("${source.name}にいいねされました")
+                val realm = Realm.getDefaultInstance()
+                realm.executeTransaction {
+                    it.createObject(DBNotification::class.java).apply {
+                        status = favoritedStatus.getSerialized()
+                        sourceUser = source.getSerialized()
+                        type = NFAVORITE
+                    }
+                }
+            }
+        }
+    }
 
-	override fun onDestroy() {
-		super.onDestroy()
-		stream.clearListeners()
-	}
+    override fun onDestroy() {
+        super.onDestroy()
+        stream.clearListeners()
+        try {
+            thread { Runnable {
+                stream.cleanUp()
+                stream.shutdown()
+            } }.start()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
 
-	fun replyNotification(onStatus: Status) {
-		val notification = newNotification {
-			setSmallIcon(R.drawable.wrap_reply)
-			setStyle(NotificationCompat.BigTextStyle().setSummaryText("会話"))
-			setGroup(REPLY_GROUP_KEY)
-			setGroupSummary(true)
-			setContentTitle("${onStatus.user.name}からリプライ")
-			setSound(Uri.parse(defaultSharedPreferences.getString("notifications_ringtone", "")))
-			setContentText(onStatus.text)
-		}
-		getNotificationManager().notify(REPLY_ID, notification)
-	}
+    fun replyNotification(onStatus: Status) {
+        val notification = newNotification {
+            setSmallIcon(R.drawable.wrap_reply)
+            setStyle(NotificationCompat.BigTextStyle().setSummaryText("会話"))
+            setGroup(REPLY_GROUP_KEY)
+            setGroupSummary(true)
+            setContentTitle("${onStatus.user.name}からリプライ")
+            setSound(Uri.parse(defaultSharedPreferences.getString("notifications_ringtone", "")))
+            setContentText(onStatus.text)
+        }
+        getNotificationManager().notify(REPLY_ID, notification)
+    }
 
 }

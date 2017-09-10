@@ -34,8 +34,8 @@ class OauthActivity : LifecycleActivity() {
 		})
 		login_button.callback = object : Callback<TwitterSession>() {
 			override fun success(result: Result<TwitterSession>) {
-			//	getString(R.string.twitter_official_consumer_key) getString(R.string.twitter_official_consumer_secret) getString(R.string.twitter_consumer_key) getString(R.string.twitter_consumer_secret),
-				viewmodel.onSuccess(getString(R.string.twitter_official_consumer_key),getString(R.string.twitter_official_consumer_secret),result)
+			//getString(R.string.twitter_official_consumer_key) getString(R.string.twitter_official_consumer_secret) getString(R.string.twitter_consumer_key) getString(R.string.twitter_consumer_secret),
+				viewmodel.onSuccess( getString(R.string.twitter_consumer_key), getString(R.string.twitter_consumer_secret),result)
 			}
 			override fun failure(exception: TwitterException?) = toast("失敗しました。")
 		}

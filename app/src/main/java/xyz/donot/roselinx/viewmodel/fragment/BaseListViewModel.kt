@@ -25,9 +25,9 @@ class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
     var useDefaultLoad = true
     var shouldLoad = true
         set(value) {
-            if (!value) {
-                adapter.loadMoreComplete()
-                adapter.loadMoreEnd()
+            if (!value){
+                    adapter.loadMoreEnd()
+                    adapter.loadMoreComplete()
             }
             field = value
         }
@@ -63,7 +63,6 @@ class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
                 pullToRefresh(twitter)?.await()?.let { insertDataBackground(it) }
                 dataRefreshed.value = Unit
             }
-
         } else {
             dataRefreshed.value = Unit
         }

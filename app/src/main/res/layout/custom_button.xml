@@ -5,7 +5,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:minHeight="40dp"
+  android:minHeight="24dp"
   android:background="?android:attr/selectableItemBackground"
   android:descendantFocusability="blocksDescendants"
   tools:layout_height="50dp">

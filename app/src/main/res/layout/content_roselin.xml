@@ -16,7 +16,7 @@
     app:layout_constraintTop_toTopOf="parent"/>
   <xyz.donot.roselinx.view.custom.UserDetailView
     android:id="@+id/user_detail_view"
-    android:layout_width="match_parent"
+    android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
     android:layout_marginStart="0dp"
@@ -27,7 +27,7 @@
   <xyz.donot.roselinx.view.custom.CustomButton
     android:id="@+id/bt_profile"
     android:layout_width="0dp"
-    android:layout_height="wrap_content"
+    android:layout_height="40dp"
     android:layout_marginTop="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
@@ -39,7 +39,7 @@
   <xyz.donot.roselinx.view.custom.CustomButton
     android:id="@+id/bt_setting"
     android:layout_width="0dp"
-    android:layout_height="wrap_content"
+    android:layout_height="40dp"
     android:layout_marginTop="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
@@ -52,11 +52,10 @@
   <xyz.donot.roselinx.view.custom.CustomButton
     android:id="@+id/bt_account"
     android:layout_width="0dp"
-    android:layout_height="wrap_content"
+    android:layout_height="40dp"
     android:layout_marginTop="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
-    android:layout_marginRight="16dp"
     app:buttonSrc="@drawable/ic_contacts_grey_400_36dp"
     app:buttonText="アカウント"
     app:layout_constraintEnd_toEndOf="parent"
@@ -68,7 +67,7 @@
   <xyz.donot.roselinx.view.custom.CustomButton
     android:id="@+id/bt_search"
     android:layout_width="0dp"
-    android:layout_height="wrap_content"
+    android:layout_height="40dp"
     android:layout_marginTop="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"

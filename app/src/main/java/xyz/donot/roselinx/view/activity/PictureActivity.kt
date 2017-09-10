@@ -10,21 +10,21 @@ import xyz.donot.roselinx.view.adapter.PicturePagerAdapter
 
 
 class PictureActivity : AppCompatActivity() {
-	private val start by lazy { intent.extras.getInt("start_page", 0) }
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			findViewById<View>(android.R.id.content).systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-		}
-		val strings = ArrayList<String>()
-		setContentView(R.layout.activity_picture)
-		if (intent.hasExtra("picture_urls"))
-			strings.addAll(intent.extras.getStringArrayList("picture_urls"))
-		val pager = picture_view_pager
-		pager.offscreenPageLimit = strings.size
-		val pagerAdapter = PicturePagerAdapter(supportFragmentManager, strings)
-		pager.adapter = pagerAdapter
-		pager.currentItem = start
-	}
+    private val start by lazy { intent.extras.getInt("start_page", 0) }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            findViewById<View>(android.R.id.content).systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        }
+        val strings = ArrayList<String>()
+        setContentView(R.layout.activity_picture)
+        if (intent.hasExtra("picture_urls"))
+            strings.addAll(intent.extras.getStringArrayList("picture_urls"))
+        val pager = picture_view_pager
+        pager.offscreenPageLimit = strings.size
+        val pagerAdapter = PicturePagerAdapter(supportFragmentManager, strings)
+        pager.adapter = pagerAdapter
+        pager.currentItem = start
+    }
 
 }
