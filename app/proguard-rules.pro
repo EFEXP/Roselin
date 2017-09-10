@@ -13,7 +13,7 @@
 -dontwarn okio.**
 -dontwarn com.squareup.okhttp.**
 -dontwarn io.github.kexanie.**
--keep class android.support.v4.content{*;}
+-keep class android.arch.lifecycle.**
 -keep public class  * extends RecyclerView.ViewHolder{ *; }
 #twitter4j
 -dontwarn twitter4j.**

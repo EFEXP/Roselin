@@ -50,7 +50,7 @@ class HomeTimeLineFragment : TimeLineFragment(){
         override fun onReceive(context: Context, intent: Intent) {
             val data=intent.extras.getByteArray("StatusDeletionNotice").getDeserialized<StatusDeletionNotice>()
                 viewmodel . adapter.data.filter { de -> de.id == data.statusId }.mapNotNull {
-                    val int=   viewmodel .adapter.data.indexOf(it)
+                    val int=viewmodel.adapter.data.indexOf(it)
                     viewmodel .  adapter.remove(int)
             }
         }

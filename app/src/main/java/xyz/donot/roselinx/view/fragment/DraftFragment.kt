@@ -11,7 +11,7 @@ import io.realm.Realm
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.realm.DBDraft
 import xyz.donot.roselinx.util.getMyId
-import xyz.donot.roselinx.view.activity.TweetEditActivity
+import xyz.donot.roselinx.view.activity.EditTweetActivity
 import xyz.donot.roselinx.view.adapter.DraftAdapter
 
 
@@ -29,8 +29,8 @@ class DraftFragment : DialogFragment() {
         list.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _->
             val parent_list=parent as ListView
             val item=parent_list.getItemAtPosition(position)as DBDraft
-            if(activity is TweetEditActivity){
-                (activity as TweetEditActivity) .changeDraft(item)
+            if(activity is EditTweetActivity){
+                (activity as EditTweetActivity) .changeDraft(item)
                 this@DraftFragment.dismiss()
             }
             Realm.getDefaultInstance().executeTransaction { item.deleteFromRealm() }

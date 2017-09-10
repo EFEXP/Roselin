@@ -21,7 +21,7 @@ import xyz.donot.roselinx.util.extraUtils.newIntent
 import xyz.donot.roselinx.util.extraUtils.start
 import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.util.getMyId
-import xyz.donot.roselinx.view.activity.TweetEditActivity
+import xyz.donot.roselinx.view.activity.EditTweetActivity
 import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.adapter.StatusAdapter
 import xyz.donot.roselinx.view.custom.MyBaseRecyclerAdapter
@@ -69,7 +69,7 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                                         putLong("status_id", item.id)
                                         putString("user_screen_name", item.user.screenName)
                                     }
-                                    activity.start<TweetEditActivity>(
+                                    activity.start<EditTweetActivity>(
                                             xyz.donot.roselinx.util.extraUtils.Bundle {
                                                 putString("status_txt", item.text)
                                                 putLong("status_id", item.id)

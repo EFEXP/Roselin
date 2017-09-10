@@ -159,7 +159,7 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
                     if (item.hasVideo) {
                         mContext.startActivity(Intent(mContext, VideoActivity::class.java).apply {
                             putExtra("video_url", item.getVideoURL())
-                            putExtra("thumbUrl",item.mediaEntities[0].mediaURLHttps)
+                            putExtra("thumbUrl",item.mediaEntities[0].mediaURL)
                         }
 
 

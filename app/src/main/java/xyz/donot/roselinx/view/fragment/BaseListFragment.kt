@@ -83,10 +83,12 @@ abstract class BaseListFragment<T> : ARecyclerFragment(), LifecycleRegistryOwner
             refresh.setOnRefreshListener {
                 pullDown()
             }
-            val view = View.inflate(activity, R.layout.item_ad, null).apply {
-                adView.loadAd(AdRequest.Builder().setGender(AdRequest.GENDER_MALE).build())
-            }
-            adapter.addHeaderView(view)
+
+            adapter.addHeaderView(
+                    View.inflate(activity, R.layout.item_ad, null).apply {
+                        adView.loadAd(AdRequest.Builder().setGender(AdRequest.GENDER_MALE).build())
+                    }
+            )
             isBackground.observe(this@BaseListFragment, Observer {
                 it?.let { isBack ->
                     if (dataStore.isNotEmpty() && isBack.not()) {

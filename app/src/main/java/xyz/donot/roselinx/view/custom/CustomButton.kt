@@ -35,6 +35,12 @@ class CustomButton(context: Context, attributeSet: AttributeSet?=null, defStyleA
             tArray.recycle()
         }
     }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+
+    }
     fun setText(string: String) {
         buttonText=string
         view.findViewById<TextView>(R.id.bt_text).text =    buttonText

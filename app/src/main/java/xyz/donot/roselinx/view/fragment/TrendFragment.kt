@@ -6,7 +6,7 @@ import android.view.View
 import twitter4j.Trend
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.view.activity.SearchActivity
-import xyz.donot.roselinx.view.activity.TweetEditActivity
+import xyz.donot.roselinx.view.activity.EditTweetActivity
 import xyz.donot.roselinx.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselinx.view.custom.MyViewHolder
 
@@ -21,8 +21,8 @@ class TrendFragment : BaseListFragment<Trend>() {
             if (activity is SearchActivity) {
                 this@TrendFragment.startActivity(Intent(context, SearchActivity::class.java).putExtra("query_text",     viewmodel .adapter.data[position].query))
             }
-           if (activity is TweetEditActivity){
-               (activity as TweetEditActivity).addTrendHashtag(viewmodel .adapter.data[position].name)
+           if (activity is EditTweetActivity){
+               (activity as EditTweetActivity).addTrendHashtag(viewmodel .adapter.data[position].name)
                this@TrendFragment.dismiss()
            }
        }

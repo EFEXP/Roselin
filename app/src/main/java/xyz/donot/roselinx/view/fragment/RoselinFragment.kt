@@ -49,7 +49,6 @@ class RoselinFragment : LifecycleFragment() {
                             editClick={ activity.start<EditProfileActivity>() }
                             user_detail_view.setUser(it)
                             user_detail_view.setRelation(null, true)
-                            val iconIntent = Intent(activity, PictureActivity::class.java).putStringArrayListExtra("picture_urls", arrayListOf(it.originalProfileImageURLHttps))
                             user_detail_view.iconClick = { startActivity(iconIntent) }
                             user_detail_view.listClick = { activity.start<UserListsActivity>(Bundle { putLong("userId", it.id) }) }
                             user_detail_view.friendClick = {

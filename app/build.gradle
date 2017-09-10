@@ -5,10 +5,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'realm-android'
-
 repositories {
     maven { url 'https://maven.fabric.io/public' }
-    mavenCentral()
     maven { url "https://jitpack.io" }
     maven { url "http://dl.bintray.com/kotlin/kotlin-eap-1.1" }
 }
@@ -21,7 +19,7 @@ android {
         applicationId "xyz.donot.roselinx"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 7
+        versionCode 8
         versionName "1.0-beta"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -29,6 +27,7 @@ android {
         release {
             shrinkResources true
             minifyEnabled true
+           // debuggable true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {

@@ -22,7 +22,7 @@ import xyz.donot.roselinx.util.getSerialized
 
 class OauthViewModel(app: Application) : AndroidViewModel(app) {
     private val realm by lazy { Realm.getDefaultInstance() }
-    val isFinished: MutableLiveData<Unit> = MutableLiveData()
+    val isFinished: MutableLiveData<Unit> by lazy { MutableLiveData<Unit>() }
 
 
     private fun saveToken(tw: Twitter, user: User) {

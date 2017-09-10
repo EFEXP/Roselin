@@ -20,7 +20,7 @@ import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.*
 import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.util.getTwitterInstance
-import xyz.donot.roselinx.view.activity.TweetEditActivity
+import xyz.donot.roselinx.view.activity.EditTweetActivity
 import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.adapter.StatusAdapter
 import xyz.donot.roselinx.view.fragment.ARecyclerFragment
@@ -60,7 +60,7 @@ class ConversationFragment : ARecyclerFragment(){
                                     bundle.putString("status_txt",item.text)
                                     bundle.putLong("status_id",item.id)
                                     bundle.putString("user_screen_name",item.user.screenName)
-                                    activity.start<TweetEditActivity>(bundle)
+                                    activity.start<EditTweetActivity>(bundle)
                                 }
                                 "削除" -> {
                                     launch(UI){

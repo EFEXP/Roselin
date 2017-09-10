@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.support.v7.app.AppCompatActivity
 import android.webkit.MimeTypeMap
+import com.squareup.picasso.Picasso
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
 import kotlinx.android.synthetic.main.activity_video.*
@@ -44,7 +45,9 @@ class VideoActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowHomeEnabled(true)
         videoView.apply {
             setUp(url, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "Video")
-            thumbImageView.setImageURI(Uri.parse(thumbUrl))
+            Picasso.with(this@VideoActivity)
+                    .load(thumbUrl)
+                    .into(thumbImageView)
         }
         videoView.loop=true
     }

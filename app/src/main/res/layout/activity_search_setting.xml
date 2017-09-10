@@ -41,6 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:imeOptions="actionSearch"
+          android:nextFocusRight="@+id/search_setting_query_absolute"
             android:inputType="text" />
     </android.support.design.widget.TextInputLayout>
 
@@ -62,6 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:imeOptions="actionSearch"
+          android:nextFocusRight="@+id/search_setting_from"
             android:inputType="text" />
     </android.support.design.widget.TextInputLayout>
 
@@ -84,13 +86,15 @@
             android:hint="~からのリプライ"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+          >
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/search_setting_from"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:maxLines="1" />
+                android:maxLines="1"
+              android:nextFocusRight="@+id/search_setting_to"/>
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
             android:hint="~へのリプライ"

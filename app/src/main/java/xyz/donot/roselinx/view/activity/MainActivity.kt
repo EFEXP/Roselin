@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
            // tabs_main.hide()
         //}
         //view
-        fab.setOnClickListener { start<TweetEditActivity>() }
+        fab.setOnClickListener { start<EditTweetActivity>() }
         button_tweet.setOnClickListener {
             viewmodel.sendTweet(text = editText_status.editableText.toString())
         }
