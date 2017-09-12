@@ -21,6 +21,7 @@ class MainTimeLineAdapter(fm: FragmentManager, private val realmResults: List<DB
     override fun getItem(i: Int): Fragment {
         Realm.getDefaultInstance().use { realm ->
                 return when (realmResults[i].type) {
+                    //HomeTimeLineFragment()
                     HOME -> HomeTimeLineFragment().apply {
                         val t = realm.where(DBAccount::class.java).equalTo("id", realmResults[i].accountId).findFirst()
                         arguments = Bundle { putByteArray("twitter", realm.copyFromRealm(t)?.twitter) }

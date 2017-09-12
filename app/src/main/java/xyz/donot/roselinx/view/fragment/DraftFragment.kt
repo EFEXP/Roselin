@@ -1,5 +1,6 @@
 package xyz.donot.roselinx.view.fragment
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import xyz.donot.roselinx.model.realm.DBDraft
 import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.view.activity.EditTweetActivity
 import xyz.donot.roselinx.view.adapter.DraftAdapter
+import xyz.donot.roselinx.viewmodel.EditTweetViewModel
 
 
 class DraftFragment : DialogFragment() {
@@ -30,7 +32,7 @@ class DraftFragment : DialogFragment() {
             val parent_list=parent as ListView
             val item=parent_list.getItemAtPosition(position)as DBDraft
             if(activity is EditTweetActivity){
-                (activity as EditTweetActivity) .changeDraft(item)
+                ViewModelProviders.of(activity).get(EditTweetViewModel::class.java)
                 this@DraftFragment.dismiss()
             }
             Realm.getDefaultInstance().executeTransaction { item.deleteFromRealm() }

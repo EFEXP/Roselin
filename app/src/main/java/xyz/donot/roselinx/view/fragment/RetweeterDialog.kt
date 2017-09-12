@@ -21,7 +21,6 @@ class RetweeterDialog : BaseListFragment<User>() {
             intent.putExtra("user_id", viewmodel.adapter.getItem(position)?.id)
             activity.startActivity(intent)
             viewmodel.adapter.getItem(position)
-            viewmodel.adapter.isUseEmpty(false)
         }
     }
 

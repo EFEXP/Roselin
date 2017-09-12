@@ -49,7 +49,7 @@
   <android.support.v7.widget.RecyclerView
     android:id="@+id/pic_recycler_view"
     android:layout_width="0dp"
-    android:layout_height="300dp"
+    android:layout_height="200dp"
     android:layout_marginTop="8dp"
     android:overScrollMode="never"
     android:scrollbars="horizontal"

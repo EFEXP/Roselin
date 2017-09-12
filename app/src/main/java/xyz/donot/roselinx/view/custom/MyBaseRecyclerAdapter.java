@@ -1,5 +1,8 @@
 package xyz.donot.roselinx.view.custom;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 import android.content.Context;
 import android.support.annotation.IdRes;
 import android.support.annotation.IntRange;
@@ -18,13 +21,11 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-
 import com.chad.library.adapter.base.animation.AlphaInAnimation;
 import com.chad.library.adapter.base.animation.BaseAnimation;
 import com.chad.library.adapter.base.entity.IExpandable;
 import com.chad.library.adapter.base.loadmore.LoadMoreView;
 import com.chad.library.adapter.base.util.MultiTypeDelegate;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
@@ -33,9 +34,6 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 
 public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends RecyclerView.Adapter<K> {
@@ -1146,149 +1144,7 @@ public abstract class MyBaseRecyclerAdapter<T, K extends MyViewHolder> extends R
 
     }
 
-    @SuppressWarnings("unchecked")
-    private int expand(@IntRange(from = 0) int position, boolean animate, boolean shouldNotify) {
-        position -= getHeaderLayoutCount();
 
-        IExpandable expandable = getExpandableItem(position);
-        if (expandable == null) {
-            return 0;
-        }
-        if (!hasSubItems(expandable)) {
-            expandable.setExpanded(false);
-            return 0;
-        }
-        int subItemCount = 0;
-        if (!expandable.isExpanded()) {
-            List list = expandable.getSubItems();
-            mData.addAll(position + 1, list);
-            subItemCount += recursiveExpand(position + 1, list);
-
-            expandable.setExpanded(true);
-            subItemCount += list.size();
-        }
-        int parentPos = position + getHeaderLayoutCount();
-        if (shouldNotify) {
-            if (animate) {
-                notifyItemChanged(parentPos);
-                notifyItemRangeInserted(parentPos + 1, subItemCount);
-            } else {
-                notifyDataSetChanged();
-            }
-        }
-        return subItemCount;
-    }
-
-    public int expand(@IntRange(from = 0) int position, boolean animate) {
-        return expand(position, animate, true);
-    }
-
-    public int expand(@IntRange(from = 0) int position) {
-        return expand(position, true, true);
-    }
-
-    private int expandAll(int position, boolean animate, boolean notify) {
-        position -= getHeaderLayoutCount();
-
-        T endItem = null;
-        if (position + 1 < this.mData.size()) {
-            endItem = getItem(position + 1);
-        }
-
-        IExpandable expandable = getExpandableItem(position);
-        if (expandable == null || !hasSubItems(expandable)) {
-            return 0;
-        }
-
-        int count = expand(position + getHeaderLayoutCount(), false, false);
-        for (int i = position + 1; i < this.mData.size(); i++) {
-            T item = getItem(i);
-
-            if (item == endItem) {
-                break;
-            }
-            if (isExpandable(item)) {
-                count += expand(i + getHeaderLayoutCount(), false, false);
-            }
-        }
-
-        if (notify) {
-            if (animate) {
-                notifyItemRangeInserted(position + getHeaderLayoutCount() + 1, count);
-            } else {
-                notifyDataSetChanged();
-            }
-        }
-        return count;
-    }
-
-    public int expandAll(int position, boolean init) {
-        return expandAll(position, true, !init);
-    }
-
-    public void expandAll() {
-        for (int i = mData.size() - 1; i >= getHeaderLayoutCount(); i--) {
-            expandAll(i, false, false);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private int recursiveCollapse(@IntRange(from = 0) int position) {
-        T item = getItem(position);
-        if (!isExpandable(item)) {
-            return 0;
-        }
-        IExpandable expandable = (IExpandable) item;
-        int subItemCount = 0;
-        if (expandable.isExpanded()) {
-            List<T> subItems = expandable.getSubItems();
-            for (int i = subItems.size() - 1; i >= 0; i--) {
-                T subItem = subItems.get(i);
-                int pos = getItemPosition(subItem);
-                if (pos < 0) {
-                    continue;
-                }
-                if (subItem instanceof IExpandable) {
-                    subItemCount += recursiveCollapse(pos);
-                }
-                mData.remove(pos);
-                subItemCount++;
-            }
-        }
-        return subItemCount;
-    }
-
-
-    private int collapse(@IntRange(from = 0) int position, boolean animate, boolean notify) {
-        position -= getHeaderLayoutCount();
-
-        IExpandable expandable = getExpandableItem(position);
-        if (expandable == null) {
-            return 0;
-        }
-        int subItemCount = recursiveCollapse(position);
-        expandable.setExpanded(false);
-        int parentPos = position + getHeaderLayoutCount();
-        if (notify) {
-            if (animate) {
-                notifyItemChanged(parentPos);
-                notifyItemRangeRemoved(parentPos + 1, subItemCount);
-            } else {
-                notifyDataSetChanged();
-            }
-        }
-        return subItemCount;
-    }
-
-
-    public int collapse(@IntRange(from = 0) int position) {
-        return collapse(position, true, true);
-    }
-
-
-    public int collapse(@IntRange(from = 0) int position, boolean animate) {
-        return collapse(position, animate, true);
-    }
 
     private int getItemPosition(T item) {
         return item != null && mData != null && !mData.isEmpty() ? mData.indexOf(item) : -1;

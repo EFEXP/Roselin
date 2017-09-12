@@ -1,13 +1,14 @@
 package xyz.donot.roselinx.view.adapter
 
-import android.app.Activity
+import android.app.Application
+import android.content.Context
 import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSnapHelper
+import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.view.ViewGroup
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
 import com.squareup.picasso.Picasso
@@ -26,17 +27,15 @@ import xyz.donot.roselinx.view.activity.PictureActivity
 import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.activity.UserActivity
 import xyz.donot.roselinx.view.activity.VideoActivity
-import xyz.donot.roselinx.view.custom.MyBaseRecyclerAdapter
-import xyz.donot.roselinx.view.custom.MyViewHolder
 
-
-class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_classic_tweet) {
-
-    override fun convert(helper: MyViewHolder, status: Status, position: Int) {
-        helper.getView<ViewGroup>(R.id.item_tweet_root).apply {
+class SimpleStatusAdapter(data: ArrayList<Status>, val context: Context) : SimpleBaseAdapter<Status>(data,R.layout.item_classic_tweet) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
+        val status = data[position]
+        holder.itemView.apply {
             val item = if (status.isRetweet) {
                 textview_is_retweet.text = "@${status.user.screenName}がリツイート"
-                LinkBuilder.on(textview_is_retweet).addLinks(mContext.getMentionLink()).build()
+                LinkBuilder.on(textview_is_retweet).addLinks(context.getMentionLink()).build()
                 textview_is_retweet.show()
                 status.retweetedStatus
             } else {
@@ -47,9 +46,9 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
             val mentionsLink = arrayListOf(
                     Link(Regex.MENTION_PATTERN)
                             .setUnderlined(false)
-                            .setTextColor(ContextCompat.getColor(mContext, R.color.colorAccent))
+                            .setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
                             .setOnClickListener {
-                                (mContext as Activity).startActivity(mContext.newIntent<UserActivity>(Bundle { putString("screen_name", it.replace("@", "")) }))
+                                (context as Application).startActivity(context.newIntent<UserActivity>(Bundle { putString("screen_name", it.replace("@", "")) }))
                             })
             //テキスト関係
             Realm.getDefaultInstance().use { realm ->
@@ -72,19 +71,19 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
             }
             else{textview_to_reply.hide()}
 
-            LinkBuilder.on(textview_text).addLinks(mContext.getTagURLMention()).build()
+            LinkBuilder.on(textview_text).addLinks(context.getTagURLMention()).build()
             //ふぁぼ済み
             val favdraw = if (item.isFavorited) R.drawable.wrap_favorite_pressed else R.drawable.wrap_favorite
-            tv_favorite.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, favdraw, null), null, null, null)
+            tv_favorite.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(context.resources, favdraw, null), null, null, null)
             //RT
             val rtdraw = if (status.isRetweeted) R.drawable.wrap_retweet_pressed else R.drawable.wrap_retweet
-            tv_retweet.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, rtdraw, null), null, null, null)
+            tv_retweet.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(context.resources, rtdraw, null), null, null, null)
             //認証済み
-            val vrdraw = if (item.user.isVerified) ResourcesCompat.getDrawable(mContext.resources, R.drawable.wraped_verify, null) else null
+            val vrdraw = if (item.user.isVerified) ResourcesCompat.getDrawable(context.resources, R.drawable.wraped_verify, null) else null
             textview_username.setCompoundDrawablesWithIntrinsicBounds(null, null, vrdraw, null)
             //鍵垢
             if (item.user.isProtected) {
-                textview_via.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, R.drawable.wrap_lock, null), null, null, null)
+                textview_via.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(context.resources, R.drawable.wrap_lock, null), null, null, null)
             } else {
                 textview_via.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
             }
@@ -94,35 +93,35 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
                 quoted_screenname.text = "@${item.quotedStatus.user.screenName}"
                 quoted_text.text = item.quotedStatus.text
                 quoted_name.text = item.quotedStatus.user.name
-                Picasso.with(mContext).load(item.quotedStatus.user.biggerProfileImageURLHttps).fit().into(quoted_icon)
+                Picasso.with(context).load(item.quotedStatus.user.biggerProfileImageURLHttps).fit().into(quoted_icon)
             } ?: quote_tweet_holder.hide()
 
             //Listener
             quote_tweet_holder.onClick {
-                (mContext as Activity).start<TwitterDetailActivity>(Bundle { putSerializable("Status", item.quotedStatus) })
+                (context as Application).start<TwitterDetailActivity>(Bundle { putSerializable("Status", item.quotedStatus) })
             }
             imageview_icon.setOnClickListener {
-                val intent = mContext.intent<UserActivity>()
+                val intent = context.intent<UserActivity>()
                 intent.putExtra("user_id", item.user.id)
-                mContext.startActivity(intent)
+                context.startActivity(intent)
             }
             tv_favorite.setOnClickListener {
                 if (item.isFavorited) {
                     launch(UI) {
                         try {
                             val result = async(CommonPool) { getTwitterInstance().destroyFavorite(status.id) }.await()
-                            setData(result, status)
+                            setData(status,result)
                         } catch (e: Exception) {
-                            mContext.twitterExceptionToast(e)
+                            e.printStackTrace()
                         }
                     }
                 } else {
                     launch(UI) {
                         try {
                             val result = async(CommonPool) { getTwitterInstance().createFavorite(status.id) }.await()
-                            setData(result, status)
+                            setData(status,result)
                         } catch (e: Exception) {
-                            mContext.twitterExceptionToast(e)
+                            e.printStackTrace()
                         }
                     }
                 }
@@ -132,10 +131,9 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
                     launch(UI) {
                         try {
                             val result = async(CommonPool) { getTwitterInstance().retweetStatus(status.id) }.await()
-                            setData(result, status)
-                            mContext.toast("RTしました")
+                            setData(status,result)
                         } catch (e: Exception) {
-                            mContext.twitterExceptionToast(e)
+                            e.printStackTrace()
                         }
                     }
                 }
@@ -144,7 +142,7 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
             val statusMediaIds = item.images
             if (statusMediaIds.isNotEmpty()) {
                 val mAdapter = TweetCardPicAdapter(statusMediaIds, item.hasVideo)
-                val manager = LinearLayoutManager(mContext).apply {
+                val manager = LinearLayoutManager(context).apply {
                     orientation = LinearLayoutManager.HORIZONTAL
                 }
                 val recycler = recyclerview_picture
@@ -157,7 +155,7 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
                 }
                 mAdapter.setOnItemClickListener { _, _, position_ ->
                     if (item.hasVideo) {
-                        mContext.startActivity(Intent(mContext, VideoActivity::class.java).apply {
+                        context.startActivity(Intent(context, VideoActivity::class.java).apply {
                             putExtra("video_url", item.getVideoURL())
                             putExtra("thumbUrl",item.mediaEntities[0].mediaURL)
                         }
@@ -165,7 +163,7 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
 
                         )
                     } else {
-                        (mContext as Activity).start<PictureActivity>(Bundle {
+                        (context as Application).start<PictureActivity>(Bundle {
                             putInt("start_page", position_)
                             putStringArrayList("picture_urls", item.images)
                         })
@@ -174,12 +172,14 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
             } else {
                 recyclerview_picture.hide()
             }
-            Picasso.with(mContext).load(item.user.originalProfileImageURLHttps).fit().into(imageview_icon)
+            Picasso.with(context).load(item.user.originalProfileImageURLHttps).fit().into(imageview_icon)
         }
-        //    val array= mContext.resources.getStringArray(R.array.ARRAY_KITITSUI)
-        //      setText(R.id.textview_text,array[Random().nextInt(array.count())])
+
+
     }
 
 
+
 }
+
 

@@ -1,14 +1,16 @@
 package xyz.donot.roselinx.view.fragment
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import twitter4j.Trend
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.view.activity.SearchActivity
 import xyz.donot.roselinx.view.activity.EditTweetActivity
+import xyz.donot.roselinx.view.activity.SearchActivity
 import xyz.donot.roselinx.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselinx.view.custom.MyViewHolder
+import xyz.donot.roselinx.viewmodel.EditTweetViewModel
 
 class TrendFragment : BaseListFragment<Trend>() {
     override fun adapterFun(): MyBaseRecyclerAdapter<Trend, MyViewHolder> =
@@ -22,7 +24,7 @@ class TrendFragment : BaseListFragment<Trend>() {
                 this@TrendFragment.startActivity(Intent(context, SearchActivity::class.java).putExtra("query_text",     viewmodel .adapter.data[position].query))
             }
            if (activity is EditTweetActivity){
-               (activity as EditTweetActivity).addTrendHashtag(viewmodel .adapter.data[position].name)
+               ViewModelProviders.of(activity).get(EditTweetViewModel::class.java).hashtag.value=viewmodel .adapter.data[position].name
                this@TrendFragment.dismiss()
            }
        }

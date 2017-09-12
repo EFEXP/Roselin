@@ -1,6 +1,7 @@
 package xyz.donot.roselinx.util.extraUtils
 
 import android.app.Activity
+import android.app.Application
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -24,15 +25,6 @@ inline fun <reified T : Activity> Activity.start(extras: Bundle, flags: Int) = t
 
 
 inline fun <reified T : Activity> Activity.startForResult(requestCode: Int) = this.startActivityForResult(intent<T>(), requestCode)
-
-inline fun <reified T : Activity> Activity.startForResult(
-        requestCode: Int, flags: Int) = this.startActivityForResult(intent<T>(flags), requestCode)
-
-inline fun <reified T : Activity> Activity.startForResult(
-        extras: Bundle, requestCode: Int) = this.startActivityForResult(intent<T>(extras), requestCode)
-
-inline fun <reified T : Activity> Activity.startForResult(
-        extras: Bundle, requestCode: Int, flags: Int) = this.startActivityForResult(intent<T>(extras, flags), requestCode)
 
 inline fun <reified T : Activity> Service.start() = this.startActivity(intent<T>(Intent.FLAG_ACTIVITY_NEW_TASK))
 
@@ -68,3 +60,11 @@ inline fun <reified T : Context> Context.intent(extras: Bundle, flags: Int): Int
     intent.putExtras(extras)
     return intent
 }
+
+inline fun <reified T : Activity> Application.start() = startActivity(intent<T>())
+
+inline fun <reified T : Activity> Application.start(flags: Int) = this.startActivity(intent<T>(flags))
+
+inline fun <reified T : Activity> Application.start(extras: Bundle) = this.startActivity(intent<T>(extras))
+
+inline fun <reified T : Activity> Application.start(extras: Bundle, flags: Int) = this.startActivity(intent<T>(extras, flags))
