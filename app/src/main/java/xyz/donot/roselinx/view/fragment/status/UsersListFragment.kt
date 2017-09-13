@@ -5,7 +5,8 @@ import android.os.Bundle
 import android.view.View
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_list.view.*
-import twitter4j.ResponseList
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
 import twitter4j.UserList
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.Bundle
@@ -34,13 +35,17 @@ class UsersListFragment : BaseListFragment<UserList>() {
                ListTimeLine().apply { arguments=Bundle{putLong("listId",item.id)} }.show(fragmentManager,"")
             }
         }
+        viewmodel.getData= {twitter->
+            async(CommonPool){
+                viewmodel . shouldLoad=false
+                viewmodel .adapter.loadMoreComplete()
+                twitter.getUserLists(userId)
+            }
+        }
+
     }
 
-    override fun GetData(): ResponseList<UserList>?{
-        viewmodel . shouldLoad=false
-        viewmodel .adapter.loadMoreComplete()
-      return  viewmodel.twitter.getUserLists(userId)
-    }
+
     inner class UserListAdapter:MyBaseRecyclerAdapter<UserList,MyViewHolder>(R.layout.item_list)
     {
         override fun convert(helper:MyViewHolder, item: UserList,position:Int) {

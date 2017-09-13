@@ -3,9 +3,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  tools:layout_editor_absoluteX="0dp"
-  tools:layout_editor_absoluteY="81dp">
+  android:layout_height="match_parent">
   <android.support.v7.widget.AppCompatImageView
     android:id="@+id/iv_connected_stream"
     android:layout_width="32dp"
@@ -27,7 +25,7 @@
   <xyz.donot.roselinx.view.custom.CustomButton
     android:id="@+id/bt_profile"
     android:layout_width="0dp"
-    android:layout_height="40dp"
+    android:layout_height="32dp"
     android:layout_marginTop="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
@@ -39,7 +37,7 @@
   <xyz.donot.roselinx.view.custom.CustomButton
     android:id="@+id/bt_setting"
     android:layout_width="0dp"
-    android:layout_height="40dp"
+    android:layout_height="32dp"
     android:layout_marginTop="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
@@ -52,7 +50,7 @@
   <xyz.donot.roselinx.view.custom.CustomButton
     android:id="@+id/bt_account"
     android:layout_width="0dp"
-    android:layout_height="40dp"
+    android:layout_height="32dp"
     android:layout_marginTop="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
@@ -67,7 +65,7 @@
   <xyz.donot.roselinx.view.custom.CustomButton
     android:id="@+id/bt_search"
     android:layout_width="0dp"
-    android:layout_height="40dp"
+    android:layout_height="32dp"
     android:layout_marginTop="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"

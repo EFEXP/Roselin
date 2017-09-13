@@ -41,12 +41,8 @@ class SearchTimeline : TimeLineFragment() {
             LoadMoreData2()
             viewmodel.dataRefreshed.value = Unit
             null
-
         }
     }
-
-
-    override fun GetData(): MutableList<Status>? = null
     override fun onDestroy() {
         super.onDestroy()
         LocalBroadcastManager.getInstance(activity).apply {

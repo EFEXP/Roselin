@@ -4,6 +4,8 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
 import twitter4j.Trend
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.view.activity.EditTweetActivity
@@ -28,9 +30,14 @@ class TrendFragment : BaseListFragment<Trend>() {
                this@TrendFragment.dismiss()
            }
        }
+
+        viewmodel.getData = { twitter ->
+                async(CommonPool) {
+                    twitter.getPlaceTrends(23424856).trends.asList()
+                }
+        }
     }
-    override fun GetData(): MutableList<Trend>? =
-            viewmodel.twitter.getPlaceTrends(23424856).trends.asList().toMutableList()
+
 
     inner class TrendAdapter:MyBaseRecyclerAdapter<Trend,MyViewHolder>(R.layout.item_trend)
     {

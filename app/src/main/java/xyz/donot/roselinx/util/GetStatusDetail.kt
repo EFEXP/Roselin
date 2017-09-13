@@ -4,6 +4,7 @@ import twitter4j.Status
 import java.text.BreakIterator
 import java.util.*
 import java.util.concurrent.TimeUnit
+import java.util.regex.Pattern
 
 
 fun getRelativeTime(create: Date): String {
@@ -39,14 +40,13 @@ fun inReplyName(status: Status): CharSequence {
 
 fun getExpandedText(status: Status): CharSequence {
     var text:String = status.text
-    if (status.displayTextRangeStart>=0&&status.displayTextRangeEnd>=0)
-        try {
-            text= emojiSubString(text,status.displayTextRangeStart,status.displayTextRangeEnd)
-        }
-        catch(e:Exception){
-            e.printStackTrace()
-            return text
-        }
+    if (status.displayTextRangeStart>=0&&status.displayTextRangeEnd>=0) {
+        text = emojiSubString(text, status.displayTextRangeStart, status.displayTextRangeEnd)
+    }
+    for   (url in status.urlEntities) {
+        text =  Pattern.compile(url.url).matcher(text).replaceAll(url.displayURL)
+    }
+
    /* for (url in status.urlEntities) {
         text =  Pattern.compile(url.url).matcher(text).replaceAll(url.displayURL)
     }

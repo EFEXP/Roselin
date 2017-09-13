@@ -128,7 +128,7 @@ class ConversationFragment : ARecyclerFragment(){
                     loadReply(result.inReplyToStatusId)
                 }
             } catch (e: Exception) {
-                activity. twitterExceptionToast(e)
+                e.printStackTrace()
             }
         }
     }
@@ -148,7 +148,7 @@ class ConversationFragment : ARecyclerFragment(){
                 }
 
             } catch (e: Exception) {
-               activity. twitterExceptionToast(e)
+                e.printStackTrace()
             }
         }
 }}

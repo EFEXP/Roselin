@@ -8,19 +8,13 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.ads.AdRequest
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import kotlinx.android.synthetic.main.item_ad.view.*
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.util.getDeserialized
 import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.custom.MyBaseRecyclerAdapter
@@ -49,7 +43,7 @@ abstract class BaseListFragment<T> : ARecyclerFragment(), LifecycleRegistryOwner
                 setOnLoadMoreListener({
                     if (viewmodel.shouldLoad) {
                         if (viewmodel.useDefaultLoad) {
-                            LoadMoreData()
+                            viewmodel.LoadMoreData()
                         } else {
                             LoadMoreData2()
                         }
@@ -61,16 +55,11 @@ abstract class BaseListFragment<T> : ARecyclerFragment(), LifecycleRegistryOwner
             recycler.adapter = adapter
             if (savedInstanceState == null) {
                 if (useDefaultLoad) {
-                    LoadMoreData()
+                    viewmodel.LoadMoreData()
                 } else {
                     LoadMoreData2()
                 }
-            } else {
-                val t = savedInstanceState.getSerializable("data") as ArrayList<T>
-                Log.d("SavedInstanceStateHas", t.size.toString())
-                adapter.addData(t)
             }
-
             dataRefreshed.observe(this@BaseListFragment, Observer {
                 refresh.setRefreshing(false)
             })
@@ -101,13 +90,12 @@ abstract class BaseListFragment<T> : ARecyclerFragment(), LifecycleRegistryOwner
             })
         }
         refresh.isEnabled = false
+        viewmodel.endLoad.observe(this, Observer {
+            it?.let {
+              //  if (it)refresh.setRefreshing(false)
+            }
+        })
     }
-
-    private fun returnDataAsync() = async(CommonPool) {
-        return@async GetData()
-    }
-
-
     override fun onResume() {
         super.onResume()
         viewmodel.isBackground.value = false
@@ -119,29 +107,8 @@ abstract class BaseListFragment<T> : ARecyclerFragment(), LifecycleRegistryOwner
     }
 
     open fun LoadMoreData2() = Unit
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-        val l = ArrayList<T>()
-        l.addAll(viewmodel.adapter.data)
-        Log.d("GiveData", viewmodel.adapter.data.count().toString())
-        outState?.putSerializable("data", l)
-    }
 
-    abstract fun GetData(): MutableList<T>?
-    private fun LoadMoreData() {
-        launch(UI) {
-            try {
-                val result = returnDataAsync().await()
-                viewmodel.adapter.loadMoreComplete()
-                result?.let {
-                    viewmodel.adapter.addData(result)
-                }
-            } catch (e: Exception) {
-                viewmodel.adapter.loadMoreFail()
-                toast(e.localizedMessage)
-            }
-        }
-    }
+
 
     private val life by lazy { LifecycleRegistry(this) }
     override fun getLifecycle(): LifecycleRegistry {

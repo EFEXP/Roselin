@@ -10,8 +10,6 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import twitter4j.Paging
-import twitter4j.ResponseList
-import twitter4j.Status
 import twitter4j.User
 import xyz.donot.roselinx.util.extraUtils.Bundle
 import xyz.donot.roselinx.util.extraUtils.start
@@ -25,20 +23,24 @@ import xyz.donot.roselinx.view.custom.UserDetailView
 import xyz.donot.roselinx.viewmodel.UserViewModel
 
 class UserTimeLineFragment : TimeLineFragment() {
-    lateinit var myviewmodel: UserViewModel
+    private lateinit var myviewmodel: UserViewModel
     val userId by lazy { arguments.getLong("userId") }
-    override fun GetData(): ResponseList<Status>? = viewmodel.twitter.getUserTimeline(userId, Paging(page))
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        myviewmodel = ViewModelProviders.of(activity).get(UserViewModel::class.java)
         viewmodel.pullToRefresh = { twitter ->
             async(CommonPool) { twitter.getUserTimeline(Paging(viewmodel.adapter.data[0].id)) }
         }
-        myviewmodel = ViewModelProviders.of(activity).get(UserViewModel::class.java)
         myviewmodel.mUser.observe(this, Observer {
             it?.let {
                 viewmodel.adapter.setHeaderView(setUpViews(it))
             }
         })
+        viewmodel.getData = { twitter ->
+            async(CommonPool) {
+                twitter.getUserTimeline(userId, Paging(page))
+            }
+        }
     }
 
 

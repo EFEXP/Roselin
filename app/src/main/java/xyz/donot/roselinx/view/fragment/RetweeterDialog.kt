@@ -3,6 +3,8 @@ package xyz.donot.roselinx.view.fragment
 
 import android.os.Bundle
 import android.view.View
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
 import twitter4j.User
 import xyz.donot.roselinx.util.extraUtils.intent
 import xyz.donot.roselinx.view.activity.UserActivity
@@ -22,23 +24,24 @@ class RetweeterDialog : BaseListFragment<User>() {
             activity.startActivity(intent)
             viewmodel.adapter.getItem(position)
         }
-    }
 
-
-    override fun GetData(): MutableList<User>? {
-        val result = viewmodel.twitter.getRetweeterIds(tweetId, cursor)
-        if (result.hasNext()) {
-            cursor = result.nextCursor
-        } else {
-            viewmodel.shouldLoad = false
+        viewmodel.getData = { twitter ->
+                async(CommonPool) {
+                    val result = twitter.getRetweeterIds(tweetId, cursor)
+                    if (result.hasNext()) {
+                        cursor = result.nextCursor
+                    } else {
+                        viewmodel.shouldLoad = false
+                    }
+                    if (result.iDs.isEmpty()) {
+                        null
+                    } else
+                    twitter.users().lookupUsers(*result.iDs)
+                }
         }
 
-
-        return if (result.iDs.isEmpty()) {
-            null
-        } else viewmodel.twitter.users().lookupUsers(*result.iDs)
-
     }
+
 
     private val tweetId by lazy { arguments.getLong("tweetId") }
 

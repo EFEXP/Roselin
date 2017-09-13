@@ -63,8 +63,8 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
             textview_text.text = getExpandedText(item)
             textview_screenname.text = "@" + item.user.screenName
             textview_via.text = getClientName(item.source)
-            tv_retweet.text = item.retweetCount.toString()
-            tv_favorite.text = item.favoriteCount.toString()
+            tv_retweet.setText(item.retweetCount.toString())
+            tv_favorite.setText(item.favoriteCount.toString())
             if (item.userMentionEntities.isNotEmpty()) {
                 textview_to_reply.show()
                 textview_to_reply.text = inReplyName(item)
@@ -75,10 +75,10 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
             LinkBuilder.on(textview_text).addLinks(mContext.getTagURLMention()).build()
             //ふぁぼ済み
             val favdraw = if (item.isFavorited) R.drawable.wrap_favorite_pressed else R.drawable.wrap_favorite
-            tv_favorite.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, favdraw, null), null, null, null)
+            tv_favorite.setSrc(favdraw)
             //RT
             val rtdraw = if (status.isRetweeted) R.drawable.wrap_retweet_pressed else R.drawable.wrap_retweet
-            tv_retweet.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(mContext.resources, rtdraw, null), null, null, null)
+            tv_retweet.setSrc(rtdraw)
             //認証済み
             val vrdraw = if (item.user.isVerified) ResourcesCompat.getDrawable(mContext.resources, R.drawable.wraped_verify, null) else null
             textview_username.setCompoundDrawablesWithIntrinsicBounds(null, null, vrdraw, null)

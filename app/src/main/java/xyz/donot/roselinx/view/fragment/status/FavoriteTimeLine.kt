@@ -5,7 +5,6 @@ import android.view.View
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import twitter4j.Paging
-import twitter4j.Status
 
 class FavoriteTimeLine:TimeLineFragment(){
     val userId by lazy { arguments.getLong("userId")  }
@@ -14,6 +13,9 @@ class FavoriteTimeLine:TimeLineFragment(){
         viewmodel.pullToRefresh={
             async(CommonPool){it.getFavorites(userId,Paging(viewmodel.adapter.data[0].id))}
         }
+        viewmodel.getData= {twitter->
+            async(CommonPool){ twitter.getFavorites(userId, Paging(page))}
+        }
     }
-    override fun GetData(): MutableList<Status> =viewmodel.twitter.getFavorites(userId, Paging(page))
+
 }

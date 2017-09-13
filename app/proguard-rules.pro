@@ -30,7 +30,7 @@
 # Add this global rule
 -keepattributes Signature
 ##---------------Begin: proguard configuration common for all Android apps ----------
--optimizationpasses 5
+-optimizationpasses 7
 -dontskipnonpubliclibraryclasses
 -dontskipnonpubliclibraryclassmembers
 -dontpreverify

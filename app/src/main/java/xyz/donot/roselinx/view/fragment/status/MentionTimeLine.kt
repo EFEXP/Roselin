@@ -11,13 +11,11 @@ import android.view.View
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import twitter4j.Paging
-import twitter4j.ResponseList
 import twitter4j.Status
 import xyz.donot.roselinx.util.extraUtils.mainThread
 import xyz.donot.roselinx.util.getDeserialized
 
 class MentionTimeLine :TimeLineFragment(){
-    override fun GetData(): ResponseList<Status>? =viewmodel.twitter.getMentionsTimeline(Paging(page))
     private val replyReceiver by lazy { ReplyReceiver () }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,6 +26,9 @@ class MentionTimeLine :TimeLineFragment(){
         }
         viewmodel.pullToRefresh= {twitter->
             async(CommonPool){twitter.getMentionsTimeline(Paging(viewmodel.adapter.data[0].id))}
+        }
+        viewmodel.getData= {twitter->
+            async(CommonPool){ twitter.getMentionsTimeline(Paging(page))}
         }
 
     }

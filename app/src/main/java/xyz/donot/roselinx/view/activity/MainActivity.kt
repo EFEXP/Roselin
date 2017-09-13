@@ -37,49 +37,19 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
             this.finish()
         } else if (isConnected()) {
             setContentView(R.layout.activity_main)
-            viewmodel =ViewModelProviders.of(this).get(MainViewModel::class.java)
+            viewmodel = ViewModelProviders.of(this).get(MainViewModel::class.java)
             viewmodel.apply {
-
                 registerReceivers()
-
                 initTab()
-
                 initUser()
-
-                if (savedInstanceState == null) {initStream()}
+                if (savedInstanceState == null) {
+                    initStream()
+                }
             }
-           // setUpDrawerEvent()
             setUpView()
             InitialRequestPermission()
-            // stream&savedInstance
         }
     }
-
-    /*
-    private fun setUpDrawerEvent() = navigation_drawer.setNavigationItemSelectedListener({
-        when (it.itemId) {
-            R.id.my_profile -> {
-                start<UserActivity>(Bundle().apply { putLong("user_id", getMyId()) })
-                drawer_layout.closeDrawers()
-            }
-            R.id.action_help -> {
-                start<HelpActivity>()
-                //  HelpFragment().show(supportFragmentManager,"")
-                drawer_layout.closeDrawers()
-            }
-            R.id.action_setting -> {
-                start<SettingsActivity>()
-                drawer_layout.closeDrawers()
-            }
-            R.id.action_account -> {
-                startForResult<AccountSettingActivity>(0)
-                drawer_layout.closeDrawers()
-            }
-
-        }
-        drawer_layout.isSelected = false
-        true
-    })*/
 
     private fun setUpView() {
 
@@ -93,7 +63,7 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
             val adapter = MainTimeLineAdapter(supportFragmentManager, list)
             main_viewpager.adapter = adapter
             main_viewpager.offscreenPageLimit = adapter.count
-            main_viewpager.currentItem=1
+            main_viewpager.currentItem = 1
         }
         viewmodel.postSucceed.observe(this, Observer {
             editText_status.hideSoftKeyboard()
@@ -111,13 +81,8 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
             background_overlay.show()
         }
 
+        tabs_main.setupWithViewPager(main_viewpager)
 
-        //if (defaultSharedPreferences.getBoolean("use_home_tab", false)) {
-            tabs_main.setupWithViewPager(main_viewpager)
-       // } else {
-           // tabs_main.hide()
-        //}
-        //view
         fab.setOnClickListener { start<EditTweetActivity>() }
         button_tweet.setOnClickListener {
             viewmodel.sendTweet(text = editText_status.editableText.toString())

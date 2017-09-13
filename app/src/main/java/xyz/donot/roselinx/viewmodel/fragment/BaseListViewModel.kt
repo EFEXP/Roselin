@@ -6,7 +6,9 @@ import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import twitter4j.Twitter
+import xyz.donot.roselinx.Roselin
 import xyz.donot.roselinx.util.extraUtils.mainThread
+import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselinx.view.custom.MyViewHolder
@@ -15,6 +17,7 @@ import kotlin.properties.Delegates
 
 class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
     var isBackground = MutableLiveData<Boolean>().apply { value=false }
+    var endLoad = MutableLiveData<Boolean>().apply { value=false }
     var twitter by Delegates.notNull<Twitter>()
     val main_twitter by lazy { getTwitterInstance() }
     val dataInserted = MutableLiveData<Unit>()
@@ -31,6 +34,7 @@ class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
             }
             field = value
         }
+    lateinit var getData:(Twitter)->Deferred<List<T>?>
 
     private fun insertDataBackground(data: List<T>) {
         mainThread {
@@ -55,7 +59,7 @@ class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
         }
     }
 
-    var pullToRefresh: (Twitter) -> Deferred<List<T>>? by Delegates.notNull()
+    lateinit var pullToRefresh: (Twitter) -> Deferred<List<T>>?
 
     fun pullDown() {
         if (adapter.data.isNotEmpty()) {
@@ -74,6 +78,21 @@ class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
 
     override fun onCleared() {
         super.onCleared()
+    }
+
+    fun LoadMoreData() {
+        launch(UI) {
+            try {
+                val result = getData(twitter).await()
+                adapter.loadMoreComplete()
+                result?.let {
+                    adapter.addData(result)
+                }
+            } catch (e: Exception) {
+                adapter.loadMoreFail()
+                getApplication<Roselin>(). toast(e.localizedMessage)
+            }
+        }
     }
 
 }

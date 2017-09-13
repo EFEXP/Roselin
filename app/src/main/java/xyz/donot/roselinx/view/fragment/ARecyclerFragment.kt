@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.content_base_fragment.*
 import xyz.donot.roselinx.R
 import kotlin.properties.Delegates
 
@@ -16,7 +17,7 @@ open class ARecyclerFragment: AppCompatDialogFragment(){
 
     var recycler by Delegates.notNull<RecyclerView>()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.content_a_recycler, container, false)
+        return inflater.inflate(R.layout.content_base_fragment, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -29,6 +30,7 @@ open class ARecyclerFragment: AppCompatDialogFragment(){
                 layoutManager = LinearLayoutManager(activity)
                 addItemDecoration(dividerItemDecoration)
             }
+            refresh.isEnabled=false
 
 
         }

@@ -11,6 +11,8 @@ import kotlinx.android.synthetic.main.activity_help.*
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import kotlinx.android.synthetic.main.content_help.*
 import kotlinx.android.synthetic.main.item_changelog.view.*
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.onClick
 import xyz.donot.roselinx.util.extraUtils.start
@@ -45,30 +47,34 @@ class HelpActivity : AppCompatActivity() {
 
 }
 
-class featuresFragment:BaseListFragment<ChangeLog>(){
-	override fun adapterFun(): MyBaseRecyclerAdapter<ChangeLog, MyViewHolder> =ChangeLogAdapter()
-	override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-		super.onViewCreated(view, savedInstanceState)
-		refresh.isEnabled=false
-        viewmodel .adapter.setEnableLoadMore(false)
-	}
+class featuresFragment:BaseListFragment<ChangeLog>() {
+    override fun adapterFun(): MyBaseRecyclerAdapter<ChangeLog, MyViewHolder> = ChangeLogAdapter()
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        refresh.isEnabled = false
+        viewmodel.adapter.setEnableLoadMore(false)
+        viewmodel.getData = { twitter ->
+            async(CommonPool) {
+                mutableListOf(
+                        ChangeLog("1.0", arrayListOf("・初回リリース"))
+                )
+            }
+        }
+    }
 
-	override fun GetData(): MutableList<ChangeLog>? = mutableListOf(
-			ChangeLog("1.0", arrayListOf("・初回リリース"))
-	)
-	inner class ChangeLogAdapter:MyBaseRecyclerAdapter<ChangeLog,MyViewHolder> (R.layout.item_changelog){
-		override fun convert(helper: MyViewHolder, item: ChangeLog, position: Int) {
-			helper.getView<LinearLayout>(R.id.item_changelog_root).apply{
-				title_version.text=item.version
-				for (i in item.features){
-					addView(TextView(mContext).apply { text=i })
-				}
 
-			}
+    inner class ChangeLogAdapter : MyBaseRecyclerAdapter<ChangeLog, MyViewHolder>(R.layout.item_changelog) {
+        override fun convert(helper: MyViewHolder, item: ChangeLog, position: Int) {
+            helper.getView<LinearLayout>(R.id.item_changelog_root).apply {
+                title_version.text = item.version
+                for (i in item.features) {
+                    addView(TextView(mContext).apply { text = i })
+                }
 
-		}
-	}
+            }
 
+        }
+    }
 }
 
 data class ChangeLog(val version:String,val features:List<String>)

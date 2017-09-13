@@ -32,6 +32,7 @@ class EditTweetViewModel(application: Application) : AndroidViewModel(applicatio
         app.startService(app.newIntent<TweetPostService>()
                 .putExtra("StatusUpdate", updateStatus.getSerialized())
                 .putStringArrayListExtra("FilePath", filePathList))
+        finish.value=Unit
 
     }
 

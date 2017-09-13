@@ -52,6 +52,27 @@ class UserDetailView(context: Context, attributeSet: AttributeSet?) : Constraint
             }
         }
     }
+    fun setBlocked(user:User) {
+        view.apply {
+            Picasso.with(context).load(user.originalProfileImageURLHttps).into(iv_icon)
+            tv_name.text = user.name
+            //認証済み
+            if (user.isVerified) {
+                tv_name
+                        .setCompoundDrawablesWithIntrinsicBounds(null, null, ResourcesCompat.getDrawable(context.resources, R.drawable.wraped_verify, null), null)
+            } else {
+                tv_name.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+            }
+            //鍵垢
+            if (user.isProtected) {
+                tv_date.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(context.resources, R.drawable.wrap_lock, null), null, null, null)
+            } else {
+                tv_date.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+            }
+            iv_icon.setOnClickListener { iconClick() }
+        }
+
+    }
 
     fun setUser(user: User) {
         view.apply {

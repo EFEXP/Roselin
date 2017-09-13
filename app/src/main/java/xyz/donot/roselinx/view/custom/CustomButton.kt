@@ -13,7 +13,7 @@ import xyz.donot.roselinx.R
 import kotlin.properties.Delegates
 
 
-class CustomButton(context: Context, attributeSet: AttributeSet?=null, defStyleAttr: Int=0) : ConstraintLayout(context, attributeSet) {
+class CustomButton(context: Context, attributeSet: AttributeSet?=null, defStyleAttr: Int=0) : ConstraintLayout(context, attributeSet,defStyleAttr) {
     private var buttonSrc by Delegates.notNull<Drawable>()
     private var buttonText by Delegates.notNull<String>()
     private var view by Delegates.notNull<View>()
@@ -36,11 +36,6 @@ class CustomButton(context: Context, attributeSet: AttributeSet?=null, defStyleA
         }
     }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-
-
-    }
     fun setText(string: String) {
         buttonText=string
         view.findViewById<TextView>(R.id.bt_text).text =    buttonText
@@ -54,6 +49,8 @@ class CustomButton(context: Context, attributeSet: AttributeSet?=null, defStyleA
         view.findViewById<ImageView>(R.id.bt_image).setImageDrawable(buttonSrc)
     }
 
-    constructor(context: Context, attributeSet: AttributeSet?) : this(context,attributeSet,0)
+    constructor(context: Context, attributeSet: AttributeSet?) : this(context,attributeSet,0){
+
+    }
     constructor(context: Context) : this(context, null, 0)
 }
