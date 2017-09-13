@@ -33,7 +33,6 @@ class EditTweetViewModel(application: Application) : AndroidViewModel(applicatio
                 .putExtra("StatusUpdate", updateStatus.getSerialized())
                 .putStringArrayListExtra("FilePath", filePathList))
         finish.value=Unit
-
     }
 
     fun saveDraft(string: String){

@@ -126,7 +126,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
-
+    fun tabReselected(){}
     //User
      val user: MutableLiveData<User> =MutableLiveData()
     fun initUser() {

@@ -1,4 +1,9 @@
 import com.android.build.OutputFile
+ext {
+    PUBLISH_GROUP_ID = 'xyz.donot'
+    PUBLISH_ARTIFACT_ID = 'roselinx'
+    PUBLISH_VERSION = "1.0-beta"
+}
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
@@ -16,14 +21,13 @@ android {
     buildToolsVersion "26.0.1"
     android.defaultConfig.vectorDrawables.useSupportLibrary = true
     defaultConfig {
-        applicationId "xyz.donot.roselinx"
+        applicationId "$PUBLISH_GROUP_ID.$PUBLISH_ARTIFACT_ID"
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 8
-        versionName "1.0-beta"
+        versionName "$PUBLISH_VERSION"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             shrinkResources true
@@ -38,7 +42,8 @@ android {
         }
     }
     packagingOptions {
-        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/kotlin-runtime.kotlin_module'
+        exclude 'META-INF/kotlin-stdlib.kotlin_module'
     }
     project.ext.versionCodes = ['armeabi': 1, 'armeabi-v7a': 2, 'arm64-v8a': 3, 'mips': 5, 'mips64': 6, 'x86': 8, 'x86_64': 9]
     splits {

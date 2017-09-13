@@ -96,6 +96,7 @@ abstract class BaseListFragment<T> : ARecyclerFragment(), LifecycleRegistryOwner
             }
         })
     }
+
     override fun onResume() {
         super.onResume()
         viewmodel.isBackground.value = false
@@ -108,7 +109,9 @@ abstract class BaseListFragment<T> : ARecyclerFragment(), LifecycleRegistryOwner
 
     open fun LoadMoreData2() = Unit
 
-
+    fun reselect(){
+        recycler.smoothScrollToPosition(0)
+    }
 
     private val life by lazy { LifecycleRegistry(this) }
     override fun getLifecycle(): LifecycleRegistry {

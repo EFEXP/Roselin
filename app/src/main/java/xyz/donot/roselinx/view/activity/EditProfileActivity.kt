@@ -22,7 +22,8 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.longToast
-import xyz.donot.roselinx.util.extraUtils.twitterExceptionToast
+import xyz.donot.roselinx.util.extraUtils.toast
+import xyz.donot.roselinx.util.extraUtils.twitterExceptionMessage
 import xyz.donot.roselinx.util.getPath
 import xyz.donot.roselinx.util.getSerialized
 import xyz.donot.roselinx.util.getTwitterInstance
@@ -112,7 +113,7 @@ class EditProfileActivity : AppCompatActivity() {
 
                 }
             } catch (e: Exception) {
-                twitterExceptionToast(e)
+                toast(twitterExceptionMessage(e))
             }
 
         }
@@ -132,7 +133,7 @@ class EditProfileActivity : AppCompatActivity() {
                     bundle.putByteArray("user", user.getSerialized())
                     setResult(RESULT_OK, Intent().putExtras(bundle))
                 } catch (e: Exception) {
-                    twitterExceptionToast(e)
+                    toast(twitterExceptionMessage(e))
                 }
             }
 
@@ -147,7 +148,7 @@ class EditProfileActivity : AppCompatActivity() {
                             longToast("更新しました")
                             mNotificationManager.cancel(id)
                         } catch (e: Exception) {
-                            twitterExceptionToast(e)
+                            toast(twitterExceptionMessage(e))
                             mNotificationManager.cancel(id)
                         }
 
@@ -159,7 +160,7 @@ class EditProfileActivity : AppCompatActivity() {
                             longToast("更新しました")
                             mNotificationManager.cancel(id)
                         } catch (e: Exception) {
-                            twitterExceptionToast(e)
+                            toast(twitterExceptionMessage(e))
                             mNotificationManager.cancel(id)
                         }
 

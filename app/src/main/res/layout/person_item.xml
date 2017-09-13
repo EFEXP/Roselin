@@ -138,7 +138,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-          app:buttonSrc="@drawable/wrap_align_bottom"
+          app:buttonSrc="@drawable/wrap_friends"
             tools:text="follow" />
 
         <xyz.donot.roselinx.view.custom.CustomButton
@@ -146,7 +146,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-          app:buttonSrc="@drawable/wrap_align_top"
+          app:buttonSrc="@drawable/wrap_follower"
             tools:text="followed" />
 
     </LinearLayout>

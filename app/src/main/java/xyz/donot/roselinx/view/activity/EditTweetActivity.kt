@@ -116,7 +116,7 @@ class EditTweetActivity : AppCompatActivity(), LifecycleRegistryOwner {
                                 })
                                 .start(this@EditTweetActivity)
                     }).setNeutralButton("削除", { _, _ ->
-                viewmodel.  mAdapter.remove(position)
+                viewmodel.mAdapter.remove(position)
             })
                     .show()
 

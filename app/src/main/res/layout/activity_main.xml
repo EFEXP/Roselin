@@ -94,14 +94,7 @@
         app:srcCompat="@drawable/ic_send_primary_24dp"/>
     </LinearLayout>
   </android.support.constraint.ConstraintLayout>
-
 </android.support.design.widget.CoordinatorLayout>
-  <!--<android.support.design.widget.NavigationView
-    android:id="@+id/navigation_drawer"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_gravity="start"
-    app:headerLayout="@layout/navigation_header"
-    app:menu="@menu/drawer"
-    />-->
+
+
 

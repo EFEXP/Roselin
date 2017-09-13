@@ -71,7 +71,7 @@ private fun emojiSubString(target:String, startIndex: Int, endIndex: Int): Strin
     // 文字数
     var count = 0
     // 文字の最後まで繰り返し
-    while (bi.next() !== BreakIterator.DONE) {
+    while (bi.next() != BreakIterator.DONE) {
         end = bi.current()
         // 文字数カウントアップ
         count++

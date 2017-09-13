@@ -39,7 +39,7 @@ class HelpActivity : AppCompatActivity() {
 			featuresFragment().show(supportFragmentManager,"")
 		}
 		contact_support.onClick {
-			val bundle = xyz.donot.roselinx.util.extraUtils.Bundle { putString("user_screen_name","""JlowoiL""") }
+			val bundle = xyz.donot.roselinx.util.extraUtils.Bundle { putString("user_screen_name","JlowoiL") }
 			start<EditTweetActivity>(bundle)
 		}
 

@@ -7,9 +7,9 @@ import twitter4j.TwitterException
 
 fun Context.toast(messageResId: Int) = mainThread { Toast.makeText(this, messageResId, Toast.LENGTH_SHORT).show() }
 
-fun Context.twitterExceptionToast(exception: Exception) = mainThread {
-    if (exception is TwitterException) {
-        val text = when (exception.errorCode) {
+fun twitterExceptionMessage(exception: Exception):String  {
+    return   if (exception is TwitterException) {
+     when (exception.errorCode) {
             32 -> {
                 "ユーザーを認証できませんでした"
             }
@@ -54,9 +54,11 @@ fun Context.twitterExceptionToast(exception: Exception) = mainThread {
             }
         }
 
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
-    else    Toast.makeText(this,exception.localizedMessage, Toast.LENGTH_SHORT).show()
+    else{
+        exception.localizedMessage
+    }
+
  }
 
 fun Context.longToast(messageResId: Int) = mainThread {  Toast.makeText(this, messageResId, Toast.LENGTH_LONG).show()}

@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.error_activity.*
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.realm.DBTabData
 import xyz.donot.roselinx.util.extraUtils.*
@@ -36,23 +37,34 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
             startActivity(intent<OauthActivity>())
             this.finish()
         } else if (isConnected()) {
-            setContentView(R.layout.activity_main)
-            viewmodel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-            viewmodel.apply {
-                registerReceivers()
-                initTab()
-                initUser()
-                if (savedInstanceState == null) {
-                    initStream()
+           setUp(savedInstanceState)
+        }
+        else{
+            setContentView(R.layout.error_activity)
+            button_retry.onClick={
+                if(isConnected()){
+                    setUp(savedInstanceState)
                 }
             }
-            setUpView()
-            InitialRequestPermission()
         }
     }
 
-    private fun setUpView() {
+    private fun setUp(bundle :Bundle?){
+        setContentView(R.layout.activity_main)
+        this.viewmodel= ViewModelProviders.of(this).get(MainViewModel::class.java)
+        viewmodel.apply {
+            registerReceivers()
+            initTab()
+            initUser()
+            if (bundle == null) {
+                initStream()
+            }
+        }
+        setUpView()
+        InitialRequestPermission()
 
+    }
+    private fun setUpView() {
         if (!defaultSharedPreferences.getBoolean("quick_tweet", false)) {
             editText_layout.visibility = View.GONE
         }
@@ -64,15 +76,15 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
             main_viewpager.adapter = adapter
             main_viewpager.offscreenPageLimit = adapter.count
             main_viewpager.currentItem = 1
-        }
+
         viewmodel.postSucceed.observe(this, Observer {
             editText_status.hideSoftKeyboard()
             it?.let { status ->
                 editText_status.editableText.clear()
-                Snackbar.make(main_coordinator, "投稿しました", Snackbar.LENGTH_LONG).setAction("取り消し", { viewmodel.deleteTweet(status.id) }).show()
+                Snackbar.make(main_coordinator, "投稿しました", Snackbar.LENGTH_SHORT).setAction("取り消し", { viewmodel.deleteTweet(status.id) }).show()
             }
         })
-        viewmodel.deleteSucceed.observe(this, Observer { toast("削除しました") })
+        viewmodel.deleteSucceed.observe(this, Observer {   Snackbar.make(main_coordinator, "削除しました", Snackbar.LENGTH_SHORT).show()})
 
         val uriString = defaultSharedPreferences.getString("BackGroundUri", "")
         if (!uriString.isNullOrBlank()) {
@@ -82,12 +94,11 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
         }
 
         tabs_main.setupWithViewPager(main_viewpager)
-
         fab.setOnClickListener { start<EditTweetActivity>() }
         button_tweet.setOnClickListener {
             viewmodel.sendTweet(text = editText_status.editableText.toString())
         }
-    }
+    } }
 
     //Permission
     private val REQUEST_WRITE_READ = 0

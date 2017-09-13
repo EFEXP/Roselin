@@ -25,12 +25,12 @@
     volatile <fields>;
 }
 -keep class com.android.vending.billing.**
-
-
+-dontwarn android.databinding.**
+-dontwarn com.android.**
 # Add this global rule
 -keepattributes Signature
 ##---------------Begin: proguard configuration common for all Android apps ----------
--optimizationpasses 7
+-optimizationpasses 3
 -dontskipnonpubliclibraryclasses
 -dontskipnonpubliclibraryclassmembers
 -dontpreverify

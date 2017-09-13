@@ -112,17 +112,17 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
                         try {
                             val result = async(CommonPool) { getTwitterInstance().destroyFavorite(status.id) }.await()
                             setData(result, status)
-                        } catch (e: Exception) {
-                            mContext.twitterExceptionToast(e)
+                        } catch (e:Exception) {
+                          e.printStackTrace()
                         }
                     }
                 } else {
                     launch(UI) {
                         try {
-                            val result = async(CommonPool) { getTwitterInstance().createFavorite(status.id) }.await()
+                            val result = async(CommonPool) { getTwitterInstance().createFavorite(status.id)}.await()
                             setData(result, status)
                         } catch (e: Exception) {
-                            mContext.twitterExceptionToast(e)
+                            e.printStackTrace()
                         }
                     }
                 }
@@ -135,7 +135,7 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
                             setData(result, status)
                             mContext.toast("RTしました")
                         } catch (e: Exception) {
-                            mContext.twitterExceptionToast(e)
+                            e.printStackTrace()
                         }
                     }
                 }
