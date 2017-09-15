@@ -69,8 +69,9 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
                 textview_to_reply.show()
                 textview_to_reply.text = inReplyName(item)
                 LinkBuilder.on(textview_to_reply).addLinks(mentionsLink).build()
+            } else {
+                textview_to_reply.hide()
             }
-            else{textview_to_reply.hide()}
 
             LinkBuilder.on(textview_text).addLinks(mContext.getTagURLMention()).build()
             //ふぁぼ済み
@@ -112,14 +113,14 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
                         try {
                             val result = async(CommonPool) { getTwitterInstance().destroyFavorite(status.id) }.await()
                             setData(result, status)
-                        } catch (e:Exception) {
-                          e.printStackTrace()
+                        } catch (e: Exception) {
+                            e.printStackTrace()
                         }
                     }
                 } else {
                     launch(UI) {
                         try {
-                            val result = async(CommonPool) { getTwitterInstance().createFavorite(status.id)}.await()
+                            val result = async(CommonPool) { getTwitterInstance().createFavorite(status.id) }.await()
                             setData(result, status)
                         } catch (e: Exception) {
                             e.printStackTrace()
@@ -159,7 +160,7 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
                     if (item.hasVideo) {
                         mContext.startActivity(Intent(mContext, VideoActivity::class.java).apply {
                             putExtra("video_url", item.getVideoURL())
-                            putExtra("thumbUrl",item.mediaEntities[0].mediaURL)
+                            putExtra("thumbUrl", item.mediaEntities[0].mediaURL)
                         }
 
 

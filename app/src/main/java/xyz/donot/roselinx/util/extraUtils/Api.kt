@@ -1,7 +1,7 @@
 package xyz.donot.roselinx.util.extraUtils
 import android.os.Build
 
-private val version: Int
+val version: Int
     get() = Build.VERSION.SDK_INT
 
 fun toApi(toVersion: Int, inclusive: Boolean = false, action: () -> Unit) {

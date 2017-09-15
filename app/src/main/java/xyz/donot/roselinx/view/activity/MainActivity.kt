@@ -9,6 +9,8 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
@@ -27,6 +29,8 @@ import xyz.donot.roselinx.util.haveToken
 import xyz.donot.roselinx.view.adapter.MainTimeLineAdapter
 import xyz.donot.roselinx.viewmodel.MainViewModel
 import kotlin.properties.Delegates
+
+
 
 
 class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
@@ -64,6 +68,7 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
         InitialRequestPermission()
 
     }
+    @SuppressLint("NewApi")
     private fun setUpView() {
         if (!defaultSharedPreferences.getBoolean("quick_tweet", false)) {
             editText_layout.visibility = View.GONE
@@ -86,11 +91,22 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
         })
         viewmodel.deleteSucceed.observe(this, Observer {   Snackbar.make(main_coordinator, "削除しました", Snackbar.LENGTH_SHORT).show()})
 
-        val uriString = defaultSharedPreferences.getString("BackGroundUri", "")
-        if (!uriString.isNullOrBlank()) {
+        val uriString = defaultSharedPreferences.getString("BackGroundUri","")
+        if (!uriString.isEmpty()) {
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.parse(uriString))
-            main_coordinator.background = BitmapDrawable(resources, bitmap)
-            background_overlay.show()
+            main_coordinator.background = BitmapDrawable(resources, bitmap).apply {
+                if (version>21){
+                    setTint(ContextCompat.getColor(this@MainActivity,R.color.overlay_background))
+                    setTintMode(PorterDuff.Mode.MULTIPLY)
+                }
+                else{
+                    val greyFilter = PorterDuffColorFilter(ContextCompat.getColor(this@MainActivity,R.color.overlay_background), PorterDuff.Mode.MULTIPLY)
+                    colorFilter = greyFilter
+                }
+            }
+
+
+
         }
 
         tabs_main.setupWithViewPager(main_viewpager)

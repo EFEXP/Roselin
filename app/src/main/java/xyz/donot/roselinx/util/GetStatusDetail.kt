@@ -44,7 +44,7 @@ fun getExpandedText(status: Status): CharSequence {
         text = emojiSubString(text, status.displayTextRangeStart, status.displayTextRangeEnd)
     }
     for   (url in status.urlEntities) {
-        text =  Pattern.compile(url.url).matcher(text).replaceAll(url.displayURL)
+        text =  Pattern.compile(url.url).matcher(text).replaceAll(url.expandedURL)
     }
 
    /* for (url in status.urlEntities) {

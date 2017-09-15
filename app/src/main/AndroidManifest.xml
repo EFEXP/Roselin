@@ -41,7 +41,7 @@
     <activity
       android:label="@string/title_activity_picture"
       android:name=".view.activity.PictureActivity"
-      android:theme="@style/AppTheme.TranslucentStatusBar"/>
+      android:theme="@style/DragDismissTheme"/>
     <activity
       android:name=".view.activity.VideoActivity"
       android:configChanges="orientation|screenSize|keyboardHidden"

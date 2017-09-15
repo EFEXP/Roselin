@@ -10,12 +10,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="xyz.donot.roselinx.view.activity.MainActivity">
-    <View
-      android:id="@+id/background_overlay"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:background="@color/overlay_background"
-      android:visibility="gone"/>
+
 
     <android.support.design.widget.TabLayout
       android:id="@+id/tabs_main"
