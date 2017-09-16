@@ -3,8 +3,6 @@ package xyz.donot.roselinx.view.activity
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.arch.lifecycle.LifecycleRegistry
-import android.arch.lifecycle.LifecycleRegistryOwner
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
@@ -30,7 +28,7 @@ import xyz.donot.roselinx.view.adapter.MainTimeLineAdapter
 import xyz.donot.roselinx.viewmodel.MainViewModel
 
 
-class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
+class MainActivity : AppCompatActivity() {
     private lateinit var viewmodel: MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -136,7 +134,5 @@ class MainActivity : AppCompatActivity(), LifecycleRegistryOwner {
     }
 
 
-    private val life by lazy { LifecycleRegistry(this) }
-    override fun getLifecycle() = life
 }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:descendantFocusability="blocksDescendants"
     xmlns:tools="http://schemas.android.com/tools"
@@ -99,6 +99,7 @@
         android:layout_weight="1"
         android:textOff="@string/follow"
         android:textOn="@string/following"
+      android:enabled="false"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_description"
@@ -204,5 +205,5 @@
             app:buttonSrc="@drawable/wrap_list"
             tools:text="20000" />
     </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+</merge>
 

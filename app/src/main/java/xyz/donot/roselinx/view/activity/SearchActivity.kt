@@ -10,22 +10,22 @@ import xyz.donot.roselinx.util.getDeserialized
 import xyz.donot.roselinx.view.adapter.SearchAdapter
 
 class SearchActivity : AppCompatActivity() {
-    private val query_text :String by lazy {  intent.getStringExtra("query_text")}
+    private val queryText:String by lazy {  intent.getStringExtra("query_text")}
     override fun onCreate(savedInstanceState: Bundle?) {
       super.onCreate(savedInstanceState)
-      val query_bundle=intent.getByteArrayExtra("query_bundle")
+      val queryBundle=intent.getByteArrayExtra("query_bundle")
       setContentView(R.layout.activity_search)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        if(query_bundle!=null)
+        if(queryBundle!=null)
       {
-        val q=  query_bundle.getDeserialized<Query>()
+        val q=  queryBundle.getDeserialized<Query>()
         setUpViews(q)
                 //Analytics
       }
         else {
-        setUpViews(Query(query_text))
+        setUpViews(Query(queryText))
           //Analytics
 
       }
@@ -33,7 +33,7 @@ class SearchActivity : AppCompatActivity() {
 
     }
  private fun setUpViews(tweetQuery: Query){
-     val ad=SearchAdapter(tweetQuery,query_text,supportFragmentManager)
+     val ad=SearchAdapter(tweetQuery, queryText,supportFragmentManager)
      search_view_pager.adapter = ad
      search_tabs.setupWithViewPager(search_view_pager)
      search_view_pager.offscreenPageLimit=ad.count

@@ -4,6 +4,8 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import twitter4j.Query
+import xyz.donot.roselinx.Roselin
+import xyz.donot.roselinx.util.extraUtils.toast
 
 class SearchSettingViewModel(app:Application):AndroidViewModel(app){
 
@@ -49,11 +51,8 @@ class SearchSettingViewModel(app:Application):AndroidViewModel(app){
         query.resultType = Query.MIXED
         query.query = querytext
         mQuery.value=query
+        getApplication<Roselin>().toast(querytext.toString())
 
-
-    }
-    override fun onCleared() {
-        super.onCleared()
     }
 }
 data class DateCompact(val y :Int, val m :Int, val d :Int)

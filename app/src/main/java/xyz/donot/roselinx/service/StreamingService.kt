@@ -1,11 +1,13 @@
 package xyz.donot.roselinx.service
 
+import android.app.PendingIntent
 import android.app.Service
-import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
 import android.os.IBinder
 import android.support.v4.app.NotificationCompat
+import android.support.v4.app.RemoteInput
+import android.support.v4.content.ContextCompat
 import android.support.v4.content.LocalBroadcastManager
 import io.realm.Realm
 import twitter4j.*
@@ -15,6 +17,8 @@ import xyz.donot.roselinx.model.realm.NFAVORITE
 import xyz.donot.roselinx.model.realm.NRETWEET
 import xyz.donot.roselinx.util.*
 import xyz.donot.roselinx.util.extraUtils.*
+import xyz.donot.roselinx.view.activity.MainActivity
+import xyz.donot.roselinx.viewmodel.SendReplyReceiver
 import kotlin.concurrent.thread
 
 
@@ -30,18 +34,15 @@ class StreamingService : Service() {
         stream.user()
     }
 
-    override fun stopService(name: Intent?): Boolean = super.stopService(name)
-
     override fun onCreate() {
         super.onCreate()
         try {
             handleActionStream()
         } catch (e: TwitterException) {
-           toast(twitterExceptionMessage(e))
+            toast(twitterExceptionMessage(e))
         }
     }
 
-    override fun startService(service: Intent?): ComponentName = super.startService(service)
     override fun onBind(intent: Intent): IBinder? = null
     inner class MyConnectionListener : ConnectionLifeCycleListener {
         override fun onConnect() {
@@ -80,7 +81,7 @@ class StreamingService : Service() {
                     }
                 }
             } else {
-                if (onStatus.inReplyToUserId == getMyId()) {
+                if (onStatus.inReplyToUserId == getMyId()) {//onStatus.inReplyToUserId == getMyId()
                     if (defaultSharedPreferences.getBoolean("notification_reply", true)) replyNotification(onStatus)
                     LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewReply").putExtra("Status", onStatus.getSerialized()))
                 }
@@ -119,25 +120,64 @@ class StreamingService : Service() {
         super.onDestroy()
         stream.clearListeners()
         try {
-            thread { Runnable {
-                stream.cleanUp()
-                stream.shutdown()
-            } }.start()
+            thread {
+                Runnable {
+                    stream.cleanUp()
+                    stream.shutdown()
+                }
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
     fun replyNotification(onStatus: Status) {
-        val notification = newNotification {
-            setSmallIcon(R.drawable.wrap_reply)
-            setStyle(NotificationCompat.BigTextStyle().setSummaryText("会話"))
-            setGroup(REPLY_GROUP_KEY)
-            setGroupSummary(true)
-            setContentTitle("${onStatus.user.name}からリプライ")
-            setSound(Uri.parse(defaultSharedPreferences.getString("notifications_ringtone", "")))
-            setContentText(onStatus.text)
-        }
+        val notification = if (version >= 24) {
+            newNotification({
+                val activityIntent = Intent(this@StreamingService,MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+               val pendingIntent = PendingIntent.getActivity(this@StreamingService, 0, activityIntent,
+                        PendingIntent.FLAG_CANCEL_CURRENT)
+
+                val sendReplyIntent=Intent(this@StreamingService,SendReplyReceiver::class.java).apply {
+                    putExtra("screen_name",onStatus.user.screenName)
+                    putExtra("status_id",onStatus.id)
+                }
+                val replyPendingIntent = PendingIntent.getBroadcast(this@StreamingService, 0, sendReplyIntent,PendingIntent.FLAG_CANCEL_CURRENT)
+                val remoteInput = RemoteInput.Builder("key_reply")
+                        .setLabel("返信")
+                        .build()
+                val action = NotificationCompat.Action.Builder(R.drawable.ic_send_white_24dp,
+                        "ここで返信", replyPendingIntent)
+                        .addRemoteInput(remoteInput)
+                        .build()
+                setContentIntent(pendingIntent)
+                setStyle(NotificationCompat.BigTextStyle().setSummaryText("会話"))
+                setSmallIcon(R.drawable.wrap_reply)
+                setSound(Uri.parse(defaultSharedPreferences.getString("notifications_ringtone", "")))
+                setContentTitle("${onStatus.user.name}からリプライ")
+                setContentText(onStatus.text)
+                addAction(action)
+            }, "Reply")
+        } else
+            newNotification({
+                val intent = Intent(this@StreamingService,MainActivity::class.java).apply {
+                    putExtra("text", "Notification Activity")
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                val pendingIntent = PendingIntent.getActivity(this@StreamingService, 0, intent,
+                        PendingIntent.FLAG_CANCEL_CURRENT)
+                setSmallIcon(R.drawable.wrap_reply)
+                setStyle(NotificationCompat.BigTextStyle().setSummaryText("会話"))
+                setGroup(REPLY_GROUP_KEY)
+                color = ContextCompat.getColor(applicationContext, R.color.colorPrimary)
+                setGroupSummary(true)
+                setContentTitle("${onStatus.user.name}からリプライ")
+                setSound(Uri.parse(defaultSharedPreferences.getString("notifications_ringtone", "")))
+                setContentIntent(pendingIntent)
+                setContentText(onStatus.text)
+            }, "Reply")
         getNotificationManager().notify(REPLY_ID, notification)
     }
 

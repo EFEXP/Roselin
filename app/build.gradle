@@ -2,7 +2,7 @@ import com.android.build.OutputFile
 ext {
     PUBLISH_GROUP_ID = 'xyz.donot'
     PUBLISH_ARTIFACT_ID = 'roselinx'
-    PUBLISH_VERSION = "1.0-beta"
+    PUBLISH_VERSION = "1.0-weber"
 }
 
 apply plugin: 'com.android.application'
@@ -61,15 +61,16 @@ android {
     }
 }
 dependencies {
-    def lifecycle = "1.0.0-alpha9"
+    def lifecycle = "1.0.0"
+    def lifecycleEx = "1.0.0-alpha9-1"
     implementation "android.arch.lifecycle:runtime:${lifecycle}"
-    implementation "android.arch.lifecycle:extensions:${lifecycle}"
-    kapt "android.arch.lifecycle:compiler:${lifecycle}"
+    implementation "android.arch.lifecycle:extensions:${lifecycleEx}"
+    kapt "android.arch.lifecycle:compiler:${lifecycleEx}"
     def twitter4j = "4.0.6"
     implementation "org.twitter4j:twitter4j-core:${twitter4j}"
     implementation "org.twitter4j:twitter4j-media-support:${twitter4j}"
     implementation "org.twitter4j:twitter4j-stream:${twitter4j}"
-    def support = "26.0.2"
+    def support = "26.1.0"
     implementation "com.android.support:appcompat-v7:${support}"
     implementation "com.android.support:design:${support}"
     implementation "com.android.support:support-v4:${support}"
@@ -94,7 +95,7 @@ dependencies {
     implementation 'io.realm:android-adapters:2.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta1'
     implementation 'com.klinkerapps:link_builder:1.6.1'
-    implementation 'fm.jiecao:jiecaovideoplayer:5.8.1'
+    implementation 'cn.jzvd:jiaozivideoplayer:6.0.0'
     implementation 'com.github.xbroak:CharCountTextView:v1.0'
     implementation 'com.dinuscxj:recyclerrefreshlayout:2.0.5'
     implementation 'com.squareup.picasso:picasso:2.5.2'

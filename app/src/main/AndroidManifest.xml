@@ -43,6 +43,7 @@
       android:theme="@style/DragDismissTheme"/>
     <activity
       android:name=".view.activity.VideoActivity"
+      android:configChanges="orientation|screenSize|keyboardHidden"
       android:screenOrientation="portrait"
       android:theme="@style/AppTheme.NoActionBar"/>
     <activity
@@ -89,7 +90,6 @@
       android:theme="@style/AppTheme.NoActionBar">
       <intent-filter>
         <action android:name="xyz.donot.roselinx.view.activity.BackImageActivity"/>
-
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
@@ -124,15 +124,21 @@
       android:theme="@style/AppTheme.NoActionBar">
       <intent-filter>
         <action android:name="xyz.donot.roselinx.view.activity.MuteSettingActivity"/>
-
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
     <activity
       android:label="@string/title_activity_help"
       android:name=".view.activity.HelpActivity"
-      android:theme="@style/AppTheme.NoActionBar"/>
-
+      android:theme="@style/AppTheme.NoActionBar">
+    <intent-filter>
+      <action android:name="xyz.donot.roselinx.view.activity.HelpActivity"/>
+      <category android:name="android.intent.category.DEFAULT"/>
+    </intent-filter>
+    </activity>
+    <receiver android:name=".viewmodel.SendReplyReceiver"
+      android:enabled="true"
+      android:exported="false" />
   </application>
 
 </manifest>

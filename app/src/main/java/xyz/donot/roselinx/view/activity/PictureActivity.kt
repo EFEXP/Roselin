@@ -1,7 +1,5 @@
 package xyz.donot.roselinx.view.activity
 
-import android.arch.lifecycle.LifecycleRegistry
-import android.arch.lifecycle.LifecycleRegistryOwner
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Color
@@ -19,7 +17,7 @@ import xyz.donot.roselinx.viewmodel.PictureViewModel
 import xyz.klinker.android.drag_dismiss.activity.DragDismissActivity
 
 
-class PictureActivity : DragDismissActivity(),LifecycleRegistryOwner {
+class PictureActivity : DragDismissActivity() {
     private val start by lazy { intent.extras.getInt("start_page", 0) }
    lateinit private var viewmodel:PictureViewModel
     override fun onCreateContent(inflater: LayoutInflater, parent: ViewGroup?, savedInstanceState: Bundle?): View =inflater.inflate(R.layout.activity_picture,parent,false)
@@ -46,9 +44,6 @@ class PictureActivity : DragDismissActivity(),LifecycleRegistryOwner {
            }
         })
     }
-    private val life by lazy { LifecycleRegistry(this) }
-    override fun getLifecycle(): LifecycleRegistry {
-        return life
-    }
+
 
 }

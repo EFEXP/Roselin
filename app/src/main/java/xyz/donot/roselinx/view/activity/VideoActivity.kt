@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.os.Environment
 import android.support.v7.app.AppCompatActivity
 import android.webkit.MimeTypeMap
+import cn.jzvd.JZVideoPlayer
+import cn.jzvd.JZVideoPlayerStandard
 import com.squareup.picasso.Picasso
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer
-import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
 import kotlinx.android.synthetic.main.activity_video.*
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.getDownloadManager
@@ -26,7 +26,7 @@ class VideoActivity : AppCompatActivity() {
 
 
     override fun onBackPressed() {
-        if (JCVideoPlayer.backPress()) {
+        if (JZVideoPlayer.backPress()) {
             return
         }
         super.onBackPressed()
@@ -34,7 +34,7 @@ class VideoActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        JCVideoPlayer.releaseAllVideos()
+        JZVideoPlayer.releaseAllVideos()
     }
 
 
@@ -44,7 +44,7 @@ class VideoActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         videoView.apply {
-            setUp(url, JCVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "Video")
+            setUp(url, JZVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "Video")
             Picasso.with(this@VideoActivity)
                     .load(thumbUrl)
                     .into(thumbImageView)

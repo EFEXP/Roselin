@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="xyz.donot.roselinx.view.activity.VideoActivity">
-    <fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard
+    <cn.jzvd.JZVideoPlayerStandard
         android:id="@+id/videoView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

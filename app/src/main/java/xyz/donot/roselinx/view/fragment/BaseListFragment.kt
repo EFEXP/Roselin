@@ -2,8 +2,6 @@
 
 package xyz.donot.roselinx.view.fragment
 
-import android.arch.lifecycle.LifecycleRegistry
-import android.arch.lifecycle.LifecycleRegistryOwner
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -24,15 +22,14 @@ import xyz.donot.roselinx.view.custom.MyLoadingView
 import xyz.donot.roselinx.viewmodel.fragment.BaseListViewModel
 
 
-abstract class BaseListFragment<T> : ARecyclerFragment(), LifecycleRegistryOwner {
-    protected lateinit var viewmodel: BaseListViewModel<T>
+abstract class BaseListFragment<T> : ARecyclerFragment() {
+    protected val viewmodel: BaseListViewModel<T> by lazy { ViewModelProviders.of(this).get(BaseListViewModel::class.java) as BaseListViewModel<T> }
     abstract val adapterx: BaseQuickAdapter<T, BaseViewHolder>
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.content_base_fragment, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewmodel = ViewModelProviders.of(this).get(BaseListViewModel::class.java) as BaseListViewModel<T>
         viewmodel.apply {
             adapter = adapterx
             twitter = if (arguments != null && arguments.containsKey("twitter")) {
@@ -85,7 +82,10 @@ abstract class BaseListFragment<T> : ARecyclerFragment(), LifecycleRegistryOwner
 
             adapter.addHeaderView(
                     View.inflate(activity, R.layout.item_ad, null).apply {
-                        adView.loadAd(AdRequest.Builder().setGender(AdRequest.GENDER_MALE).build())
+                        adView.loadAd(AdRequest.Builder()
+                                .setGender(AdRequest.GENDER_MALE)
+                                .addTestDevice("0CF83648F3E630518CF53907939C9A8D")
+                                .build())
                     }
             )
             isBackground.observe(this@BaseListFragment, Observer {
@@ -125,10 +125,6 @@ abstract class BaseListFragment<T> : ARecyclerFragment(), LifecycleRegistryOwner
         Log.d("GiveData", viewmodel.adapter.data.count().toString())
         outState?.putSerializable("data", l)
     }
-
-    private val life by lazy { LifecycleRegistry(this) }
-    override fun getLifecycle() = life
-
 
 }
 

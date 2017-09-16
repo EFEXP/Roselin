@@ -1,10 +1,10 @@
 package xyz.donot.roselinx.view.fragment
 
-import android.arch.lifecycle.LifecycleFragment
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v4.content.res.ResourcesCompat
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +21,7 @@ import xyz.donot.roselinx.viewmodel.MainViewModel
 import kotlin.properties.Delegates
 
 
-class RoselinFragment : LifecycleFragment() {
+class RoselinFragment : Fragment() {
 
     var viewmodel: MainViewModel by Delegates.notNull()
 

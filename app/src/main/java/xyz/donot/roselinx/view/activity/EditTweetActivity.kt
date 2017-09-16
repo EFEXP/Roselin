@@ -1,8 +1,6 @@
 package xyz.donot.roselinx.view.activity
 
 import android.Manifest
-import android.arch.lifecycle.LifecycleRegistry
-import android.arch.lifecycle.LifecycleRegistryOwner
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -30,10 +28,8 @@ import java.util.*
 import kotlin.properties.Delegates
 
 
-class EditTweetActivity : AppCompatActivity(), LifecycleRegistryOwner {
+class EditTweetActivity : AppCompatActivity() {
 
-    private val life by lazy { LifecycleRegistry(this) }
-    override fun getLifecycle() = life
     var viewmodel by Delegates.notNull<EditTweetViewModel>()
     private var pair:Pair<Uri,Int>?=null
 
@@ -137,8 +133,10 @@ class EditTweetActivity : AppCompatActivity(), LifecycleRegistryOwner {
                                 editText_status.setText("♪ $track /$album /$artists #NowPlaying")
                             }
                             "突然の死" -> {
-                                editText_status.text.clear()
                                 editText_status.setText(viewmodel.suddenDeath(editText_status.text.toString()))
+                            }
+                            "縦書き" -> {
+                                editText_status.setText(viewmodel.tanzaku(editText_status.text.toString()))
                             }
                         }
                     })

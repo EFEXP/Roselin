@@ -1,7 +1,5 @@
 package xyz.donot.roselinx.view.activity
 
-import android.arch.lifecycle.LifecycleRegistry
-import android.arch.lifecycle.LifecycleRegistryOwner
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -17,7 +15,7 @@ import xyz.donot.roselinx.viewmodel.QueryBundle
 import xyz.donot.roselinx.viewmodel.SearchSettingViewModel
 
 
-class SearchSettingActivity : AppCompatActivity(), LifecycleRegistryOwner {
+class SearchSettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_setting)
@@ -25,24 +23,26 @@ class SearchSettingActivity : AppCompatActivity(), LifecycleRegistryOwner {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        val viewmodel=
-        ViewModelProviders.of(this).get(SearchSettingViewModel::class.java)
+        val viewmodel =
+                ViewModelProviders.of(this).get(SearchSettingViewModel::class.java)
         viewmodel.dayFrom.observe(this, Observer {
             it?.let {
-            day_from.text = "${it.y}/${it.m}/${it.d}~"
-        }}
+                day_from.text = "${it.y}/${it.m}/${it.d}~"
+            }
+        }
         )
         viewmodel.dayTo.observe(this, Observer {
             it?.let {
-            day_to.text = "~${it.y}/${it.m}/${it.d}"
-        }})
+                day_to.text = "~${it.y}/${it.m}/${it.d}"
+            }
+        })
         viewmodel.mQuery.observe(this, Observer {
-          it?.let {
-              start<SearchActivity>(Bundle().apply {
-                  putByteArray("query_bundle", it.getSerialized())
-                  putString("query_text", search_setting_query.text.toString())
-              })
-          }
+            it?.let {
+                start<SearchActivity>(Bundle().apply {
+                    putByteArray("query_bundle", it.getSerialized())
+                    putString("query_text", search_setting_query.text.toString())
+                })
+            }
         })
 
         search_setting_query.setOnEditorActionListener { view, i, _ ->
@@ -75,7 +75,7 @@ class SearchSettingActivity : AppCompatActivity(), LifecycleRegistryOwner {
                 return@setOnClickListener
             viewmodel.setQuery(
                     QueryBundle(
-                            query = search_setting_query.text.toString(),
+                            query = search_setting_query.text.toString() ,
                             queryAbsolute = "\"${search_setting_query_absolute.text}\"",
                             dayFrom = viewmodel.dayFrom.value,
                             dayTo = viewmodel.dayTo.value,
@@ -95,8 +95,4 @@ class SearchSettingActivity : AppCompatActivity(), LifecycleRegistryOwner {
         return super.onSupportNavigateUp()
     }
 
-    private val life by lazy { LifecycleRegistry(this) }
-    override fun getLifecycle(): LifecycleRegistry {
-        return life
-    }
 }

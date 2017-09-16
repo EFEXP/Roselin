@@ -17,15 +17,15 @@ import xyz.donot.roselinx.view.custom.SingleLiveEvent
 import kotlin.properties.Delegates
 
 class EditTweetViewModel(application: Application) : AndroidViewModel(application) {
-    val draft:MutableLiveData<String> = MutableLiveData()
-    val hashtag:MutableLiveData<String> = MutableLiveData()
-    val finish:SingleLiveEvent<Unit> = SingleLiveEvent()
+    val draft: MutableLiveData<String> = MutableLiveData()
+    val hashtag: MutableLiveData<String> = MutableLiveData()
+    val finish: SingleLiveEvent<Unit> = SingleLiveEvent()
     var statusId by Delegates.notNull<Long>()
     val mAdapter = TwitterImageAdapter()
     var screenName: String = ""
 
     fun onSendClick(string: String) {
-        val app=getApplication<Roselin>()
+        val app = getApplication<Roselin>()
         val updateStatus = StatusUpdate(string)
         updateStatus.inReplyToStatusId = statusId
         val filePathList = ArrayList<String>()
@@ -36,19 +36,19 @@ class EditTweetViewModel(application: Application) : AndroidViewModel(applicatio
         finish.call()
     }
 
-    fun saveDraft(string: String){
+    fun saveDraft(string: String) {
         Realm.getDefaultInstance().executeTransaction {
             it.createObject(DBDraft::class.java).apply {
                 text = string
                 replyToScreenName = screenName
-                replyToStatusId =  statusId
+                replyToStatusId = statusId
                 accountId = getMyId()
             }
         }
 
     }
 
-    fun suddenDeath(string: String):String{
+    fun suddenDeath(string: String): String {
         val i = string.count() - 4
         var a = ""
         var b = ""
@@ -57,9 +57,16 @@ class EditTweetViewModel(application: Application) : AndroidViewModel(applicatio
             b += "^Y"
         }
         return "＿人人人人人$a＿\n＞ $string ＜\n￣Y^Y^Y^Y^Y$b￣"
+    }
 
+    fun tanzaku(string: String): String {
+        var text = "┏┻┓\n┃　┃\n"
+        string.forEach {
+            text += "┃$it┃\n"
+        }
+        text += "┃　┃\n┗━┛"
+        return text
     }
-    override fun onCleared() {
-        super.onCleared()
-    }
+
+
 }

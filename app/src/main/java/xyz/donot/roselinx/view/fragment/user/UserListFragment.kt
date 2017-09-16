@@ -30,7 +30,7 @@ abstract class UserListFragment : BaseListFragment<User>() {
                     }
                     result
                 } else {
-                    throw IllegalStateException()
+                    null
                 }
             }
         }

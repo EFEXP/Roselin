@@ -7,8 +7,7 @@
       android:entries="@array/compress_quality"
       android:entryValues="@array/compress_quality_values"
       android:key="compress_preference"
-      android:title="アップロード画質の設定"
-      >
+      android:title="アップロード画質の設定">
     </ListPreference>
   </PreferenceCategory>
   <PreferenceCategory
@@ -74,14 +73,19 @@
   <PreferenceCategory
     android:title="その他">
     <PreferenceScreen
-      android:summary="ホーム画面のタブに関する設定です"
+      android:summary="ホーム画面のタブをカスタマイズ出来ます"
       android:title="タブの設定">
       <intent android:action="xyz.donot.roselinx.view.activity.TabSettingActivity"/>
     </PreferenceScreen>
     <PreferenceScreen
-      android:summary="ミュートに関する設定です"
+      android:summary="ミュート条件を管理出来ます"
       android:title="ミュートの設定">
       <intent android:action="xyz.donot.roselinx.view.activity.MuteSettingActivity"/>
+    </PreferenceScreen>
+    <PreferenceScreen
+      android:summary="このアプリに関する情報を閲覧出来ます"
+      android:title="このアプリについて">
+      <intent android:action="xyz.donot.roselinx.view.activity.HelpActivity"/>
     </PreferenceScreen>
   </PreferenceCategory>
 </PreferenceScreen>

@@ -13,6 +13,7 @@ import twitter4j.Relationship
 import twitter4j.User
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.show
+import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.util.getTagURLMention
 import xyz.donot.roselinx.util.getURLLink
 import java.text.SimpleDateFormat
@@ -40,6 +41,7 @@ class UserDetailView(context: Context, attributeSet: AttributeSet?) : Constraint
         } else {
             relationship?.let {
                 view.apply {
+                    bt_follow.isEnabled=true
                     tv_isfollowed.show()
                     bt_follow.show()
                     bt_follow.isChecked = relationship.isSourceFollowingTarget
@@ -49,6 +51,14 @@ class UserDetailView(context: Context, attributeSet: AttributeSet?) : Constraint
                         tv_isfollowed.setText(R.string.not_following_you)
                     }
                 }
+                //変わった後のが流れてくる
+                bt_follow.setOnCheckedChangeListener({_,checked->
+                    context.toast(checked.toString())
+                    if (checked)
+                        followClick()
+                    else
+                        destroyFollowClick()
+                })
             }
         }
     }
@@ -93,6 +103,7 @@ class UserDetailView(context: Context, attributeSet: AttributeSet?) : Constraint
             tv_friends.setOnClickListener { friendClick() }
             tv_follower.setOnClickListener { followerClick() }
             bt_edit.setOnClickListener{editClick()}
+
         }
 
     }

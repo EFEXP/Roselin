@@ -48,8 +48,8 @@ fun Context.getResourceValue(resId: Int): Int {
     return TypedValue.complexToFloat(value.data).toInt()
 }
 
-inline fun Context.newNotification(func: NotificationCompat.Builder.() -> Unit): Notification {
-    val builder = NotificationCompat.Builder(this)
+inline fun Context.newNotification(func: NotificationCompat.Builder.() -> Unit,channel: String): Notification {
+    val builder = NotificationCompat.Builder(this,channel)
     builder.func()
     return builder.build()
 }

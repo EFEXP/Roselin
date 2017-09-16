@@ -18,58 +18,58 @@ import xyz.donot.roselinx.view.fragment.status.SearchTimeline
 import xyz.donot.roselinx.view.fragment.user.UserListFragment
 
 class SearchAdapter(private val query: Query, private val queryText: String, fm: FragmentManager) : FragmentPagerAdapter(fm) {
-	override fun getItem(position: Int): Fragment = when (position) {
-		0 -> {
-			SearchTimeline().apply { arguments = Bundle { putByteArray("query_bundle", query.getSerialized()) } }
+    override fun getItem(position: Int): Fragment = when (position) {
+        0 -> {
+            SearchTimeline().apply { arguments = Bundle { putByteArray("query_bundle", query.getSerialized()) } }
 
-		}
-		1 -> {
-			UserSearch().apply { arguments = Bundle { putString("query_text", queryText) } }
-		}
-		2 -> TrendFragment()
+        }
+        1 -> {
+            UserSearch().apply { arguments = Bundle { putString("query_text", queryText) } }
+        }
+        2 -> TrendFragment()
 
-		else -> throw  IllegalStateException()
-	}
+        else -> throw  IllegalStateException()
+    }
 
-	override fun getPageTitle(position: Int): CharSequence = when (position) {
-		0 -> "Tweet"
-		1 -> "User"
-		2 -> "Trend"
-		else -> throw  IllegalStateException()
-	}
+    override fun getPageTitle(position: Int): CharSequence = when (position) {
+        0 -> "Tweet"
+        1 -> "User"
+        2 -> "Trend"
+        else -> throw  IllegalStateException()
+    }
 
-	override fun getCount(): Int = 3
+    override fun getCount(): Int = 3
 
-	class UserSearch : UserListFragment() {
-		private var page: Int = 0
-			get() {
-				field++
-				return field
-			}
+    class UserSearch : UserListFragment() {
+        private var page: Int = 0
+            get() {
+                field++
+                return field
+            }
 
-		override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-			super.onViewCreated(view, savedInstanceState)
-            viewmodel .adapter.setOnItemClickListener { _, _, position ->
-				val intent = activity.intent<UserActivity>()
-				intent.putExtra("user_id",     viewmodel .adapter.getItem(position)?.id)
-				activity.startActivity(intent)
-                viewmodel .adapter.getItem(position)
+        override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
+            viewmodel.adapter.setOnItemClickListener { _, _, position ->
+                val intent = activity.intent<UserActivity>()
+                intent.putExtra("user_id", viewmodel.adapter.getItem(position)?.id)
+                activity.startActivity(intent)
+                viewmodel.adapter.getItem(position)
 
-			}
-		}
+            }
+        }
 
-		override fun getUserData(userId: Long, cursor: Long): PagableResponseList<User>? {
-			val queryText = arguments.getString("query_text")
-			val result = viewmodel.twitter.searchUsers(queryText, page)
-			mainThread {
-				if (result != null) {
-                    viewmodel .adapter.addData(result)
-				}
+        override fun getUserData(userId: Long, cursor: Long): PagableResponseList<User>? {
+            val queryText = arguments.getString("query_text")
+            val result = viewmodel.twitter.searchUsers(queryText, page)
+            mainThread {
+                if (result != null) {
+                    viewmodel.adapter.addData(result)
+                }
 
-			}
-			return null
-		}
-	}
+            }
+            return null
+        }
+    }
 
 }
 

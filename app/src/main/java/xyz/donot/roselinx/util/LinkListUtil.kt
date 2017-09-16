@@ -38,7 +38,7 @@ fun Context.getTagURLMention() :MutableList<Link> = mutableListOf(
         Link(Regex.HASHTAG_PATTERN)
                 .setTextColor(ContextCompat.getColor(this, R.color.colorAccent))
                 .setOnClickListener {
-                    (this as Activity).start<SearchActivity>(Bundle { putString("query_text",it) })
+                    (this as Activity).start<SearchActivity>(Bundle { putString("query_text","$it -rt") })
                 }
 )
 fun Context.getURLLink() :MutableList<Link> = arrayListOf(

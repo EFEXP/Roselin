@@ -42,8 +42,8 @@ class SearchSettingFragment:DialogFragment(){
                     if(search_setting_image.isChecked) {
                         querytext +=" filter:images"
                     }
-                    if ( !search_setting_query_absolute.text.toString().isBlank()){
-                        querytext +="\"${search_setting_query_absolute.text}\""
+                    if ( search_setting_query_absolute.text.toString().isBlank().not()){
+                        querytext +=""""${search_setting_query_absolute.text}""""
                     }
 
 

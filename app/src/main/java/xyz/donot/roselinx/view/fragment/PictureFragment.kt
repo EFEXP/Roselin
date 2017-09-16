@@ -1,13 +1,13 @@
 package xyz.donot.roselinx.view.fragment
 
 
-import android.arch.lifecycle.LifecycleFragment
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Bitmap
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.graphics.Palette
 import android.view.LayoutInflater
@@ -22,7 +22,7 @@ import xyz.donot.roselinx.util.extraUtils.onClick
 import xyz.donot.roselinx.viewmodel.PictureViewModel
 
 
-class PictureFragment : LifecycleFragment() {
+class PictureFragment : Fragment() {
     private val stringURL by lazy { arguments.getString("url") }
     lateinit var viewmodel :PictureViewModel
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

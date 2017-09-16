@@ -1,7 +1,5 @@
 package xyz.donot.roselinx.view.activity
 
-import android.arch.lifecycle.LifecycleRegistry
-import android.arch.lifecycle.LifecycleRegistryOwner
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
@@ -22,7 +20,7 @@ import xyz.donot.roselinx.viewmodel.UserViewModel
 import kotlin.properties.Delegates
 
 
-class UserActivity : AppCompatActivity(), LifecycleRegistryOwner {
+class UserActivity : AppCompatActivity(){
     var viewmodel by Delegates.notNull<UserViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +97,4 @@ class UserActivity : AppCompatActivity(), LifecycleRegistryOwner {
         return true
     }
 
-
-    private val life by lazy { LifecycleRegistry(this) }
-    override fun getLifecycle(): LifecycleRegistry = life
 }

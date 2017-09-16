@@ -18,7 +18,9 @@ import twitter4j.User
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.realm.DBNotification
 import xyz.donot.roselinx.model.realm.NRETWEET
+import xyz.donot.roselinx.service.REPLY_ID
 import xyz.donot.roselinx.util.extraUtils.Bundle
+import xyz.donot.roselinx.util.extraUtils.getNotificationManager
 import xyz.donot.roselinx.util.extraUtils.start
 import xyz.donot.roselinx.util.getDeserialized
 import xyz.donot.roselinx.util.getExpandedText
@@ -53,6 +55,7 @@ class NotificationFragment : ARecyclerFragment() {
         super.onResume()
         isBackground = false
         itemInserted()
+       activity.getNotificationManager().cancel(REPLY_ID)
     }
 
     override fun onStop() {

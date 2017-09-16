@@ -1,10 +1,10 @@
 package xyz.donot.roselinx.view.activity
 
-import android.arch.lifecycle.LifecycleActivity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import com.twitter.sdk.android.core.Callback
 import com.twitter.sdk.android.core.Result
 import com.twitter.sdk.android.core.TwitterException
@@ -15,7 +15,7 @@ import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.viewmodel.OauthViewModel
 
 
-class OauthActivity : LifecycleActivity() {
+class OauthActivity : AppCompatActivity() {
 
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

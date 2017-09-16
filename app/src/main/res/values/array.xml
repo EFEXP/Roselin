@@ -44,5 +44,6 @@
     <string-array name="text_tools">
         <item>#NowPlaying</item>
         <item>突然の死</item>
+        <item>縦書き</item>
     </string-array>
 </resources>

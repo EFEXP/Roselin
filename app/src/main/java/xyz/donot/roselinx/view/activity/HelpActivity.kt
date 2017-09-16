@@ -36,7 +36,7 @@ class HelpActivity : AppCompatActivity() {
         }
 
         whats_new.setOnClickListener {
-            featuresFragment().show(supportFragmentManager, "")
+            FeaturesFragment().show(supportFragmentManager, "")
         }
         contact_support.onClick {
             val bundle = xyz.donot.roselinx.util.extraUtils.Bundle { putString("user_screen_name", "JlowoiL") }
@@ -47,7 +47,7 @@ class HelpActivity : AppCompatActivity() {
 
 }
 
-class featuresFragment : BaseListFragment<ChangeLog>() {
+class FeaturesFragment : BaseListFragment<ChangeLog>() {
     override val adapterx: BaseQuickAdapter<ChangeLog, BaseViewHolder> by lazy { ChangeLogAdapter() }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 

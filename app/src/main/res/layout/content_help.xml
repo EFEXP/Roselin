@@ -1,147 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="xyz.donot.roselinx.view.activity.HelpActivity"
-    tools:layout_editor_absoluteX="0dp"
-    tools:layout_editor_absoluteY="81dp"
-    tools:showIn="@layout/activity_help">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  app:layout_behavior="@string/appbar_scrolling_view_behavior"
+  tools:context="xyz.donot.roselinx.view.activity.HelpActivity"
+  tools:layout_editor_absoluteX="0dp"
+  tools:layout_editor_absoluteY="81dp"
+  tools:showIn="@layout/activity_help">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cardView3"
+  <android.support.v7.widget.CardView
+    android:id="@+id/cardView3"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+
+      <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+        <android.support.v7.widget.AppCompatImageView
+          android:id="@+id/appCompatImageView"
+          android:layout_width="56dp"
+          android:layout_height="56dp"
+          android:layout_margin="8dp"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
+          android:layout_marginStart="8dp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          app:srcCompat="@drawable/ic_launcher"/>
 
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+        <TextView
+          android:id="@+id/textView4"
+          android:textStyle="bold"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:layout_marginStart="8dp"
+          android:text="@string/app_name"
+          android:textSize="24sp"
+          app:layout_constraintStart_toEndOf="@+id/appCompatImageView"
+          app:layout_constraintTop_toTopOf="parent"/>
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/appCompatImageView"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_margin="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_launcher" />
+        <TextView
+          android:id="@+id/tv_version_name"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="8dp"
+          android:textSize="12sp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintStart_toStartOf="@+id/textView4"
+          app:layout_constraintTop_toBottomOf="@+id/textView4"
+          tools:text="Ver.1.0"/>
+      </android.support.constraint.ConstraintLayout>
 
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/app_name"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toEndOf="@+id/appCompatImageView"
-                    app:layout_constraintTop_toTopOf="parent" />
+      <LinearLayout
+        android:id="@+id/contact_support"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tv_version_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginStart="0dp"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/appCompatImageView"
-                    app:layout_constraintTop_toBottomOf="@+id/textView4"
-                    tools:text="Ver.1.0" />
-            </android.support.constraint.ConstraintLayout>
+        <android.support.v7.widget.AppCompatImageView
+          android:layout_width="32dp"
+          android:layout_height="32dp"
+          android:layout_margin="8dp"
+          app:srcCompat="@drawable/avatar_place_holder"/>
 
-            <LinearLayout
-                android:id="@+id/contact_support"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="サポートに連絡"/>
+      </LinearLayout>
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_margin="8dp"
-                    app:srcCompat="@drawable/avatar_place_holder" />
+      <LinearLayout
+        android:id="@+id/whats_new"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="サポートに連絡" />
-            </LinearLayout>
+        <android.support.v7.widget.AppCompatImageView
+          android:layout_width="32dp"
+          android:layout_height="32dp"
+          android:layout_margin="8dp"
+          app:srcCompat="@drawable/ic_timeline"/>
 
-            <LinearLayout
-                android:id="@+id/whats_new"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+        <TextView
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_margin="8dp"
-                    app:srcCompat="@drawable/ic_timeline" />
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="更新履歴"/>
+      </LinearLayout>
 
-                <TextView
+      <LinearLayout
+        android:id="@+id/rate_this_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="更新履歴" />
-            </LinearLayout>
+        <android.support.v7.widget.AppCompatImageView
+          android:layout_width="32dp"
+          android:layout_height="32dp"
+          android:layout_margin="8dp"
+          app:srcCompat="@drawable/ic_star"/>
 
-            <LinearLayout
-                android:id="@+id/rate_this_app"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="アプリを評価"/>
+      </LinearLayout>
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_margin="8dp"
-                    app:srcCompat="@drawable/ic_star" />
+      <LinearLayout
+        android:id="@+id/show_licenses"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="アプリを評価" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/show_licenses"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:text="このアプリは Apache License, Version 2.0 のライセンスで配布されている成果物を含んでいます。" />
-            </LinearLayout>
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_margin="8dp"
+          android:text="このアプリは Apache License, Version 2.0 ライセンスで配布されている成果物を含んでいます。"/>
+      </LinearLayout>
+    </LinearLayout>
+  </android.support.v7.widget.CardView>
 
 
 </android.support.constraint.ConstraintLayout>
