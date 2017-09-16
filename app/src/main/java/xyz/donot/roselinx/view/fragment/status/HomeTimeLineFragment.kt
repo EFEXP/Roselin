@@ -20,7 +20,7 @@ class HomeTimeLineFragment : TimeLineFragment(){
     private val deleteReceiver by lazy { DeleteReceiver() }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (savedInstanceState==null&&viewmodel.twitter==viewmodel.main_twitter){
+        if (savedInstanceState==null&&viewmodel.twitter==viewmodel.mainTwitter){
             LocalBroadcastManager.getInstance(activity).apply {
                 registerReceiver(receiver, IntentFilter("NewStatus"))
                 registerReceiver(deleteReceiver, IntentFilter("DeleteStatus"))
@@ -30,7 +30,7 @@ class HomeTimeLineFragment : TimeLineFragment(){
             async(CommonPool){ twitter.getHomeTimeline(Paging(viewmodel.adapter.data[0].id))}
         }
         viewmodel.getData= {twitter->
-            async(CommonPool){ twitter.getHomeTimeline(Paging(page))}
+            async(CommonPool){ twitter.getHomeTimeline(Paging(viewmodel.page))}
         }
     }
     override fun onDestroy() {

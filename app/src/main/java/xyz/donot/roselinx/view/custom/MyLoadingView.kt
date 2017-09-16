@@ -1,8 +1,9 @@
 package xyz.donot.roselinx.view.custom
 
+import com.chad.library.adapter.base.loadmore.LoadMoreView
 import xyz.donot.roselinx.R
 
-class MyLoadingView: MyLoadMoreView (){
+class MyLoadingView: LoadMoreView(){
     override fun getLayoutId(): Int = R.layout.item_loading
 
     override fun getLoadingViewId(): Int = R.id.load_more_loading_view

@@ -8,58 +8,68 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.gms.ads.AdRequest
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import kotlinx.android.synthetic.main.item_ad.view.*
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.getDeserialized
 import xyz.donot.roselinx.util.getTwitterInstance
-import xyz.donot.roselinx.view.custom.MyBaseRecyclerAdapter
 import xyz.donot.roselinx.view.custom.MyLoadingView
-import xyz.donot.roselinx.view.custom.MyViewHolder
 import xyz.donot.roselinx.viewmodel.fragment.BaseListViewModel
-import kotlin.properties.Delegates
 
-//PullToRefresh  付き
+
 abstract class BaseListFragment<T> : ARecyclerFragment(), LifecycleRegistryOwner {
-    protected var viewmodel by Delegates.notNull<BaseListViewModel<T>>()
-    abstract fun adapterFun(): MyBaseRecyclerAdapter<T, MyViewHolder>
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        viewmodel = ViewModelProviders.of(this).get(BaseListViewModel::class.java) as BaseListViewModel<T>
-        viewmodel.twitter = if (arguments != null && arguments.containsKey("twitter")) {
-            arguments.getByteArray("twitter").getDeserialized()
-        } else getTwitterInstance()
-        return inflater.inflate(R.layout.content_base_fragment, container, false)
-    }
+    protected lateinit var viewmodel: BaseListViewModel<T>
+    abstract val adapterx: BaseQuickAdapter<T, BaseViewHolder>
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
+            inflater.inflate(R.layout.content_base_fragment, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewmodel = ViewModelProviders.of(this).get(BaseListViewModel::class.java) as BaseListViewModel<T>
         viewmodel.apply {
-            initAdapter(adapterFun())
+            adapter = adapterx
+            twitter = if (arguments != null && arguments.containsKey("twitter")) {
+                arguments.getByteArray("twitter").getDeserialized()
+            } else getTwitterInstance()
             adapter.apply {
                 setOnLoadMoreListener({
-                    if (viewmodel.shouldLoad) {
-                        if (viewmodel.useDefaultLoad) {
-                            viewmodel.LoadMoreData()
-                        } else {
-                            LoadMoreData2()
-                        }
+                    if (viewmodel.useDefaultLoad) {
+                        viewmodel.loadMoreData()
+                    } else {
+                        loadMoreData2()
                     }
-                }, recycler)
+                }
+                        , recycler)
                 setLoadMoreView(MyLoadingView())
                 emptyView = View.inflate(activity, R.layout.item_empty, null)
             }
             recycler.adapter = adapter
-            if (savedInstanceState == null) {
+
+            if (savedInstanceState == null)
                 if (useDefaultLoad) {
-                    viewmodel.LoadMoreData()
+                    viewmodel.loadMoreData()
                 } else {
-                    LoadMoreData2()
+                    loadMoreData2()
                 }
+            else {
+                val t = savedInstanceState.getSerializable("data") as ArrayList<T>
+                Log.d("SavedInstanceStateHas", t.size.toString())
+                adapter.addData(t)
             }
+
+
+            viewmodel.exception.observe(this@BaseListFragment, Observer {
+                it?.let {
+                    adapter.emptyView = View.inflate(activity, R.layout.item_no_content, null)
+                }
+            })
             dataRefreshed.observe(this@BaseListFragment, Observer {
                 refresh.setRefreshing(false)
             })
@@ -90,11 +100,6 @@ abstract class BaseListFragment<T> : ARecyclerFragment(), LifecycleRegistryOwner
             })
         }
         refresh.isEnabled = false
-        viewmodel.endLoad.observe(this, Observer {
-            it?.let {
-              //  if (it)refresh.setRefreshing(false)
-            }
-        })
     }
 
     override fun onResume() {
@@ -107,16 +112,22 @@ abstract class BaseListFragment<T> : ARecyclerFragment(), LifecycleRegistryOwner
         viewmodel.isBackground.value = true
     }
 
-    open fun LoadMoreData2() = Unit
+    open fun loadMoreData2() = Unit
 
-    fun reselect(){
+    fun reselect() {
         recycler.smoothScrollToPosition(0)
     }
 
-    private val life by lazy { LifecycleRegistry(this) }
-    override fun getLifecycle(): LifecycleRegistry {
-        return life
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        val l = ArrayList<T>()
+        l.addAll(viewmodel.adapter.data)
+        Log.d("GiveData", viewmodel.adapter.data.count().toString())
+        outState?.putSerializable("data", l)
     }
+
+    private val life by lazy { LifecycleRegistry(this) }
+    override fun getLifecycle() = life
 
 
 }

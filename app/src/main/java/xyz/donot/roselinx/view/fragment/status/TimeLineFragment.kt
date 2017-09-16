@@ -24,25 +24,12 @@ import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.view.activity.EditTweetActivity
 import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.adapter.StatusAdapter
-import xyz.donot.roselinx.view.custom.MyBaseRecyclerAdapter
-import xyz.donot.roselinx.view.custom.MyViewHolder
 import xyz.donot.roselinx.view.fragment.BaseListFragment
 import xyz.donot.roselinx.view.fragment.RetweeterDialog
 
 
 abstract class TimeLineFragment : BaseListFragment<Status>() {
-    var page: Int = 0
-        set(value) {
-            pagecopy = value
-            field = value
-        }
-        get() {
-            field++
-            pagecopy = field
-            return field
-        }
-    private var pagecopy: Int = 0
-    override fun adapterFun(): MyBaseRecyclerAdapter<Status, MyViewHolder> = StatusAdapter()
+    override val adapterx by lazy { StatusAdapter()}
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //クリックリスナー
@@ -80,7 +67,7 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                                 "削除" -> {
                                     launch(UI) {
                                         try {
-                                            async(CommonPool) { viewmodel.main_twitter.destroyStatus(status.id) }.await()
+                                            async(CommonPool) { viewmodel.mainTwitter.destroyStatus(status.id) }.await()
                                             toast("削除しました")
                                         } catch (e: Exception) {
                                             toast(e.localizedMessage)
@@ -124,14 +111,9 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
         }
         //クリックリスナーEnd
         viewmodel.adapter.emptyView = View.inflate(activity, R.layout.item_empty, null)
-        if (savedInstanceState != null)
-            page = savedInstanceState.getInt("page", 0)
         refresh.isEnabled=true
     }
 
 
-    override fun onSaveInstanceState(outState: Bundle?) {
-        super.onSaveInstanceState(outState)
-        outState?.putInt("page", pagecopy)
-    }
+
 }

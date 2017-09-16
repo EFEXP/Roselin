@@ -28,7 +28,7 @@ class MentionTimeLine :TimeLineFragment(){
             async(CommonPool){twitter.getMentionsTimeline(Paging(viewmodel.adapter.data[0].id))}
         }
         viewmodel.getData= {twitter->
-            async(CommonPool){ twitter.getMentionsTimeline(Paging(page))}
+            async(CommonPool){ twitter.getMentionsTimeline(Paging(viewmodel.page))}
         }
 
     }

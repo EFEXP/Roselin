@@ -15,7 +15,7 @@ class ListTimeLine:TimeLineFragment(){
             async(CommonPool){twitter.getUserListStatuses(listId,Paging(viewmodel.adapter.data[0].id))}
         }
         viewmodel.getData= {twitter->
-            async(CommonPool){ twitter.getUserListStatuses(listId, Paging(page))}
+            async(CommonPool){ twitter.getUserListStatuses(listId, Paging(viewmodel.page))}
         }
     }
 }

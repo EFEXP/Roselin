@@ -36,7 +36,7 @@ class StreamingService : Service() {
         super.onCreate()
         try {
             handleActionStream()
-        } catch (e: Exception) {
+        } catch (e: TwitterException) {
            toast(twitterExceptionMessage(e))
         }
     }

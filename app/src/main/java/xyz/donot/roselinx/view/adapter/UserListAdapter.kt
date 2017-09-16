@@ -1,21 +1,25 @@
 package xyz.donot.roselinx.view.adapter
 
 import android.widget.ImageView
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.BaseViewHolder
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_user.view.*
 import twitter4j.User
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.view.custom.MyBaseRecyclerAdapter
-import xyz.donot.roselinx.view.custom.MyViewHolder
 
 
-class UserListAdapter : MyBaseRecyclerAdapter<User, MyViewHolder>(R.layout.item_user) {
+class UserListAdapter : BaseQuickAdapter<User,BaseViewHolder>(R.layout.item_user) {
 
-    override fun convert(helper: MyViewHolder, item: User, position: Int) {
+    override fun convert(helper:BaseViewHolder, item: User) {
         helper.apply {
             Picasso.with(mContext).load(item.biggerProfileImageURLHttps).into(getView<ImageView>(R.id.iv_icon))
-            setText(R.id.tv_username, item.name)
-            setText(R.id.tv_screenname, "@" + item.screenName)
-            setText(R.id.tv_description, item.description)
+            helper.itemView.apply {
+                tv_username.text=item.name
+                tv_screenname.text= "@" + item.screenName
+                tv_description.text= item.description
+            }
+
         }
     }
 

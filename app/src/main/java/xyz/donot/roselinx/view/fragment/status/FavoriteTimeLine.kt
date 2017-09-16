@@ -14,7 +14,7 @@ class FavoriteTimeLine:TimeLineFragment(){
             async(CommonPool){it.getFavorites(userId,Paging(viewmodel.adapter.data[0].id))}
         }
         viewmodel.getData= {twitter->
-            async(CommonPool){ twitter.getFavorites(userId, Paging(page))}
+            async(CommonPool){ twitter.getFavorites(userId, Paging(viewmodel.page))}
         }
     }
 

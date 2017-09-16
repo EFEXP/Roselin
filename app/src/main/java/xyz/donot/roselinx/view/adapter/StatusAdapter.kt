@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSnapHelper
 import android.view.View
 import android.view.ViewGroup
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.BaseViewHolder
 import com.klinker.android.link_builder.Link
 import com.klinker.android.link_builder.LinkBuilder
 import com.squareup.picasso.Picasso
@@ -26,13 +28,10 @@ import xyz.donot.roselinx.view.activity.PictureActivity
 import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.activity.UserActivity
 import xyz.donot.roselinx.view.activity.VideoActivity
-import xyz.donot.roselinx.view.custom.MyBaseRecyclerAdapter
-import xyz.donot.roselinx.view.custom.MyViewHolder
 
+class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_classic_tweet) {
 
-class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_classic_tweet) {
-
-    override fun convert(helper: MyViewHolder, status: Status, position: Int) {
+    override fun convert(helper: BaseViewHolder, status: Status) {
         helper.getView<ViewGroup>(R.id.item_tweet_root).apply {
             val item = if (status.isRetweet) {
                 textview_is_retweet.text = "@${status.user.screenName}がリツイート"
@@ -112,7 +111,7 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
                     launch(UI) {
                         try {
                             val result = async(CommonPool) { getTwitterInstance().destroyFavorite(status.id) }.await()
-                            setData(result, status)
+                            setData(helper.layoutPosition-1, result)
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
@@ -121,7 +120,7 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
                     launch(UI) {
                         try {
                             val result = async(CommonPool) { getTwitterInstance().createFavorite(status.id) }.await()
-                            setData(result, status)
+                            setData(helper.layoutPosition-1, result)
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
@@ -133,7 +132,7 @@ class StatusAdapter : MyBaseRecyclerAdapter<Status, MyViewHolder>(R.layout.item_
                     launch(UI) {
                         try {
                             val result = async(CommonPool) { getTwitterInstance().retweetStatus(status.id) }.await()
-                            setData(result, status)
+                            setData(helper.layoutPosition-1, result)
                             mContext.toast("RTしました")
                         } catch (e: Exception) {
                             e.printStackTrace()

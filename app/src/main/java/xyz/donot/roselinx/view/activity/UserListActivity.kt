@@ -29,6 +29,7 @@ class UserListActivity : AppCompatActivity() {
 }
 
 class FriendUserList : UserListFragment() {
+
 	override fun getUserData(userId: Long, cursor: Long): PagableResponseList<User>? = viewmodel.twitter.getFriendsList(userId, cursor)
 	override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)

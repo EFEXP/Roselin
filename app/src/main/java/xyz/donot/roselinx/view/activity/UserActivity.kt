@@ -101,7 +101,5 @@ class UserActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
 
     private val life by lazy { LifecycleRegistry(this) }
-    override fun getLifecycle(): LifecycleRegistry {
-        return life
-    }
+    override fun getLifecycle(): LifecycleRegistry = life
 }

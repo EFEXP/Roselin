@@ -24,6 +24,7 @@ import xyz.donot.roselinx.util.extraUtils.startService
 import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.util.getMyScreenName
 import xyz.donot.roselinx.util.getTwitterInstance
+import xyz.donot.roselinx.view.custom.SingleLiveEvent
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var receiver: BroadcastReceiver? = null
@@ -32,7 +33,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val twitter by lazy { getTwitterInstance()}
     val isConnectedStream = MutableLiveData<Boolean>()
     val postSucceed = MutableLiveData<Status>()
-    val deleteSucceed = MutableLiveData<Unit>()
+    val deleteSucceed = SingleLiveEvent<Unit>()
     fun registerReceivers() {
         val app: Roselin = getApplication()
         LocalBroadcastManager.getInstance(app).apply {
@@ -75,7 +76,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val realm = Realm.getDefaultInstance()
     //realm
     fun initTab() {
-        if (realm.where(DBTabData::class.java).count() == 0L) {
+        if (realm.where(DBTabData::class.java).count() <= 0) {
             realm.executeTransaction {
                 it.createObject(DBTabData::class.java).apply {
                     order = 0
@@ -120,7 +121,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             launch(UI) {
                 try {
                       async(CommonPool) { twitter.destroyStatus(id) }.await()
-                    deleteSucceed.value=Unit
+                    deleteSucceed.call()
                 } catch (e: Exception) {
                     e.printStackTrace()
             }

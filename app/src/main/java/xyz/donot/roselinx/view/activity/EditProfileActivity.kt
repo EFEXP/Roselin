@@ -20,6 +20,7 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
+import twitter4j.TwitterException
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.longToast
 import xyz.donot.roselinx.util.extraUtils.toast
@@ -112,7 +113,7 @@ class EditProfileActivity : AppCompatActivity() {
                             }
 
                 }
-            } catch (e: Exception) {
+            } catch (e: TwitterException) {
                 toast(twitterExceptionMessage(e))
             }
 
@@ -132,7 +133,7 @@ class EditProfileActivity : AppCompatActivity() {
                     val bundle = Bundle()
                     bundle.putByteArray("user", user.getSerialized())
                     setResult(RESULT_OK, Intent().putExtras(bundle))
-                } catch (e: Exception) {
+                } catch (e: TwitterException) {
                     toast(twitterExceptionMessage(e))
                 }
             }
@@ -147,7 +148,7 @@ class EditProfileActivity : AppCompatActivity() {
                             async(CommonPool) { getTwitterInstance().updateProfileImage(File(getPath(this@EditProfileActivity, iconUri!!))) }.await()
                             longToast("更新しました")
                             mNotificationManager.cancel(id)
-                        } catch (e: Exception) {
+                        } catch (e: TwitterException) {
                             toast(twitterExceptionMessage(e))
                             mNotificationManager.cancel(id)
                         }
@@ -159,7 +160,7 @@ class EditProfileActivity : AppCompatActivity() {
                             async(CommonPool) { getTwitterInstance().updateProfileBanner(File(getPath(this@EditProfileActivity, bannerUri!!))) }.await()
                             longToast("更新しました")
                             mNotificationManager.cancel(id)
-                        } catch (e: Exception) {
+                        } catch (e:TwitterException) {
                             toast(twitterExceptionMessage(e))
                             mNotificationManager.cancel(id)
                         }

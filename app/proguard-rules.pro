@@ -5,6 +5,10 @@
 -keepclassmembers public class * extends com.chad.library.adapter.base.BaseViewHolder {
      <init>(android.view.View);
 }
+#debug
+-keep class xyz.donot.roselinx.** { *; }
+
+
 
 -dontwarn com.bumptech.glide.**
 -dontwarn xyz.donot.roselinx.view.**

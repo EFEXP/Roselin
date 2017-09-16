@@ -13,12 +13,13 @@ import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.util.getPath
 import xyz.donot.roselinx.util.getSerialized
 import xyz.donot.roselinx.view.adapter.TwitterImageAdapter
+import xyz.donot.roselinx.view.custom.SingleLiveEvent
 import kotlin.properties.Delegates
 
 class EditTweetViewModel(application: Application) : AndroidViewModel(application) {
     val draft:MutableLiveData<String> = MutableLiveData()
     val hashtag:MutableLiveData<String> = MutableLiveData()
-    val finish:MutableLiveData<Unit> = MutableLiveData()
+    val finish:SingleLiveEvent<Unit> = SingleLiveEvent()
     var statusId by Delegates.notNull<Long>()
     val mAdapter = TwitterImageAdapter()
     var screenName: String = ""
@@ -32,7 +33,7 @@ class EditTweetViewModel(application: Application) : AndroidViewModel(applicatio
         app.startService(app.newIntent<TweetPostService>()
                 .putExtra("StatusUpdate", updateStatus.getSerialized())
                 .putStringArrayListExtra("FilePath", filePathList))
-        finish.value=Unit
+        finish.call()
     }
 
     fun saveDraft(string: String){

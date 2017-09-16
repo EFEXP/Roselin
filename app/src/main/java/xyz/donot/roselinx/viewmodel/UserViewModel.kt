@@ -8,11 +8,13 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
+import twitter4j.TwitterException
 import twitter4j.User
 import xyz.donot.roselinx.Roselin
 import xyz.donot.roselinx.model.realm.DBCustomProfile
 import xyz.donot.roselinx.model.realm.DBMute
 import xyz.donot.roselinx.util.extraUtils.toast
+import xyz.donot.roselinx.util.extraUtils.twitterExceptionMessage
 import xyz.donot.roselinx.util.getSerialized
 import xyz.donot.roselinx.util.getTwitterInstance
 
@@ -20,14 +22,13 @@ import xyz.donot.roselinx.util.getTwitterInstance
 class UserViewModel(app: Application) : AndroidViewModel(app) {
     var mUser: MutableLiveData<User> = MutableLiveData()
     private val realm by lazy { Realm.getDefaultInstance() }
-
     fun initUser(screenName: String) {
         if (mUser.value == null) {
             launch(UI) {
                 try {
                     mUser.value = async(CommonPool) { getTwitterInstance().showUser(screenName) }.await()
-                } catch (e: Exception) {
-                   getApplication<Roselin>().toast(e.localizedMessage)
+                } catch (e: TwitterException) {
+                   getApplication<Roselin>().toast(twitterExceptionMessage(e))
                 }
             }
         }
@@ -37,8 +38,8 @@ class UserViewModel(app: Application) : AndroidViewModel(app) {
             launch(UI) {
                 try {
                     mUser.value = async(CommonPool) { getTwitterInstance().showUser(id) }.await()
-                } catch (e: Exception) {
-                    getApplication<Roselin>().toast(e.localizedMessage)
+                } catch (e: TwitterException) {
+                    getApplication<Roselin>().toast(twitterExceptionMessage(e))
                 }
             }
         }

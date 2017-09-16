@@ -2,7 +2,6 @@ package xyz.donot.roselinx.viewmodel
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.MutableLiveData
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.twitter.sdk.android.core.Result
 import com.twitter.sdk.android.core.TwitterSession
@@ -19,16 +18,14 @@ import xyz.donot.roselinx.model.realm.DBAccount
 import xyz.donot.roselinx.model.realm.DBMute
 import xyz.donot.roselinx.util.extraUtils.Bundle
 import xyz.donot.roselinx.util.getSerialized
+import xyz.donot.roselinx.view.custom.SingleLiveEvent
 
 class OauthViewModel(app: Application) : AndroidViewModel(app) {
     private val realm by lazy { Realm.getDefaultInstance() }
-    val isFinished: MutableLiveData<Unit> by lazy { MutableLiveData<Unit>() }
-
-
+    val isFinished= SingleLiveEvent<Unit>()
     private fun saveToken(tw: Twitter, user: User) {
         //val result = async(CommonPool) { tw.verifyCredentials() }.await()
         if (realm.where(DBAccount::class.java).equalTo("id", user.id).findAll().count() == 0) {
-
             val realmAccounts = realm.where(DBAccount::class.java).equalTo("isMain", true)
             realm.executeTransaction {
                 if (realmAccounts.findFirst() != null) {
@@ -56,7 +53,7 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
                     }
 
                 }
-                isFinished.value = Unit
+                isFinished.call()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -97,8 +94,6 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
             }
 
         }
-
-
     }
 
     override fun onCleared() {

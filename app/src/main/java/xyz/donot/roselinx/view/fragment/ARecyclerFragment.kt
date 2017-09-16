@@ -11,30 +11,26 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import xyz.donot.roselinx.R
-import kotlin.properties.Delegates
 
-open class ARecyclerFragment: AppCompatDialogFragment(){
+open class ARecyclerFragment : AppCompatDialogFragment() {
 
-    var recycler by Delegates.notNull<RecyclerView>()
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.content_base_fragment, container, false)
-    }
+    lateinit var recycler: RecyclerView
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
+            inflater.inflate(R.layout.content_base_fragment, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view?.let {
-            recycler= view.findViewById(R.id.recycler)
-            val dividerItemDecoration = DividerItemDecoration(recycler.context, LinearLayoutManager(activity).orientation)
-            recycler.apply {
-                (itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
-                layoutManager = LinearLayoutManager(activity)
-                addItemDecoration(dividerItemDecoration)
-            }
-            refresh.isEnabled=false
-
+                recycler = view.findViewById(R.id.recycler)
+                val dividerItemDecoration = DividerItemDecoration(recycler.context, LinearLayoutManager(activity).orientation)
+                recycler.apply {
+                    (itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
+                    layoutManager = LinearLayoutManager(activity)
+                    addItemDecoration(dividerItemDecoration)
+                }
+                refresh.isEnabled = false
 
         }
-
 
 
     }

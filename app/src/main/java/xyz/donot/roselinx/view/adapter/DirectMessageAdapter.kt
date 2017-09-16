@@ -1,17 +1,17 @@
 package xyz.donot.roselinx.view.adapter
 
 import android.view.ViewGroup
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.BaseViewHolder
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_directmessage.view.*
 import twitter4j.DirectMessage
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.getMyId
-import xyz.donot.roselinx.view.custom.MyBaseRecyclerAdapter
-import xyz.donot.roselinx.view.custom.MyViewHolder
 
-class DirectMessageAdapter : MyBaseRecyclerAdapter<DirectMessage, MyViewHolder>(R.layout.item_directmessage) {
+class DirectMessageAdapter : BaseQuickAdapter<DirectMessage, BaseViewHolder>(R.layout.item_directmessage) {
 	private val myId = getMyId()
-	override fun convert(helper: MyViewHolder, item: DirectMessage, position: Int) {
+	override fun convert(helper: BaseViewHolder, item: DirectMessage) {
 		helper.getView<ViewGroup>(R.id.item_directmessage_root).apply {
 			tv_screenname.text="@${item.senderScreenName}から@${item.recipientScreenName}"
 			tv_description.text = item.text

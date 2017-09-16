@@ -33,11 +33,10 @@ import kotlin.properties.Delegates
 class EditTweetActivity : AppCompatActivity(), LifecycleRegistryOwner {
 
     private val life by lazy { LifecycleRegistry(this) }
-    override fun getLifecycle(): LifecycleRegistry {
-        return life
-    }
+    override fun getLifecycle() = life
     var viewmodel by Delegates.notNull<EditTweetViewModel>()
-    private var croppingUri: Uri? = null
+    private var pair:Pair<Uri,Int>?=null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,8 +103,8 @@ class EditTweetActivity : AppCompatActivity(), LifecycleRegistryOwner {
                             })
                         })*/
                     .setPositiveButton("編集", { _, _ ->
-                        croppingUri = item
-                        UCrop.of(item!!, Uri.fromFile(File(cacheDir, "${Date().time}.jpg")))
+                        pair =Pair(item!!,position)
+                                UCrop.of(item, Uri.fromFile(File(cacheDir, "${Date().time}.jpg")))
                                 .withOptions(UCrop.Options().apply {
                                     setImageToCropBoundsAnimDuration(100)
                                     setFreeStyleCropEnabled(true)
@@ -173,7 +172,7 @@ class EditTweetActivity : AppCompatActivity(), LifecycleRegistryOwner {
             when (requestCode) {
                 UCrop.REQUEST_CROP -> {
                     val resultUri = UCrop.getOutput(data)
-                    viewmodel.  mAdapter.setData(resultUri!!, croppingUri!!)
+                    viewmodel.  mAdapter.setData(pair!!.second,resultUri!!)
                 }
             }
         }

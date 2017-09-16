@@ -11,6 +11,7 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import twitter4j.Paging
 import twitter4j.User
+import xyz.donot.roselinx.R.string.page
 import xyz.donot.roselinx.util.extraUtils.Bundle
 import xyz.donot.roselinx.util.extraUtils.start
 import xyz.donot.roselinx.util.extraUtils.toast
@@ -78,7 +79,6 @@ class UserTimeLineFragment : TimeLineFragment() {
                     }
 
                     launch(UI) {
-
                         val result = async(CommonPool) { viewmodel.twitter.showFriendship(getMyId(), user.id) }.await()
                         setRelation(result, getMyId() == user.id)
                     }
