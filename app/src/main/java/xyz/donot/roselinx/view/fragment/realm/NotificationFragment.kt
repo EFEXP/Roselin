@@ -1,9 +1,9 @@
 package xyz.donot.roselinx.view.fragment.realm
 
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
 import android.support.text.emoji.widget.EmojiTextView
 import android.support.v4.content.res.ResourcesCompat
-import android.support.v7.widget.CardView
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -101,7 +101,7 @@ class NotificationFragment : ARecyclerFragment() {
             val sendericon: RoundedImageView = view.iv_notification_sender_icon
             val icon: RoundedImageView = view.iv_notification_icon
             val screen: TextView = view.tv_notification_myscreen
-            val card: CardView = view.cardView
+            val card: ConstraintLayout = view.constraint2
         }
 
 

@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView
+  xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
+  app:layout_behavior="@string/appbar_scrolling_view_behavior"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  app:layout_behavior="@string/appbar_scrolling_view_behavior"
+  >
+<RelativeLayout
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
   tools:context=".view.activity.EditProfileActivity"
   tools:showIn="@layout/activity_edit_profile">
 
-  <ImageView
+  <android.support.v7.widget.AppCompatImageView
     android:layout_width="match_parent"
     android:layout_height="180dp"
     android:id="@+id/profile_banner"
     android:layout_centerHorizontal="true"
       android:scaleType="fitXY"
-
     />
 
-  <ImageView
+  <android.support.v7.widget.AppCompatImageView
     android:layout_width="100dp"
     android:layout_height="100dp"
     android:id="@+id/icon"
@@ -28,21 +32,20 @@
   <android.support.design.widget.TextInputLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
-    android:layout_alignParentRight="true"
     android:layout_alignParentEnd="true"
     android:layout_below="@+id/icon"
     app:counterEnabled="true"
     app:counterMaxLength="20"
     android:id="@+id/user_name_"
-      app:theme="@style/AppTheme.Design"
+    app:theme="@style/AppTheme.Design"
     >
 <android.support.design.widget.TextInputEditText
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:id="@+id/user_name"
   android:hint="@string/name_char_length"
+  android:maxLines="2"
   />
   </android.support.design.widget.TextInputLayout>
 
@@ -50,9 +53,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@+id/user_name_"
-    android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
-    android:layout_alignRight="@+id/user_name_"
     android:layout_alignEnd="@+id/user_name_"
     android:id="@+id/web_"
       app:theme="@style/AppTheme.Design"
@@ -61,6 +62,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/web"
+    android:maxLines="2"
     android:hint="@string/optional_url"
     />
   </android.support.design.widget.TextInputLayout>
@@ -68,9 +70,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@+id/web_"
-    android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
-    android:layout_alignRight="@+id/web_"
     android:layout_alignEnd="@+id/web_"
     android:id="@+id/geo_"
       app:theme="@style/AppTheme.Design"
@@ -79,6 +79,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/geo"
+    android:maxLines="2"
     android:hint="@string/optional_location"
     />
 
@@ -88,9 +89,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@+id/geo_"
-    android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
-    android:layout_alignParentRight="true"
     android:layout_alignParentEnd="true"
       app:theme="@style/AppTheme.Design"
     >
@@ -100,6 +99,7 @@
     android:inputType="textMultiLine"
     android:ems="10"
     android:minLines="3"
+    android:maxLines="5"
     android:id="@+id/description"
     app:counterEnabled="true"
     app:counterMaxLength="160"
@@ -107,3 +107,4 @@
     />
   </android.support.design.widget.TextInputLayout>
 </RelativeLayout>
+</android.support.v4.widget.NestedScrollView>

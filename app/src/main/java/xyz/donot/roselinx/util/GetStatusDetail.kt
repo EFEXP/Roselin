@@ -38,7 +38,7 @@ fun inReplyName(status: Status): CharSequence {
    return text
 }
 
-fun getExpandedText(status: Status): CharSequence {
+fun getExpandedText(status: Status): String {
     var text:String = status.text
     if (status.displayTextRangeStart>=0&&status.displayTextRangeEnd>=0) {
         text = emojiSubString(text, status.displayTextRangeStart, status.displayTextRangeEnd)

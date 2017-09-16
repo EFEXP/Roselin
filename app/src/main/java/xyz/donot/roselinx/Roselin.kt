@@ -2,7 +2,6 @@ package xyz.donot.roselinx
 
 import android.app.Application
 import android.app.UiModeManager
-import android.preference.PreferenceManager
 import android.support.text.emoji.EmojiCompat
 import android.support.text.emoji.FontRequestEmojiCompatConfig
 import android.support.v4.provider.FontRequest
@@ -14,7 +13,7 @@ import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import xyz.donot.roselinx.util.extraUtils.roselinxConfig
+import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
 
 
 class Roselin : Application() {
@@ -38,7 +37,7 @@ class Roselin : Application() {
                 .deleteRealmIfMigrationNeeded()
                 .build()
         Realm.setDefaultConfiguration(config)
-        roselinxConfig.logEnabled = true
+       // roselinxConfig.logEnabled = true
         /*
         val config = RealmConfiguration.Builder().schemaVersion(0L)
                 .migration(MyRealmMigration())
@@ -63,7 +62,7 @@ class Roselin : Application() {
         //Delegate
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true)
         WebView(applicationContext)
-        val design = if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean("night", true)) {
+        val design = if (defaultSharedPreferences.getBoolean("night", true)) {
             AppCompatDelegate.MODE_NIGHT_YES
         } else {
             AppCompatDelegate.MODE_NIGHT_NO

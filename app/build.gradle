@@ -2,7 +2,7 @@ import com.android.build.OutputFile
 ext {
     PUBLISH_GROUP_ID = 'xyz.donot'
     PUBLISH_ARTIFACT_ID = 'roselinx'
-    PUBLISH_VERSION = "1.0-weber"
+    PUBLISH_VERSION = "1.0-Weber"
 }
 
 apply plugin: 'com.android.application'
@@ -24,7 +24,7 @@ android {
         applicationId "$PUBLISH_GROUP_ID.$PUBLISH_ARTIFACT_ID"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 8
+        versionCode 9
         versionName "$PUBLISH_VERSION"
     }
     buildTypes {

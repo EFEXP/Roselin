@@ -59,7 +59,13 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_cla
                     textview_username.text = item.user.name
             }
             textview_date.text = getRelativeTime(item.createdAt)
-            textview_text.text = getExpandedText(item)
+            val text= getExpandedText(item)
+            if (text.codePointCount(0, text.length) == 0)
+                textview_text.hide()
+            else {
+                textview_text.text = text
+                textview_text.show()}
+
             textview_screenname.text = "@" + item.user.screenName
             textview_via.text = getClientName(item.source)
             tv_retweet.setText(item.retweetCount.toString())

@@ -118,7 +118,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     //SendTweet
     fun sendTweet(text: String) {
-        if (!text.isBlank() && text.count() <= 140) {
+        if (!text.isBlank() && text.codePointCount(0, text.length) <= 140) {
             launch(UI) {
                 try {
                     val status = async(CommonPool) { getTwitterInstance().updateStatus(text) }.await()

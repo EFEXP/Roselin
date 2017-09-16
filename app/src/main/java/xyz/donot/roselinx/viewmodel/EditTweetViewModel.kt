@@ -25,15 +25,17 @@ class EditTweetViewModel(application: Application) : AndroidViewModel(applicatio
     var screenName: String = ""
 
     fun onSendClick(string: String) {
-        val app = getApplication<Roselin>()
-        val updateStatus = StatusUpdate(string)
-        updateStatus.inReplyToStatusId = statusId
-        val filePathList = ArrayList<String>()
-        mAdapter.data.forEach { filePathList.add(getPath(app, it)!!) }
-        app.startService(app.newIntent<TweetPostService>()
-                .putExtra("StatusUpdate", updateStatus.getSerialized())
-                .putStringArrayListExtra("FilePath", filePathList))
-        finish.call()
+        if (string.codePointCount(0, string.length)<= 140){
+            val app = getApplication<Roselin>()
+            val updateStatus = StatusUpdate(string)
+            updateStatus.inReplyToStatusId = statusId
+            val filePathList = ArrayList<String>()
+            mAdapter.data.forEach { filePathList.add(getPath(app, it)!!) }
+            app.startService(app.newIntent<TweetPostService>()
+                    .putExtra("StatusUpdate", updateStatus.getSerialized())
+                    .putStringArrayListExtra("FilePath", filePathList))
+            finish.call()
+        }
     }
 
     fun saveDraft(string: String) {
@@ -49,7 +51,7 @@ class EditTweetViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun suddenDeath(string: String): String {
-        val i = string.count() - 4
+        val i = string.codePointCount(0, string.length) - 4
         var a = ""
         var b = ""
         for (v in 0..i) {

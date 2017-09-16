@@ -89,14 +89,16 @@ class MainActivity : AppCompatActivity() {
             if (!uriString.isEmpty()) {
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.parse(uriString))
                 main_coordinator.background = BitmapDrawable(resources, bitmap).apply {
-                    if (version > 21) {
+                val porter=    if (defaultSharedPreferences.getBoolean("night", true))PorterDuff.Mode.DARKEN else PorterDuff.Mode.LIGHTEN
+                    if (version  >=  21) {
                         setTint(ContextCompat.getColor(this@MainActivity, R.color.overlay_background))
-                        setTintMode(PorterDuff.Mode.MULTIPLY)
+                        setTintMode(porter)
                     } else {
-                        val greyFilter = PorterDuffColorFilter(ContextCompat.getColor(this@MainActivity, R.color.overlay_background), PorterDuff.Mode.MULTIPLY)
+                        val greyFilter = PorterDuffColorFilter(ContextCompat.getColor(this@MainActivity, R.color.overlay_background),porter)
                         colorFilter = greyFilter
                     }
                 }
+              //  main_viewpager.background= ColorDrawable(ContextCompat.getColor(this,R.color.overlay_background))
             }
 
             tabs_main.setupWithViewPager(main_viewpager)
@@ -111,7 +113,7 @@ class MainActivity : AppCompatActivity() {
     private val REQUEST_WRITE_READ = 0
 
     @SuppressLint("NewApi")
-    private fun initialRequestPermission() = fromApi(23) {
+    private fun initialRequestPermission() = fromApi(23,true) {
         val EX_WRITE = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
         val LOCATION = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
         val EX_READ = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED

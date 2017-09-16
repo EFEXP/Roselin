@@ -59,13 +59,6 @@ class EditTweetActivity : AppCompatActivity() {
             })
         }
 
-
-        tvTextCounter.setEditText(editText_status)
-        tvTextCounter.setCharCountChangedListener { _, b ->
-            if (b) {
-                send_status.isEnabled = false
-            }
-        }
         val manager = LinearLayoutManager(this@EditTweetActivity).apply { orientation = LinearLayoutManager.HORIZONTAL }
 
         pic_recycler_view.apply {

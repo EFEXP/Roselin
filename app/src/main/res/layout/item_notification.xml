@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
     android:descendantFocusability="blocksDescendants"
    >
     <com.makeramen.roundedimageview.RoundedImageView
@@ -30,23 +29,22 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="~さんがツイートをいいねしました。" />
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:cardCornerRadius="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_notification_sender_icon"
-        app:layout_constraintTop_toBottomOf="@+id/iv_notification_sender_icon">
+
 
         <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+          android:id="@+id/constraint2"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="8dp"
+          android:layout_marginEnd="8dp"
+          android:layout_marginStart="8dp"
+          android:layout_marginTop="8dp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toEndOf="@+id/iv_notification_sender_icon"
+          app:layout_constraintTop_toBottomOf="@+id/iv_notification_sender_icon"
+          android:background="@color/overlay_background"
+          >
 
             <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/iv_notification_icon"
@@ -92,8 +90,5 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_notification_myscreen"
                 tools:text="りんごんりんごーん 私ベルエンジェル シャドウバース知ってる 本格カードゲームがスマホで楽しめちゃうの カードの進化が勝負の鍵 進化したら私だってこんなに強くなっちゃうんだから どすこーい❗ お前に負けるなら悔いはないさ…！ シャドウバース！" />
         </android.support.constraint.ConstraintLayout>
-
-    </android.support.v7.widget.CardView>
-
 
 </android.support.constraint.ConstraintLayout>
