@@ -36,26 +36,22 @@ class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
             return field
         }
 
-    private fun insertDataBackground(data: List<T>) {
-        mainThread {
-            if (isBackground.value!!) {
-                dataStore.addAll(0, data)
-            } else {
-                adapter.addData(0, data)
-                dataInserted.call()
-            }
+    private fun insertDataBackground(data: List<T>) = mainThread {
+        if (isBackground.value!!) {
+            dataStore.addAll(0, data)
+        } else {
+            adapter.addData(0, data)
+            dataInserted.call()
         }
     }
 
 
-    fun insertDataBackground(data: T) {
-        mainThread {
-            if (isBackground.value!!) {
-                dataStore.add(0, data)
-            } else {
-                adapter.addData(0, data)
-                dataInserted.call()
-            }
+    fun insertDataBackground(data: T) = mainThread {
+        if (isBackground.value!!) {
+            dataStore.add(0, data)
+        } else {
+            adapter.addData(0, data)
+            dataInserted.call()
         }
     }
 
@@ -72,10 +68,8 @@ class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
         }
     }
 
-    fun endAdapter() {
-        mainThread {
-            adapter.loadMoreEnd(true)
-        }
+    fun endAdapter() = mainThread {
+        adapter.loadMoreEnd(true)
     }
 
     fun loadMoreData() {

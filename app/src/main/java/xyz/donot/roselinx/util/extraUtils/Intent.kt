@@ -24,16 +24,16 @@ inline fun <reified T : Context> Context.newIntent(flags: Int, extras: Bundle): 
     return intent
 }
 
-inline fun <reified T : Activity> Activity.startActivity(): Unit =
+inline fun <reified T : Activity> Activity.startActivity()=
         this.startActivity(newIntent<T>())
 
-inline fun <reified T : Activity> Activity.startActivity(flags: Int): Unit =
+inline fun <reified T : Activity> Activity.startActivity(flags: Int) =
         this.startActivity(newIntent<T>(flags))
 
-inline fun <reified T : Activity> Activity.startActivity(extras: Bundle): Unit =
+inline fun <reified T : Activity> Activity.startActivity(extras: Bundle) =
         this.startActivity(newIntent<T>(extras))
 
-inline fun <reified T : Activity> Activity.startActivity(flags: Int, extras: Bundle): Unit =
+inline fun <reified T : Activity> Activity.startActivity(flags: Int, extras: Bundle) =
         this.startActivity(newIntent<T>(flags, extras))
 
 inline fun <reified T : Service> Context.startService(): ComponentName =

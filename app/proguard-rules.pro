@@ -5,10 +5,6 @@
 -keepclassmembers public class * extends com.chad.library.adapter.base.BaseViewHolder {
      <init>(android.view.View);
 }
-#debug
--keep class xyz.donot.roselinx.** { *; }
-
-
 
 -dontwarn com.bumptech.glide.**
 -dontwarn xyz.donot.roselinx.view.**
@@ -23,8 +19,6 @@
 -dontwarn twitter4j.**
 -keep class twitter4j.** { *; }
 -dontwarn javax.**
--keepclassmembers public class * extends xyz.donot.roselinx.view.custom.MyViewHolder{ <init>(android.view.View); }
--keep public class * extends xyz.donot.roselinx.view.custom.MyBaseRecyclerAdapter
 -keepclassmembernames class kotlinx.** {
     volatile <fields>;
 }

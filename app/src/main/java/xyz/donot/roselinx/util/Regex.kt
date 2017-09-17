@@ -267,7 +267,7 @@ object Regex {
     val INVALID_HASHTAG_MATCH_END: Pattern = Pattern.compile("^(?:[#＃]|://)")
     val RTL_CHARACTERS: Pattern = Pattern.compile("[\u0600-\u06FF\u0750-\u077F\u0590-\u05FF\uFE70-\uFEFF]")
 
-    val AT_SIGNS: Pattern = Pattern.compile("[$AT_SIGNS_CHARS]")
+    private val AT_SIGNS: Pattern = Pattern.compile("[$AT_SIGNS_CHARS]")
     val MENTION_PATTERN: Pattern = Pattern.compile("($AT_SIGNS+)([a-z0-9_]{1,20})(/[a-z][a-z0-9_\\-]{0,24})?", Pattern.CASE_INSENSITIVE)
     val VALID_MENTION_OR_LIST_GROUP_BEFORE = 1
     val VALID_MENTION_OR_LIST_GROUP_AT = 2

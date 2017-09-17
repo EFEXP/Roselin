@@ -31,6 +31,7 @@ import xyz.donot.roselinx.view.activity.VideoActivity
 
 class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_classic_tweet) {
 
+
     override fun convert(helper: BaseViewHolder, status: Status) {
         helper.getView<ViewGroup>(R.id.item_tweet_root).apply {
             val item = if (status.isRetweet) {

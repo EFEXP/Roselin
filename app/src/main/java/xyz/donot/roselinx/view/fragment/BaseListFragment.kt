@@ -130,9 +130,7 @@ abstract class BaseListFragment<T> : ARecyclerFragment() {
 
     open fun loadMoreData2() = Unit
 
-    fun reselect() {
-        recycler.smoothScrollToPosition(0)
-    }
+    fun reselect() = recycler.smoothScrollToPosition(0)
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)

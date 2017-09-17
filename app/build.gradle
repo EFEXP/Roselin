@@ -24,7 +24,7 @@ android {
         applicationId "$PUBLISH_GROUP_ID.$PUBLISH_ARTIFACT_ID"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 9
+        versionCode 10
         versionName "$PUBLISH_VERSION"
     }
     buildTypes {

@@ -1,8 +1,6 @@
 package xyz.donot.roselinx.util.extraUtils
 import android.app.Activity
-import android.app.Fragment
 import android.content.Intent
-import android.view.View
 import android.support.v4.app.Fragment as SupportFragment
 
 

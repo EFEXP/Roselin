@@ -44,13 +44,10 @@ class CustomButton(context: Context, attributeSet: AttributeSet?=null, defStyleA
         buttonSrc=ContextCompat.getDrawable(context,id)
         view.findViewById<ImageView>(R.id.bt_image).setImageDrawable(buttonSrc)
     }
-    fun setSrc(drawable: Drawable){
+    private fun setSrc(drawable: Drawable){
         buttonSrc=drawable
         view.findViewById<ImageView>(R.id.bt_image).setImageDrawable(buttonSrc)
     }
 
-    constructor(context: Context, attributeSet: AttributeSet?) : this(context,attributeSet,0){
 
-    }
-    constructor(context: Context) : this(context, null, 0)
 }
