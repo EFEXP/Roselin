@@ -1,13 +1,9 @@
 package xyz.donot.roselinx.util
 
-import android.content.Context
 import io.realm.Realm
 import twitter4j.Status
 import twitter4j.Twitter
-import twitter4j.TwitterFactory
 import twitter4j.User
-import twitter4j.conf.ConfigurationBuilder
-import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.realm.DBAccount
 import xyz.donot.roselinx.model.realm.DBMute
 import xyz.donot.roselinx.util.extraUtils.logd
@@ -28,18 +24,11 @@ fun <T> ByteArray.getDeserialized(): T {
     return ObjectInputStream(ByteArrayInputStream(this)).readObject() as T
 }
 
-
 fun getTwitterInstance(): twitter4j.Twitter = Realm.getDefaultInstance().use {
     val ac = it.where(DBAccount::class.java).equalTo("isMain", true).findFirst()
     return ac?.twitter?.getDeserialized<Twitter>() ?: throw IllegalStateException()
 }
 
-fun getOfficialInstance(context: Context): twitter4j.Twitter {
-    val builder = ConfigurationBuilder()
-    builder.setOAuthConsumerKey(context.getString(R.string.twitter_consumer_key))
-    builder.setOAuthConsumerSecret(context.getString(R.string.twitter_consumer_secret))
-    return TwitterFactory(builder.build()).instance
-}
 
 
 fun getMyScreenName(): String = Realm.getDefaultInstance().use {

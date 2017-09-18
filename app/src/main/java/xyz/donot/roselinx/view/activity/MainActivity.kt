@@ -8,13 +8,13 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import io.realm.Realm
@@ -29,7 +29,7 @@ import xyz.donot.roselinx.viewmodel.MainViewModel
 
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var viewmodel: MainViewModel
+    private val viewmodel: MainViewModel by lazy { ViewModelProviders.of(this).get(MainViewModel::class.java) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (!haveToken()) {
@@ -49,11 +49,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUp(bundle: Bundle?) {
         setContentView(R.layout.activity_main)
-        this.viewmodel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        viewmodel.initTab()
         setUpView()
         viewmodel.apply {
             registerReceivers()
-            initTab()
             initUser()
             if (bundle == null) {
                 initStream()
@@ -88,19 +87,13 @@ class MainActivity : AppCompatActivity() {
             val uriString = defaultSharedPreferences.getString("BackGroundUri", "")
             if (!uriString.isEmpty()) {
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.parse(uriString))
-                main_coordinator.background = BitmapDrawable(resources, bitmap).apply {
-                val porter=    if (defaultSharedPreferences.getBoolean("night", true))PorterDuff.Mode.DARKEN else PorterDuff.Mode.LIGHTEN
-                    if (version  >=  21) {
-                        setTint(ContextCompat.getColor(this@MainActivity, R.color.overlay_background))
-                        setTintMode(porter)
-                    } else {
-                        val greyFilter = PorterDuffColorFilter(ContextCompat.getColor(this@MainActivity, R.color.overlay_background),porter)
-                        colorFilter = greyFilter
-                    }
-                }
-              //  main_viewpager.background= ColorDrawable(ContextCompat.getColor(this,R.color.overlay_background))
+                val bitmapDrawable = BitmapDrawable(resources, bitmap)
+                val porter = if (defaultSharedPreferences.getBoolean("night", true)) PorterDuff.Mode.DARKEN else PorterDuff.Mode.LIGHTEN
+                val d2 = DrawableCompat.wrap(bitmapDrawable)
+                DrawableCompat.setTint(d2, ContextCompat.getColor(this@MainActivity, R.color.overlay_background))
+                DrawableCompat.setTintMode(d2, porter)
+                main_coordinator.background = d2
             }
-
             tabs_main.setupWithViewPager(main_viewpager)
             fab.setOnClickListener { start<EditTweetActivity>() }
             button_tweet.setOnClickListener {
@@ -113,11 +106,11 @@ class MainActivity : AppCompatActivity() {
     private val REQUEST_WRITE_READ = 0
 
     @SuppressLint("NewApi")
-    private fun initialRequestPermission() = fromApi(23,true) {
-        val EX_WRITE = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-        val LOCATION = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-        val EX_READ = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-        if (!(EX_WRITE && EX_READ && LOCATION)) {
+    private fun initialRequestPermission() = fromApi(23, true) {
+        val hasPermission = ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+        if (hasPermission.not()) {
             requestPermissions(
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE
                             , Manifest.permission.READ_EXTERNAL_STORAGE

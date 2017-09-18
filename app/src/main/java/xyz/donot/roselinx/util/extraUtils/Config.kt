@@ -3,7 +3,7 @@ package xyz.donot.roselinx.util.extraUtils
 import android.util.Log
 
 
-class roselinxConfig {
+class RoselinxConfig {
     companion object {
         var logLevel = Log.ASSERT
         var logEnabled: Boolean

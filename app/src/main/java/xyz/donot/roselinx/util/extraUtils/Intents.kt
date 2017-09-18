@@ -1,7 +1,6 @@
 package xyz.donot.roselinx.util.extraUtils
 
 import android.app.Activity
-import android.app.Application
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -61,10 +60,3 @@ inline fun <reified T : Context> Context.intent(extras: Bundle, flags: Int): Int
     return intent
 }
 
-inline fun <reified T : Activity> Application.start() = startActivity(intent<T>())
-
-inline fun <reified T : Activity> Application.start(flags: Int) = this.startActivity(intent<T>(flags))
-
-inline fun <reified T : Activity> Application.start(extras: Bundle) = this.startActivity(intent<T>(extras))
-
-inline fun <reified T : Activity> Application.start(extras: Bundle, flags: Int) = this.startActivity(intent<T>(extras, flags))

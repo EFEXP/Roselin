@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Environment
 import android.provider.MediaStore
+import android.support.v7.graphics.Palette
 import com.squareup.picasso.Picasso
 import xyz.donot.roselinx.Roselin
 import xyz.donot.roselinx.util.extraUtils.toast
@@ -17,11 +18,13 @@ import java.io.IOException
 import java.util.*
 
 class PictureViewModel(application: Application) : AndroidViewModel(application) {
-    val dominantColor=MutableLiveData<Int>()
-    val mutedColor=MutableLiveData<Int>()
-    fun savePicture(string: String) {
+    val mutedColor=MutableLiveData<Palette.Swatch>()
+    var urlList=MutableLiveData<ArrayList<String>>()
+    var currentPage=0
+
+    fun savePicture() {
         val app=getApplication<Roselin>()
-        Picasso.with(app).load(string).into(object : com.squareup.picasso.Target {
+        Picasso.with(app).load(urlList.value!![currentPage]).into(object : com.squareup.picasso.Target {
             override fun onBitmapFailed(p0: Drawable?) = Unit
             override fun onBitmapLoaded(p0: Bitmap, p1: Picasso.LoadedFrom?) {
                 val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)

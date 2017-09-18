@@ -13,17 +13,20 @@ import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import xyz.donot.roselinx.util.Key.xxxxx
+import xyz.donot.roselinx.util.Key.yyyyyy
+import xyz.donot.roselinx.util.extraUtils.RoselinxConfig
 import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
 
 
 class Roselin : Application() {
     private val TWITTER_KEY by lazy {
         //resources.getString(R.string.twitter_official_consumer_key)
-        	getString(R.string.twitter_consumer_key)
+        yyyyyy
     }
     private val TWITTER_SECRET by lazy {
         //resources.getString(R.string.twitter_official_consumer_secret)
-        resources.getString(R.string.twitter_consumer_secret)
+        xxxxx
     }
 
     override fun onCreate() {
@@ -37,7 +40,7 @@ class Roselin : Application() {
                 .deleteRealmIfMigrationNeeded()
                 .build()
         Realm.setDefaultConfiguration(config)
-       // roselinxConfig.logEnabled = true
+       RoselinxConfig.logEnabled = true
         /*
         val config = RealmConfiguration.Builder().schemaVersion(0L)
                 .migration(MyRealmMigration())
@@ -49,6 +52,7 @@ class Roselin : Application() {
         Realm.setDefaultConfiguration(config)
         */
         //Font
+
         val fontRequest = FontRequest(
                 "com.google.android.gms.fonts",
                 "com.google.android.gms",

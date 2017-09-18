@@ -58,6 +58,6 @@ class MainTimeLineAdapter(fm: FragmentManager, private val realmResults: List<DB
 
 
     override fun getPageTitle(position: Int): CharSequence =
-            if (realmResults[position].screenName != null) "${ConvertToSimpleName(realmResults[position].type)}@${realmResults[position].screenName!!}"
-            else ConvertToSimpleName(realmResults[position].type)
+            if (realmResults[position].screenName != null) "${toSimpleName(realmResults[position].type)}@${realmResults[position].screenName!!}"
+            else toSimpleName(realmResults[position].type)
 }

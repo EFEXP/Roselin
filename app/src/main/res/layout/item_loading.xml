@@ -15,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
-            android:layout_marginRight="4dp"
           />
 
         <TextView
@@ -23,7 +22,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_marginLeft="4dp"
             android:text="@string/now_loading"
             android:textColor="#0dddb8" />
     </LinearLayout>

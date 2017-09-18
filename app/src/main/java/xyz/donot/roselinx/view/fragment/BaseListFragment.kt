@@ -24,16 +24,11 @@ import xyz.donot.roselinx.util.getDeserialized
 import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.custom.MyLoadingView
 import xyz.donot.roselinx.viewmodel.fragment.BaseListViewModel
-
-
-
-
 abstract class BaseListFragment<T> : ARecyclerFragment() {
     protected val viewmodel: BaseListViewModel<T> by lazy { ViewModelProviders.of(this).get(BaseListViewModel::class.java) as BaseListViewModel<T> }
     abstract val adapterx: BaseQuickAdapter<T, BaseViewHolder>
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.content_base_fragment, container, false)
-
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewmodel.apply {
@@ -43,13 +38,11 @@ abstract class BaseListFragment<T> : ARecyclerFragment() {
             } else getTwitterInstance()
             adapter.apply {
                 setOnLoadMoreListener({
-                  Handler().delayed(2000,{
                       if (viewmodel.useDefaultLoad) {
                           viewmodel.loadMoreData()
                       } else {
                           loadMoreData2()
                       }
-                  })
                 }
                         , recycler)
                 setLoadMoreView(MyLoadingView())
@@ -85,7 +78,8 @@ abstract class BaseListFragment<T> : ARecyclerFragment() {
                 }
             })
             refresh.setOnRefreshListener {
-                pullDown()
+                Handler().delayed(1000,{
+                pullDown()})
             }
 
             adapter.addHeaderView(
@@ -93,6 +87,7 @@ abstract class BaseListFragment<T> : ARecyclerFragment() {
                         adView.loadAd(AdRequest.Builder()
                                 .setGender(AdRequest.GENDER_MALE)
                                 .addTestDevice("0CF83648F3E630518CF53907939C9A8D")
+                                .addTestDevice("6D38172C5A30A07095F6420BC145C497")
                                 .build())
                     }
             )

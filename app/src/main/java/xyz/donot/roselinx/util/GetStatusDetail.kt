@@ -10,13 +10,13 @@ import java.util.regex.Pattern
 fun getRelativeTime(create: Date): String {
     val datetime1 = System.currentTimeMillis()
     val datetime2 = create.time
-    val Difference = datetime1 - datetime2
+    val difference = datetime1 - datetime2
     return when {
-        Difference < 10000L -> "いま".format(TimeUnit.MILLISECONDS.toSeconds(Difference))
-        Difference < 60000L -> "%d秒前".format(TimeUnit.MILLISECONDS.toSeconds(Difference))
-        Difference < 3600000L -> "%d分前".format(TimeUnit.MILLISECONDS.toMinutes(Difference))
-        Difference < 86400000L -> "%d時間前".format(TimeUnit.MILLISECONDS.toHours(Difference))
-        else -> "%d日前".format(TimeUnit.MILLISECONDS.toDays(Difference))
+        difference < 10000L -> "いま".format(TimeUnit.MILLISECONDS.toSeconds(difference))
+        difference < 60000L -> "%d秒前".format(TimeUnit.MILLISECONDS.toSeconds(difference))
+        difference < 3600000L -> "%d分前".format(TimeUnit.MILLISECONDS.toMinutes(difference))
+        difference < 86400000L -> "%d時間前".format(TimeUnit.MILLISECONDS.toHours(difference))
+        else -> "%d日前".format(TimeUnit.MILLISECONDS.toDays(difference))
     }
 }
 

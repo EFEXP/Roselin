@@ -36,7 +36,7 @@ const val TREND = 4
 const val SEARCH = 5
 const val DM = 6
 const val SETTING = 7
-fun ConvertToName(int: Int): String = when (int) {
+fun toName(int: Int): String = when (int) {
 	HOME -> "Home"
 	LIST -> "List"
 	MENTION -> "Reply"
@@ -48,7 +48,7 @@ fun ConvertToName(int: Int): String = when (int) {
 	else -> throw Exception()
 }
 
-fun ConvertToSimpleName(int: Int): String = when (int) {
+fun toSimpleName(int: Int): String = when (int) {
 	HOME -> "Home"
 	LIST -> "List"
 	MENTION -> "Reply"

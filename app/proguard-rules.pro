@@ -5,7 +5,6 @@
 -keepclassmembers public class * extends com.chad.library.adapter.base.BaseViewHolder {
      <init>(android.view.View);
 }
-
 -dontwarn com.bumptech.glide.**
 -dontwarn xyz.donot.roselinx.view.**
 -keep public class  * extends io.realm.RealmRecyclerViewAdapter {*;}
@@ -15,6 +14,7 @@
 -dontwarn io.github.kexanie.**
 -keep class android.arch.lifecycle.**
 -keep public class  * extends RecyclerView.ViewHolder{ *; }
+-keep class android.support.v7.widget.Toolbar.** { *; }
 #twitter4j
 -dontwarn twitter4j.**
 -keep class twitter4j.** { *; }
@@ -22,7 +22,6 @@
 -keepclassmembernames class kotlinx.** {
     volatile <fields>;
 }
--keep class com.android.vending.billing.**
 -dontwarn android.databinding.**
 -dontwarn com.android.**
 # Add this global rule

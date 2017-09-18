@@ -29,8 +29,8 @@ class DraftFragment : DialogFragment() {
         val list: ListView =view.findViewById(R.id.draft_list_view)
         list.adapter=mAdapter
         list.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _->
-            val parent_list=parent as ListView
-            val item=parent_list.getItemAtPosition(position)as DBDraft
+            val parentList=parent as ListView
+            val item=parentList.getItemAtPosition(position)as DBDraft
             if(activity is EditTweetActivity){
                 ViewModelProviders.of(activity).get(EditTweetViewModel::class.java)
                 this@DraftFragment.dismiss()

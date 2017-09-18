@@ -178,7 +178,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
     android:layout_marginEnd="8dp"
-    android:layout_marginLeft="16dp"
+    android:layout_marginStart="16dp"
     android:text="複数指定は半角スペースを使用してください。"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"

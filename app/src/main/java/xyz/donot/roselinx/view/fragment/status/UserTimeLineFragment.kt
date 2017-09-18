@@ -11,7 +11,6 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import twitter4j.Paging
 import twitter4j.User
-import xyz.donot.roselinx.R.string.page
 import xyz.donot.roselinx.util.extraUtils.Bundle
 import xyz.donot.roselinx.util.extraUtils.start
 import xyz.donot.roselinx.util.extraUtils.toast
@@ -24,27 +23,25 @@ import xyz.donot.roselinx.view.custom.UserDetailView
 import xyz.donot.roselinx.viewmodel.UserViewModel
 
 class UserTimeLineFragment : TimeLineFragment() {
-    private lateinit var myviewmodel: UserViewModel
+    private lateinit var myViewModel: UserViewModel
     val userId by lazy { arguments.getLong("userId") }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        myviewmodel = ViewModelProviders.of(activity).get(UserViewModel::class.java)
+        myViewModel = ViewModelProviders.of(activity).get(UserViewModel::class.java)
         viewmodel.pullToRefresh = { twitter ->
             async(CommonPool) { twitter.getUserTimeline(Paging(viewmodel.adapter.data[0].id)) }
         }
-        myviewmodel.mUser.observe(this, Observer {
+        myViewModel.mUser.observe(this, Observer {
             it?.let {
                 viewmodel.adapter.setHeaderView(setUpViews(it))
             }
         })
         viewmodel.getData = { twitter ->
             async(CommonPool) {
-                twitter.getUserTimeline(userId, Paging(page))
+                twitter.getUserTimeline(userId, Paging(viewmodel.page))
             }
         }
     }
-
-
     private fun setUpViews(user: User): View =
             UserDetailView(activity).apply {
                 val iconIntent = Intent(activity, PictureActivity::class.java).putStringArrayListExtra("picture_urls", arrayListOf(user.originalProfileImageURLHttps))
@@ -64,26 +61,35 @@ class UserTimeLineFragment : TimeLineFragment() {
                     })
                 }
                 editClick = { activity.start<EditProfileActivity>() }
-                try {
-                    followClick = {
-                        launch(UI) {
+
+                followClick = {
+                    launch(UI) {
+                        try {
                             async(CommonPool) { viewmodel.twitter.createFriendship(user.id) }.await()
                             toast("フォローしました")
+                        } catch (e: Exception) {
+                            toast(e.localizedMessage)
                         }
                     }
-                    destroyFollowClick = {
+                }
+                destroyFollowClick = {
+                    try {
                         launch(UI) {
                             async(CommonPool) { viewmodel.twitter.destroyFriendship(user.id) }.await()
                             toast("フォロー解除しました")
                         }
+                    } catch (e: Exception) {
+                        toast(e.localizedMessage)
                     }
+                }
 
-                    launch(UI) {
+                launch(UI) {
+                    try {
                         val result = async(CommonPool) { viewmodel.twitter.showFriendship(getMyId(), user.id) }.await()
                         setRelation(result, getMyId() == user.id)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
                     }
-                } catch (e: Exception) {
-                    toast(e.localizedMessage)
                 }
 
 

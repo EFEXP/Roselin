@@ -27,15 +27,15 @@ import xyz.donot.roselinx.view.fragment.ARecyclerFragment
 import xyz.donot.roselinx.view.fragment.RetweeterDialog
 
 
-class ConversationFragment : ARecyclerFragment(){
-    val status by lazy {arguments.getSerializable("status") as Status }
+class ConversationFragment : ARecyclerFragment() {
+    val status by lazy { arguments.getSerializable("status") as Status }
     val adapter by lazy { StatusAdapter() }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadReply(status.id)
         getDiscuss(status)
         recycler.adapter = adapter
-     //   view.recycler.layoutManager = LinearLayoutManager(activity)
+        //   view.recycler.layoutManager = LinearLayoutManager(activity)
         //クリックリスナー
         adapter.setOnItemClickListener { adapter, _, position ->
             val status = adapter.data[position] as Status
@@ -55,19 +55,19 @@ class ConversationFragment : ARecyclerFragment(){
                         .setItems(tweetItem, { _, int ->
                             val selectedItem = context.resources.getStringArray(tweetItem)[int]
                             when (selectedItem) {
-                                "返信"->{
-                                    val bundle=  Bundle()
-                                    bundle.putString("status_txt",item.text)
-                                    bundle.putLong("status_id",item.id)
-                                    bundle.putString("user_screen_name",item.user.screenName)
+                                "返信" -> {
+                                    val bundle = Bundle()
+                                    bundle.putString("status_txt", item.text)
+                                    bundle.putLong("status_id", item.id)
+                                    bundle.putString("user_screen_name", item.user.screenName)
                                     activity.start<EditTweetActivity>(bundle)
                                 }
                                 "削除" -> {
-                                    launch(UI){
+                                    launch(UI) {
                                         try {
-                                            async(CommonPool){ getTwitterInstance().destroyStatus(status.id)}.await()
+                                            async(CommonPool) { getTwitterInstance().destroyStatus(status.id) }.await()
                                             toast("削除しました")
-                                        }catch (e:Exception){
+                                        } catch (e: Exception) {
                                             toast(e.localizedMessage)
                                         }
                                     }
@@ -83,9 +83,9 @@ class ConversationFragment : ARecyclerFragment(){
 
                                 }
                                 "RTした人" -> {
-                                    val rd= RetweeterDialog()
-                                    rd.arguments= Bundle{putLong("tweetId",item.id)}
-                                    rd.show(activity.supportFragmentManager,"")
+                                    val rd = RetweeterDialog()
+                                    rd.arguments = Bundle { putLong("tweetId", item.id) }
+                                    rd.show(activity.supportFragmentManager, "")
                                 }
                                 "共有" -> {
                                     context.startActivity(Intent().apply {
@@ -108,8 +108,7 @@ class ConversationFragment : ARecyclerFragment(){
             }
         }
         //クリックリスナーEnd
-        adapter.emptyView=View.inflate(activity, R.layout.item_empty,null)
-
+        adapter.emptyView = View.inflate(activity, R.layout.item_empty, null)
 
 
     }
@@ -118,13 +117,13 @@ class ConversationFragment : ARecyclerFragment(){
             inflater.inflate(R.layout.content_base_fragment, container, false)
 
 
-    private fun loadReply(long: Long){
-        launch(UI){
+    private fun loadReply(long: Long) {
+        launch(UI) {
             try {
-                val result= async(CommonPool){ getTwitterInstance().showStatus(long)}.await()
-                adapter.addData(0,result)
-                val voo=result.inReplyToStatusId>0
-                if(voo){
+                val result = async(CommonPool) { getTwitterInstance().showStatus(long) }.await()
+                adapter.addData(0, result)
+                val voo = result.inReplyToStatusId > 0
+                if (voo) {
                     loadReply(result.inReplyToStatusId)
                 }
             } catch (e: Exception) {
@@ -134,21 +133,24 @@ class ConversationFragment : ARecyclerFragment(){
     }
 
 
-    private fun getDiscuss(status: Status){
+    private fun getDiscuss(status: Status) {
         val twitter by lazy { getTwitterInstance() }
-        val query= Query("to:" + status.user.screenName)
-                // Query("@$screenname since_id:${status.id}")
-        query.count=100
-        context.logd {  query.count.toString()}
-        launch(UI){
+        val query = Query("to:" + status.user.screenName)
+        // Query("@$screenname since_id:${status.id}")
+        query.count = 100
+        context.logd { query.count.toString() }
+        launch(UI) {
             try {
-                val result= async(CommonPool){ twitter.search(query)}.await()
-                for (tweet in result.tweets){
-                    if (tweet.inReplyToStatusId == status.id){adapter.addData(tweet)}
+                val result = async(CommonPool) { twitter.search(query) }.await()
+                for (tweet in result.tweets) {
+                    if (tweet.inReplyToStatusId == status.id) {
+                        adapter.addData(tweet)
+                    }
                 }
 
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
-}}
+    }
+}

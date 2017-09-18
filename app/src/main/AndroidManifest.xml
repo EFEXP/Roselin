@@ -40,12 +40,12 @@
     <activity
       android:label="@string/title_activity_picture"
       android:name=".view.activity.PictureActivity"
-      android:theme="@style/DragDismissTheme"/>
+      android:theme="@style/AppTheme.Translucent.Picture"/>
     <activity
       android:name=".view.activity.VideoActivity"
       android:configChanges="orientation|screenSize|keyboardHidden"
       android:screenOrientation="portrait"
-      android:theme="@style/AppTheme.NoActionBar"/>
+      android:theme="@style/DragDismissTheme"/>
     <activity
       android:label="@string/title_activity_user"
       android:name=".view.activity.UserActivity"

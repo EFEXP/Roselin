@@ -14,6 +14,8 @@ import kotlin.properties.Delegates
 
 
 class CustomButton(context: Context, attributeSet: AttributeSet?=null, defStyleAttr: Int=0) : ConstraintLayout(context, attributeSet,defStyleAttr) {
+    constructor(context: Context,attributeSet: AttributeSet?) : this(context,attributeSet,0)
+    constructor(context: Context) : this(context,null,0)
     private var buttonSrc by Delegates.notNull<Drawable>()
     private var buttonText by Delegates.notNull<String>()
     private var view by Delegates.notNull<View>()
@@ -23,17 +25,14 @@ class CustomButton(context: Context, attributeSet: AttributeSet?=null, defStyleA
         view = LayoutInflater.from(context).inflate(R.layout.custom_button, this)
         attributeSet?.let {
             val tArray = context.obtainStyledAttributes(it, R.styleable.my_button)
-
             if (tArray.hasValue(R.styleable.my_button_buttonSrc))
-            setSrc(tArray.getDrawable(R.styleable.my_button_buttonSrc))
-
+                setSrc(tArray.getDrawable(R.styleable.my_button_buttonSrc))
             if (tArray.hasValue(R.styleable.my_button_buttonText))
                 setText(tArray.getString(R.styleable.my_button_buttonText))
-
             this.setOnClickListener{onClick()}
-
             tArray.recycle()
         }
+
     }
 
     fun setText(string: String) {

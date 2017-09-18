@@ -24,8 +24,9 @@ android {
         applicationId "$PUBLISH_GROUP_ID.$PUBLISH_ARTIFACT_ID"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 10
+        versionCode 12
         versionName "$PUBLISH_VERSION"
+        resConfigs "ja"
     }
     buildTypes {
         release {
@@ -96,7 +97,6 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta1'
     implementation 'com.klinkerapps:link_builder:1.6.1'
     implementation 'cn.jzvd:jiaozivideoplayer:6.0.0'
-    implementation 'com.github.xbroak:CharCountTextView:v1.0'
     implementation 'com.dinuscxj:recyclerrefreshlayout:2.0.5'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.28'

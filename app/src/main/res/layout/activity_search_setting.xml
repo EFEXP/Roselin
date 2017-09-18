@@ -83,7 +83,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
         tools:layout_height="40dp">
         <android.support.design.widget.TextInputLayout
-            android:hint="~からのリプライ"
+            android:hint="@string/reply_from"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
@@ -192,7 +192,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:text="複数指定は半角スペースを使用してください。"
         app:layout_constraintEnd_toEndOf="parent"
@@ -206,7 +205,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="検索"
+        android:text="@string/search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

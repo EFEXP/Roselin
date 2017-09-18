@@ -23,6 +23,7 @@ import xyz.donot.roselinx.R
 import xyz.donot.roselinx.Roselin
 import xyz.donot.roselinx.model.realm.*
 import xyz.donot.roselinx.service.REPLY_ID
+import xyz.donot.roselinx.service.SearchStreamService
 import xyz.donot.roselinx.service.StreamingService
 import xyz.donot.roselinx.util.extraUtils.*
 import xyz.donot.roselinx.util.getMyId
@@ -159,6 +160,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         if (app.defaultSharedPreferences.getBoolean("use_home_stream", true)) {
             app.startService<StreamingService>()
         }
+      //  app.startService<SearchStreamService>()
     }
 
     //Destroy
@@ -175,6 +177,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         if (receiver != sendReplyReceiver) {
             app.unregisterReceiver(sendReplyReceiver)
         }
+        app.stopService(app.newIntent<SearchStreamService>())
         app.stopService(app.newIntent<StreamingService>())
         realm.close()
     }

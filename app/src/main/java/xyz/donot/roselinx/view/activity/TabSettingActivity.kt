@@ -70,10 +70,10 @@ class TabSettingActivity : AppCompatActivity() {
         }
         tab_recycler.adapter = mAdapter
         fab.setOnClickListener {
-            val tab_menu = R.array.add_tab_menu
+            val tabMenu = R.array.add_tab_menu
             AlertDialog.Builder(this@TabSettingActivity)
-                    .setItems(tab_menu, { _, int ->
-                        val selectedItem = resources.getStringArray(tab_menu)[int]
+                    .setItems(tabMenu, { _, int ->
+                        val selectedItem = resources.getStringArray(tabMenu)[int]
                         when (selectedItem) {
                             "ホーム" -> {
                                 mAdapter.addData(DBTabData().apply {
@@ -184,7 +184,7 @@ class TabSettingActivity : AppCompatActivity() {
     inner class TabItemAdapter(list: ArrayList<DBTabData>) : BaseItemDraggableAdapter<DBTabData, BaseViewHolder>(R.layout.item_tabs_setting, list) {
         override fun convert(helper: BaseViewHolder, item: DBTabData) {
             helper.apply {
-                val text = ConvertToName(item.type)
+                val text = toName(item.type)
                 setText(R.id.tv_screenname, item.screenName.toString())
                 when (item.type) {
                     HOME -> {

@@ -11,35 +11,44 @@ import com.twitter.sdk.android.core.TwitterException
 import com.twitter.sdk.android.core.TwitterSession
 import kotlinx.android.synthetic.main.content_oauth.*
 import xyz.donot.roselinx.R
+import xyz.donot.roselinx.util.Key.xxxxx
+import xyz.donot.roselinx.util.Key.yyyyyy
+import xyz.donot.roselinx.util.extraUtils.hide
+import xyz.donot.roselinx.util.extraUtils.show
+import xyz.donot.roselinx.util.extraUtils.start
 import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.viewmodel.OauthViewModel
 
 
 class OauthActivity : AppCompatActivity() {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        login_button.onActivityResult(requestCode, resultCode, data)
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_oauth)
+        val viewmodel = ViewModelProviders.of(this).get(OauthViewModel::class.java)
+        viewmodel.isFinished.observe(this, Observer {
+          val  flags =Intent.FLAG_ACTIVITY_CLEAR_TASK
+            this.start<MainActivity>(flags)
+            finish()
+        })
+        viewmodel.information.observe(this, Observer {
+          it?.let {
+              tv_information.text = it
+          }
+        })
+        login_button.callback = object : Callback<TwitterSession>() {
+            override fun success(result: Result<TwitterSession>) {
+                //getString(R.string.twitter_official_consumer_key) getString(R.string.twitter_official_consumer_secret)
+                login_button.hide()
+                progressBar.show()
+                viewmodel.onSuccess(yyyyyy,xxxxx, result)
+            }
+            override fun failure(exception: TwitterException?) = toast("失敗しました。")
+        }
 
-
-	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-		super.onActivityResult(requestCode, resultCode, data)
-		login_button.onActivityResult(requestCode, resultCode, data)
-	}
-
-
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_oauth)
-		val viewmodel =ViewModelProviders.of(this).get(OauthViewModel::class.java)
-		viewmodel.isFinished.observe(this, Observer {
-			finish()
-			startActivity(Intent(this, MainActivity::class.java))
-		})
-		login_button.callback = object : Callback<TwitterSession>() {
-			override fun success(result: Result<TwitterSession>) {
-			//getString(R.string.twitter_official_consumer_key) getString(R.string.twitter_official_consumer_secret) getString(R.string.twitter_consumer_key) getString(R.string.twitter_consumer_secret),
-				viewmodel.onSuccess( getString(R.string.twitter_consumer_key), getString(R.string.twitter_consumer_secret),result)
-			}
-			override fun failure(exception: TwitterException?) = toast("失敗しました。")
-		}
-
-	}
+    }
 
 }

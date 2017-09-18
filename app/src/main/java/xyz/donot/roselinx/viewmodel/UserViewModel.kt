@@ -13,8 +13,11 @@ import twitter4j.User
 import xyz.donot.roselinx.Roselin
 import xyz.donot.roselinx.model.realm.DBCustomProfile
 import xyz.donot.roselinx.model.realm.DBMute
+import xyz.donot.roselinx.model.realm.DBUser
+import xyz.donot.roselinx.model.realm.saveUser
 import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.util.extraUtils.twitterExceptionMessage
+import xyz.donot.roselinx.util.getDeserialized
 import xyz.donot.roselinx.util.getSerialized
 import xyz.donot.roselinx.util.getTwitterInstance
 
@@ -26,8 +29,12 @@ class UserViewModel(app: Application) : AndroidViewModel(app) {
         if (mUser.value == null) {
             launch(UI) {
                 try {
-                    mUser.value = async(CommonPool) { getTwitterInstance().showUser(screenName) }.await()
+                    val result= async(CommonPool) { getTwitterInstance().showUser(screenName) }.await()
+                    mUser.value =result
+                    saveUser(result)
                 } catch (e: TwitterException) {
+                    val user=  realm.where(DBUser::class.java).equalTo("screenname",screenName).findFirst()
+                   mUser.value =user?.user?.getDeserialized<User>()
                    getApplication<Roselin>().toast(twitterExceptionMessage(e))
                 }
             }
@@ -37,8 +44,12 @@ class UserViewModel(app: Application) : AndroidViewModel(app) {
         if (mUser.value == null) {
             launch(UI) {
                 try {
-                    mUser.value = async(CommonPool) { getTwitterInstance().showUser(id) }.await()
+                    val result= async(CommonPool) { getTwitterInstance().showUser(id) }.await()
+                    mUser.value =result
+                    saveUser(result)
                 } catch (e: TwitterException) {
+                    val user=  realm.where(DBUser::class.java).equalTo("id",id).findFirst()
+                    mUser.value =user?.user?.getDeserialized<User>()
                     getApplication<Roselin>().toast(twitterExceptionMessage(e))
                 }
             }

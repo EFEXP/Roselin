@@ -2,6 +2,7 @@ package xyz.donot.roselinx.viewmodel
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
+import android.arch.lifecycle.MutableLiveData
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.twitter.sdk.android.core.Result
 import com.twitter.sdk.android.core.TwitterSession
@@ -16,15 +17,16 @@ import twitter4j.User
 import twitter4j.conf.ConfigurationBuilder
 import xyz.donot.roselinx.model.realm.DBAccount
 import xyz.donot.roselinx.model.realm.DBMute
+import xyz.donot.roselinx.model.realm.saveUser
 import xyz.donot.roselinx.util.extraUtils.Bundle
 import xyz.donot.roselinx.util.getSerialized
 import xyz.donot.roselinx.view.custom.SingleLiveEvent
 
 class OauthViewModel(app: Application) : AndroidViewModel(app) {
     private val realm by lazy { Realm.getDefaultInstance() }
+    val information= MutableLiveData<String>()
     val isFinished= SingleLiveEvent<Unit>()
     private fun saveToken(tw: Twitter, user: User) {
-        //val result = async(CommonPool) { tw.verifyCredentials() }.await()
         if (realm.where(DBAccount::class.java).equalTo("id", user.id).findAll().count() == 0) {
             val realmAccounts = realm.where(DBAccount::class.java).equalTo("isMain", true)
             realm.executeTransaction {
@@ -36,14 +38,17 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
                 account.twitter = tw.getSerialized()
                 account.user = user.getSerialized()
             }
+            saveUser(user)
         }
     }
-
+    var hasNext=false
+    var cursor: Long = -1L
     private fun saveMute(tw: Twitter) {
-        var cursor: Long = -1L
         launch(UI) {
             try {
-                val result = async(CommonPool) { tw.getMutesList(cursor) }.await()
+                val result = async(CommonPool) {tw.getMutesList(cursor) }.await()
+                hasNext=result.hasNext()
+                if (result.hasNext()) cursor=result.nextCursor
                 realm.executeTransaction {
                     result.forEach { muser ->
                         realm.createObject(DBMute::class.java).apply {
@@ -51,9 +56,9 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
                             id = muser.id
                         }
                     }
-
                 }
-                isFinished.call()
+               if (hasNext) saveMute(tw)
+                else  isFinished.call()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -83,12 +88,16 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
                     setOAuthAccessTokenSecret(result.data.authToken.secret)
                 }.build()
         val twitter = TwitterFactory(builder).instance
+        information.value="ユーザ情報の取得中"
         launch(UI) {
             try {
                 val user = async(CommonPool) { twitter.verifyCredentials() }.await()
                 logUser(user)
+                information.value="ユーザ情報保存中"
                 saveToken(twitter, user)
+                information.value="ミュートユーザ取得中"
                 saveMute(twitter)
+
             } catch (e: Exception) {
                 e.printStackTrace()
             }

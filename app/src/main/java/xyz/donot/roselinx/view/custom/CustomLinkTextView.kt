@@ -1,5 +1,6 @@
 package xyz.donot.roselinx.view.custom
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.text.emoji.widget.EmojiAppCompatTextView
 import android.util.AttributeSet
@@ -17,6 +18,7 @@ class CustomLinkTextView : EmojiAppCompatTextView {
 
     override fun hasFocusable(): Boolean = false
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         super.onTouchEvent(event)
 

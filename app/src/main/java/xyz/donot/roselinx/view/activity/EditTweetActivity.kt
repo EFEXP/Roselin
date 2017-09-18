@@ -13,13 +13,19 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSnapHelper
 import com.mlsdev.rximagepicker.RxImagePicker
 import com.mlsdev.rximagepicker.Sources
+import com.squareup.picasso.Picasso
 import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.UCropActivity
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_tweet_edit.*
 import kotlinx.android.synthetic.main.content_tweet_edit.*
+import twitter4j.User
 import xyz.donot.roselinx.R
+import xyz.donot.roselinx.model.realm.DBUser
 import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
 import xyz.donot.roselinx.util.extraUtils.show
+import xyz.donot.roselinx.util.getDeserialized
+import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.view.fragment.DraftFragment
 import xyz.donot.roselinx.view.fragment.TrendFragment
 import xyz.donot.roselinx.viewmodel.EditTweetViewModel
@@ -41,7 +47,6 @@ class EditTweetActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         viewmodel= ViewModelProviders.of(this).get(EditTweetViewModel::class.java).apply {
-
             statusId= intent.getLongExtra("status_id", 0)
             draft.observe(this@EditTweetActivity,android.arch.lifecycle.Observer{
                 it?.let {
@@ -60,7 +65,6 @@ class EditTweetActivity : AppCompatActivity() {
         }
 
         val manager = LinearLayoutManager(this@EditTweetActivity).apply { orientation = LinearLayoutManager.HORIZONTAL }
-
         pic_recycler_view.apply {
             if (onFlingListener == null) LinearSnapHelper().attachToRecyclerView(pic_recycler_view)
             hasFixedSize()
@@ -77,6 +81,11 @@ class EditTweetActivity : AppCompatActivity() {
         if (intent.hasExtra("status_txt")) {
             reply_for_status.text = intent.getStringExtra("status_txt")
             reply_for_status.show()
+        }
+        Realm.getDefaultInstance().use {
+           val user= it.where(DBUser::class.java).equalTo("id", getMyId()).findFirst()?.user?.getDeserialized<User>()
+            Picasso.with(this).load(user?.biggerProfileImageURLHttps).fit().into(iv_icon)
+            editText_status_layout.hint="@${user?.screenName}からツイート"
         }
         send_status.setOnClickListener {
            viewmodel.onSendClick(editText_status.text.toString())

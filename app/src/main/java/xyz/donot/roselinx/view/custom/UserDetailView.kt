@@ -1,6 +1,8 @@
 package xyz.donot.roselinx.view.custom
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.support.constraint.ConstraintLayout
 import android.support.v4.content.res.ResourcesCompat
 import android.util.AttributeSet
@@ -8,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import com.klinker.android.link_builder.LinkBuilder
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.person_item.view.*
 import twitter4j.Relationship
 import twitter4j.User
@@ -19,8 +22,9 @@ import xyz.donot.roselinx.util.getURLLink
 import java.text.SimpleDateFormat
 import kotlin.properties.Delegates
 
-class UserDetailView(context: Context, attributeSet: AttributeSet?) : ConstraintLayout(context, attributeSet) {
-    constructor(context: Context) : this(context, null)
+class UserDetailView(context: Context, attributeSet: AttributeSet? = null, defStyleAttr: Int = 0) : ConstraintLayout(context, attributeSet, defStyleAttr) {
+    constructor(context: Context) : this(context, null, 0)
+    constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
 
     var view by Delegates.notNull<View>()
     var iconClick: () -> Unit = {}
@@ -30,6 +34,7 @@ class UserDetailView(context: Context, attributeSet: AttributeSet?) : Constraint
     var destroyFollowClick: () -> Unit = {}
     var followClick: () -> Unit = {}
     var editClick: () -> Unit = {}
+    lateinit var iconBitmap: Bitmap
 
     init {
         view = LayoutInflater.from(context).inflate(R.layout.person_item, this)
@@ -41,7 +46,7 @@ class UserDetailView(context: Context, attributeSet: AttributeSet?) : Constraint
         } else {
             relationship?.let {
                 view.apply {
-                    bt_follow.isEnabled=true
+                    bt_follow.isEnabled = true
                     tv_isfollowed.show()
                     bt_follow.show()
                     bt_follow.isChecked = relationship.isSourceFollowingTarget
@@ -52,7 +57,7 @@ class UserDetailView(context: Context, attributeSet: AttributeSet?) : Constraint
                     }
                 }
                 //変わった後のが流れてくる
-                bt_follow.setOnCheckedChangeListener({_,checked->
+                bt_follow.setOnCheckedChangeListener({ _, checked ->
                     context.toast(checked.toString())
                     if (checked)
                         followClick()
@@ -62,6 +67,7 @@ class UserDetailView(context: Context, attributeSet: AttributeSet?) : Constraint
             }
         }
     }
+
     fun setBlocked() {
         view.apply {
 
@@ -71,7 +77,20 @@ class UserDetailView(context: Context, attributeSet: AttributeSet?) : Constraint
 
     fun setUser(user: User) {
         view.apply {
-            Picasso.with(context).load(user.originalProfileImageURLHttps).into(iv_icon)
+            Picasso.with(context).load(user.originalProfileImageURLHttps).into(object : Target {
+                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+
+                }
+
+                override fun onBitmapFailed(errorDrawable: Drawable?) {
+
+                }
+
+                override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
+                    iv_icon.setImageBitmap(bitmap)
+                    iconBitmap = bitmap
+                }
+            })
             tv_name.text = user.name
             tv_description.text = if (user.description.isNullOrEmpty()) " No Description" else user.description.replace("\n", "")
             tv_web.text = if (user.urlEntity.expandedURL.isEmpty()) " No Url" else user.urlEntity.expandedURL
@@ -79,7 +98,7 @@ class UserDetailView(context: Context, attributeSet: AttributeSet?) : Constraint
             tv_date.text = "${SimpleDateFormat("yyyy/MM/dd").format(user.createdAt)}に開始"
             tv_follower.setText(user.followersCount.toString())
             tv_friends.setText(user.friendsCount.toString())
-            tv_list.setText( user.listedCount.toString())
+            tv_list.setText(user.listedCount.toString())
             tv_tweets.setText(user.statusesCount.toString())
             tv_fav.setText(user.favouritesCount.toString())
             //認証済み
@@ -102,7 +121,7 @@ class UserDetailView(context: Context, attributeSet: AttributeSet?) : Constraint
             tv_list.setOnClickListener { listClick() }
             tv_friends.setOnClickListener { friendClick() }
             tv_follower.setOnClickListener { followerClick() }
-            bt_edit.setOnClickListener{editClick()}
+            bt_edit.setOnClickListener { editClick() }
 
         }
 
