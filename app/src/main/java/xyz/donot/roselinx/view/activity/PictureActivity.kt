@@ -18,7 +18,7 @@ import xyz.donot.roselinx.util.extraUtils.hide
 import xyz.donot.roselinx.util.extraUtils.logd
 import xyz.donot.roselinx.util.extraUtils.onClick
 import xyz.donot.roselinx.view.adapter.PicturePagerAdapter
-import xyz.donot.roselinx.viewmodel.PictureViewModel
+import xyz.donot.roselinx.viewmodel.fragment.PictureViewModel
 import xyz.klinker.android.drag_dismiss.activity.DragDismissActivity
 
 

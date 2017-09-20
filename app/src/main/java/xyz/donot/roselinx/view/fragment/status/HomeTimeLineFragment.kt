@@ -26,6 +26,7 @@ class HomeTimeLineFragment : TimeLineFragment(){
                 registerReceiver(deleteReceiver, IntentFilter("DeleteStatus"))
             }
         }
+        recycler.isNestedScrollingEnabled=false
         viewmodel.pullToRefresh= {twitter->
             async(CommonPool){ twitter.getHomeTimeline(Paging(viewmodel.adapter.data[0].id))}
         }

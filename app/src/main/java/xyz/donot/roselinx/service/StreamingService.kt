@@ -18,7 +18,7 @@ import xyz.donot.roselinx.model.realm.NRETWEET
 import xyz.donot.roselinx.util.*
 import xyz.donot.roselinx.util.extraUtils.*
 import xyz.donot.roselinx.view.activity.MainActivity
-import xyz.donot.roselinx.viewmodel.SendReplyReceiver
+import xyz.donot.roselinx.viewmodel.activity.SendReplyReceiver
 import kotlin.concurrent.thread
 
 
@@ -140,7 +140,7 @@ class StreamingService : Service() {
                val pendingIntent = PendingIntent.getActivity(this@StreamingService, 0, activityIntent,
                         PendingIntent.FLAG_CANCEL_CURRENT)
 
-                val sendReplyIntent=Intent(this@StreamingService,SendReplyReceiver::class.java).apply {
+                val sendReplyIntent=Intent(this@StreamingService, SendReplyReceiver::class.java).apply {
                     putExtra("screen_name",onStatus.user.screenName)
                     putExtra("status_id",onStatus.id)
                 }

@@ -13,8 +13,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.gms.ads.AdRequest
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import kotlinx.android.synthetic.main.item_ad.view.*
@@ -26,13 +24,11 @@ import xyz.donot.roselinx.view.custom.MyLoadingView
 import xyz.donot.roselinx.viewmodel.fragment.BaseListViewModel
 abstract class BaseListFragment<T> : ARecyclerFragment() {
     protected val viewmodel: BaseListViewModel<T> by lazy { ViewModelProviders.of(this).get(BaseListViewModel::class.java) as BaseListViewModel<T> }
-    abstract val adapterx: BaseQuickAdapter<T, BaseViewHolder>
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.content_base_fragment, container, false)
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewmodel.apply {
-            adapter = adapterx
             twitter = if (arguments != null && arguments.containsKey("twitter")) {
                 arguments.getByteArray("twitter").getDeserialized()
             } else getTwitterInstance()
@@ -57,9 +53,9 @@ abstract class BaseListFragment<T> : ARecyclerFragment() {
                     loadMoreData2()
                 }
             else {
-                val t = savedInstanceState.getSerializable("data") as ArrayList<T>
-                Log.d("SavedInstanceStateHas", t.size.toString())
-                adapter.addData(t)
+             //   val t = savedInstanceState.getSerializable("data") as ArrayList<T>
+            //    Log.d("SavedInstanceStateHas", t.size.toString())
+            //    adapter.addData(t)
             }
 
 
@@ -129,10 +125,10 @@ abstract class BaseListFragment<T> : ARecyclerFragment() {
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        val l = ArrayList<T>()
-        l.addAll(viewmodel.adapter.data)
+     //   val l = ArrayList<T>()
+       // l.addAll(viewmodel.adapter.data)
         Log.d("GiveData", viewmodel.adapter.data.count().toString())
-        outState?.putSerializable("data", l)
+      //  outState?.putSerializable("data", l)
     }
 
 }

@@ -136,7 +136,7 @@
       <category android:name="android.intent.category.DEFAULT"/>
     </intent-filter>
     </activity>
-    <receiver android:name=".viewmodel.SendReplyReceiver"
+    <receiver android:name=".viewmodel.activity.SendReplyReceiver"
       android:enabled="true"
       android:exported="false" />
   </application>

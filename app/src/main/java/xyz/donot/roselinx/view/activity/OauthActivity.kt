@@ -5,6 +5,8 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import com.twitter.sdk.android.core.Callback
 import com.twitter.sdk.android.core.Result
 import com.twitter.sdk.android.core.TwitterException
@@ -17,7 +19,9 @@ import xyz.donot.roselinx.util.extraUtils.hide
 import xyz.donot.roselinx.util.extraUtils.show
 import xyz.donot.roselinx.util.extraUtils.start
 import xyz.donot.roselinx.util.extraUtils.toast
-import xyz.donot.roselinx.viewmodel.OauthViewModel
+import xyz.donot.roselinx.viewmodel.activity.OauthViewModel
+
+
 
 
 class OauthActivity : AppCompatActivity() {
@@ -27,6 +31,12 @@ class OauthActivity : AppCompatActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val anim = AlphaAnimation(0.0f, 1.0f).apply {
+            duration = 500
+            startOffset = 20
+            repeatMode = Animation.REVERSE
+            repeatCount = Animation.INFINITE
+        }
         setContentView(R.layout.activity_oauth)
         val viewmodel = ViewModelProviders.of(this).get(OauthViewModel::class.java)
         viewmodel.isFinished.observe(this, Observer {
@@ -34,20 +44,23 @@ class OauthActivity : AppCompatActivity() {
             this.start<MainActivity>(flags)
             finish()
         })
-        viewmodel.information.observe(this, Observer {
-          it?.let {
-              tv_information.text = it
-          }
-        })
         login_button.callback = object : Callback<TwitterSession>() {
             override fun success(result: Result<TwitterSession>) {
                 //getString(R.string.twitter_official_consumer_key) getString(R.string.twitter_official_consumer_secret)
                 login_button.hide()
                 progressBar.show()
+                tv_information.startAnimation(anim)
                 viewmodel.onSuccess(yyyyyy,xxxxx, result)
             }
             override fun failure(exception: TwitterException?) = toast("失敗しました。")
         }
+        viewmodel.information.observe(this, Observer {
+            it?.let {
+                tv_information.text = it
+            }
+        })
+
+
 
     }
 

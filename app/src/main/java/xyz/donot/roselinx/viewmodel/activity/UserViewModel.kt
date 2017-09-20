@@ -1,4 +1,4 @@
-package xyz.donot.roselinx.viewmodel
+package xyz.donot.roselinx.viewmodel.activity
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
@@ -27,6 +27,10 @@ class UserViewModel(app: Application) : AndroidViewModel(app) {
     private val realm by lazy { Realm.getDefaultInstance() }
     fun initUser(screenName: String) {
         if (mUser.value == null) {
+       // val user=    realm.where(DBUser::class.java).equalTo("screenname",screenName).findFirst()
+          //  user?.let {
+          //      mUser.value=user.user.getDeserialized()
+         //   }?:
             launch(UI) {
                 try {
                     val result= async(CommonPool) { getTwitterInstance().showUser(screenName) }.await()
@@ -42,6 +46,10 @@ class UserViewModel(app: Application) : AndroidViewModel(app) {
     }
     fun initUser(id:Long) {
         if (mUser.value == null) {
+          //  val user=    realm.where(DBUser::class.java).equalTo("id",id).findFirst()
+        //    user?.let {
+         //       mUser.value=user.user.getDeserialized()
+         //   }?:
             launch(UI) {
                 try {
                     val result= async(CommonPool) { getTwitterInstance().showUser(id) }.await()

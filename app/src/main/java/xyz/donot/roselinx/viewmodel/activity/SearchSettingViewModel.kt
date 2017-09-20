@@ -1,4 +1,4 @@
-package xyz.donot.roselinx.viewmodel
+package xyz.donot.roselinx.viewmodel.activity
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
@@ -57,8 +57,8 @@ data class QueryBundle(val japanese :Boolean,
                        val links :Boolean,
                        val pictures :Boolean,
                        val videos :Boolean,
-                       val dayFrom :DateCompact?,
-                       val dayTo :DateCompact?,
+                       val dayFrom : DateCompact?,
+                       val dayTo : DateCompact?,
                        val replyTo :String?,
                        val replyFrom :String?,
                        val queryAbsolute :String?,

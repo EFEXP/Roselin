@@ -1,7 +1,7 @@
 package xyz.donot.roselinx
 
-import android.app.Application
 import android.app.UiModeManager
+import android.support.multidex.MultiDexApplication
 import android.support.text.emoji.EmojiCompat
 import android.support.text.emoji.FontRequestEmojiCompatConfig
 import android.support.v4.provider.FontRequest
@@ -19,20 +19,11 @@ import xyz.donot.roselinx.util.extraUtils.RoselinxConfig
 import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
 
 
-class Roselin : Application() {
-    private val TWITTER_KEY by lazy {
-        //resources.getString(R.string.twitter_official_consumer_key)
-        yyyyyy
-    }
-    private val TWITTER_SECRET by lazy {
-        //resources.getString(R.string.twitter_official_consumer_secret)
-        xxxxx
-    }
-
+class Roselin : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         //Twitter
-        val twitterConfig = TwitterConfig.Builder(this).twitterAuthConfig(TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET)).build()
+        val twitterConfig = TwitterConfig.Builder(this).twitterAuthConfig(TwitterAuthConfig(yyyyyy, xxxxx)).build()
         Twitter.initialize(twitterConfig)
         //realm
         Realm.init(this)
@@ -40,7 +31,8 @@ class Roselin : Application() {
                 .deleteRealmIfMigrationNeeded()
                 .build()
         Realm.setDefaultConfiguration(config)
-       RoselinxConfig.logEnabled = true
+      if(BuildConfig.DEBUG)
+          RoselinxConfig.logEnabled = true
         /*
         val config = RealmConfiguration.Builder().schemaVersion(0L)
                 .migration(MyRealmMigration())

@@ -48,9 +48,9 @@ class HelpActivity : AppCompatActivity() {
 }
 
 class FeaturesFragment : BaseListFragment<ChangeLog>() {
-    override val adapterx: BaseQuickAdapter<ChangeLog, BaseViewHolder> by lazy { ChangeLogAdapter() }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-
+        if (savedInstanceState==null)
+            viewmodel.adapter= ChangeLogAdapter()
         super.onViewCreated(view, savedInstanceState)
         refresh.isEnabled = false
         viewmodel.adapter.setEnableLoadMore(false)

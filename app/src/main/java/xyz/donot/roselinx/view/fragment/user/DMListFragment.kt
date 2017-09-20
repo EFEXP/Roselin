@@ -15,12 +15,10 @@ class DMListFragment : BaseListFragment<DirectMessage>() {
             field++
             return field
         }
-
-    override val adapterx by lazy { DirectMessageAdapter() }
-
-
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (savedInstanceState==null)
+            viewmodel.adapter= DirectMessageAdapter()
         viewmodel.getData = { twitter ->
             async(CommonPool) {
                 twitter.getDirectMessages(Paging(page))

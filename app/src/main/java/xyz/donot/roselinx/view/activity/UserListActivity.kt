@@ -15,8 +15,7 @@ class UserListActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_user_list)
 		val bundle = Bundle { putLong("userId", intent.getLongExtra("userId", 0L)) }
-		val fragment =
-				if (intent.getBooleanExtra("isFriend", true))
+		val fragment = if (intent.getBooleanExtra("isFriend", true))
 					FriendUserList()
 				else
 					FollowerUserList()

@@ -33,7 +33,7 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/reply_for_status"
     >
-  <android.support.text.emoji.widget.EmojiAppCompatEditText
+  <xyz.donot.roselinx.view.custom.ReplaceAutoCompleteEditText
     android:id="@+id/editText_status"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"

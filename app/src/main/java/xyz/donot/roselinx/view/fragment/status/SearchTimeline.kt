@@ -26,12 +26,14 @@ class SearchTimeline : TimeLineFragment() {
             viewmodel.adapter.notifyDataSetChanged()
             query = arguments.getByteArray("query_bundle").getDeserialized<Query>()
             loadMoreData2()
-            viewmodel.dataRefreshed.value = Unit
+            viewmodel.dataRefreshed.call()
             null
         }
     }
 
+    var load=true
     override fun loadMoreData2() {
+        if (load)
         launch(UI) {
             try {
                 val result = async(CommonPool) { viewmodel.twitter.search(query) }.await()
@@ -39,7 +41,7 @@ class SearchTimeline : TimeLineFragment() {
                     query = result.nextQuery()
                     viewmodel.adapter.loadMoreComplete()
                 } else {
-                    query = null
+                    load=false
                     viewmodel.endAdapter()
                 }
                 viewmodel.adapter.addData(result.tweets)

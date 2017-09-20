@@ -17,10 +17,10 @@ import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.fragment_picture.view.*
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.logd
-import xyz.donot.roselinx.viewmodel.PictureViewModel
+import xyz.donot.roselinx.viewmodel.fragment.PictureViewModel
 
 
-class PictureFragment : Fragment() {
+class PictureFragment : Fragment(),Target {
     private val page by lazy { arguments.getInt("page") }
     lateinit var viewmodel: PictureViewModel
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -29,22 +29,22 @@ class PictureFragment : Fragment() {
         viewmodel.urlList.observe(this, Observer {
             it?.let {
                 logd { it[page] }
-                Picasso.with(activity).load(it[page]).into(object : Target {
-                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) = Unit
-                    override fun onBitmapFailed(errorDrawable: Drawable?) = Unit
-                    override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
-                        view.iv_picture.setImage(ImageSource.bitmap(bitmap))
-                        Palette.from(bitmap).generate(
-                                {
-                                    viewmodel.mutedColor.value = it.lightMutedSwatch
-                                }
-                        )
-
-                    }
-                })
+                Picasso.with(activity).load(it[page]).into(this)
             }
         })
         return view
     }
 
+    override fun onPrepareLoad(placeHolderDrawable: Drawable?)  =Unit
+
+    override fun onBitmapFailed(errorDrawable: Drawable?) =Unit
+
+    override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
+        view?.iv_picture?.setImage(ImageSource.bitmap(bitmap))
+        Palette.from(bitmap).generate(
+                {
+                    viewmodel.mutedColor.value = it.mutedSwatch
+                }
+        )
+    }
 }

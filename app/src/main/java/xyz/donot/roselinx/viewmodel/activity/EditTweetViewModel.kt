@@ -1,4 +1,4 @@
-package xyz.donot.roselinx.viewmodel
+package xyz.donot.roselinx.viewmodel.activity
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
@@ -34,8 +34,7 @@ class EditTweetViewModel(application: Application) : AndroidViewModel(applicatio
             app.startService(app.newIntent<TweetPostService>()
                     .putExtra("StatusUpdate", updateStatus.getSerialized())
                     .putStringArrayListExtra("FilePath", filePathList))
-            finish.call()
-        }
+            finish.call() }
     }
 
     fun saveDraft(string: String) {

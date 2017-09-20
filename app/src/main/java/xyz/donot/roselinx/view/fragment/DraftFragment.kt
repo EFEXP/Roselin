@@ -14,7 +14,7 @@ import xyz.donot.roselinx.model.realm.DBDraft
 import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.view.activity.EditTweetActivity
 import xyz.donot.roselinx.view.adapter.DraftAdapter
-import xyz.donot.roselinx.viewmodel.EditTweetViewModel
+import xyz.donot.roselinx.viewmodel.activity.EditTweetViewModel
 
 
 class DraftFragment : DialogFragment() {

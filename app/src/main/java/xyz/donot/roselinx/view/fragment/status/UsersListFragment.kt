@@ -19,11 +19,9 @@ import xyz.donot.roselinx.view.fragment.BaseListFragment
 class UsersListFragment : BaseListFragment<UserList>() {
     private val userId by lazy { arguments.getLong("userId") }
     private val selectList by lazy { arguments.getBoolean("selectList", false) }
-
-    override val adapterx by lazy { UserListAdapter() }
-
-
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        if (savedInstanceState==null)
+            viewmodel.adapter= UserListAdapter()
         super.onViewCreated(view, savedInstanceState)
         viewmodel.adapter.setEnableLoadMore(false)
         viewmodel.adapter.setOnItemClickListener { _, _, position ->
@@ -36,7 +34,6 @@ class UsersListFragment : BaseListFragment<UserList>() {
         }
         viewmodel.getData = { twitter ->
             async(CommonPool) {
-                viewmodel.endAdapter()
                 twitter.getUserLists(userId)
             }
         }

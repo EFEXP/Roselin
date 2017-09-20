@@ -12,8 +12,10 @@ import xyz.donot.roselinx.view.adapter.UserListAdapter
 
 class RetweeterDialog : BaseListFragment<User>() {
     private var cursor: Long = -1L
-    override val adapterx by lazy { UserListAdapter() }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        if (savedInstanceState==null)
+            viewmodel.adapter= UserListAdapter()
         super.onViewCreated(view, savedInstanceState)
         viewmodel.adapter.setOnItemClickListener { _, _, position ->
             val intent = activity.intent<UserActivity>()

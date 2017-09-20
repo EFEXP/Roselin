@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSnapHelper
+import android.widget.ArrayAdapter
 import com.mlsdev.rximagepicker.RxImagePicker
 import com.mlsdev.rximagepicker.Sources
 import com.squareup.picasso.Picasso
@@ -21,6 +22,8 @@ import kotlinx.android.synthetic.main.activity_tweet_edit.*
 import kotlinx.android.synthetic.main.content_tweet_edit.*
 import twitter4j.User
 import xyz.donot.roselinx.R
+import xyz.donot.roselinx.model.CursorPositionListener
+import xyz.donot.roselinx.model.UserSuggestAdapter
 import xyz.donot.roselinx.model.realm.DBUser
 import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
 import xyz.donot.roselinx.util.extraUtils.show
@@ -28,7 +31,7 @@ import xyz.donot.roselinx.util.getDeserialized
 import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.view.fragment.DraftFragment
 import xyz.donot.roselinx.view.fragment.TrendFragment
-import xyz.donot.roselinx.viewmodel.EditTweetViewModel
+import xyz.donot.roselinx.viewmodel.activity.EditTweetViewModel
 import java.io.File
 import java.util.*
 import kotlin.properties.Delegates
@@ -37,7 +40,7 @@ import kotlin.properties.Delegates
 class EditTweetActivity : AppCompatActivity() {
 
     var viewmodel by Delegates.notNull<EditTweetViewModel>()
-    private var pair:Pair<Uri,Int>?=null
+    private var pair: Pair<Uri, Int>? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,52 +49,53 @@ class EditTweetActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        viewmodel= ViewModelProviders.of(this).get(EditTweetViewModel::class.java).apply {
-            statusId= intent.getLongExtra("status_id", 0)
-            draft.observe(this@EditTweetActivity,android.arch.lifecycle.Observer{
+        viewmodel = ViewModelProviders.of(this).get(EditTweetViewModel::class.java).apply {
+            statusId = intent.getLongExtra("status_id", 0)
+            draft.observe(this@EditTweetActivity, android.arch.lifecycle.Observer {
                 it?.let {
                     editText_status.editableText.clear()
                     editText_status.append(it)
                 }
             })
-            hashtag.observe(this@EditTweetActivity,android.arch.lifecycle.Observer{
+            hashtag.observe(this@EditTweetActivity, android.arch.lifecycle.Observer {
                 it?.let {
                     editText_status.append(" $it")
                 }
             })
-            finish.observe(this@EditTweetActivity,android.arch.lifecycle.Observer {
+            finish.observe(this@EditTweetActivity, android.arch.lifecycle.Observer {
                 finish()
             })
         }
-
+        //recycler
         val manager = LinearLayoutManager(this@EditTweetActivity).apply { orientation = LinearLayoutManager.HORIZONTAL }
         pic_recycler_view.apply {
             if (onFlingListener == null) LinearSnapHelper().attachToRecyclerView(pic_recycler_view)
             hasFixedSize()
             layoutManager = manager
-            pic_recycler_view.adapter =viewmodel. mAdapter
+            pic_recycler_view.adapter = viewmodel.mAdapter
         }
 
         //View#Set
+        setUpSuggest()
         if (intent.hasExtra("user_screen_name")) {
-           viewmodel. screenName = "@${intent.getStringExtra("user_screen_name")} "
+            viewmodel.screenName = "@${intent.getStringExtra("user_screen_name")} "
         }
-        editText_status.setText( viewmodel. screenName)
+        editText_status.setText(viewmodel.screenName)
         editText_status.setSelection(editText_status.editableText.count())
         if (intent.hasExtra("status_txt")) {
             reply_for_status.text = intent.getStringExtra("status_txt")
             reply_for_status.show()
         }
         Realm.getDefaultInstance().use {
-           val user= it.where(DBUser::class.java).equalTo("id", getMyId()).findFirst()?.user?.getDeserialized<User>()
+            val user = it.where(DBUser::class.java).equalTo("id", getMyId()).findFirst()?.user?.getDeserialized<User>()
             Picasso.with(this).load(user?.biggerProfileImageURLHttps).fit().into(iv_icon)
-            editText_status_layout.hint="@${user?.screenName}からツイート"
+            editText_status_layout.hint = "@${user?.screenName}からツイート"
         }
         send_status.setOnClickListener {
-           viewmodel.onSendClick(editText_status.text.toString())
+            viewmodel.onSendClick(editText_status.text.toString())
         }
-       viewmodel.mAdapter.setOnItemClickListener { _, _, position ->
-            val item =  viewmodel.mAdapter.getItem(position)
+        viewmodel.mAdapter.setOnItemClickListener { _, _, position ->
+            val item = viewmodel.mAdapter.getItem(position)
             val color = ContextCompat.getColor(this@EditTweetActivity, R.color.colorPrimary)
             AlertDialog.Builder(this@EditTweetActivity).setTitle("写真")
                     .setMessage("何をしますか？")
@@ -101,8 +105,8 @@ class EditTweetActivity : AppCompatActivity() {
                             })
                         })*/
                     .setPositiveButton("編集", { _, _ ->
-                        pair =Pair(item!!,position)
-                                UCrop.of(item, Uri.fromFile(File(cacheDir, "${Date().time}.jpg")))
+                        pair = Pair(item!!, position)
+                        UCrop.of(item, Uri.fromFile(File(cacheDir, "${Date().time}.jpg")))
                                 .withOptions(UCrop.Options().apply {
                                     setImageToCropBoundsAnimDuration(100)
                                     setFreeStyleCropEnabled(true)
@@ -119,7 +123,7 @@ class EditTweetActivity : AppCompatActivity() {
 
         }
         show_drafts.setOnClickListener {
-           DraftFragment().show(supportFragmentManager, "")
+            DraftFragment().show(supportFragmentManager, "")
         }
 
         text_tools.setOnClickListener {
@@ -145,7 +149,7 @@ class EditTweetActivity : AppCompatActivity() {
                     .show()
         }
         trend_hashtag.setOnClickListener {
-          TrendFragment().show(supportFragmentManager, "")
+            TrendFragment().show(supportFragmentManager, "")
         }
         use_camera.setOnClickListener {
             if (pic_recycler_view.layoutManager.itemCount < 4
@@ -167,12 +171,26 @@ class EditTweetActivity : AppCompatActivity() {
     }
 
 
+    private fun setUpSuggest() {
+        Realm.getDefaultInstance().use {
+            val screenname = it.where(DBUser::class.java).findAll().map { "@" + it.screenname }
+            val adapter = UserSuggestAdapter(this, android.R.layout.simple_dropdown_item_1line,screenname)
+            adapter.listener= object : CursorPositionListener {
+                override fun currentCursorPosition() = editText_status.selectionStart
+            }
+            editText_status.setAdapter<ArrayAdapter<String>>(adapter)
+        }
+
+
+    }
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
             when (requestCode) {
                 UCrop.REQUEST_CROP -> {
                     val resultUri = UCrop.getOutput(data)
-                    viewmodel.  mAdapter.setData(pair!!.second,resultUri!!)
+                    viewmodel.mAdapter.setData(pair!!.second, resultUri!!)
                 }
             }
         }
@@ -184,7 +202,7 @@ class EditTweetActivity : AppCompatActivity() {
     }
 
 
-    private fun addPhotos(uri: Uri) =  viewmodel.mAdapter.addData(uri)
+    private fun addPhotos(uri: Uri) = viewmodel.mAdapter.addData(uri)
 
 
     override fun onBackPressed() {

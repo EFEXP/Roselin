@@ -19,7 +19,7 @@ import kotlin.properties.Delegates
 
 
 class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
-    var isBackground = MutableLiveData<Boolean>().apply { value = false }
+    var isBackground = MutableLiveData<Boolean>()
     var twitter by Delegates.notNull<Twitter>()
     val exception = MutableLiveData<TwitterException>()
     val mainTwitter by lazy { getTwitterInstance() }

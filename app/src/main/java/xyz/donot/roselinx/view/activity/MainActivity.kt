@@ -25,7 +25,7 @@ import xyz.donot.roselinx.model.realm.DBTabData
 import xyz.donot.roselinx.util.extraUtils.*
 import xyz.donot.roselinx.util.haveToken
 import xyz.donot.roselinx.view.adapter.MainTimeLineAdapter
-import xyz.donot.roselinx.viewmodel.MainViewModel
+import xyz.donot.roselinx.viewmodel.activity.MainViewModel
 
 
 class MainActivity : AppCompatActivity() {

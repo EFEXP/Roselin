@@ -27,9 +27,10 @@ import xyz.donot.roselinx.view.fragment.RetweeterDialog
 
 
 abstract class TimeLineFragment : BaseListFragment<Status>() {
-    override val adapterx by lazy { StatusAdapter()}
     private var doubleClick=false
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+
+            viewmodel.adapter= StatusAdapter()
         super.onViewCreated(view, savedInstanceState)
         //クリックリスナー
         viewmodel.adapter.setOnItemClickListener { adapter, _, position ->

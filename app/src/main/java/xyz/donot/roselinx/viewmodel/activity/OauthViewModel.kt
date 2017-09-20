@@ -1,4 +1,4 @@
-package xyz.donot.roselinx.viewmodel
+package xyz.donot.roselinx.viewmodel.activity
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
@@ -17,6 +17,7 @@ import twitter4j.User
 import twitter4j.conf.ConfigurationBuilder
 import xyz.donot.roselinx.model.realm.DBAccount
 import xyz.donot.roselinx.model.realm.DBMute
+import xyz.donot.roselinx.model.realm.DBUser
 import xyz.donot.roselinx.model.realm.saveUser
 import xyz.donot.roselinx.util.extraUtils.Bundle
 import xyz.donot.roselinx.util.getSerialized
@@ -41,8 +42,8 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
             saveUser(user)
         }
     }
-    var hasNext=false
-    var cursor: Long = -1L
+    private var hasNext=false
+    private var cursor: Long = -1L
     private fun saveMute(tw: Twitter) {
         launch(UI) {
             try {
@@ -61,6 +62,20 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
                 else  isFinished.call()
             } catch (e: Exception) {
                 e.printStackTrace()
+            }
+        }
+    }
+
+    private fun saveFollower(tw: Twitter,u: User) {
+        launch(UI) {
+            val result = async(CommonPool) {tw.getFriendsList(u.id,-1,50)}.await()
+            realm.executeTransaction {
+                result.forEach { user_ ->
+                    realm.createObject(DBUser::class.java,user_.id).apply {
+                        user = user_.getSerialized()
+                        screenname=user_.screenName
+                    }
+                }
             }
         }
     }
@@ -95,8 +110,11 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
                 logUser(user)
                 information.value="ユーザ情報保存中"
                 saveToken(twitter, user)
+                information.value="フォロワー情報取得中"
+                saveFollower(twitter,user)
                 information.value="ミュートユーザ取得中"
                 saveMute(twitter)
+
 
             } catch (e: Exception) {
                 e.printStackTrace()

@@ -12,10 +12,10 @@ import xyz.donot.roselinx.view.fragment.BaseListFragment
 abstract class UserListFragment : BaseListFragment<User>() {
     private var cursor: Long = -1L
     private val userId by lazy { arguments.getLong("userId") }
-    override val adapterx by lazy { UserListAdapter() }
     abstract fun getUserData(userId: Long, cursor: Long): PagableResponseList<User>?
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-
+        if (savedInstanceState==null)
+            viewmodel.adapter= UserListAdapter()
         super.onViewCreated(view, savedInstanceState)
         if (savedInstanceState != null)
             cursor = savedInstanceState.getLong("cursor", -1L)

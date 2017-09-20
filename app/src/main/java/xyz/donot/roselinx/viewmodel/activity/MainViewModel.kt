@@ -1,4 +1,4 @@
-package xyz.donot.roselinx.viewmodel
+package xyz.donot.roselinx.viewmodel.activity
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel

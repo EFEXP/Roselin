@@ -27,6 +27,7 @@ android {
         versionCode 12
         versionName "$PUBLISH_VERSION"
         resConfigs "ja"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -36,8 +37,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            shrinkResources true
-            minifyEnabled true
+            shrinkResources false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -100,6 +101,7 @@ dependencies {
     implementation 'com.dinuscxj:recyclerrefreshlayout:2.0.5'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.28'
+    implementation  'com.android.support:multidex:1.0.2'
     compile project(':Dragdismiss:library')
 }
 apply plugin: 'com.google.gms.google-services'

@@ -13,11 +13,12 @@ import twitter4j.Trend
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.view.activity.EditTweetActivity
 import xyz.donot.roselinx.view.activity.SearchActivity
-import xyz.donot.roselinx.viewmodel.EditTweetViewModel
+import xyz.donot.roselinx.viewmodel.activity.EditTweetViewModel
 
 class TrendFragment : BaseListFragment<Trend>() {
-    override val adapterx by lazy { TrendAdapter() }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        if (savedInstanceState==null)
+            viewmodel.adapter=TrendAdapter()
         super.onViewCreated(view, savedInstanceState)
         viewmodel.adapter.setEnableLoadMore(false)
         viewmodel.adapter.setOnItemClickListener { _, _, position ->

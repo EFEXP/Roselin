@@ -17,7 +17,7 @@ import xyz.donot.roselinx.util.extraUtils.start
 import xyz.donot.roselinx.util.extraUtils.startForResult
 import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.view.activity.*
-import xyz.donot.roselinx.viewmodel.MainViewModel
+import xyz.donot.roselinx.viewmodel.activity.MainViewModel
 import kotlin.properties.Delegates
 
 
@@ -70,7 +70,8 @@ class RoselinFragment : Fragment() {
         viewmodel.isConnectedStream.observe(this@RoselinFragment, Observer {
             it?.let {
                 mainThread {
-                    view.iv_connected_stream.setImageDrawable(ResourcesCompat.getDrawable(resources, if (it) R.drawable.ic_cloud else R.drawable.ic_cloud_off, null))
+                    if (activity!=null)
+                        view.iv_connected_stream.setImageDrawable(ResourcesCompat.getDrawable(resources, if (it) R.drawable.ic_cloud else R.drawable.ic_cloud_off, null))
                 }
             }
         })

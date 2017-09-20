@@ -22,10 +22,10 @@ import xyz.donot.roselinx.util.getURLLink
 import java.text.SimpleDateFormat
 import kotlin.properties.Delegates
 
-class UserDetailView(context: Context, attributeSet: AttributeSet? = null, defStyleAttr: Int = 0) : ConstraintLayout(context, attributeSet, defStyleAttr) {
-    constructor(context: Context) : this(context, null, 0)
-    constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
-
+class UserDetailView : ConstraintLayout {
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
     var view by Delegates.notNull<View>()
     var iconClick: () -> Unit = {}
     var friendClick: () -> Unit = {}
@@ -68,12 +68,6 @@ class UserDetailView(context: Context, attributeSet: AttributeSet? = null, defSt
         }
     }
 
-    fun setBlocked() {
-        view.apply {
-
-        }
-
-    }
 
     fun setUser(user: User) {
         view.apply {

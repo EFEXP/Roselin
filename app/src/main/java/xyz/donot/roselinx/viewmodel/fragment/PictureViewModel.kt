@@ -1,4 +1,4 @@
-package xyz.donot.roselinx.viewmodel
+package xyz.donot.roselinx.viewmodel.fragment
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel

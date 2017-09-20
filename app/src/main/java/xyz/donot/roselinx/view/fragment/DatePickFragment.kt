@@ -5,8 +5,8 @@ import android.app.Dialog
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import xyz.donot.roselinx.viewmodel.DateCompact
-import xyz.donot.roselinx.viewmodel.SearchSettingViewModel
+import xyz.donot.roselinx.viewmodel.activity.DateCompact
+import xyz.donot.roselinx.viewmodel.activity.SearchSettingViewModel
 import java.util.*
 
 class DatePickFragment : DialogFragment() {
@@ -18,8 +18,10 @@ class DatePickFragment : DialogFragment() {
         //   }
         val listener = DatePickerDialog.OnDateSetListener { _, year_, monthOfYear, dayOfMonth ->
                 if (arguments.getBoolean("isFrom", false))
-            { viewmodel.dayFrom.value= DateCompact(year_,monthOfYear+1,dayOfMonth) }
-            else{viewmodel.dayTo.value=DateCompact(year_,monthOfYear+1,dayOfMonth)}
+            { viewmodel.dayFrom.value= DateCompact(year_, monthOfYear + 1, dayOfMonth)
+            }
+            else{viewmodel.dayTo.value= DateCompact(year_, monthOfYear + 1, dayOfMonth)
+                }
         }
         return DatePickerDialog(activity,listener,c.get(Calendar.YEAR),  c.get(Calendar.MONTH),c.get(Calendar.DAY_OF_MONTH))
                 .apply {

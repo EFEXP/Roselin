@@ -3,22 +3,27 @@ package xyz.donot.roselinx.view.activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.graphics.Palette
 import android.view.View
 import android.widget.EditText
 import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.activity_user.*
 import twitter4j.User
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.view.adapter.UserTimeLineAdapter
-import xyz.donot.roselinx.viewmodel.UserViewModel
+import xyz.donot.roselinx.viewmodel.activity.UserViewModel
 import kotlin.properties.Delegates
 
 
-class UserActivity : AppCompatActivity() {
+class UserActivity : AppCompatActivity(),Target {
     var viewmodel by Delegates.notNull<UserViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +45,7 @@ class UserActivity : AppCompatActivity() {
     }
 
     private fun setUp(user_: User) {
-        Picasso.with(this).load(user_.profileBannerIPadRetinaURL).into(banner)
+        Picasso.with(this).load(user_.profileBannerIPadRetinaURL).into(this)
 
         banner.setOnClickListener {
             startActivity(Intent(applicationContext, PictureActivity::class.java)
@@ -81,6 +86,19 @@ class UserActivity : AppCompatActivity() {
         tabs_user.setupWithViewPager(viewpager_user)
     }
 
+    override fun onPrepareLoad(placeHolderDrawable: Drawable?) =Unit
 
+    override fun onBitmapFailed(errorDrawable: Drawable?) =Unit
+
+    override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
+        banner.setImageBitmap(bitmap)
+        Palette.from(bitmap).generate(
+                {
+                    it.mutedSwatch?.let {
+                        toolbar.setTitleTextColor(it.rgb)
+                        banner.background=ColorDrawable(it.rgb)
+                    }
+                })
+    }
 
 }

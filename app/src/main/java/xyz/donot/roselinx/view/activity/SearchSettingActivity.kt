@@ -11,8 +11,8 @@ import xyz.donot.roselinx.util.extraUtils.hideSoftKeyboard
 import xyz.donot.roselinx.util.extraUtils.start
 import xyz.donot.roselinx.util.getSerialized
 import xyz.donot.roselinx.view.fragment.DatePickFragment
-import xyz.donot.roselinx.viewmodel.QueryBundle
-import xyz.donot.roselinx.viewmodel.SearchSettingViewModel
+import xyz.donot.roselinx.viewmodel.activity.QueryBundle
+import xyz.donot.roselinx.viewmodel.activity.SearchSettingViewModel
 
 
 class SearchSettingActivity : AppCompatActivity() {
@@ -75,7 +75,7 @@ class SearchSettingActivity : AppCompatActivity() {
                 return@setOnClickListener
             viewmodel.setQuery(
                     QueryBundle(
-                            query = search_setting_query.text.toString() ,
+                            query = search_setting_query.text.toString(),
                             queryAbsolute = "\"${search_setting_query_absolute.text}\"",
                             dayFrom = viewmodel.dayFrom.value,
                             dayTo = viewmodel.dayTo.value,

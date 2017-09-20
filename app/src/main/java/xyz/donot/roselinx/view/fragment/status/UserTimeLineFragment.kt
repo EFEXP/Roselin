@@ -20,7 +20,7 @@ import xyz.donot.roselinx.view.activity.PictureActivity
 import xyz.donot.roselinx.view.activity.UserListActivity
 import xyz.donot.roselinx.view.activity.UserListsActivity
 import xyz.donot.roselinx.view.custom.UserDetailView
-import xyz.donot.roselinx.viewmodel.UserViewModel
+import xyz.donot.roselinx.viewmodel.activity.UserViewModel
 
 class UserTimeLineFragment : TimeLineFragment() {
     private lateinit var myViewModel: UserViewModel

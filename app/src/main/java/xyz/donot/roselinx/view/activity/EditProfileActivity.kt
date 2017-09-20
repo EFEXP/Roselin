@@ -18,7 +18,7 @@ import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.getNotificationManager
 import xyz.donot.roselinx.util.extraUtils.newNotification
 import xyz.donot.roselinx.util.getSerialized
-import xyz.donot.roselinx.viewmodel.EditProfileViewModel
+import xyz.donot.roselinx.viewmodel.activity.EditProfileViewModel
 import java.io.File
 import java.util.*
 
