@@ -12,7 +12,7 @@ class ListTimeLine:TimeLineFragment(){
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewmodel.pullToRefresh= {twitter->
-            async(CommonPool){twitter.getUserListStatuses(listId,Paging(viewmodel.adapter.data[0].id))}
+            async(CommonPool){twitter.getUserListStatuses(listId,Paging(viewmodel.adapter!!.data[0].id))}
         }
         viewmodel.getData= {twitter->
             async(CommonPool){ twitter.getUserListStatuses(listId, Paging(viewmodel.page))}

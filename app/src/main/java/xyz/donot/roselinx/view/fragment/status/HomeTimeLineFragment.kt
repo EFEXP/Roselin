@@ -1,62 +1,279 @@
 package xyz.donot.roselinx.view.fragment.status
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
+import android.content.*
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.support.customtabs.CustomTabsIntent
+import android.support.v4.content.ContextCompat
 import android.support.v4.content.LocalBroadcastManager
+import android.support.v7.app.AlertDialog
+import android.support.v7.widget.LinearLayoutManager
 import android.view.View
+import kotlinx.android.synthetic.main.content_base_fragment.*
 import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
-import twitter4j.Paging
-import twitter4j.Status
-import twitter4j.StatusDeletionNotice
+import kotlinx.coroutines.experimental.launch
+import twitter4j.*
+import xyz.donot.roselinx.R
+import xyz.donot.roselinx.Roselin
+import xyz.donot.roselinx.util.extraUtils.*
 import xyz.donot.roselinx.util.getDeserialized
+import xyz.donot.roselinx.util.getMyId
+import xyz.donot.roselinx.util.getTwitterInstance
+import xyz.donot.roselinx.view.activity.EditTweetActivity
+import xyz.donot.roselinx.view.activity.TwitterDetailActivity
+import xyz.donot.roselinx.view.adapter.StatusAdapter
+import xyz.donot.roselinx.view.custom.MyLoadingView
+import xyz.donot.roselinx.view.custom.SingleLiveEvent
+import xyz.donot.roselinx.view.fragment.ARecyclerFragment
+import xyz.donot.roselinx.view.fragment.RetweeterDialog
+import kotlin.properties.Delegates
 
 
-class HomeTimeLineFragment : TimeLineFragment(){
-    private val receiver by lazy { StatusReceiver() }
-    private val deleteReceiver by lazy { DeleteReceiver() }
+class HomeTimeLineFragment : ARecyclerFragment() {
+    private val viewmodel: HomeTimeLineViewModel by lazy { ViewModelProviders.of(this).get(HomeTimeLineViewModel::class.java) }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (savedInstanceState==null&&viewmodel.twitter==viewmodel.mainTwitter){
-            LocalBroadcastManager.getInstance(activity).apply {
-                registerReceiver(receiver, IntentFilter("NewStatus"))
-                registerReceiver(deleteReceiver, IntentFilter("DeleteStatus"))
+        viewmodel.apply {
+            twitter = arguments.getByteArray("twitter").getDeserialized()
+            if (savedInstanceState==null){
+            adapter.apply {
+                setOnLoadMoreListener({ viewmodel.loadMoreData() }, recycler)
+                setLoadMoreView(MyLoadingView())
+                emptyView = View.inflate(activity, R.layout.item_empty, null)
+                initService()
+            }
+                loadMoreData()
+            }
+            adapter.setOnItemClickListener { adapter, _, position ->
+                val status = adapter.data[position] as Status
+                val item = if (status.isRetweet) {
+                    status.retweetedStatus
+                } else {
+                    status
+                }
+                if (!activity.isFinishing) {
+                    val tweetItem = if (getMyId() == status.user.id) {
+                        R.array.tweet_my_menu
+                    } else {
+                        R.array.tweet_menu
+                    }
+                    AlertDialog.Builder(context).setItems(tweetItem, { _, int ->
+                        val selectedItem = context.resources.getStringArray(tweetItem)[int]
+                        when (selectedItem) {
+                            "返信" -> {
+                                xyz.donot.roselinx.util.extraUtils.Bundle {
+                                    putString("status_txt", item.text)
+                                    putLong("status_id", item.id)
+                                    putString("user_screen_name", item.user.screenName)
+                                }
+                                activity.start<EditTweetActivity>(
+                                        xyz.donot.roselinx.util.extraUtils.Bundle {
+                                            putString("status_txt", item.text)
+                                            putLong("status_id", item.id)
+                                            putString("user_screen_name", item.user.screenName)
+                                        }
+                                )
+                            }
+                            "削除" -> {
+                                launch(UI) {
+                                    try {
+                                        async(CommonPool) { viewmodel.mainTwitter.destroyStatus(status.id) }.await()
+                                        toast("削除しました")
+                                    } catch (e: Exception) {
+                                        toast(e.localizedMessage)
+                                    }
+                                }
+
+                            }
+                            "会話" -> {
+                                context.startActivity(context.newIntent<TwitterDetailActivity>(Bundle().apply { putSerializable("Status", item) }))
+
+                            }
+                            "コピー" -> {
+                                (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip = ClipData.newPlainText(ClipDescription.MIMETYPE_TEXT_URILIST, item.text)
+                                toast("コピーしました")
+
+                            }
+                            "RTした人" -> {
+                                val rd = RetweeterDialog()
+                                rd.arguments = Bundle { putLong("tweetId", item.id) }
+                                rd.show(activity.supportFragmentManager, "")
+                            }
+                            "共有" -> {
+                                context.startActivity(Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    type = "text/plain"
+                                    putExtra(Intent.EXTRA_TEXT, "@${item.user.screenName}さんのツイート https://twitter.com/${item.user.screenName}/status/${item.id}をチェック")
+                                })
+                            }
+                            "公式で見る" -> {
+                                CustomTabsIntent.Builder()
+                                        .setShowTitle(true)
+                                        .addDefaultShareMenuItem()
+                                        .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                                        .setStartAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                                        .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build()
+                                        .launchUrl(context, Uri.parse("https://twitter.com/${item.user.screenName}/status/${item.id}"))
+                            }
+                        }
+                    }).show()
+                }
+            }
+            recycler.adapter = adapter
+            //Observe
+            exception.observe(this@HomeTimeLineFragment, Observer {
+                it?.let {
+                    adapter.emptyView = View.inflate(activity, R.layout.item_no_content, null)
+                }
+            })
+            dataRefreshed.observe(this@HomeTimeLineFragment, Observer {
+                refresh.setRefreshing(false)
+            })
+            dataInserted.observe(this@HomeTimeLineFragment, Observer {
+                val positionIndex = (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                if (positionIndex == 0) {
+                    recycler.layoutManager.scrollToPosition(0)
+                }
+            })
+            refresh.setOnRefreshListener {
+                Handler().delayed(1000, {
+                    pullDown()
+                })
             }
         }
-        recycler.isNestedScrollingEnabled=false
-        viewmodel.pullToRefresh= {twitter->
-            async(CommonPool){ twitter.getHomeTimeline(Paging(viewmodel.adapter.data[0].id))}
+        refresh.isEnabled = true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewmodel.isBackground = false
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewmodel.isBackground = true
+    }
+
+}
+
+class HomeTimeLineViewModel(app: Application) : AndroidViewModel(app) {
+    private val receiver by lazy { StatusReceiver() }
+    private val deleteReceiver by lazy { DeleteReceiver() }
+    var twitter by Delegates.notNull<Twitter>()
+    val exception = MutableLiveData<TwitterException>()
+    val mainTwitter by lazy { getTwitterInstance() }
+    val dataInserted = SingleLiveEvent<Unit>()
+    val dataRefreshed = SingleLiveEvent<Unit>()
+    private val dataStore: ArrayList<Status> = ArrayList()
+    val adapter by lazy { StatusAdapter() }
+    var page: Int = 0
+        get() {
+            field++
+            return field
         }
-        viewmodel.getData= {twitter->
-            async(CommonPool){ twitter.getHomeTimeline(Paging(viewmodel.page))}
+    var isBackground = false
+        set(value) {
+            if (!value)
+                if (dataStore.isNotEmpty()) {
+                    adapter.addData(0, dataStore)
+                    dataStore.clear()
+                    dataInserted.call()
+                }
+        }
+
+    private fun insertDataBackground(data: List<Status>) = mainThread {
+      mainThread {
+          if (isBackground) {
+              dataStore.addAll(0, data)
+          } else {
+              adapter.addData(0, data)
+              dataInserted.call()
+          }
+      }
+    }
+
+
+    fun insertDataBackground(data: Status) = mainThread {
+        mainThread { if (isBackground) {
+            dataStore.add(0, data)
+        } else {
+            adapter.addData(0, data)
+            dataInserted.call()
+        }}
+    }
+
+
+    fun pullDown() {
+        if (adapter.data.isNotEmpty()) {
+            launch(UI) {
+                async(CommonPool) { twitter.getHomeTimeline(Paging(adapter.data[0].id)) }.await()?.let { insertDataBackground(it) }
+                dataRefreshed.call()
+            }
+        } else {
+            dataRefreshed.call()
         }
     }
-    override fun onDestroy() {
-        super.onDestroy()
-        LocalBroadcastManager.getInstance(activity).apply {
+
+    private fun endAdapter() = mainThread {
+        adapter.loadMoreEnd(true)
+    }
+
+    fun loadMoreData() {
+        launch(UI) {
+            try {
+                val result = async(CommonPool) { twitter.getHomeTimeline(Paging(page)) }.await()
+                if (result.isEmpty()) {
+                    endAdapter()
+                } else {
+                    adapter.addData(result)
+                    adapter.loadMoreComplete()
+                }
+            } catch (e: TwitterException) {
+                adapter.loadMoreFail()
+                exception.value = e
+                getApplication<Roselin>().toast(twitterExceptionMessage(e))
+            }
+        }
+    }
+
+    fun initService() {
+        LocalBroadcastManager.getInstance(getApplication()).apply {
+            registerReceiver(receiver, IntentFilter("NewStatus"))
+            registerReceiver(deleteReceiver, IntentFilter("DeleteStatus"))
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        LocalBroadcastManager.getInstance(getApplication()).apply {
             unregisterReceiver(receiver)
             unregisterReceiver(deleteReceiver)
         }
     }
-    //Receiver
+
     inner class StatusReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val data=intent.extras.getByteArray("Status").getDeserialized<Status>()
-                viewmodel.insertDataBackground(data)
+            val data = intent.extras.getByteArray("Status").getDeserialized<Status>()
+            insertDataBackground(data)
         }
     }
+
     inner class DeleteReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            val data=intent.extras.getByteArray("StatusDeletionNotice").getDeserialized<StatusDeletionNotice>()
-                viewmodel . adapter.data.filter { de -> de.id == data.statusId }.mapNotNull {
-                    val int=viewmodel.adapter.data.indexOf(it)
-                    viewmodel .  adapter.remove(int)
+            val data = intent.extras.getByteArray("StatusDeletionNotice").getDeserialized<StatusDeletionNotice>()
+            adapter.data.filter { de -> de.id == data.statusId }.mapNotNull {
+                val int = adapter.data.indexOf(it)
+                adapter.remove(int)
             }
         }
     }
+
 }
-
-

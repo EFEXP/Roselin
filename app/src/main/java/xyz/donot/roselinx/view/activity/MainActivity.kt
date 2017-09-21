@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         } else if (isConnected()) {
             setUp(savedInstanceState)
         } else {
+
             setContentView(R.layout.error_activity)
             button_retry.onClick = {
                 if (isConnected()) {

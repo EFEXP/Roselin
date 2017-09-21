@@ -25,7 +25,7 @@ class RoselinFragment : Fragment() {
 
     var viewmodel: MainViewModel by Delegates.notNull()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.content_roselin, null, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.content_roselin,null, false)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewmodel = ViewModelProviders.of(activity).get(MainViewModel::class.java)
         viewmodel.user.observe(this@RoselinFragment, Observer {
@@ -70,7 +70,7 @@ class RoselinFragment : Fragment() {
         viewmodel.isConnectedStream.observe(this@RoselinFragment, Observer {
             it?.let {
                 mainThread {
-                    if (activity!=null)
+                    if (this.isAdded)
                         view.iv_connected_stream.setImageDrawable(ResourcesCompat.getDrawable(resources, if (it) R.drawable.ic_cloud else R.drawable.ic_cloud_off, null))
                 }
             }

@@ -23,9 +23,9 @@ class UsersListFragment : BaseListFragment<UserList>() {
         if (savedInstanceState==null)
             viewmodel.adapter= UserListAdapter()
         super.onViewCreated(view, savedInstanceState)
-        viewmodel.adapter.setEnableLoadMore(false)
-        viewmodel.adapter.setOnItemClickListener { _, _, position ->
-            val item = viewmodel.adapter.data[position]
+        viewmodel.adapter!!.setEnableLoadMore(false)
+        viewmodel.adapter!!.setOnItemClickListener { _, _, position ->
+            val item = viewmodel.adapter!!.data[position]
             if (selectList) {
                 (activity as UserListsActivity).callbackMethod(item.id, item.name)
             } else {

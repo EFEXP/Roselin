@@ -53,7 +53,7 @@ class FeaturesFragment : BaseListFragment<ChangeLog>() {
             viewmodel.adapter= ChangeLogAdapter()
         super.onViewCreated(view, savedInstanceState)
         refresh.isEnabled = false
-        viewmodel.adapter.setEnableLoadMore(false)
+        viewmodel.adapter!!.setEnableLoadMore(false)
         viewmodel.getData = { _ ->
             async(CommonPool) {
                 mutableListOf(

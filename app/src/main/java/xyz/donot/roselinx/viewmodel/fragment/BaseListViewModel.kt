@@ -18,7 +18,7 @@ import xyz.donot.roselinx.view.custom.SingleLiveEvent
 import kotlin.properties.Delegates
 
 
-class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
+open class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
     var isBackground = MutableLiveData<Boolean>()
     var twitter by Delegates.notNull<Twitter>()
     val exception = MutableLiveData<TwitterException>()
@@ -26,9 +26,11 @@ class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
     val dataInserted = SingleLiveEvent<Unit>()
     val dataRefreshed = SingleLiveEvent<Unit>()
     val dataStore: ArrayList<T> = ArrayList()
-    lateinit var adapter: BaseQuickAdapter<T, BaseViewHolder>
-    val data = MutableLiveData<List<T>>()
-    var useDefaultLoad = true
+    var adapter: BaseQuickAdapter<T, BaseViewHolder>?=null
+    set(value) {
+        if (field==null)
+        field=value
+    }
     lateinit var getData: (Twitter) -> Deferred<List<T>?>
     var page: Int = 0
         get() {
@@ -40,7 +42,7 @@ class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
         if (isBackground.value!!) {
             dataStore.addAll(0, data)
         } else {
-            adapter.addData(0, data)
+            adapter!!.addData(0, data)
             dataInserted.call()
         }
     }
@@ -50,7 +52,7 @@ class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
         if (isBackground.value!!) {
             dataStore.add(0, data)
         } else {
-            adapter.addData(0, data)
+            adapter?.addData(0, data)
             dataInserted.call()
         }
     }
@@ -58,7 +60,7 @@ class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
     lateinit var pullToRefresh: (Twitter) -> Deferred<List<T>>?
 
     fun pullDown() {
-        if (adapter.data.isNotEmpty()) {
+        if (adapter!!.data.isNotEmpty()) {
             launch(UI) {
                 pullToRefresh(twitter)?.await()?.let { insertDataBackground(it) }
                 dataRefreshed.call()
@@ -69,7 +71,7 @@ class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
     }
 
     fun endAdapter() = mainThread {
-        adapter.loadMoreEnd(true)
+        adapter?.loadMoreEnd(true)
     }
 
     fun loadMoreData() {
@@ -79,14 +81,16 @@ class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
                 if (result == null || result.isEmpty()) {
                     endAdapter()
                 } else {
-                    adapter.addData(result)
-                    adapter.loadMoreComplete()
+                    adapter?.addData(result)
+                    adapter?.loadMoreComplete()
                 }
             } catch (e: TwitterException) {
-                adapter.loadMoreFail()
+                adapter?.loadMoreFail()
                 exception.value = e
                 getApplication<Roselin>().toast(twitterExceptionMessage(e))
             }
         }
     }
 }
+
+

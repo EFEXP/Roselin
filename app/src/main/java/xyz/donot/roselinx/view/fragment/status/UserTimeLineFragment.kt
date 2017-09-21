@@ -29,11 +29,11 @@ class UserTimeLineFragment : TimeLineFragment() {
         super.onViewCreated(view, savedInstanceState)
         myViewModel = ViewModelProviders.of(activity).get(UserViewModel::class.java)
         viewmodel.pullToRefresh = { twitter ->
-            async(CommonPool) { twitter.getUserTimeline(Paging(viewmodel.adapter.data[0].id)) }
+            async(CommonPool) { twitter.getUserTimeline(Paging(viewmodel.adapter!!.data[0].id)) }
         }
         myViewModel.mUser.observe(this, Observer {
             it?.let {
-                viewmodel.adapter.setHeaderView(setUpViews(it))
+                viewmodel.adapter!!.setHeaderView(setUpViews(it))
             }
         })
         viewmodel.getData = { twitter ->

@@ -17,11 +17,11 @@ class RetweeterDialog : BaseListFragment<User>() {
         if (savedInstanceState==null)
             viewmodel.adapter= UserListAdapter()
         super.onViewCreated(view, savedInstanceState)
-        viewmodel.adapter.setOnItemClickListener { _, _, position ->
+        viewmodel.adapter!!.setOnItemClickListener { _, _, position ->
             val intent = activity.intent<UserActivity>()
-            intent.putExtra("user_id", viewmodel.adapter.getItem(position)?.id)
+            intent.putExtra("user_id", viewmodel.adapter!!.getItem(position)?.id)
             activity.startActivity(intent)
-            viewmodel.adapter.getItem(position)
+            viewmodel.adapter!!.getItem(position)
         }
 
         viewmodel.getData = { twitter ->

@@ -1,0 +1,9 @@
+<resources>
+  <style name="AppTheme.Translucent.Picture"  parent="DragDismissTheme">
+    <item name="android:statusBarColor">@android:color/transparent</item>
+  </style>
+  <style name="AppTheme.Translucent.User"  parent="AppTheme.NoActionBar">
+    <item name="android:statusBarColor">@android:color/transparent</item>
+    <item name="android:windowTranslucentNavigation">true</item>
+  </style>
+</resources>

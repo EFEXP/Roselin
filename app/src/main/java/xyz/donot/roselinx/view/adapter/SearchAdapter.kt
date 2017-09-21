@@ -49,11 +49,11 @@ class SearchAdapter(private val query: Query, private val queryText: String, fm:
 
         override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
-            viewmodel.adapter.setOnItemClickListener { _, _, position ->
+            viewmodel.adapter!!.setOnItemClickListener { _, _, position ->
                 val intent = activity.intent<UserActivity>()
-                intent.putExtra("user_id", viewmodel.adapter.getItem(position)?.id)
+                intent.putExtra("user_id", viewmodel.adapter!!.getItem(position)?.id)
                 activity.startActivity(intent)
-                viewmodel.adapter.getItem(position)
+                viewmodel.adapter!!.getItem(position)
 
             }
         }
@@ -63,9 +63,8 @@ class SearchAdapter(private val query: Query, private val queryText: String, fm:
             val result = viewmodel.twitter.searchUsers(queryText, page)
             mainThread {
                 if (result != null) {
-                    viewmodel.adapter.addData(result)
+                    viewmodel.adapter!!.addData(result)
                 }
-
             }
             return null
         }

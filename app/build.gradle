@@ -100,7 +100,7 @@ dependencies {
     implementation 'cn.jzvd:jiaozivideoplayer:6.0.0'
     implementation 'com.dinuscxj:recyclerrefreshlayout:2.0.5'
     implementation 'com.squareup.picasso:picasso:2.5.2'
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.28'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
     implementation  'com.android.support:multidex:1.0.2'
     compile project(':Dragdismiss:library')
 }

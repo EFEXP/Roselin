@@ -30,10 +30,10 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
     private var doubleClick=false
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 
-            viewmodel.adapter= StatusAdapter()
+         viewmodel.adapter= StatusAdapter()
         super.onViewCreated(view, savedInstanceState)
         //クリックリスナー
-        viewmodel.adapter.setOnItemClickListener { adapter, _, position ->
+        viewmodel.adapter!!.setOnItemClickListener { adapter, _, position ->
             if (doubleClick)
                 return@setOnItemClickListener
             doubleClick=true
@@ -114,7 +114,7 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
             }
         }
         //クリックリスナーEnd
-        viewmodel.adapter.emptyView = View.inflate(activity, R.layout.item_empty, null)
+        viewmodel.adapter!!.emptyView = View.inflate(activity, R.layout.item_empty, null)
         refresh.isEnabled=true
     }
 
