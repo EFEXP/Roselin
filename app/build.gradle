@@ -13,7 +13,6 @@ apply plugin: 'realm-android'
 repositories {
     maven { url 'https://maven.fabric.io/public' }
     maven { url "https://jitpack.io" }
-    maven { url "http://dl.bintray.com/kotlin/kotlin-eap-1.1" }
 }
 
 android {
@@ -101,7 +100,7 @@ dependencies {
     implementation 'com.dinuscxj:recyclerrefreshlayout:2.0.5'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
-    implementation  'com.android.support:multidex:1.0.2'
-    compile project(':Dragdismiss:library')
+    implementation 'com.android.support:multidex:1.0.2'
+    implementation 'com.klinkerapps:drag-dismiss-activity:1.4.4'
 }
 apply plugin: 'com.google.gms.google-services'

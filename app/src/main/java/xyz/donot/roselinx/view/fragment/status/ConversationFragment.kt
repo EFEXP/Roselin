@@ -32,7 +32,9 @@ class ConversationFragment : ARecyclerFragment() {
     val adapter by lazy { StatusAdapter() }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadReply(status.id)
+        adapter.addData(status)
+       if (status.inReplyToStatusId > 0)
+        loadReply(status.inReplyToStatusId)
         getDiscuss(status)
         recycler.adapter = adapter
         //   view.recycler.layoutManager = LinearLayoutManager(activity)
@@ -135,18 +137,15 @@ class ConversationFragment : ARecyclerFragment() {
 
     private fun getDiscuss(status: Status) {
         val twitter by lazy { getTwitterInstance() }
-        val query = Query("to:" + status.user.screenName)
-        // Query("@$screenname since_id:${status.id}")
+        val query = Query("to:"+ status.user.screenName)
         query.count = 100
         context.logd { query.count.toString() }
         launch(UI) {
             try {
                 val result = async(CommonPool) { twitter.search(query) }.await()
-                for (tweet in result.tweets) {
-                    if (tweet.inReplyToStatusId == status.id) {
-                        adapter.addData(tweet)
-                    }
-                }
+                result.tweets
+                        .filter { it.inReplyToStatusId == status.id }
+                        .forEach { adapter.addData(it) }
 
             } catch (e: Exception) {
                 e.printStackTrace()

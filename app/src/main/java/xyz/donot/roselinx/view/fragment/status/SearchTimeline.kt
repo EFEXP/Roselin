@@ -13,7 +13,6 @@ import android.os.Handler
 import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -143,12 +142,6 @@ class SearchTimeline : ARecyclerFragment() {
             dataRefreshed.observe(this@SearchTimeline, Observer {
                 refresh.setRefreshing(false)
             })
-            dataInserted.observe(this@SearchTimeline, Observer {
-                val positionIndex = (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                if (positionIndex == 0) {
-                    recycler.layoutManager.scrollToPosition(0)
-                }
-            })
 
             /*  adapter.addHeaderView(
                       View.inflate(activity, R.layout.item_ad, null).apply {
@@ -175,12 +168,9 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     var query: MutableLiveData<Query> = MutableLiveData()
     val exception = MutableLiveData<TwitterException>()
     val mainTwitter by lazy { getTwitterInstance() }
-    val dataInserted = SingleLiveEvent<Unit>()
     val dataRefreshed = SingleLiveEvent<Unit>()
     val adapter: BaseQuickAdapter<Status, BaseViewHolder> by lazy { StatusAdapter() }
     val data = MutableLiveData<List<Status>>()
-
-
     fun pullDown() {
         if (adapter.data.isNotEmpty()) {
             launch(UI) {

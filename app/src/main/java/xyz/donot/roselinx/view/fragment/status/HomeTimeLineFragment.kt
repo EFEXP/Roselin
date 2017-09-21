@@ -1,9 +1,6 @@
 package xyz.donot.roselinx.view.fragment.status
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.*
 import android.net.Uri
@@ -13,7 +10,6 @@ import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import kotlinx.coroutines.experimental.CommonPool
@@ -29,27 +25,26 @@ import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.activity.EditTweetActivity
 import xyz.donot.roselinx.view.activity.TwitterDetailActivity
-import xyz.donot.roselinx.view.adapter.StatusAdapter
 import xyz.donot.roselinx.view.custom.MyLoadingView
-import xyz.donot.roselinx.view.custom.SingleLiveEvent
-import xyz.donot.roselinx.view.fragment.ARecyclerFragment
 import xyz.donot.roselinx.view.fragment.RetweeterDialog
+import xyz.donot.roselinx.view.playground.MainTimeLineFragment
+import xyz.donot.roselinx.view.playground.MainTimeLineViewModel
 import kotlin.properties.Delegates
 
 
-class HomeTimeLineFragment : ARecyclerFragment() {
-    private val viewmodel: HomeTimeLineViewModel by lazy { ViewModelProviders.of(this).get(HomeTimeLineViewModel::class.java) }
+class HomeTimeLineFragment : MainTimeLineFragment() {
+    override val viewmodel: HomeTimeLineViewModel by lazy { ViewModelProviders.of(this).get(HomeTimeLineViewModel::class.java) }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewmodel.apply {
             twitter = arguments.getByteArray("twitter").getDeserialized()
-            if (savedInstanceState==null){
-            adapter.apply {
-                setOnLoadMoreListener({ viewmodel.loadMoreData() }, recycler)
-                setLoadMoreView(MyLoadingView())
-                emptyView = View.inflate(activity, R.layout.item_empty, null)
-                initService()
-            }
+            if (savedInstanceState == null) {
+                adapter.apply {
+                    setOnLoadMoreListener({ viewmodel.loadMoreData() }, recycler)
+                    setLoadMoreView(MyLoadingView())
+                    emptyView = View.inflate(activity, R.layout.item_empty, null)
+                    initService()
+                }
                 loadMoreData()
             }
             adapter.setOnItemClickListener { adapter, _, position ->
@@ -128,21 +123,7 @@ class HomeTimeLineFragment : ARecyclerFragment() {
                 }
             }
             recycler.adapter = adapter
-            //Observe
-            exception.observe(this@HomeTimeLineFragment, Observer {
-                it?.let {
-                    adapter.emptyView = View.inflate(activity, R.layout.item_no_content, null)
-                }
-            })
-            dataRefreshed.observe(this@HomeTimeLineFragment, Observer {
-                refresh.setRefreshing(false)
-            })
-            dataInserted.observe(this@HomeTimeLineFragment, Observer {
-                val positionIndex = (recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
-                if (positionIndex == 0) {
-                    recycler.layoutManager.scrollToPosition(0)
-                }
-            })
+
             refresh.setOnRefreshListener {
                 Handler().delayed(1000, {
                     pullDown()
@@ -151,64 +132,13 @@ class HomeTimeLineFragment : ARecyclerFragment() {
         }
         refresh.isEnabled = true
     }
-
-    override fun onResume() {
-        super.onResume()
-        viewmodel.isBackground = false
-    }
-
-    override fun onStop() {
-        super.onStop()
-        viewmodel.isBackground = true
-    }
-
 }
 
-class HomeTimeLineViewModel(app: Application) : AndroidViewModel(app) {
+class HomeTimeLineViewModel(app: Application) : MainTimeLineViewModel(app) {
     private val receiver by lazy { StatusReceiver() }
     private val deleteReceiver by lazy { DeleteReceiver() }
     var twitter by Delegates.notNull<Twitter>()
-    val exception = MutableLiveData<TwitterException>()
     val mainTwitter by lazy { getTwitterInstance() }
-    val dataInserted = SingleLiveEvent<Unit>()
-    val dataRefreshed = SingleLiveEvent<Unit>()
-    private val dataStore: ArrayList<Status> = ArrayList()
-    val adapter by lazy { StatusAdapter() }
-    var page: Int = 0
-        get() {
-            field++
-            return field
-        }
-    var isBackground = false
-        set(value) {
-            if (!value)
-                if (dataStore.isNotEmpty()) {
-                    adapter.addData(0, dataStore)
-                    dataStore.clear()
-                    dataInserted.call()
-                }
-        }
-
-    private fun insertDataBackground(data: List<Status>) = mainThread {
-      mainThread {
-          if (isBackground) {
-              dataStore.addAll(0, data)
-          } else {
-              adapter.addData(0, data)
-              dataInserted.call()
-          }
-      }
-    }
-
-
-    fun insertDataBackground(data: Status) = mainThread {
-        mainThread { if (isBackground) {
-            dataStore.add(0, data)
-        } else {
-            adapter.addData(0, data)
-            dataInserted.call()
-        }}
-    }
 
 
     fun pullDown() {
@@ -220,10 +150,6 @@ class HomeTimeLineViewModel(app: Application) : AndroidViewModel(app) {
         } else {
             dataRefreshed.call()
         }
-    }
-
-    private fun endAdapter() = mainThread {
-        adapter.loadMoreEnd(true)
     }
 
     fun loadMoreData() {
@@ -277,3 +203,4 @@ class HomeTimeLineViewModel(app: Application) : AndroidViewModel(app) {
     }
 
 }
+
