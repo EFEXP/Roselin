@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.item_notification.view.*
 import twitter4j.Status
 import twitter4j.User
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.DBNotification
+import xyz.donot.roselinx.model.realm.NotificationObject
 import xyz.donot.roselinx.model.realm.NRETWEET
 import xyz.donot.roselinx.service.REPLY_ID
 import xyz.donot.roselinx.util.extraUtils.Bundle
@@ -34,10 +34,10 @@ class NotificationFragment : ARecyclerFragment() {
     private var isBackground = false
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val query = Realm.getDefaultInstance().where(DBNotification::class.java).findAllSorted("date", Sort.DESCENDING)
+        val query = Realm.getDefaultInstance().where(NotificationObject::class.java).findAllSorted("date", Sort.DESCENDING)
         val adapter = NotificationAdapter(query)
         recycler.adapter = adapter
-        query.addChangeListener(RealmChangeListener<RealmResults<DBNotification>> {
+        query.addChangeListener(RealmChangeListener<RealmResults<NotificationObject>> {
             itemInserted()
         })
     }
@@ -64,7 +64,7 @@ class NotificationFragment : ARecyclerFragment() {
     }
 
 
-    inner class NotificationAdapter(orderedRealmCollection: OrderedRealmCollection<DBNotification>) : RealmRecyclerViewAdapter<DBNotification, NotificationAdapter.ViewHolder>(orderedRealmCollection, true) {
+    inner class NotificationAdapter(orderedRealmCollection: OrderedRealmCollection<NotificationObject>) : RealmRecyclerViewAdapter<NotificationObject, NotificationAdapter.ViewHolder>(orderedRealmCollection, true) {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             getItem(position)?.let {
                 val s = it.status?.getDeserialized<Status>()

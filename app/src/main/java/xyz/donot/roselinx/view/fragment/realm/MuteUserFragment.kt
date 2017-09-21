@@ -16,13 +16,13 @@ import io.realm.RealmRecyclerViewAdapter
 import kotlinx.android.synthetic.main.item_user.view.*
 import twitter4j.User
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.DBMute
+import xyz.donot.roselinx.model.realm.MuteObject
 import xyz.donot.roselinx.util.getDeserialized
 import xyz.donot.roselinx.view.fragment.ARecyclerFragment
 
 
 class MuteUserFragment : ARecyclerFragment(){
-    val adapter by lazy {MuteUserAdater(Realm.getDefaultInstance().where(DBMute::class.java).notEqualTo("id",0L).findAll()) }
+    val adapter by lazy {MuteUserAdater(Realm.getDefaultInstance().where(MuteObject::class.java).notEqualTo("id",0L).findAll()) }
 
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -31,7 +31,7 @@ class MuteUserFragment : ARecyclerFragment(){
 
     }
 
-     inner class MuteUserAdater(orderedRealmCollection: OrderedRealmCollection<DBMute>): RealmRecyclerViewAdapter<DBMute, MuteUserAdater.ViewHolder>(orderedRealmCollection,true){
+     inner class MuteUserAdater(orderedRealmCollection: OrderedRealmCollection<MuteObject>): RealmRecyclerViewAdapter<MuteObject, MuteUserAdater.ViewHolder>(orderedRealmCollection,true){
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item=getItem(position)!!

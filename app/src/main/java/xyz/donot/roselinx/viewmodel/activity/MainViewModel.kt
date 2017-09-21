@@ -89,25 +89,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val realm = Realm.getDefaultInstance()
     //realm
     fun initTab() {
-        if (realm.where(DBTabData::class.java).count() <= 0) {
+        if (realm.where(TabDataObject::class.java).count() <= 0) {
             realm.executeTransaction {
-                it.createObject(DBTabData::class.java).apply {
+                it.createObject(TabDataObject::class.java).apply {
                     order = 0
                     type = SETTING
                 }
-                it.createObject(DBTabData::class.java).apply {
+                it.createObject(TabDataObject::class.java).apply {
                     order = 1
                     type = HOME
                     accountId = getMyId()
                     screenName = getMyScreenName()
                 }
-                it.createObject(DBTabData::class.java).apply {
+                it.createObject(TabDataObject::class.java).apply {
                     order = 3
                     type = NOTIFICATION
                     accountId = getMyId()
                     screenName = getMyScreenName()
                 }
-                it.createObject(DBTabData::class.java).apply {
+                it.createObject(TabDataObject::class.java).apply {
                     order = 2
                     type = MENTION
                     accountId = getMyId()
@@ -142,8 +142,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
-
-    fun tabReselected() {}
     //User
     val user: MutableLiveData<User> = MutableLiveData()
 

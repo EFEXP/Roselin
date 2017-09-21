@@ -16,20 +16,23 @@ import xyz.donot.roselinx.view.fragment.status.SearchTimeline
 import xyz.donot.roselinx.view.fragment.user.DMListFragment
 
 
-class MainTimeLineAdapter(fm: FragmentManager, private val realmResults: List<DBTabData>) : FragmentPagerAdapter(fm) {
+class MainTimeLineAdapter(fm: FragmentManager, private val realmResults: List<TabDataObject>) : FragmentPagerAdapter(fm) {
 
     override fun getItem(i: Int): Fragment {
         Realm.getDefaultInstance().use { realm ->
                 return when (realmResults[i].type) {
                     //HomeTimeLineFragment()
                     HOME -> HomeTimeLineFragment().apply {
-                        val t = realm.where(DBAccount::class.java).equalTo("id", realmResults[i].accountId).findFirst()
+                        val t = realm.where(AccountObject::class.java).equalTo("id", realmResults[i].accountId).findFirst()
                         arguments = Bundle { putByteArray("twitter", realm.copyFromRealm(t)?.twitter) }
                     }
-                    MENTION -> MentionTimeLine().apply {
-                        val t = realm.where(DBAccount::class.java).equalTo("id", realmResults[i].accountId).findFirst()
-                        arguments = Bundle { putByteArray("twitter", realm.copyFromRealm(t)?.twitter) }
-                    }
+                    MENTION ->
+
+                    MentionTimeLine().apply {
+                        val t = realm.where(AccountObject::class.java).equalTo("id", realmResults[i].accountId).findFirst()
+                        arguments = Bundle { putByteArray("twitter", realm.copyFromRealm(t)?.twitter) }}
+
+
                     SEARCH -> SearchTimeline().apply {
                         arguments = Bundle {
                             putString("query_text", realmResults[i].searchWord)
@@ -37,7 +40,7 @@ class MainTimeLineAdapter(fm: FragmentManager, private val realmResults: List<DB
                         }
                     }
                     LIST -> ListTimeLine().apply {
-                        val t = realm.where(DBAccount::class.java).equalTo("id", realmResults[i].accountId).findFirst()
+                        val t = realm.where(AccountObject::class.java).equalTo("id", realmResults[i].accountId).findFirst()
                         arguments = Bundle {
                             putLong("listId", realmResults[i].listId)
                             putByteArray("twitter", realm.copyFromRealm(t)?.twitter)
@@ -46,7 +49,7 @@ class MainTimeLineAdapter(fm: FragmentManager, private val realmResults: List<DB
                     NOTIFICATION -> NotificationFragment()
                     TREND -> TrendFragment()
                     DM -> DMListFragment().apply {
-                        val t = realm.where(DBAccount::class.java).equalTo("id", realmResults[i].accountId).findFirst()
+                        val t = realm.where(AccountObject::class.java).equalTo("id", realmResults[i].accountId).findFirst()
                         arguments = Bundle { putByteArray("twitter", realm.copyFromRealm(t)?.twitter) }
                     }
                     SETTING -> RoselinFragment()

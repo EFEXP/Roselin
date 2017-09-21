@@ -11,9 +11,9 @@ import kotlinx.coroutines.experimental.launch
 import twitter4j.TwitterException
 import twitter4j.User
 import xyz.donot.roselinx.Roselin
-import xyz.donot.roselinx.model.realm.DBCustomProfile
-import xyz.donot.roselinx.model.realm.DBMute
-import xyz.donot.roselinx.model.realm.DBUser
+import xyz.donot.roselinx.model.realm.CustomProfileObject
+import xyz.donot.roselinx.model.realm.MuteObject
+import xyz.donot.roselinx.model.realm.UserObject
 import xyz.donot.roselinx.model.realm.saveUser
 import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.util.extraUtils.twitterExceptionMessage
@@ -27,7 +27,7 @@ class UserViewModel(app: Application) : AndroidViewModel(app) {
     private val realm by lazy { Realm.getDefaultInstance() }
     fun initUser(screenName: String) {
         if (mUser.value == null) {
-       // val user=    realm.where(DBUser::class.java).equalTo("screenname",screenName).findFirst()
+       // val user=    realm.where(UserObject::class.java).equalTo("screenname",screenName).findFirst()
           //  user?.let {
           //      mUser.value=user.user.getDeserialized()
          //   }?:
@@ -37,7 +37,7 @@ class UserViewModel(app: Application) : AndroidViewModel(app) {
                     mUser.value =result
                     saveUser(result)
                 } catch (e: TwitterException) {
-                    val user=  realm.where(DBUser::class.java).equalTo("screenname",screenName).findFirst()
+                    val user=  realm.where(UserObject::class.java).equalTo("screenname",screenName).findFirst()
                    mUser.value =user?.user?.getDeserialized<User>()
                    getApplication<Roselin>().toast(twitterExceptionMessage(e))
                 }
@@ -46,7 +46,7 @@ class UserViewModel(app: Application) : AndroidViewModel(app) {
     }
     fun initUser(id:Long) {
         if (mUser.value == null) {
-          //  val user=    realm.where(DBUser::class.java).equalTo("id",id).findFirst()
+          //  val user=    realm.where(UserObject::class.java).equalTo("id",id).findFirst()
         //    user?.let {
          //       mUser.value=user.user.getDeserialized()
          //   }?:
@@ -56,7 +56,7 @@ class UserViewModel(app: Application) : AndroidViewModel(app) {
                     mUser.value =result
                     saveUser(result)
                 } catch (e: TwitterException) {
-                    val user=  realm.where(DBUser::class.java).equalTo("id",id).findFirst()
+                    val user=  realm.where(UserObject::class.java).equalTo("id",id).findFirst()
                     mUser.value =user?.user?.getDeserialized<User>()
                     getApplication<Roselin>().toast(twitterExceptionMessage(e))
                 }
@@ -66,7 +66,7 @@ class UserViewModel(app: Application) : AndroidViewModel(app) {
 
     fun muteUser() {
         realm.executeTransaction {
-            it.createObject(DBMute::class.java)
+            it.createObject(MuteObject::class.java)
                     .apply {
                         id = mUser.value!!.id
                         user = mUser.value?.getSerialized()
@@ -78,7 +78,7 @@ class UserViewModel(app: Application) : AndroidViewModel(app) {
     fun changeName(string: String) {
         realm.executeTransaction {
             it.copyToRealmOrUpdate(
-                    DBCustomProfile().apply {
+                    CustomProfileObject().apply {
                         id = mUser.value!!.id
                         customname = string
                     }
@@ -89,7 +89,7 @@ class UserViewModel(app: Application) : AndroidViewModel(app) {
 
     fun revertName(){
         realm.executeTransaction {
-            it.where(DBCustomProfile::class.java).equalTo("id",mUser.value!!.id).findAll().forEach {
+            it.where(CustomProfileObject::class.java).equalTo("id",mUser.value!!.id).findAll().forEach {
                 it.customname=null
             }
         }

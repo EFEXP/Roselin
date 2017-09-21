@@ -7,7 +7,7 @@ import io.realm.annotations.Required
 
 
 
-open class DBAccount : RealmObject() {
+open class AccountObject : RealmObject() {
 	@PrimaryKey open var id: Long = 0
 	open var isMain: Boolean = false
 	open var user: ByteArray? = null

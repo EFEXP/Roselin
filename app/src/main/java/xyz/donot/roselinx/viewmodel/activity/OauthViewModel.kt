@@ -15,9 +15,9 @@ import twitter4j.Twitter
 import twitter4j.TwitterFactory
 import twitter4j.User
 import twitter4j.conf.ConfigurationBuilder
-import xyz.donot.roselinx.model.realm.DBAccount
-import xyz.donot.roselinx.model.realm.DBMute
-import xyz.donot.roselinx.model.realm.DBUser
+import xyz.donot.roselinx.model.realm.AccountObject
+import xyz.donot.roselinx.model.realm.MuteObject
+import xyz.donot.roselinx.model.realm.UserObject
 import xyz.donot.roselinx.model.realm.saveUser
 import xyz.donot.roselinx.util.extraUtils.Bundle
 import xyz.donot.roselinx.util.getSerialized
@@ -28,13 +28,13 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
     val information= MutableLiveData<String>()
     val isFinished= SingleLiveEvent<Unit>()
     private fun saveToken(tw: Twitter, user: User) {
-        if (realm.where(DBAccount::class.java).equalTo("id", user.id).findAll().count() == 0) {
-            val realmAccounts = realm.where(DBAccount::class.java).equalTo("isMain", true)
+        if (realm.where(AccountObject::class.java).equalTo("id", user.id).findAll().count() == 0) {
+            val realmAccounts = realm.where(AccountObject::class.java).equalTo("isMain", true)
             realm.executeTransaction {
                 if (realmAccounts.findFirst() != null) {
                     realmAccounts.findFirst()?.isMain = false
                 }
-                val account = realm.createObject(DBAccount::class.java, user.id)
+                val account = realm.createObject(AccountObject::class.java, user.id)
                 account.isMain = true
                 account.twitter = tw.getSerialized()
                 account.user = user.getSerialized()
@@ -52,7 +52,7 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
                 if (result.hasNext()) cursor=result.nextCursor
                 realm.executeTransaction {
                     result.forEach { muser ->
-                        realm.createObject(DBMute::class.java).apply {
+                        realm.createObject(MuteObject::class.java).apply {
                             user = muser.getSerialized()
                             id = muser.id
                         }
@@ -71,7 +71,7 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
             val result = async(CommonPool) {tw.getFriendsList(u.id,-1,50)}.await()
             realm.executeTransaction {
                 result.forEach { user_ ->
-                    realm.createObject(DBUser::class.java,user_.id).apply {
+                    realm.createObject(UserObject::class.java,user_.id).apply {
                         user = user_.getSerialized()
                         screenname=user_.screenName
                     }

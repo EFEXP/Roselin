@@ -61,7 +61,7 @@ fun toSimpleName(int: Int): String = when (int) {
 }
 
 
-open class DBTabData : RealmObject() {
+open class TabDataObject : RealmObject() {
 	open var type: Int = 0
 	open var screenName: String? = null
 	open var accountId: Long = 0L

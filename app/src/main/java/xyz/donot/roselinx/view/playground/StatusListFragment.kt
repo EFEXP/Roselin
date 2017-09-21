@@ -69,7 +69,6 @@ abstract class MainTimeLineFragment: ARecyclerFragment(){
     abstract val viewmodel:MainTimeLineViewModel
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewmodel.apply {
             exception.observe(this@MainTimeLineFragment , Observer {
                 it?.let {

@@ -10,7 +10,7 @@ import android.widget.AdapterView
 import android.widget.ListView
 import io.realm.Realm
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.DBDraft
+import xyz.donot.roselinx.model.realm.DraftObject
 import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.view.activity.EditTweetActivity
 import xyz.donot.roselinx.view.adapter.DraftAdapter
@@ -22,7 +22,7 @@ class DraftFragment : DialogFragment() {
                               savedInstanceState: Bundle?): View? {
         val view=inflater.inflate(R.layout.fragment_draft, container, false)
         val realm= Realm.getDefaultInstance()
-                .where(DBDraft::class.java)
+                .where(DraftObject::class.java)
                 .equalTo("accountId",getMyId())
                 .findAll()
         val mAdapter= DraftAdapter(context = context,realmResults =realm)
@@ -30,7 +30,7 @@ class DraftFragment : DialogFragment() {
         list.adapter=mAdapter
         list.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _->
             val parentList=parent as ListView
-            val item=parentList.getItemAtPosition(position)as DBDraft
+            val item=parentList.getItemAtPosition(position)as DraftObject
             if(activity is EditTweetActivity){
                 ViewModelProviders.of(activity).get(EditTweetViewModel::class.java)
                 this@DraftFragment.dismiss()

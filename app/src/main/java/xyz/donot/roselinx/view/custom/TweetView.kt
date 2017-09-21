@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.item_classic_tweet.view.*
 import twitter4j.Status
 import twitter4j.User
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.DBCustomProfile
+import xyz.donot.roselinx.model.realm.CustomProfileObject
 import xyz.donot.roselinx.util.*
 import xyz.donot.roselinx.util.extraUtils.hide
 import xyz.donot.roselinx.util.extraUtils.onClick
@@ -60,7 +60,7 @@ class TweetView(context: Context, attributeSet: AttributeSet? = null, defStyleAt
                                 userNameClick(it)
                             })
             Realm.getDefaultInstance().use { realm ->
-                val query = realm.where(DBCustomProfile::class.java).equalTo("id", item.user.id)
+                val query = realm.where(CustomProfileObject::class.java).equalTo("id", item.user.id)
                 if (query.count() > 0) {
                     textview_username.text = query.findFirst()?.customname
                 } else

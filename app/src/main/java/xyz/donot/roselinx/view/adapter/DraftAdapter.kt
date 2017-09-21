@@ -11,11 +11,11 @@ import io.realm.OrderedRealmCollection
 import io.realm.Realm
 import io.realm.RealmBaseAdapter
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.DBDraft
+import xyz.donot.roselinx.model.realm.DraftObject
 import xyz.donot.roselinx.util.extraUtils.inflater
 
 class DraftAdapter(val context: Context,
-                   val realmResults: OrderedRealmCollection<DBDraft>) : RealmBaseAdapter<DBDraft>(realmResults), ListAdapter {
+                   val realmResults: OrderedRealmCollection<DraftObject>) : RealmBaseAdapter<DraftObject>(realmResults), ListAdapter {
 
     override fun getView(position: Int, convertView_: View?, parent: ViewGroup): View {
         var convertView = convertView_

@@ -10,7 +10,7 @@ import android.widget.EditText
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_mute_setting.*
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.DBMute
+import xyz.donot.roselinx.model.realm.MuteObject
 import xyz.donot.roselinx.view.fragment.realm.MuteUserFragment
 import xyz.donot.roselinx.view.fragment.realm.MuteWordFragment
 
@@ -32,7 +32,7 @@ class MuteSettingActivity : AppCompatActivity() {
                     .setView(editView)
                     .setPositiveButton("OK", { _ , _ ->
                       Realm.getDefaultInstance().executeTransaction{
-                          it.createObject(DBMute::class.java)
+                          it.createObject(MuteObject::class.java)
                                   .apply {
                                       text=editView.text.toString()
                                   }

@@ -47,7 +47,7 @@ class TabSettingActivity : AppCompatActivity() {
         val dividerItemDecoration = DividerItemDecoration(tab_recycler.context, LinearLayoutManager(this@TabSettingActivity).orientation)
         tab_recycler.addItemDecoration(dividerItemDecoration)
         tab_recycler.layoutManager = LinearLayoutManager(this)
-        val data = Realm.getDefaultInstance().where(DBTabData::class.java).findAll()
+        val data = Realm.getDefaultInstance().where(TabDataObject::class.java).findAll()
         data.forEach {
             mAdapter.addData(Realm.getDefaultInstance().copyFromRealm(it))
         }
@@ -76,7 +76,7 @@ class TabSettingActivity : AppCompatActivity() {
                         val selectedItem = resources.getStringArray(tabMenu)[int]
                         when (selectedItem) {
                             "ホーム" -> {
-                                mAdapter.addData(DBTabData().apply {
+                                mAdapter.addData(TabDataObject().apply {
                                     type = HOME
                                     accountId = getMyId()
                                     screenName = getMyScreenName()
@@ -90,7 +90,7 @@ class TabSettingActivity : AppCompatActivity() {
                                 }, REQUEST_LISTS)
                             }
                             "リプライ" -> {
-                                mAdapter.addData(DBTabData().apply {
+                                mAdapter.addData(TabDataObject().apply {
                                     type = MENTION
                                     accountId = getMyId()
                                     screenName = getMyScreenName()
@@ -98,13 +98,13 @@ class TabSettingActivity : AppCompatActivity() {
                                 realmRecreate()
                             }
                             "トレンド" -> {
-                                mAdapter.addData(DBTabData().apply {
+                                mAdapter.addData(TabDataObject().apply {
                                     type = TREND
                                 })
                                 realmRecreate()
                             }
                             "ダイレクトメール" -> {
-                                mAdapter.addData(DBTabData().apply {
+                                mAdapter.addData(TabDataObject().apply {
                                     type = DM
                                     accountId = getMyId()
                                     screenName = getMyScreenName()
@@ -116,7 +116,7 @@ class TabSettingActivity : AppCompatActivity() {
                             }
 
                             "通知" -> {
-                                mAdapter.addData(DBTabData().apply {
+                                mAdapter.addData(TabDataObject().apply {
                                     type = NOTIFICATION
                                     accountId = getMyId()
                                     screenName = getMyScreenName()
@@ -134,7 +134,7 @@ class TabSettingActivity : AppCompatActivity() {
     }
 
     fun setSearchWord(query: Query, querytext: String) {
-        mAdapter.addData(DBTabData().apply {
+        mAdapter.addData(TabDataObject().apply {
             type = SEARCH
             searchQuery = query.getSerialized()
             searchWord = querytext
@@ -146,10 +146,10 @@ class TabSettingActivity : AppCompatActivity() {
     fun realmRecreate()
             = Realm.getDefaultInstance().use {
         it.executeTransaction { realm ->
-            realm.where(DBTabData::class.java).findAll().deleteAllFromRealm()
+            realm.where(TabDataObject::class.java).findAll().deleteAllFromRealm()
             for (i in 0 until mAdapter.data.size) {
                 val data = mAdapter.data[i]
-                realm.createObject(DBTabData::class.java).apply {
+                realm.createObject(TabDataObject::class.java).apply {
                     type = data.type
                     order = i
                     screenName = data.screenName
@@ -168,7 +168,7 @@ class TabSettingActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (data != null && resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_LISTS) {
-                mAdapter.addData(DBTabData().apply {
+                mAdapter.addData(TabDataObject().apply {
                     type = LIST
                     listName = data.getStringExtra("listName")
                     listId = data.getLongExtra("listId", 0L)
@@ -181,8 +181,8 @@ class TabSettingActivity : AppCompatActivity() {
 
     }
 
-    inner class TabItemAdapter(list: ArrayList<DBTabData>) : BaseItemDraggableAdapter<DBTabData, BaseViewHolder>(R.layout.item_tabs_setting, list) {
-        override fun convert(helper: BaseViewHolder, item: DBTabData) {
+    inner class TabItemAdapter(list: ArrayList<TabDataObject>) : BaseItemDraggableAdapter<TabDataObject, BaseViewHolder>(R.layout.item_tabs_setting, list) {
+        override fun convert(helper: BaseViewHolder, item: TabDataObject) {
             helper.apply {
                 val text = toName(item.type)
                 setText(R.id.tv_screenname, item.screenName.toString())

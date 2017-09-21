@@ -12,7 +12,7 @@ import android.support.v4.content.LocalBroadcastManager
 import io.realm.Realm
 import twitter4j.*
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.DBNotification
+import xyz.donot.roselinx.model.realm.NotificationObject
 import xyz.donot.roselinx.model.realm.NFAVORITE
 import xyz.donot.roselinx.model.realm.NRETWEET
 import xyz.donot.roselinx.util.*
@@ -72,7 +72,7 @@ class StreamingService : Service() {
                     mainThread {
                         val realm = Realm.getDefaultInstance()
                         realm.executeTransaction {
-                            it.createObject(DBNotification::class.java).apply {
+                            it.createObject(NotificationObject::class.java).apply {
                                 status = onStatus.getSerialized()
                                 sourceUser = onStatus.user.getSerialized()
                                 type = NRETWEET
@@ -106,7 +106,7 @@ class StreamingService : Service() {
                 if (defaultSharedPreferences.getBoolean("notification_favorite", true)) toast("${source.name}にいいねされました")
                 val realm = Realm.getDefaultInstance()
                 realm.executeTransaction {
-                    it.createObject(DBNotification::class.java).apply {
+                    it.createObject(NotificationObject::class.java).apply {
                         status = favoritedStatus.getSerialized()
                         sourceUser = source.getSerialized()
                         type = NFAVORITE

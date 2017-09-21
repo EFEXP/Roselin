@@ -24,7 +24,7 @@ import twitter4j.User
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.CursorPositionListener
 import xyz.donot.roselinx.model.UserSuggestAdapter
-import xyz.donot.roselinx.model.realm.DBUser
+import xyz.donot.roselinx.model.realm.UserObject
 import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
 import xyz.donot.roselinx.util.extraUtils.show
 import xyz.donot.roselinx.util.getDeserialized
@@ -87,7 +87,7 @@ class EditTweetActivity : AppCompatActivity() {
             reply_for_status.show()
         }
         Realm.getDefaultInstance().use {
-            val user = it.where(DBUser::class.java).equalTo("id", getMyId()).findFirst()?.user?.getDeserialized<User>()
+            val user = it.where(UserObject::class.java).equalTo("id", getMyId()).findFirst()?.user?.getDeserialized<User>()
             Picasso.with(this).load(user?.biggerProfileImageURLHttps).fit().into(iv_icon)
             editText_status_layout.hint = "@${user?.screenName}からツイート"
         }
@@ -173,7 +173,7 @@ class EditTweetActivity : AppCompatActivity() {
 
     private fun setUpSuggest() {
         Realm.getDefaultInstance().use {
-            val screenname = it.where(DBUser::class.java).findAll().map { "@" + it.screenname }
+            val screenname = it.where(UserObject::class.java).findAll().map { "@" + it.screenname }
             val adapter = UserSuggestAdapter(this, android.R.layout.simple_dropdown_item_1line,screenname)
             adapter.listener= object : CursorPositionListener {
                 override fun currentCursorPosition() = editText_status.selectionStart

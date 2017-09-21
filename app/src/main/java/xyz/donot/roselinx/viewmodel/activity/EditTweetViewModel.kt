@@ -6,7 +6,7 @@ import android.arch.lifecycle.MutableLiveData
 import io.realm.Realm
 import twitter4j.StatusUpdate
 import xyz.donot.roselinx.Roselin
-import xyz.donot.roselinx.model.realm.DBDraft
+import xyz.donot.roselinx.model.realm.DraftObject
 import xyz.donot.roselinx.service.TweetPostService
 import xyz.donot.roselinx.util.extraUtils.newIntent
 import xyz.donot.roselinx.util.getMyId
@@ -39,7 +39,7 @@ class EditTweetViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun saveDraft(string: String) {
         Realm.getDefaultInstance().executeTransaction {
-            it.createObject(DBDraft::class.java).apply {
+            it.createObject(DraftObject::class.java).apply {
                 text = string
                 replyToScreenName = screenName
                 replyToStatusId = statusId

@@ -5,7 +5,7 @@ import io.realm.annotations.PrimaryKey
 import java.util.*
 
 
-open class DBCustomProfile : RealmObject() {
+open class CustomProfileObject : RealmObject() {
     @PrimaryKey open var id: Long = 0
     open  var customname: String?=null
     open  var birthday: Date?=null

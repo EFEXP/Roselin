@@ -21,7 +21,7 @@ import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.error_activity.*
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.DBTabData
+import xyz.donot.roselinx.model.realm.TabDataObject
 import xyz.donot.roselinx.util.extraUtils.*
 import xyz.donot.roselinx.util.haveToken
 import xyz.donot.roselinx.view.adapter.MainTimeLineAdapter
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
 
         //pager
         Realm.getDefaultInstance().use {
-            val list = it.copyFromRealm(it.where(DBTabData::class.java).findAll()).toList()
+            val list = it.copyFromRealm(it.where(TabDataObject::class.java).findAll()).toList()
             val adapter = MainTimeLineAdapter(supportFragmentManager, list)
             main_viewpager.adapter = adapter
             main_viewpager.offscreenPageLimit = adapter.count

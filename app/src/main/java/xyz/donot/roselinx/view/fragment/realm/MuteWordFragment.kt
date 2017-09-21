@@ -12,11 +12,11 @@ import io.realm.Realm
 import io.realm.RealmRecyclerViewAdapter
 import kotlinx.android.synthetic.main.item_mute.view.*
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.DBMute
+import xyz.donot.roselinx.model.realm.MuteObject
 import xyz.donot.roselinx.view.fragment.ARecyclerFragment
 
 class MuteWordFragment :ARecyclerFragment(){
-    val adapter by lazy {MuteWordAdater(Realm.getDefaultInstance().where(DBMute::class.java).isNotNull("text").findAll()) }
+    val adapter by lazy {MuteWordAdater(Realm.getDefaultInstance().where(MuteObject::class.java).isNotNull("text").findAll()) }
 
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -24,7 +24,7 @@ class MuteWordFragment :ARecyclerFragment(){
         recycler.adapter=adapter
     }
 
-    inner class MuteWordAdater(orderedRealmCollection: OrderedRealmCollection<DBMute>): RealmRecyclerViewAdapter<DBMute, MuteWordAdater.ViewHolder>(orderedRealmCollection,true){
+    inner class MuteWordAdater(orderedRealmCollection: OrderedRealmCollection<MuteObject>): RealmRecyclerViewAdapter<MuteObject, MuteWordAdater.ViewHolder>(orderedRealmCollection,true){
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item=getItem(position)!!
             val text:String?=item.text

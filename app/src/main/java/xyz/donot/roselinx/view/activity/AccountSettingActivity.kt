@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.activity_account_setting.*
 import kotlinx.android.synthetic.main.content_account_setting.*
 import twitter4j.User
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.DBAccount
+import xyz.donot.roselinx.model.realm.AccountObject
 import xyz.donot.roselinx.util.extraUtils.start
 import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.util.getDeserialized
@@ -35,7 +35,7 @@ class AccountSettingActivity : AppCompatActivity() {
 		adapter.setOnItemLongClickListener { _, _, position ->
 			Realm.getDefaultInstance().use {
 				it.executeTransaction {
-					it.where(DBAccount::class.java).equalTo("id", adapter.data[position].id).findFirst()?.deleteFromRealm()
+					it.where(AccountObject::class.java).equalTo("id", adapter.data[position].id).findFirst()?.deleteFromRealm()
 
 				}
 				toast("削除しました")
@@ -46,8 +46,8 @@ class AccountSettingActivity : AppCompatActivity() {
 		adapter.setOnItemClickListener { _, _, position ->
 			Realm.getDefaultInstance().use {
 				it.executeTransaction {
-					it.where(DBAccount::class.java).equalTo("isMain", true).findFirst()?.isMain = false
-					it.where(DBAccount::class.java).equalTo("id", adapter.data[position].id).findFirst()?.apply {
+					it.where(AccountObject::class.java).equalTo("isMain", true).findFirst()?.isMain = false
+					it.where(AccountObject::class.java).equalTo("id", adapter.data[position].id).findFirst()?.apply {
 						isMain = true
 					}
 				}
@@ -58,7 +58,7 @@ class AccountSettingActivity : AppCompatActivity() {
 			}
 		}
 		 Realm.getDefaultInstance().use {realm->
-			val users = realm.where(DBAccount::class.java).findAll().map { it.user?.getDeserialized<User>() }
+			val users = realm.where(AccountObject::class.java).findAll().map { it.user?.getDeserialized<User>() }
 				adapter.addData(users)
 			}
 		fab.setOnClickListener { _ ->

@@ -5,7 +5,7 @@ import io.realm.RealmObject
 import io.realm.annotations.Required
 
 
-open class DBDraft : RealmObject() {
+open class DraftObject : RealmObject() {
     open  var accountId:Long =0
 	@Required
     open  var text:String =""

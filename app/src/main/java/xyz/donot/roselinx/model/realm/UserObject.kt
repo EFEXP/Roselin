@@ -7,7 +7,7 @@ import io.realm.annotations.Required
 import twitter4j.User
 import xyz.donot.roselinx.util.getSerialized
 
-open class DBUser : RealmObject() {
+open class UserObject : RealmObject() {
     @PrimaryKey open var id: Long = 0L
     open var screenname: String = ""
     @Required
@@ -18,7 +18,7 @@ fun saveUser(user_: User) {
     Realm.getDefaultInstance().use {
         it.executeTransaction {
             it.insertOrUpdate(
-                    DBUser().apply {
+                    UserObject().apply {
                         screenname = user_.screenName
                         id = user_.id
                         user = user_.getSerialized()
