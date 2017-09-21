@@ -41,6 +41,7 @@ class TweetView(context: Context, attributeSet: AttributeSet? = null, defStyleAt
     init {
         view = LayoutInflater.from(context).inflate(R.layout.item_classic_tweet, this)
     }
+
     fun setStatus(status: Status, item: Status) {
         val mContext = context
         view.apply {
@@ -134,7 +135,7 @@ class TweetView(context: Context, attributeSet: AttributeSet? = null, defStyleAt
                     if (item.hasVideo) {
                         videoClick(item.getVideoURL()!!, item.mediaEntities[0].mediaURL)
                     } else {
-                        pictureClick(position_,item.images)
+                        pictureClick(position_, item.images)
                     }
                 }
             } else {

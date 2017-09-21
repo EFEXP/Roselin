@@ -46,7 +46,7 @@ class FollowerUserList : UserListFragment() {
 		super.onViewCreated(view, savedInstanceState)
         viewmodel .adapter!!.setOnItemClickListener { _, _, position ->
 			val intent = activity.intent<UserActivity>()
-			intent.putExtra("user_id", viewmodel!! .adapter!!.data[position].id)
+			intent.putExtra("user_id", viewmodel .adapter!!.data[position].id)
 			activity.startActivity(intent)
 		}
 	}

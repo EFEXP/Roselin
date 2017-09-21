@@ -20,7 +20,7 @@ import xyz.donot.roselinx.util.getTagURLMention
 import xyz.donot.roselinx.util.getURLLink
 import java.text.SimpleDateFormat
 
-class UserDetailView : ConstraintLayout {
+class UserDetailView : ConstraintLayout,Target {
     constructor (context: Context, attributeSet: AttributeSet, defStyleAttr: Int ): super(context, attributeSet, defStyleAttr)
     constructor(context: Context, attributeSet: AttributeSet?) : super(context, attributeSet)
     constructor(context: Context) : super(context)
@@ -66,23 +66,23 @@ class UserDetailView : ConstraintLayout {
         }
     }
 
+    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+
+    }
+
+    override fun onBitmapFailed(errorDrawable: Drawable?) {
+
+
+    }
+
+    override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
+        iv_icon.setImageBitmap(bitmap)
+        iconBitmap = bitmap
+    }
 
     fun setUser(user: User) {
 
-        Picasso.with(context).load(user.originalProfileImageURLHttps).into(object : Target {
-            override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-
-            }
-
-            override fun onBitmapFailed(errorDrawable: Drawable?) {
-
-            }
-
-            override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom?) {
-                iv_icon.setImageBitmap(bitmap)
-                iconBitmap = bitmap
-            }
-        })
+        Picasso.with(context).load(user.originalProfileImageURLHttps).into(this)
         tv_name.text = user.name
         tv_description.text = if (user.description.isNullOrEmpty()) " No Description" else user.description.replace("\n", "")
         tv_web.text = if (user.urlEntity.expandedURL.isEmpty()) " No Url" else user.urlEntity.expandedURL
