@@ -17,7 +17,7 @@ import xyz.donot.roselinx.view.custom.SingleLiveEvent
 import kotlin.properties.Delegates
 
 class EditTweetViewModel(application: Application) : AndroidViewModel(application) {
-    val draft: MutableLiveData<String> = MutableLiveData()
+    val draft: MutableLiveData<DraftObject> = MutableLiveData()
     val hashtag: MutableLiveData<String> = MutableLiveData()
     val finish: SingleLiveEvent<Unit> = SingleLiveEvent()
     var statusId by Delegates.notNull<Long>()

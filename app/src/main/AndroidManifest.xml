@@ -30,7 +30,7 @@
     <activity
       android:label="@string/app_name"
       android:name=".view.activity.MainActivity"
-      android:theme="@style/AppTheme.NoActionBar">
+      android:theme="@style/AppTheme.NoActionBar.Transition">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
 
@@ -42,8 +42,8 @@
       android:name=".view.activity.PictureActivity"
       android:theme="@style/DragDismissTheme"/>
     <activity
-      android:name=".view.activity.VideoActivity"
       android:configChanges="orientation|screenSize|keyboardHidden"
+      android:name=".view.activity.VideoActivity"
       android:screenOrientation="portrait"
       android:theme="@style/DragDismissTheme"/>
     <activity
@@ -131,14 +131,16 @@
       android:label="@string/title_activity_help"
       android:name=".view.activity.HelpActivity"
       android:theme="@style/AppTheme.NoActionBar">
-    <intent-filter>
-      <action android:name="xyz.donot.roselinx.view.activity.HelpActivity"/>
-      <category android:name="android.intent.category.DEFAULT"/>
-    </intent-filter>
+      <intent-filter>
+        <action android:name="xyz.donot.roselinx.view.activity.HelpActivity"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+      </intent-filter>
     </activity>
-    <receiver android:name=".viewmodel.activity.SendReplyReceiver"
+
+    <receiver
       android:enabled="true"
-      android:exported="false" />
+      android:exported="false"
+      android:name=".viewmodel.activity.SendReplyReceiver"/>
   </application>
 
 </manifest>

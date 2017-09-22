@@ -1,5 +1,7 @@
 package xyz.donot.roselinx.util
 
+import android.content.Context
+import android.content.Intent
 import io.realm.Realm
 import twitter4j.Status
 import twitter4j.Twitter
@@ -7,6 +9,7 @@ import twitter4j.User
 import xyz.donot.roselinx.model.realm.AccountObject
 import xyz.donot.roselinx.model.realm.MuteObject
 import xyz.donot.roselinx.util.extraUtils.logd
+import xyz.klinker.android.drag_dismiss.DragDismissIntentBuilder
 import java.io.*
 
 
@@ -60,3 +63,10 @@ fun canPass(status: Status): Boolean {
 
 }
 
+
+fun Context.getDragdismiss(i: Intent):Intent{
+ return   DragDismissIntentBuilder(this)
+            .setShowToolbar(false)
+            .setDragElasticity(DragDismissIntentBuilder.DragElasticity.XXLARGE)
+            .build(i)
+}

@@ -10,13 +10,13 @@ import kotlinx.coroutines.experimental.launch
 import twitter4j.Status
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.*
+import xyz.donot.roselinx.util.getDragdismiss
 import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.activity.PictureActivity
 import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.activity.UserActivity
 import xyz.donot.roselinx.view.activity.VideoActivity
 import xyz.donot.roselinx.view.custom.TweetView
-import xyz.klinker.android.drag_dismiss.DragDismissIntentBuilder
 
 class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_tweet_view) {
     override fun convert(helper: BaseViewHolder, status: Status) {
@@ -27,31 +27,18 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
                 setStatus(status, status)
             }
             pictureClick = { position, images ->
-                val i = mContext.newIntent<PictureActivity>(
-                        Bundle {
-                            putInt("start_page", position)
-                            putStringArrayList("picture_urls", images)
-                        }
-                )
-                logd { images.size }
-                DragDismissIntentBuilder(mContext)
-                        .setShowToolbar(false)
-                        .setDragElasticity(DragDismissIntentBuilder.DragElasticity.XXLARGE)
-                        .build(i)
+                val i = mContext.getDragdismiss(mContext.newIntent<PictureActivity>( Bundle {
+                    putInt("start_page", position)
+                    putStringArrayList("picture_urls", images)
+                }))
                 (mContext as Activity).startActivity(i)
             }
             videoClick = { videoUrl, thumbUrl ->
-                val i = mContext.newIntent<VideoActivity>(
-                        Bundle {
-                            putString("video_url", videoUrl)
-                            putString("thumbUrl", thumbUrl)
-                        }
-                )
-                DragDismissIntentBuilder(mContext)
-                        .setShowToolbar(false)
-                        .setDragElasticity(DragDismissIntentBuilder.DragElasticity.XXLARGE)
-                        .build(i)
-                mContext.startActivity(i)
+                val i = mContext.newIntent<VideoActivity>(Bundle {
+                    putString("video_url", videoUrl)
+                    putString("thumbUrl", thumbUrl)
+                })
+                (mContext as Activity).startActivity(i)
             }
             userNameClick = { userName -> (mContext as Activity).startActivity(mContext.newIntent<UserActivity>(Bundle { putString("screen_name", userName.replace("@", "")) })) }
             quoteClick = {
@@ -67,7 +54,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
                     launch(UI) {
                         try {
                             val result = async(CommonPool) { getTwitterInstance().destroyFavorite(id) }.await()
-                            setData(helper.layoutPosition - 1, result)
+                            setData(helper.adapterPosition - headerLayoutCount, result)
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
@@ -76,7 +63,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
                     launch(UI) {
                         try {
                             val result = async(CommonPool) { getTwitterInstance().createFavorite(id) }.await()
-                            setData(helper.layoutPosition - 1, result)
+                            setData(helper.adapterPosition - headerLayoutCount, result)
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
@@ -88,7 +75,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
                     launch(UI) {
                         try {
                             val result = async(CommonPool) { getTwitterInstance().retweetStatus(id) }.await()
-                            setData(helper.layoutPosition - 1, result)
+                            setData(helper.adapterPosition - headerLayoutCount, result)
                             mContext.toast("RTしました")
                         } catch (e: Exception) {
                             e.printStackTrace()

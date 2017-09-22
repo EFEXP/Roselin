@@ -18,21 +18,20 @@ import xyz.donot.roselinx.viewmodel.activity.EditTweetViewModel
 
 
 class DraftFragment : DialogFragment() {
+    val realm: Realm = Realm.getDefaultInstance()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view=inflater.inflate(R.layout.fragment_draft, container, false)
-        val realm= Realm.getDefaultInstance()
-                .where(DraftObject::class.java)
-                .equalTo("accountId",getMyId())
-                .findAll()
-        val mAdapter= DraftAdapter(context = context,realmResults =realm)
+        val mAdapter= DraftAdapter(context = context,realmResults =
+                realm.where(DraftObject::class.java)
+                .equalTo("accountId",getMyId()).findAll())
         val list: ListView =view.findViewById(R.id.draft_list_view)
         list.adapter=mAdapter
         list.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _->
             val parentList=parent as ListView
             val item=parentList.getItemAtPosition(position)as DraftObject
             if(activity is EditTweetActivity){
-                ViewModelProviders.of(activity).get(EditTweetViewModel::class.java)
+                ViewModelProviders.of(activity).get(EditTweetViewModel::class.java).draft.value=item
                 this@DraftFragment.dismiss()
             }
             Realm.getDefaultInstance().executeTransaction { item.deleteFromRealm() }
@@ -40,4 +39,8 @@ class DraftFragment : DialogFragment() {
         return view
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        realm.close()
+    }
 }

@@ -90,7 +90,6 @@ abstract class MainTimeLineFragment: ARecyclerFragment(){
         super.onViewCreated(view, savedInstanceState)
 
         viewmodel.apply {
-            if (savedInstanceState == null)
             adapter.setOnItemClickListener { adapter, _, position ->
                 val status = adapter.data[position] as Status
                 val item = if (status.isRetweet) {

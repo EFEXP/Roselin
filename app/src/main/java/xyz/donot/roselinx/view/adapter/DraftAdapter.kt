@@ -14,8 +14,7 @@ import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.realm.DraftObject
 import xyz.donot.roselinx.util.extraUtils.inflater
 
-class DraftAdapter(val context: Context,
-                   val realmResults: OrderedRealmCollection<DraftObject>) : RealmBaseAdapter<DraftObject>(realmResults), ListAdapter {
+class DraftAdapter(val context: Context, val realmResults: OrderedRealmCollection<DraftObject>) : RealmBaseAdapter<DraftObject>(realmResults), ListAdapter {
 
     override fun getView(position: Int, convertView_: View?, parent: ViewGroup): View {
         var convertView = convertView_
@@ -30,7 +29,7 @@ class DraftAdapter(val context: Context,
             viewHolder = convertView.tag as ViewHolder
         }
         val item = realmResults[position]
-        viewHolder.draftText?.text = item.text
+        viewHolder.draftText?.text = "Weeeeeeeeeeeeeeeeeeee"
         viewHolder.deleteDraft?.setOnClickListener {
             Realm.getDefaultInstance().use {
                 it.executeTransaction {
@@ -45,6 +44,5 @@ class DraftAdapter(val context: Context,
     inner class ViewHolder {
         var draftText: TextView? = null
         var deleteDraft: AppCompatImageButton? = null
-
     }
 }

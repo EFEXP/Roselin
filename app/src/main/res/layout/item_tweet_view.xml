@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-  <xyz.donot.roselinx.view.custom.TweetView
-    android:id="@+id/tweetview"
+<xyz.donot.roselinx.view.custom.TweetView
   xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent"
+  android:id="@+id/tweetview"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:background="?android:attr/selectableItemBackground"
   android:descendantFocusability="blocksDescendants"
-   />
+  />
 

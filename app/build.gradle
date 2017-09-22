@@ -21,7 +21,7 @@ android {
     android.defaultConfig.vectorDrawables.useSupportLibrary = true
     defaultConfig {
         applicationId "$PUBLISH_GROUP_ID.$PUBLISH_ARTIFACT_ID"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 26
         versionCode 12
         versionName "$PUBLISH_VERSION"
@@ -63,7 +63,7 @@ android {
 }
 dependencies {
     def lifecycle = "1.0.0"
-    def lifecycleEx = "1.0.0-alpha9-1"
+    def lifecycleEx = "1.0.0-beta1"
     implementation "android.arch.lifecycle:runtime:${lifecycle}"
     implementation "android.arch.lifecycle:extensions:${lifecycleEx}"
     kapt "android.arch.lifecycle:compiler:${lifecycleEx}"
@@ -82,7 +82,7 @@ dependencies {
     def coroutine_version = '0.18'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
-    def firebase='11.2.2'
+    def firebase='11.4.0'
     implementation "com.google.firebase:firebase-ads:$firebase"
     implementation "com.google.firebase:firebase-core:$firebase"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"

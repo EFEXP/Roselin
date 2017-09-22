@@ -33,14 +33,17 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/reply_for_status"
     >
-  <xyz.donot.roselinx.view.custom.ReplaceAutoCompleteEditText
-    android:id="@+id/editText_status"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="top"
-    android:inputType="textMultiLine"
-    android:maxLines="6"
-    android:minLines="3"/>
+    <xyz.donot.roselinx.view.custom.ReplaceAutoCompleteEditText
+      android:id="@+id/editText_status"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:inputType="textMultiLine"
+      android:layout_margin="8dp"
+      android:minLines="5"
+      android:background="@null"
+      android:gravity="top"
+      android:textAppearance="@android:style/TextAppearance.Material.Large"
+     />
   </android.support.design.widget.TextInputLayout>
   <android.support.v7.widget.RecyclerView
     android:id="@+id/pic_recycler_view"
@@ -59,11 +62,9 @@
   <LinearLayout
     android:id="@+id/tools_layout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp"
+    android:layout_height="32dp"
     android:orientation="horizontal"
+    android:background="@color/overlay_background"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent">

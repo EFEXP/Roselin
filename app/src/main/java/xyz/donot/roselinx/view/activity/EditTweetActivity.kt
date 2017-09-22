@@ -54,7 +54,10 @@ class EditTweetActivity : AppCompatActivity() {
             draft.observe(this@EditTweetActivity, android.arch.lifecycle.Observer {
                 it?.let {
                     editText_status.editableText.clear()
-                    editText_status.append(it)
+                    editText_status.append("@${it.replyToScreenName} ")
+                    if (it.replyToStatusId!=0L)
+                        viewmodel.statusId=it.replyToStatusId
+                    editText_status.append(it.text)
                 }
             })
             hashtag.observe(this@EditTweetActivity, android.arch.lifecycle.Observer {
