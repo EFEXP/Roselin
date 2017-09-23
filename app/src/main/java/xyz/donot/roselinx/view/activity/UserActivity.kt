@@ -19,19 +19,19 @@ import kotlinx.android.synthetic.main.activity_user.*
 import twitter4j.User
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.view.adapter.UserTimeLineAdapter
+import xyz.donot.roselinx.view.fragment.status.UserTimeLineViewModel
 import xyz.donot.roselinx.viewmodel.activity.UserViewModel
 import kotlin.properties.Delegates
 
 
 class UserActivity : AppCompatActivity(),Target {
-    var viewmodel by Delegates.notNull<UserViewModel>()
+    val viewmodel by lazy { ViewModelProviders.of(this).get(UserTimeLineViewModel::class.java) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             findViewById<View>(android.R.id.content).systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         }
         setContentView(R.layout.activity_user)
-        viewmodel = ViewModelProviders.of(this).get(UserViewModel::class.java)
             if (intent.hasExtra("screen_name")) {
                 viewmodel.initUser(intent.getStringExtra("screen_name"))
             } else {

@@ -47,6 +47,7 @@ class HomeTimeLineFragment : MainTimeLineFragment() {
             }
 
             recycler.adapter = adapter
+            recycler.isNestedScrollingEnabled=false
 
             refresh.setOnRefreshListener {
                 Handler().delayed(1000, {

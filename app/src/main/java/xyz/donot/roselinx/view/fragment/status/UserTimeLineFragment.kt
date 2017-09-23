@@ -1,46 +1,71 @@
 package xyz.donot.roselinx.view.fragment.status
 
+import android.app.Application
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
+import io.realm.Realm
+import kotlinx.android.synthetic.main.content_base_fragment.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import twitter4j.Paging
+import twitter4j.TwitterException
 import twitter4j.User
-import xyz.donot.roselinx.util.extraUtils.Bundle
-import xyz.donot.roselinx.util.extraUtils.start
-import xyz.donot.roselinx.util.extraUtils.toast
+import xyz.donot.roselinx.R
+import xyz.donot.roselinx.Roselin
+import xyz.donot.roselinx.model.realm.CustomProfileObject
+import xyz.donot.roselinx.model.realm.MuteObject
+import xyz.donot.roselinx.model.realm.UserObject
+import xyz.donot.roselinx.model.realm.saveUser
+import xyz.donot.roselinx.util.extraUtils.*
+import xyz.donot.roselinx.util.getDeserialized
 import xyz.donot.roselinx.util.getMyId
+import xyz.donot.roselinx.util.getSerialized
+import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.activity.EditProfileActivity
 import xyz.donot.roselinx.view.activity.PictureActivity
 import xyz.donot.roselinx.view.activity.UserListActivity
 import xyz.donot.roselinx.view.activity.UserListsActivity
+import xyz.donot.roselinx.view.custom.MyLoadingView
 import xyz.donot.roselinx.view.custom.UserDetailView
-import xyz.donot.roselinx.viewmodel.activity.UserViewModel
+import xyz.donot.roselinx.view.playground.MainTimeLineFragment
+import xyz.donot.roselinx.view.playground.MainTimeLineViewModel
 
-class UserTimeLineFragment : TimeLineFragment() {
-    private lateinit var myViewModel: UserViewModel
+class UserTimeLineFragment : MainTimeLineFragment() {
+    override val viewmodel: UserTimeLineViewModel by lazy { ViewModelProviders.of(activity).get(UserTimeLineViewModel::class.java) }
     val userId by lazy { arguments.getLong("userId") }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        myViewModel = ViewModelProviders.of(activity).get(UserViewModel::class.java)
-        viewmodel.pullToRefresh = { twitter ->
-            async(CommonPool) { twitter.getUserTimeline(Paging(viewmodel.adapter!!.data[0].id)) }
-        }
-        myViewModel.mUser.observe(this, Observer {
-            it?.let {
-                viewmodel.adapter!!.setHeaderView(setUpViews(it))
+        viewmodel.apply {
+            twitter= getTwitterInstance()
+            if (savedInstanceState == null) {
+                adapter.apply {
+                    setOnLoadMoreListener({ viewmodel.loadMoreData(userId) }, recycler)
+                    setLoadMoreView(MyLoadingView())
+                    emptyView = View.inflate(activity, R.layout.item_empty, null)
+                }
+                loadMoreData(userId)
             }
-        })
-        viewmodel.getData = { twitter ->
-            async(CommonPool) {
-                twitter.getUserTimeline(userId, Paging(viewmodel.page))
+            mUser.observe(this@UserTimeLineFragment, Observer {
+                it?.let {
+                    viewmodel.adapter!!.setHeaderView(setUpViews(it))
+                }
+            })
+            recycler.adapter = adapter
+            refresh.setOnRefreshListener {
+                Handler().delayed(1000, {
+                    pullDown()
+                })
             }
         }
+
+        refresh.isEnabled = true
     }
     private fun setUpViews(user: User): View =
             UserDetailView(activity).apply {
@@ -94,4 +119,112 @@ class UserTimeLineFragment : TimeLineFragment() {
 
 
             }
+}
+
+class UserTimeLineViewModel(app: Application) : MainTimeLineViewModel(app) {
+    var mUser: MutableLiveData<User> = MutableLiveData()
+    fun loadMoreData(userID:Long) {
+        launch(UI) {
+            try {
+                val result = async(CommonPool) { twitter.getUserTimeline(userID,Paging(page)) }.await()
+                if (result.isEmpty()) {
+                    endAdapter()
+                } else {
+                    adapter.addData(result)
+                    adapter.loadMoreComplete()
+                }
+            } catch (e: TwitterException) {
+                adapter.loadMoreFail()
+                exception.value = e
+                getApplication<Roselin>().toast(twitterExceptionMessage(e))
+            }
+        }
+    }
+    fun pullDown() {
+        if (adapter.data.isNotEmpty()) {
+            launch(UI) {
+                async(CommonPool) { twitter.getUserTimeline(Paging(adapter!!.data[0].id)) }.await()?.let { insertDataBackground(it) }
+                dataRefreshed.call()
+            }
+        } else {
+            dataRefreshed.call()
+        }
+    }
+
+    private val realm by lazy { Realm.getDefaultInstance() }
+    fun initUser(screenName: String) {
+        if (mUser.value == null) {
+            // val user=    realm.where(UserObject::class.java).equalTo("screenname",screenName).findFirst()
+            //  user?.let {
+            //      mUser.value=user.user.getDeserialized()
+            //   }?:
+            launch(UI) {
+                try {
+                    val result= async(CommonPool) { getTwitterInstance().showUser(screenName) }.await()
+                    mUser.value =result
+                    saveUser(result)
+                } catch (e: TwitterException) {
+                    val user=  realm.where(UserObject::class.java).equalTo("screenname",screenName).findFirst()
+                    mUser.value =user?.user?.getDeserialized<User>()
+                    getApplication<Roselin>().toast(twitterExceptionMessage(e))
+                }
+            }
+        }
+    }
+    fun initUser(id:Long) {
+        if (mUser.value == null) {
+            //  val user=    realm.where(UserObject::class.java).equalTo("id",id).findFirst()
+            //    user?.let {
+            //       mUser.value=user.user.getDeserialized()
+            //   }?:
+            launch(UI) {
+                try {
+                    val result= async(CommonPool) { getTwitterInstance().showUser(id) }.await()
+                    mUser.value =result
+                    saveUser(result)
+                } catch (e: TwitterException) {
+                    val user=  realm.where(UserObject::class.java).equalTo("id",id).findFirst()
+                    mUser.value =user?.user?.getDeserialized<User>()
+                    getApplication<Roselin>().toast(twitterExceptionMessage(e))
+                }
+            }
+        }
+    }
+
+    fun muteUser() {
+        realm.executeTransaction {
+            it.createObject(MuteObject::class.java)
+                    .apply {
+                        id = mUser.value!!.id
+                        user = mUser.value?.getSerialized()
+                    }
+        }
+        getApplication<Roselin>().toast("ミュートしました")
+    }
+
+    fun changeName(string: String) {
+        realm.executeTransaction {
+            it.copyToRealmOrUpdate(
+                    CustomProfileObject().apply {
+                        id = mUser.value!!.id
+                        customname = string
+                    }
+            )
+        }
+        getApplication<Roselin>().toast("変更しました")
+    }
+
+    fun revertName(){
+        realm.executeTransaction {
+            it.where(CustomProfileObject::class.java).equalTo("id",mUser.value!!.id).findAll().forEach {
+                it.customname=null
+            }
+        }
+        getApplication<Roselin>().toast("戻しました")
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        realm.close()
+    }
 }

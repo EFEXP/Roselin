@@ -1,5 +1,4 @@
 <resources>
-
   <!-- Base application theme. -->
   <style name="AppTheme" parent="Theme.AppCompat.DayNight">
     <item name="colorPrimary">@color/colorPrimary</item>
@@ -25,13 +24,5 @@
   <style name="AppTheme.Translucent.User"  parent="AppTheme.NoActionBar">
     <item name="android:windowTranslucentStatus">true</item>
     <item name="android:windowTranslucentNavigation">true</item>
-  </style>
-
-  <style name="AppTheme.NoActionBar.Transition" parent="AppTheme.NoActionBar">
-    <item name="android:windowContentTransitions">true</item>
-    <item name="android:windowAllowEnterTransitionOverlap">true</item>
-    <item name="android:windowAllowReturnTransitionOverlap">true</item>
-    <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
-    <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
   </style>
 </resources>

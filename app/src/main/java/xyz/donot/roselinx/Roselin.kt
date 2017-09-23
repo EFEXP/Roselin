@@ -1,7 +1,7 @@
 package xyz.donot.roselinx
 
+import android.app.Application
 import android.app.UiModeManager
-import android.support.multidex.MultiDexApplication
 import android.support.text.emoji.EmojiCompat
 import android.support.text.emoji.FontRequestEmojiCompatConfig
 import android.support.v4.provider.FontRequest
@@ -19,7 +19,7 @@ import xyz.donot.roselinx.util.extraUtils.RoselinxConfig
 import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
 
 
-class Roselin : MultiDexApplication() {
+class Roselin : Application() {
     override fun onCreate() {
         super.onCreate()
         //Twitter

@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.item_changelog.view.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import xyz.donot.roselinx.R
+import xyz.donot.roselinx.util.extraUtils.Bundle
 import xyz.donot.roselinx.util.extraUtils.onClick
 import xyz.donot.roselinx.util.extraUtils.start
 import xyz.donot.roselinx.util.extraUtils.startPlayStoreLink
@@ -37,7 +38,7 @@ class HelpActivity : AppCompatActivity() {
             FeaturesFragment().show(supportFragmentManager, "")
         }
         contact_support.onClick {
-            val bundle = xyz.donot.roselinx.util.extraUtils.Bundle { putString("user_screen_name", "JlowoiL") }
+            val bundle = Bundle { putString("user_screen_name", "JlowoiL") }
             start<EditTweetActivity>(bundle)
         }
 

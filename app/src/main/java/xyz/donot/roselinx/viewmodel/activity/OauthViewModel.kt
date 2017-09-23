@@ -25,56 +25,65 @@ import xyz.donot.roselinx.view.custom.SingleLiveEvent
 
 class OauthViewModel(app: Application) : AndroidViewModel(app) {
     private val realm by lazy { Realm.getDefaultInstance() }
-    val information= MutableLiveData<String>()
-    val isFinished= SingleLiveEvent<Unit>()
+    val information = MutableLiveData<String>()
+    val isFinished = SingleLiveEvent<Unit>()
     private fun saveToken(tw: Twitter, user: User) {
-        if (realm.where(AccountObject::class.java).equalTo("id", user.id).findAll().count() == 0) {
             val realmAccounts = realm.where(AccountObject::class.java).equalTo("isMain", true)
             realm.executeTransaction {
                 if (realmAccounts.findFirst() != null) {
                     realmAccounts.findFirst()?.isMain = false
                 }
-                val account = realm.createObject(AccountObject::class.java, user.id)
-                account.isMain = true
-                account.twitter = tw.getSerialized()
-                account.user = user.getSerialized()
+               realm.insertOrUpdate(
+                       AccountObject().also {
+                           it.twitter = tw.getSerialized()
+                           it.isMain = true
+                           it.user = user.getSerialized()
+                           it.id = user.id
+                       }
+               )
+
             }
             saveUser(user)
-        }
     }
-    private var hasNext=false
+
+    private var hasNext = false
     private var cursor: Long = -1L
     private fun saveMute(tw: Twitter) {
         launch(UI) {
             try {
-                val result = async(CommonPool) {tw.getMutesList(cursor) }.await()
-                hasNext=result.hasNext()
-                if (result.hasNext()) cursor=result.nextCursor
+                val result = async(CommonPool) { tw.getMutesList(cursor) }.await()
+                hasNext = result.hasNext()
+                if (result.hasNext()) cursor = result.nextCursor
                 realm.executeTransaction {
                     result.forEach { muser ->
-                        realm.createObject(MuteObject::class.java).apply {
-                            user = muser.getSerialized()
-                            id = muser.id
-                        }
+                        realm.insertOrUpdate(
+                                MuteObject().apply {
+                                    user = muser.getSerialized()
+                                    id = muser.id
+                                }
+                        )
                     }
                 }
-               if (hasNext) saveMute(tw)
-                else  isFinished.call()
+                if (hasNext) saveMute(tw)
+                else isFinished.call()
             } catch (e: Exception) {
                 e.printStackTrace()
             }
         }
     }
 
-    private fun saveFollower(tw: Twitter,u: User) {
+    private fun saveFollower(tw: Twitter, u: User) {
         launch(UI) {
-            val result = async(CommonPool) {tw.getFriendsList(u.id,-1,50)}.await()
+            val result = async(CommonPool) { tw.getFriendsList(u.id, -1, 50) }.await()
             realm.executeTransaction {
                 result.forEach { user_ ->
-                    realm.createObject(UserObject::class.java,user_.id).apply {
-                        user = user_.getSerialized()
-                        screenname=user_.screenName
-                    }
+                    realm.insertOrUpdate(
+                            UserObject().apply {
+                                user = user_.getSerialized()
+                                screenname = user_.screenName
+                                id = user_.id
+                            }
+                    )
                 }
             }
         }
@@ -103,16 +112,16 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
                     setOAuthAccessTokenSecret(result.data.authToken.secret)
                 }.build()
         val twitter = TwitterFactory(builder).instance
-        information.value="ユーザ情報の取得中"
+        information.value = "ユーザ情報の取得中"
         launch(UI) {
             try {
                 val user = async(CommonPool) { twitter.verifyCredentials() }.await()
                 logUser(user)
-                information.value="ユーザ情報保存中"
+                information.value = "ユーザ情報保存中"
                 saveToken(twitter, user)
-                information.value="フォロワー情報取得中"
-                saveFollower(twitter,user)
-                information.value="ミュートユーザ取得中"
+                information.value = "フォロワー情報取得中"
+                saveFollower(twitter, user)
+                information.value = "ミュートユーザ取得中"
                 saveMute(twitter)
 
 
