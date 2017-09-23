@@ -25,11 +25,13 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
-    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
     android:ellipsize="end"
     android:maxLines="1"
     android:textColor="?android:textColorPrimary"
     android:textSize="18sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
     app:layout_constraintLeft_toRightOf="@+id/imageview_icon"
     app:layout_constraintTop_toBottomOf="@+id/textview_to_reply"
     app:layout_goneMarginTop="8dp"
@@ -225,9 +227,4 @@
       android:layout_below="@+id/quoted_icon"
       android:textColor="?android:textColorPrimary"
       tools:text="りんごんりんごーん 私ベルエンジェル シャドウバース知ってる 本格カードゲームがスマホで楽しめちゃうの カードの進化が勝負の鍵 進化したら私だってこんなに強くなっちゃうんだから どすこーい❗ お前に負けるなら悔いはないさ…！ シャドウバース！"/>
-  </RelativeLayout>
-
-
-</merge>
-
-
+  </RelativeLayout></merge>

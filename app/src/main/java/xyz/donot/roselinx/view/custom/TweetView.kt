@@ -4,8 +4,8 @@ import android.content.Context
 import android.support.constraint.ConstraintLayout
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.res.ResourcesCompat
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.LinearSnapHelper
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -118,14 +118,12 @@ class TweetView(context: Context, attributeSet: AttributeSet? = null, defStyleAt
             tv_favorite.onClick { favoriteClick(item.isFavorited, status.id) }
             //mediaType
             val statusMediaIds = item.images
-            if (statusMediaIds.isNotEmpty()) {
+            if (statusMediaIds.size>=2) {
                 val mAdapter = TweetCardPicAdapter(statusMediaIds, item.hasVideo)
-                val manager = LinearLayoutManager(mContext).apply {
-                    orientation = LinearLayoutManager.HORIZONTAL
-                }
+                val manager =GridLayoutManager(mContext,2, LinearLayoutManager.VERTICAL, false)
                 val recycler = recyclerview_picture
                 recycler.apply {
-                    if (onFlingListener == null) LinearSnapHelper().attachToRecyclerView(recycler)
+               //     if (onFlingListener == null) LinearSnapHelper().attachToRecyclerView(recycler)
                     adapter = mAdapter
                     layoutManager = manager
                     visibility = View.VISIBLE
@@ -138,7 +136,29 @@ class TweetView(context: Context, attributeSet: AttributeSet? = null, defStyleAt
                         pictureClick(position_, item.images)
                     }
                 }
-            } else {
+            }
+            else if(statusMediaIds.size==1) {
+                val mAdapter = TweetCardPicAdapter(statusMediaIds, item.hasVideo)
+                val manager =LinearLayoutManager(mContext).apply {
+                    orientation = LinearLayoutManager.HORIZONTAL
+                }
+                val recycler = recyclerview_picture
+                recycler.apply {
+                    //     if (onFlingListener == null) LinearSnapHelper().attachToRecyclerView(recycler)
+                    adapter = mAdapter
+                    layoutManager = manager
+                    visibility = View.VISIBLE
+                    hasFixedSize()
+                }
+                mAdapter.setOnItemClickListener { _, _, position_ ->
+                    if (item.hasVideo) {
+                        videoClick(item.getVideoURL()!!, item.mediaEntities[0].mediaURL)
+                    } else {
+                        pictureClick(position_, item.images)
+                    }
+                }
+            }
+            else {
                 recyclerview_picture.hide()
             }
             Picasso.with(mContext).load(item.user.originalProfileImageURLHttps).fit().into(imageview_icon)
