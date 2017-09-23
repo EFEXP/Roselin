@@ -60,16 +60,10 @@ android {
                     project.ext.versionCodes.get(output.getFilter(OutputFile.ABI), 0) * 1000000 + android.defaultConfig.versionCode
         }
     }
-    sourceSets {
-        main {
-            res.srcDirs =
-                    [
-                            'src/main/res/activity',
-                            'src/main/res'
-                    ]
-        }
-    }
 
+}
+androidExtensions {
+    experimental = true
 }
 dependencies {
     def lifecycle = "1.0.0"
@@ -112,6 +106,5 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
     implementation 'com.android.support:multidex:1.0.2'
     implementation 'com.klinkerapps:drag-dismiss-activity:1.4.4'
-    implementation 'com.github.Nishant-Pathak:MathView:v1.1'
 }
 apply plugin: 'com.google.gms.google-services'

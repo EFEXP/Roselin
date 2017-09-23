@@ -29,6 +29,13 @@ fun Context.inflate(layoutResId: Int, parent: ViewGroup): View =
 fun Context.inflate(layoutResId: Int, parent: ViewGroup, attachToRoot: Boolean): View =
         inflateView(this, layoutResId, parent, attachToRoot)
 
+fun Context.startPlayStoreLink(packageId: String) {
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$packageId"))
+    if (intent.resolveActivity(packageManager) != null)
+        startActivity(intent)
+    else
+        toast("Cannot resolve play store")
+}
 
 fun Context.mediaScan(uri: Uri) {
     val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)

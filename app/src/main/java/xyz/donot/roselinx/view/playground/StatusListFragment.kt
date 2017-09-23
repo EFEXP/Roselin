@@ -29,7 +29,6 @@ import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.adapter.StatusAdapter
 import xyz.donot.roselinx.view.custom.SingleLiveEvent
 import xyz.donot.roselinx.view.fragment.ARecyclerFragment
-import xyz.donot.roselinx.view.fragment.MathDialog
 import xyz.donot.roselinx.view.fragment.RetweeterDialog
 import kotlin.properties.Delegates
 
@@ -90,6 +89,7 @@ abstract class MainTimeLineFragment: ARecyclerFragment(){
         super.onViewCreated(view, savedInstanceState)
 
         viewmodel.apply {
+
             adapter.setOnItemClickListener { adapter, _, position ->
                 val status = adapter.data[position] as Status
                 val item = if (status.isRetweet) {
@@ -106,11 +106,6 @@ abstract class MainTimeLineFragment: ARecyclerFragment(){
                     AlertDialog.Builder(context).setItems(tweetItem, { _, int ->
                         val selectedItem = context.resources.getStringArray(tweetItem)[int]
                         when (selectedItem) {
-                            "数式" -> {
-                                MathDialog().apply {
-                                    arguments=Bundle { putString("math_formula",item.text) }
-                                }.show(activity.supportFragmentManager,"")
-                            }
                             "返信" -> {
                                Bundle {
                                     putString("status_txt", item.text)

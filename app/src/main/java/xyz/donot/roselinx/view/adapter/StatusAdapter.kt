@@ -3,12 +3,14 @@ package xyz.donot.roselinx.view.adapter
 import android.app.Activity
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
+import io.realm.Realm
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import twitter4j.Status
 import xyz.donot.roselinx.R
+import xyz.donot.roselinx.model.realm.MuteObject
 import xyz.donot.roselinx.util.extraUtils.*
 import xyz.donot.roselinx.util.getDragdismiss
 import xyz.donot.roselinx.util.getTwitterInstance
@@ -19,15 +21,19 @@ import xyz.donot.roselinx.view.activity.VideoActivity
 import xyz.donot.roselinx.view.custom.TweetView
 
 class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_tweet_view) {
+
+    private val kichitsui = Realm.getDefaultInstance().where(MuteObject::class.java).equalTo("kichitsui", true).findAll().filter { it.kichitsui }.mapNotNull { it.id }
+
     override fun convert(helper: BaseViewHolder, status: Status) {
         helper.getView<TweetView>(R.id.tweetview).apply {
             if (status.isRetweet) {
-                setStatus(status, status.retweetedStatus)
+                setStatus(status, status.retweetedStatus,kichitsui.contains(status.user.id))
             } else {
-                setStatus(status, status)
+                setStatus(status, status,kichitsui.contains(status.user.id))
             }
+
             pictureClick = { position, images ->
-                val i = mContext.getDragdismiss(mContext.newIntent<PictureActivity>( Bundle {
+                val i = mContext.getDragdismiss(mContext.newIntent<PictureActivity>(Bundle {
                     putInt("start_page", position)
                     putStringArrayList("picture_urls", images)
                 }))
@@ -85,8 +91,6 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
             }
 
         }
-        //    val array= mContext.resources.getStringArray(R.array.ARRAY_KITITSUI)
-        //      setText(R.id.textview_text,array[Random().nextInt(array.count())])
     }
 
 

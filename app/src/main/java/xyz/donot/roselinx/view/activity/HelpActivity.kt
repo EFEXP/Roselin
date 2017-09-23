@@ -1,7 +1,5 @@
 package xyz.donot.roselinx.view.activity
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -18,6 +16,7 @@ import kotlinx.coroutines.experimental.async
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.onClick
 import xyz.donot.roselinx.util.extraUtils.start
+import xyz.donot.roselinx.util.extraUtils.startPlayStoreLink
 import xyz.donot.roselinx.view.fragment.BaseListFragment
 
 class HelpActivity : AppCompatActivity() {
@@ -31,8 +30,7 @@ class HelpActivity : AppCompatActivity() {
         val pack = packageManager.getPackageInfo(packageName, 0)
         tv_version_name.text = "Ver." + pack.versionName
         rate_this_app.onClick {
-            val uri = Uri.parse("http://play.google.com/store/apps/details?id=" + packageName)
-            startActivity(Intent(Intent.ACTION_VIEW, uri))
+           startPlayStoreLink(packageManager.getInstallerPackageName(packageName))
         }
 
         whats_new.setOnClickListener {

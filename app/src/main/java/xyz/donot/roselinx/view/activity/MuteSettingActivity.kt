@@ -15,7 +15,6 @@ import xyz.donot.roselinx.view.fragment.realm.MuteUserFragment
 import xyz.donot.roselinx.view.fragment.realm.MuteWordFragment
 
 
-
 class MuteSettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,45 +22,44 @@ class MuteSettingActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        mute_pager.adapter=MuteViewPager(supportFragmentManager)
+        mute_pager.adapter = MuteViewPager(supportFragmentManager)
         mute_tab.setupWithViewPager(mute_pager)
         fab.setOnClickListener { _ ->
             val editView = EditText(this@MuteSettingActivity)
             AlertDialog.Builder(this@MuteSettingActivity)
                     .setTitle("ミュートワードを入力してください")
                     .setView(editView)
-                    .setPositiveButton("OK", { _ , _ ->
-                      Realm.getDefaultInstance().executeTransaction{
-                          it.createObject(MuteObject::class.java)
-                                  .apply {
-                                      text=editView.text.toString()
-                                  }
-                      }
+                    .setPositiveButton("OK", { _, _ ->
+                        Realm.getDefaultInstance().executeTransaction {
+                            it.createObject(MuteObject::class.java)
+                                    .apply {
+                                        text = editView.text.toString()
+                                        kichitsui=true
+                                    }
+                        }
                     })
-                    .setNegativeButton("キャンセル",  { _ , _ -> })
+                    .setNegativeButton("キャンセル", { _, _ -> })
                     .show()
         }
     }
 
 
+    inner class MuteViewPager(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+        override fun getCount(): Int = 2
 
-    inner class MuteViewPager(fm: FragmentManager): FragmentPagerAdapter(fm) {
-        override fun getCount(): Int =2
-
-        override fun getItem(position: Int): Fragment =when(position)
-        {
-            0->MuteUserFragment()
-            1->MuteWordFragment()
-            else-> throw Exception()
+        override fun getItem(position: Int): Fragment = when (position) {
+            0 -> MuteUserFragment()
+            1 -> MuteWordFragment()
+            else -> throw Exception()
         }
 
-        override fun getPageTitle(position: Int): CharSequence=when(position)
-        {
-            0->"ユーザー"
-            1->"ワード"
-            else-> throw Exception()
+        override fun getPageTitle(position: Int): CharSequence = when (position) {
+            0 -> "ユーザー"
+            1 -> "ワード"
+            else -> throw Exception()
         }
     }
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()

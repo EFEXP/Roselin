@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso
 import io.realm.OrderedRealmCollection
 import io.realm.Realm
 import io.realm.RealmRecyclerViewAdapter
+import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_user.view.*
 import twitter4j.User
 import xyz.donot.roselinx.R
@@ -22,7 +23,7 @@ import xyz.donot.roselinx.view.fragment.ARecyclerFragment
 
 
 class MuteUserFragment : ARecyclerFragment(){
-    val adapter by lazy {MuteUserAdater(Realm.getDefaultInstance().where(MuteObject::class.java).notEqualTo("id",0L).findAll()) }
+    val adapter by lazy { MuteUserAdapter(Realm.getDefaultInstance().where(MuteObject::class.java).notEqualTo("id",0L).findAll()) }
 
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -31,7 +32,7 @@ class MuteUserFragment : ARecyclerFragment(){
 
     }
 
-     inner class MuteUserAdater(orderedRealmCollection: OrderedRealmCollection<MuteObject>): RealmRecyclerViewAdapter<MuteObject, MuteUserAdater.ViewHolder>(orderedRealmCollection,true){
+     inner class MuteUserAdapter(orderedRealmCollection: OrderedRealmCollection<MuteObject>): RealmRecyclerViewAdapter<MuteObject, MuteUserAdapter.ViewHolder>(orderedRealmCollection,true){
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val item=getItem(position)!!
@@ -61,12 +62,12 @@ class MuteUserFragment : ARecyclerFragment(){
         override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder =
                 ViewHolder(layoutInflater.inflate(R.layout.item_user,parent,false))
 
-        inner  class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val icon:ImageView=view.iv_icon
-            val screenname: AppCompatTextView =view.tv_screenname
-            val username: EmojiAppCompatTextView =view.tv_username
-            val description: EmojiAppCompatTextView =view.tv_description
-            val background: ConstraintLayout =view.item_user_background
+        inner  class ViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView) , LayoutContainer {
+            val icon:ImageView=containerView.iv_icon
+            val screenname: AppCompatTextView =containerView.tv_screenname
+            val username: EmojiAppCompatTextView =containerView.tv_username
+            val description: EmojiAppCompatTextView =containerView.tv_description
+            val background: ConstraintLayout =containerView.item_user_background
         }
 
 

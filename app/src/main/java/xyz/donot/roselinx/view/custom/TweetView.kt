@@ -23,6 +23,7 @@ import xyz.donot.roselinx.util.extraUtils.hide
 import xyz.donot.roselinx.util.extraUtils.onClick
 import xyz.donot.roselinx.util.extraUtils.show
 import xyz.donot.roselinx.view.adapter.TweetCardPicAdapter
+import java.util.*
 import kotlin.properties.Delegates
 
 class TweetView(context: Context, attributeSet: AttributeSet? = null, defStyleAttr: Int = 0) : ConstraintLayout(context, attributeSet, defStyleAttr) {
@@ -41,8 +42,8 @@ class TweetView(context: Context, attributeSet: AttributeSet? = null, defStyleAt
     init {
         view = LayoutInflater.from(context).inflate(R.layout.item_classic_tweet, this)
     }
-
-    fun setStatus(status: Status, item: Status) {
+    
+    fun setStatus(status: Status, item: Status,kichitsui:Boolean) {
         val mContext = context
         view.apply {
             if (status.isRetweet) {
@@ -61,21 +62,26 @@ class TweetView(context: Context, attributeSet: AttributeSet? = null, defStyleAt
                                 userNameClick(it)
                             })
             Realm.getDefaultInstance().use { realm ->
-                val query = realm.where(CustomProfileObject::class.java).equalTo("id", item.user.id)
-                if (query.count() > 0) {
-                    textview_username.text = query.findFirst()?.customname
+                val query = realm.where(CustomProfileObject::class.java).equalTo("id", item.user.id).findAll()
+                if (query.size > 0) {
+                    textview_username.text = query[0]?.customname
                 } else
                     textview_username.text = item.user.name
-            }
 
-            textview_date.text = getRelativeTime(item.createdAt)
-            val text = getExpandedText(item)
-            if (text.codePointCount(0, text.length) == 0)
-                textview_text.hide()
-            else {
-                textview_text.text = text
-                textview_text.show()
+                if (kichitsui) {
+                    val array = mContext.resources.getStringArray(R.array.ARRAY_KITITSUI)
+                    textview_text.text = array[Random().nextInt(array.count())]
+                } else {
+                    val text = getExpandedText(item)
+                    if (text.codePointCount(0, text.length) == 0)
+                        textview_text.hide()
+                    else {
+                        textview_text.text = text
+                        textview_text.show()
+                    }
+                }
             }
+            textview_date.text = getRelativeTime(item.createdAt)
             textview_screenname.text = "@" + item.user.screenName
             textview_via.text = getClientName(item.source)
             tv_retweet.setText(item.retweetCount.toString())
@@ -118,12 +124,12 @@ class TweetView(context: Context, attributeSet: AttributeSet? = null, defStyleAt
             tv_favorite.onClick { favoriteClick(item.isFavorited, status.id) }
             //mediaType
             val statusMediaIds = item.images
-            if (statusMediaIds.size>=2) {
+            if (statusMediaIds.size >= 2) {
                 val mAdapter = TweetCardPicAdapter(statusMediaIds, item.hasVideo)
-                val manager =GridLayoutManager(mContext,2, LinearLayoutManager.VERTICAL, false)
+                val manager = GridLayoutManager(mContext, 2, LinearLayoutManager.VERTICAL, false)
                 val recycler = recyclerview_picture
                 recycler.apply {
-               //     if (onFlingListener == null) LinearSnapHelper().attachToRecyclerView(recycler)
+                    //     if (onFlingListener == null) LinearSnapHelper().attachToRecyclerView(recycler)
                     adapter = mAdapter
                     layoutManager = manager
                     visibility = View.VISIBLE
@@ -136,10 +142,9 @@ class TweetView(context: Context, attributeSet: AttributeSet? = null, defStyleAt
                         pictureClick(position_, item.images)
                     }
                 }
-            }
-            else if(statusMediaIds.size==1) {
+            } else if (statusMediaIds.size == 1) {
                 val mAdapter = TweetCardPicAdapter(statusMediaIds, item.hasVideo)
-                val manager =LinearLayoutManager(mContext).apply {
+                val manager = LinearLayoutManager(mContext).apply {
                     orientation = LinearLayoutManager.HORIZONTAL
                 }
                 val recycler = recyclerview_picture
@@ -157,8 +162,7 @@ class TweetView(context: Context, attributeSet: AttributeSet? = null, defStyleAt
                         pictureClick(position_, item.images)
                     }
                 }
-            }
-            else {
+            } else {
                 recyclerview_picture.hide()
             }
             Picasso.with(mContext).load(item.user.originalProfileImageURLHttps).fit().into(imageview_icon)
