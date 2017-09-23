@@ -10,11 +10,15 @@ import android.support.v4.app.RemoteInput
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.LocalBroadcastManager
 import io.realm.Realm
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import twitter4j.*
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.NotificationObject
 import xyz.donot.roselinx.model.realm.NFAVORITE
 import xyz.donot.roselinx.model.realm.NRETWEET
+import xyz.donot.roselinx.model.realm.NotificationObject
 import xyz.donot.roselinx.util.*
 import xyz.donot.roselinx.util.extraUtils.*
 import xyz.donot.roselinx.view.activity.MainActivity
@@ -65,6 +69,7 @@ class StreamingService : Service() {
         }
 
         override fun onStatus(onStatus: Status) {
+            //通知用
             if (onStatus.isRetweet) {
                 //RT
                 if (onStatus.retweetedStatus.user.id == getMyId()) {
@@ -80,15 +85,29 @@ class StreamingService : Service() {
                         }
                     }
                 }
-            } else {
-                if (onStatus.inReplyToUserId == getMyId()) {//onStatus.inReplyToUserId == getMyId()
+            }
+            else {
+                //通知用
+                if (onStatus.inReplyToUserId == getMyId()) {
                     if (defaultSharedPreferences.getBoolean("notification_reply", true)) replyNotification(onStatus)
                     LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewReply").putExtra("Status", onStatus.getSerialized()))
                 }
+                if (canPass(onStatus)) {
+                    LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewStatus").putExtra("Status", onStatus.getSerialized()))
+                    if (onStatus.inReplyToStatusId>0&&!onStatus.isRetweet)
+                    {
+                        launch(UI){
+                            val result= async(CommonPool){twitter.showStatus(onStatus.inReplyToStatusId)}.await()
+                            LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewStatus").putExtra("Status",result.getSerialized()))
+                        }
+                    }
+                }
+
             }
-            if (canPass(onStatus)) {
-                LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewStatus").putExtra("Status", onStatus.getSerialized()))
-            }
+            //TLに通すか
+
+
+
         }
 
         override fun onException(ex: Exception) {

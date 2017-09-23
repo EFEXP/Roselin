@@ -54,7 +54,7 @@ class UserTimeLineFragment : MainTimeLineFragment() {
             }
             mUser.observe(this@UserTimeLineFragment, Observer {
                 it?.let {
-                    viewmodel.adapter!!.setHeaderView(setUpViews(it))
+                    viewmodel.adapter.setHeaderView(setUpViews(it))
                 }
             })
             recycler.adapter = adapter
@@ -143,7 +143,7 @@ class UserTimeLineViewModel(app: Application) : MainTimeLineViewModel(app) {
     fun pullDown() {
         if (adapter.data.isNotEmpty()) {
             launch(UI) {
-                async(CommonPool) { twitter.getUserTimeline(Paging(adapter!!.data[0].id)) }.await()?.let { insertDataBackground(it) }
+                async(CommonPool) { twitter.getUserTimeline(Paging(adapter.data[0].id)) }.await()?.let { insertDataBackground(it) }
                 dataRefreshed.call()
             }
         } else {

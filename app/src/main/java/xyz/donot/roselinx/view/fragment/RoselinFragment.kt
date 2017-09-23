@@ -11,10 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.content_roselin.view.*
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.util.extraUtils.Bundle
-import xyz.donot.roselinx.util.extraUtils.mainThread
-import xyz.donot.roselinx.util.extraUtils.start
-import xyz.donot.roselinx.util.extraUtils.startForResult
+import xyz.donot.roselinx.util.extraUtils.*
+import xyz.donot.roselinx.util.getDragdismiss
 import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.view.activity.*
 import xyz.donot.roselinx.viewmodel.activity.MainViewModel
@@ -75,7 +73,9 @@ class RoselinFragment : Fragment() {
                 }
             }
         })
-        view.bt_profile.onClick= { activity. start<UserActivity>(Bundle().apply { putLong("user_id", getMyId()) })}
+        view.bt_profile.onClick= {
+            activity.startActivity(context.getDragdismiss(context.newIntent<UserActivity>(Bundle().apply { putLong("user_id", getMyId()) })))
+        }
         view.bt_setting.onClick= { activity.start<SettingsActivity>() }
         view.bt_account.onClick={  activity.startForResult<AccountSettingActivity>(0) }
         view.bt_search.onClick={  activity.start<SearchSettingActivity>() }

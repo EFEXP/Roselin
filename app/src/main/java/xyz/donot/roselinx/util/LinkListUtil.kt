@@ -17,13 +17,13 @@ import xyz.donot.roselinx.view.activity.UserActivity
 fun Context.getTagURLMention() :MutableList<Link> = mutableListOf(
         Link(Regex.MENTION_PATTERN)
                 .setUnderlined(false)
-                .setTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
                 .setOnClickListener {
                     this.startActivity(Intent(this, UserActivity::class.java).putExtra("screen_name", it.replace("@",""))) }
         ,
         Link(Regex.VALID_URL)
                 .setUnderlined(false)
-                .setTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
                 .setOnClickListener {
 
                     CustomTabsIntent.Builder()
@@ -36,7 +36,7 @@ fun Context.getTagURLMention() :MutableList<Link> = mutableListOf(
                 }
         ,
         Link(Regex.HASHTAG_PATTERN)
-                .setTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
                 .setOnClickListener {
                     (this as Activity).start<SearchActivity>(Bundle { putString("query_text","$it -rt") })
                 }
@@ -44,7 +44,7 @@ fun Context.getTagURLMention() :MutableList<Link> = mutableListOf(
 fun Context.getURLLink() :MutableList<Link> = arrayListOf(
         Link(Regex.VALID_URL)
                 .setUnderlined(false)
-                .setTextColor(ContextCompat.getColor(this@getURLLink, R.color.colorAccent))
+                .setTextColor(ContextCompat.getColor(this@getURLLink, R.color.colorPrimary))
                 .setOnClickListener {
                     CustomTabsIntent.Builder()
                             .setShowTitle(true)
@@ -57,9 +57,17 @@ fun Context.getURLLink() :MutableList<Link> = arrayListOf(
 fun Context.getMentionLink() :MutableList<Link> = arrayListOf(
         Link(Regex.MENTION_PATTERN)
                 .setUnderlined(false)
-                .setTextColor(ContextCompat.getColor(this, R.color.colorAccent))
+                .setBold(true)
+                .setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
                 .setOnClickListener {
                     this.startActivity(Intent(this, UserActivity::class.java).putExtra("screen_name", it.replace("@","")))
-                }
+                })
 
-)
+fun Context.getRetweetMention() :MutableList<Link> = arrayListOf(
+        Link(Regex.MENTION_PATTERN)
+                .setUnderlined(false)
+                .setTextColor(ContextCompat.getColor(this, R.color.retweet))
+                .setBold(true)
+                .setOnClickListener {
+                    this.startActivity(Intent(this, UserActivity::class.java).putExtra("screen_name", it.replace("@","")))
+                })

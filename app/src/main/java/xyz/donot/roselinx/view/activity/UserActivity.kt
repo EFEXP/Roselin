@@ -18,6 +18,9 @@ import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.activity_user.*
 import twitter4j.User
 import xyz.donot.roselinx.R
+import xyz.donot.roselinx.util.extraUtils.newIntent
+import xyz.donot.roselinx.util.getDragdismiss
+import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.view.adapter.UserTimeLineAdapter
 import xyz.donot.roselinx.view.fragment.status.UserTimeLineViewModel
 import xyz.donot.roselinx.viewmodel.activity.UserViewModel
@@ -48,8 +51,7 @@ class UserActivity : AppCompatActivity(),Target {
         Picasso.with(this).load(user_.profileBannerIPadRetinaURL).into(this)
 
         banner.setOnClickListener {
-            startActivity(Intent(applicationContext, PictureActivity::class.java)
-                    .putStringArrayListExtra("picture_urls", arrayListOf(user_.profileBannerIPadRetinaURL)))
+                    startActivity( getDragdismiss(newIntent<PictureActivity>(Bundle().apply {putStringArrayList("picture_urls", arrayListOf(user_.profileBannerIPadRetinaURL)) })))
         }
         toolbar.apply {
             title = user_.screenName

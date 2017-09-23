@@ -43,7 +43,7 @@
           app:layout_constraintEnd_toEndOf="parent"
           app:layout_constraintStart_toEndOf="@+id/iv_notification_sender_icon"
           app:layout_constraintTop_toBottomOf="@+id/iv_notification_sender_icon"
-          android:background="@color/overlay_background"
+          android:background="@drawable/custom_frame"
           >
 
             <com.makeramen.roundedimageview.RoundedImageView

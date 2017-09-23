@@ -25,16 +25,16 @@ inline fun <reified T : Context> Context.newIntent(flags: Int, extras: Bundle): 
 }
 
 inline fun <reified T : Activity> Activity.startActivity()=
-        this.startActivity(newIntent<T>())
+        this.startActivity(newIntent<T>(),android.support.v4.app.ActivityOptionsCompat.makeSceneTransitionAnimation(this,null).toBundle())
 
 inline fun <reified T : Activity> Activity.startActivity(flags: Int) =
-        this.startActivity(newIntent<T>(flags))
+        this.startActivity(newIntent<T>(flags),android.support.v4.app.ActivityOptionsCompat.makeSceneTransitionAnimation(this,null).toBundle())
 
 inline fun <reified T : Activity> Activity.startActivity(extras: Bundle) =
-        this.startActivity(newIntent<T>(extras))
+        this.startActivity(newIntent<T>(extras),android.support.v4.app.ActivityOptionsCompat.makeSceneTransitionAnimation(this,null).toBundle())
 
 inline fun <reified T : Activity> Activity.startActivity(flags: Int, extras: Bundle) =
-        this.startActivity(newIntent<T>(flags, extras))
+        this.startActivity(newIntent<T>(flags, extras),android.support.v4.app.ActivityOptionsCompat.makeSceneTransitionAnimation(this,null).toBundle())
 
 inline fun <reified T : Service> Context.startService(): ComponentName =
         this.startService(newIntent<T>())
