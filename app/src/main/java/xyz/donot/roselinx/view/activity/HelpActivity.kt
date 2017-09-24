@@ -18,7 +18,7 @@ import xyz.donot.roselinx.util.extraUtils.Bundle
 import xyz.donot.roselinx.util.extraUtils.onClick
 import xyz.donot.roselinx.util.extraUtils.start
 import xyz.donot.roselinx.util.extraUtils.startPlayStoreLink
-import xyz.donot.roselinx.view.fragment.BaseListFragment
+import xyz.donot.roselinx.view.fragment.base.BaseListFragment
 
 class HelpActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package xyz.donot.roselinx.view.playground
+package xyz.donot.roselinx.view.fragment.base
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
@@ -28,8 +28,7 @@ import xyz.donot.roselinx.view.activity.EditTweetActivity
 import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.adapter.StatusAdapter
 import xyz.donot.roselinx.view.custom.SingleLiveEvent
-import xyz.donot.roselinx.view.fragment.ARecyclerFragment
-import xyz.donot.roselinx.view.fragment.RetweeterDialog
+import xyz.donot.roselinx.view.fragment.user.RetweeterDialog
 import kotlin.properties.Delegates
 
 abstract class MainTimeLineViewModel(app: Application) : AndroidViewModel(app) {
@@ -84,7 +83,7 @@ abstract class MainTimeLineViewModel(app: Application) : AndroidViewModel(app) {
 }
 
 abstract class MainTimeLineFragment: ARecyclerFragment(){
-    abstract val viewmodel:MainTimeLineViewModel
+    abstract val viewmodel: MainTimeLineViewModel
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

@@ -84,7 +84,7 @@ class TabSettingActivity : AppCompatActivity() {
                                 realmRecreate()
                             }
                             "リスト" -> {
-                                startActivityForResult(newIntent<UserListsActivity>().apply {
+                                startActivityForResult(newIntent<UsersListActivity>().apply {
                                     putExtra("userId", getMyId())
                                     putExtra("selectList", true)
                                 }, REQUEST_LISTS)

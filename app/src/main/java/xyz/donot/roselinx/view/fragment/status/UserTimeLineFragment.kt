@@ -31,11 +31,11 @@ import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.activity.EditProfileActivity
 import xyz.donot.roselinx.view.activity.PictureActivity
 import xyz.donot.roselinx.view.activity.UserListActivity
-import xyz.donot.roselinx.view.activity.UserListsActivity
+import xyz.donot.roselinx.view.activity.UsersListActivity
 import xyz.donot.roselinx.view.custom.MyLoadingView
 import xyz.donot.roselinx.view.custom.UserDetailView
-import xyz.donot.roselinx.view.playground.MainTimeLineFragment
-import xyz.donot.roselinx.view.playground.MainTimeLineViewModel
+import xyz.donot.roselinx.view.fragment.base.MainTimeLineFragment
+import xyz.donot.roselinx.view.fragment.base.MainTimeLineViewModel
 
 class UserTimeLineFragment : MainTimeLineFragment() {
     override val viewmodel: UserTimeLineViewModel by lazy { ViewModelProviders.of(activity).get(UserTimeLineViewModel::class.java) }
@@ -44,14 +44,13 @@ class UserTimeLineFragment : MainTimeLineFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewmodel.apply {
             twitter= getTwitterInstance()
-            if (savedInstanceState == null) {
                 adapter.apply {
                     setOnLoadMoreListener({ viewmodel.loadMoreData(userId) }, recycler)
                     setLoadMoreView(MyLoadingView())
                     emptyView = View.inflate(activity, R.layout.item_empty, null)
                 }
+            if (savedInstanceState == null)
                 loadMoreData(userId)
-            }
             mUser.observe(this@UserTimeLineFragment, Observer {
                 it?.let {
                     viewmodel.adapter.setHeaderView(setUpViews(it))
@@ -72,7 +71,7 @@ class UserTimeLineFragment : MainTimeLineFragment() {
                 val iconIntent = Intent(activity, PictureActivity::class.java).putStringArrayListExtra("picture_urls", arrayListOf(user.originalProfileImageURLHttps))
                 setUser(user)
                 iconClick = { startActivity(iconIntent) }
-                listClick = { activity.start<UserListsActivity>(Bundle { putLong("userId", user.id) }) }
+                listClick = { activity.start<UsersListActivity>(Bundle { putLong("userId", user.id) }) }
                 friendClick = {
                     activity.start<UserListActivity>(Bundle {
                         putLong("userId", user.id)

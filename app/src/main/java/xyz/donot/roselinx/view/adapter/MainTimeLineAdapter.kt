@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentPagerAdapter
 import io.realm.Realm
 import xyz.donot.roselinx.model.realm.*
 import xyz.donot.roselinx.util.extraUtils.Bundle
-import xyz.donot.roselinx.view.fragment.RoselinFragment
 import xyz.donot.roselinx.view.fragment.TrendFragment
 import xyz.donot.roselinx.view.fragment.realm.NotificationFragment
 import xyz.donot.roselinx.view.fragment.status.HomeTimeLineFragment
@@ -14,6 +13,7 @@ import xyz.donot.roselinx.view.fragment.status.ListTimeLine
 import xyz.donot.roselinx.view.fragment.status.MentionTimeLine
 import xyz.donot.roselinx.view.fragment.status.SearchTimeline
 import xyz.donot.roselinx.view.fragment.user.DMListFragment
+import xyz.donot.roselinx.view.fragment.user.RoselinFragment
 
 
 class MainTimeLineAdapter(fm: FragmentManager, private val realmResults: List<TabDataObject>) : FragmentPagerAdapter(fm) {

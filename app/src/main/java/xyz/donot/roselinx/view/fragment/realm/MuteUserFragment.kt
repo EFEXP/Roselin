@@ -19,7 +19,7 @@ import twitter4j.User
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.realm.MuteObject
 import xyz.donot.roselinx.util.getDeserialized
-import xyz.donot.roselinx.view.fragment.ARecyclerFragment
+import xyz.donot.roselinx.view.fragment.base.ARecyclerFragment
 
 
 class MuteUserFragment : ARecyclerFragment(){

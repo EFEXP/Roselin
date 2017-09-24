@@ -10,7 +10,7 @@ import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.hideSoftKeyboard
 import xyz.donot.roselinx.util.extraUtils.start
 import xyz.donot.roselinx.util.getSerialized
-import xyz.donot.roselinx.view.fragment.DatePickFragment
+import xyz.donot.roselinx.view.fragment.base.DatePickFragment
 import xyz.donot.roselinx.viewmodel.activity.QueryBundle
 import xyz.donot.roselinx.viewmodel.activity.SearchSettingViewModel
 

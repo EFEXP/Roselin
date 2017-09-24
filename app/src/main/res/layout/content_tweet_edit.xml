@@ -75,7 +75,6 @@
       android:layout_height="match_parent"
       android:layout_weight="1"
       android:background="@android:color/transparent"
-      android:scaleType="fitCenter"
       app:srcCompat="@drawable/ic_add_to_photos_primary_18dp"/>
 
     <android.support.v7.widget.AppCompatImageButton
@@ -84,7 +83,6 @@
       android:layout_height="match_parent"
       android:layout_weight="1"
       android:background="@android:color/transparent"
-      android:scaleType="fitCenter"
       app:srcCompat="@drawable/ic_camera_alt_primary_18dp"/>
 
     <android.support.v7.widget.AppCompatImageButton
@@ -93,7 +91,6 @@
       android:layout_height="match_parent"
       android:layout_weight="1"
       android:background="@android:color/transparent"
-      android:scaleType="fitCenter"
       app:srcCompat="@drawable/ic_whatshot_vector"/>
 
     <android.support.v7.widget.AppCompatImageButton
@@ -102,7 +99,6 @@
       android:layout_height="match_parent"
       android:layout_weight="1"
       android:background="@android:color/transparent"
-      android:scaleType="fitCenter"
       app:srcCompat="@drawable/ic_format_align_justify_primary_18dp"/>
 
     <android.support.v7.widget.AppCompatImageButton
@@ -111,7 +107,6 @@
       android:layout_height="match_parent"
       android:layout_weight="1"
       android:background="@android:color/transparent"
-      android:scaleType="fitCenter"
       app:srcCompat="@drawable/ic_insert_emoticon_primary_24dp"/>
 
     <android.support.v7.widget.AppCompatImageButton

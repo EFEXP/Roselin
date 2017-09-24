@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/pref_fragment"
-        android:name="xyz.donot.roselinx.view.MPreferenceFragment"
+        android:name="xyz.donot.roselinx.view.fragment.MPreferenceFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"

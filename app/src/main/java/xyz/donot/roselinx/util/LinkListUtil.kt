@@ -25,7 +25,6 @@ fun Context.getTagURLMention() :MutableList<Link> = mutableListOf(
                 .setUnderlined(false)
                 .setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
                 .setOnClickListener {
-
                     CustomTabsIntent.Builder()
                             .setShowTitle(true)
                             .addDefaultShareMenuItem()
@@ -36,6 +35,7 @@ fun Context.getTagURLMention() :MutableList<Link> = mutableListOf(
                 }
         ,
         Link(Regex.HASHTAG_PATTERN)
+                .setUnderlined(false)
                 .setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
                 .setOnClickListener {
                     (this as Activity).start<SearchActivity>(Bundle { putString("query_text","$it -rt") })

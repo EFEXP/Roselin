@@ -7,7 +7,7 @@ import kotlinx.coroutines.experimental.async
 import twitter4j.DirectMessage
 import twitter4j.Paging
 import xyz.donot.roselinx.view.adapter.DirectMessageAdapter
-import xyz.donot.roselinx.view.fragment.BaseListFragment
+import xyz.donot.roselinx.view.fragment.base.BaseListFragment
 
 class DMListFragment : BaseListFragment<DirectMessage>() {
     var page: Int = 0

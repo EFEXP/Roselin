@@ -10,6 +10,7 @@ import twitter4j.Query
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.view.activity.TabSettingActivity
+import xyz.donot.roselinx.view.fragment.base.DatePickFragment
 
 class SearchSettingFragment:DialogFragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -20,7 +21,8 @@ class SearchSettingFragment:DialogFragment(){
                 DatePickFragment()
                         .apply { arguments= Bundle().apply { putBoolean("isFrom",true) } }
                         .show(activity.supportFragmentManager,"") }
-            day_to.setOnClickListener {DatePickFragment()
+            day_to.setOnClickListener {
+                DatePickFragment()
                     .apply { arguments= Bundle().apply { putBoolean("isFrom",false) } }
                     .show(activity.supportFragmentManager,"") }
             bt_search.setOnClickListener{

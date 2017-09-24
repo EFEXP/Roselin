@@ -1,4 +1,4 @@
-package xyz.donot.roselinx.view.fragment
+package xyz.donot.roselinx.view.fragment.user
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -31,7 +31,7 @@ class RoselinFragment : Fragment() {
                         val iconIntent = Intent(activity, PictureActivity::class.java).putStringArrayListExtra("picture_urls", arrayListOf(it.originalProfileImageURLHttps))
                         view.user_detail_view.apply {
                             iconClick = { startActivity(iconIntent) }
-                            listClick = { activity.start<UserListsActivity>(Bundle { putLong("userId", it.id) }) }
+                            listClick = { activity.start<UsersListActivity>(Bundle { putLong("userId", it.id) }) }
                             friendClick = {
                                 activity.start<UserListActivity>(Bundle {
                                     putLong("userId", it.id)
@@ -48,7 +48,7 @@ class RoselinFragment : Fragment() {
                             user_detail_view.setUser(it)
                             user_detail_view.setRelation(null, true)
                             user_detail_view.iconClick = { startActivity(iconIntent) }
-                            user_detail_view.listClick = { activity.start<UserListsActivity>(Bundle { putLong("userId", it.id) }) }
+                            user_detail_view.listClick = { activity.start<UsersListActivity>(Bundle { putLong("userId", it.id) }) }
                             user_detail_view.friendClick = {
                                 activity.start<UserListActivity>(Bundle {
                                     putLong("userId", it.id)

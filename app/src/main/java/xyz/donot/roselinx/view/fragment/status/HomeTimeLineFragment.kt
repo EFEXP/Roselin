@@ -26,8 +26,8 @@ import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.util.extraUtils.twitterExceptionMessage
 import xyz.donot.roselinx.util.getDeserialized
 import xyz.donot.roselinx.view.custom.MyLoadingView
-import xyz.donot.roselinx.view.playground.MainTimeLineFragment
-import xyz.donot.roselinx.view.playground.MainTimeLineViewModel
+import xyz.donot.roselinx.view.fragment.base.MainTimeLineFragment
+import xyz.donot.roselinx.view.fragment.base.MainTimeLineViewModel
 
 
 class HomeTimeLineFragment : MainTimeLineFragment() {
@@ -36,18 +36,17 @@ class HomeTimeLineFragment : MainTimeLineFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewmodel.apply {
             twitter = arguments.getByteArray("twitter").getDeserialized()
-            if (savedInstanceState == null) {
-                adapter.apply {
-                    setOnLoadMoreListener({ viewmodel.loadMoreData() }, recycler)
-                    setLoadMoreView(MyLoadingView())
-                    emptyView = View.inflate(activity, R.layout.item_empty, null)
-                    initService()
-                }
-                loadMoreData()
+            adapter.apply {
+                setOnLoadMoreListener({ viewmodel.loadMoreData() }, recycler)
+                setLoadMoreView(MyLoadingView())
+                emptyView = View.inflate(activity, R.layout.item_empty, null)
             }
-
-            recycler.adapter = adapter
-            recycler.isNestedScrollingEnabled=false
+            if (savedInstanceState == null) {
+                loadMoreData()
+                initService()
+            }
+            recycler . adapter = adapter
+                    recycler.isNestedScrollingEnabled = false
 
             refresh.setOnRefreshListener {
                 Handler().delayed(1000, {
@@ -62,7 +61,6 @@ class HomeTimeLineFragment : MainTimeLineFragment() {
 class HomeTimeLineViewModel(app: Application) : MainTimeLineViewModel(app) {
     private val receiver by lazy { StatusReceiver() }
     private val deleteReceiver by lazy { DeleteReceiver() }
-
 
 
     fun pullDown() {

@@ -1,6 +1,6 @@
 @file:Suppress("UNCHECKED_CAST")
 
-package xyz.donot.roselinx.view.fragment
+package xyz.donot.roselinx.view.fragment.base
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -73,7 +73,6 @@ abstract class BaseListFragment<T> : ARecyclerFragment() {
                 }
             })
         }
-        refresh.isEnabled = false
     }
 
     override fun onResume() {

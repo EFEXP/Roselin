@@ -14,9 +14,9 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_mute.view.*
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.realm.MuteObject
-import xyz.donot.roselinx.view.fragment.ARecyclerFragment
+import xyz.donot.roselinx.view.fragment.base.ARecyclerFragment
 
-class MuteWordFragment :ARecyclerFragment(){
+class MuteWordFragment : ARecyclerFragment(){
     val adapter by lazy { MuteWordAdapter(Realm.getDefaultInstance().where(MuteObject::class.java).isNotNull("text").findAll()) }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

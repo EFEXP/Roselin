@@ -1,4 +1,4 @@
-package xyz.donot.roselinx.view.fragment
+package xyz.donot.roselinx.view.fragment.user
 
 
 import android.os.Bundle
@@ -9,6 +9,7 @@ import twitter4j.User
 import xyz.donot.roselinx.util.extraUtils.intent
 import xyz.donot.roselinx.view.activity.UserActivity
 import xyz.donot.roselinx.view.adapter.UserListAdapter
+import xyz.donot.roselinx.view.fragment.base.BaseListFragment
 
 class RetweeterDialog : BaseListFragment<User>() {
     private var cursor: Long = -1L

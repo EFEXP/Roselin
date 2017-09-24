@@ -25,8 +25,8 @@ import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.util.extraUtils.twitterExceptionMessage
 import xyz.donot.roselinx.util.getDeserialized
 import xyz.donot.roselinx.view.custom.MyLoadingView
-import xyz.donot.roselinx.view.playground.MainTimeLineFragment
-import xyz.donot.roselinx.view.playground.MainTimeLineViewModel
+import xyz.donot.roselinx.view.fragment.base.MainTimeLineFragment
+import xyz.donot.roselinx.view.fragment.base.MainTimeLineViewModel
 
 class MentionTimeLine : MainTimeLineFragment() {
    override val viewmodel: MentionViewModel by lazy { ViewModelProviders.of(this).get(MentionViewModel::class.java) }
@@ -45,9 +45,10 @@ class MentionTimeLine : MainTimeLineFragment() {
                                 .addTestDevice("6D38172C5A30A07095F6420BC145C497")
                                 .build())
                     })*/
-                    initService()
                 }
-                loadMoreData()
+            if (savedInstanceState == null) {
+                initService()
+                loadMoreData()}
             
             recycler.adapter = adapter
             refresh.setOnRefreshListener {

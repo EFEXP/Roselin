@@ -35,8 +35,8 @@ import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.adapter.StatusAdapter
 import xyz.donot.roselinx.view.custom.MyLoadingView
 import xyz.donot.roselinx.view.custom.SingleLiveEvent
-import xyz.donot.roselinx.view.fragment.ARecyclerFragment
-import xyz.donot.roselinx.view.fragment.RetweeterDialog
+import xyz.donot.roselinx.view.fragment.base.ARecyclerFragment
+import xyz.donot.roselinx.view.fragment.user.RetweeterDialog
 
 class SearchTimeline : ARecyclerFragment() {
     val viewmodel: SearchViewModel by lazy { ViewModelProviders.of(this).get(SearchViewModel::class.java) }
@@ -128,7 +128,6 @@ class SearchTimeline : ARecyclerFragment() {
                             }
                         }
                     }
-
             recycler.adapter = adapter
             refresh.isEnabled = true
 

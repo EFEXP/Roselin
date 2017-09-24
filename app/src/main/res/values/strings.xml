@@ -667,4 +667,8 @@
   <string name="action_settings">Settings</string>
   <string name="reply_from">~からのリプライ</string>
   <string name="trans_name">tweet_picture_transition</string>
+  <string name="changelog_dialog_title">Changelog</string>
+  <string name="default_new_version_title">Update</string>
+  <string name="empty_changelog">Empty Changelog</string>
+  <string name="great">Great</string>
 </resources>

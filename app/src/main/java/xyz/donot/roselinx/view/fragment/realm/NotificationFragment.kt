@@ -26,7 +26,7 @@ import xyz.donot.roselinx.util.getDeserialized
 import xyz.donot.roselinx.util.getExpandedText
 import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.activity.UserActivity
-import xyz.donot.roselinx.view.fragment.ARecyclerFragment
+import xyz.donot.roselinx.view.fragment.base.ARecyclerFragment
 
 class NotificationFragment : ARecyclerFragment() {
 

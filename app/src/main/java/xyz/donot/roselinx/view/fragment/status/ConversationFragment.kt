@@ -23,8 +23,8 @@ import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.activity.EditTweetActivity
 import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.adapter.StatusAdapter
-import xyz.donot.roselinx.view.fragment.ARecyclerFragment
-import xyz.donot.roselinx.view.fragment.RetweeterDialog
+import xyz.donot.roselinx.view.fragment.base.ARecyclerFragment
+import xyz.donot.roselinx.view.fragment.user.RetweeterDialog
 
 
 class ConversationFragment : ARecyclerFragment() {
@@ -33,9 +33,11 @@ class ConversationFragment : ARecyclerFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter.addData(status)
-       if (status.inReplyToStatusId > 0)
-        loadReply(status.inReplyToStatusId)
-        getDiscuss(status)
+        if (status.inReplyToStatusId > 0)
+            if (savedInstanceState == null) {
+                loadReply(status.inReplyToStatusId)
+                getDiscuss(status)
+            }
         recycler.adapter = adapter
         //   view.recycler.layoutManager = LinearLayoutManager(activity)
         //クリックリスナー
@@ -137,7 +139,7 @@ class ConversationFragment : ARecyclerFragment() {
 
     private fun getDiscuss(status: Status) {
         val twitter by lazy { getTwitterInstance() }
-        val query = Query("to:"+ status.user.screenName)
+        val query = Query("to:" + status.user.screenName)
         query.count = 100
         context.logd { query.count.toString() }
         launch(UI) {

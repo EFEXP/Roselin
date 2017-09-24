@@ -17,7 +17,8 @@
     android:name=".Roselin"
     android:supportsRtl="true"
     android:theme="@style/AppTheme"
-    tools:replace="android:label">
+    tools:replace="android:label"
+    >
     <activity
       android:label="OauthActivity"
       android:name=".view.activity.OauthActivity"
@@ -33,7 +34,6 @@
       android:theme="@style/AppTheme.NoActionBar">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
-
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
@@ -106,7 +106,7 @@
     </activity>
     <activity
       android:label="@string/title_activity_user_lists"
-      android:name=".view.activity.UserListsActivity"
+      android:name=".view.activity.UsersListActivity"
       android:theme="@style/AppTheme.NoActionBar"/>
     <activity
       android:label="@string/title_activity_account_setting"

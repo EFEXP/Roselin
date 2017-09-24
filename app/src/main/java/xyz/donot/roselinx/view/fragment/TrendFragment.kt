@@ -24,6 +24,7 @@ import xyz.donot.roselinx.util.extraUtils.twitterExceptionMessage
 import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.activity.EditTweetActivity
 import xyz.donot.roselinx.view.activity.SearchActivity
+import xyz.donot.roselinx.view.fragment.base.ARecyclerFragment
 import xyz.donot.roselinx.viewmodel.activity.EditTweetViewModel
 
 class TrendFragment : ARecyclerFragment() {

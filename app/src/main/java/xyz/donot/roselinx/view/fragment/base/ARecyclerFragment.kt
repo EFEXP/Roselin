@@ -1,4 +1,4 @@
-package xyz.donot.roselinx.view.fragment
+package xyz.donot.roselinx.view.fragment.base
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatDialogFragment

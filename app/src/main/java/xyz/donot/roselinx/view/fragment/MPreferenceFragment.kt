@@ -1,4 +1,4 @@
-package xyz.donot.roselinx.view
+package xyz.donot.roselinx.view.fragment
 
 import android.os.Bundle
 import android.preference.PreferenceFragment

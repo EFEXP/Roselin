@@ -1,4 +1,4 @@
-package xyz.donot.roselinx.view.fragment
+package xyz.donot.roselinx.view.fragment.base
 
 import android.app.DatePickerDialog
 import android.app.Dialog

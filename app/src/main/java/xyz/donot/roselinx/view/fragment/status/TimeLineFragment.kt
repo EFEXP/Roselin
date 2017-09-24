@@ -22,8 +22,8 @@ import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.view.activity.EditTweetActivity
 import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.adapter.StatusAdapter
-import xyz.donot.roselinx.view.fragment.BaseListFragment
-import xyz.donot.roselinx.view.fragment.RetweeterDialog
+import xyz.donot.roselinx.view.fragment.base.BaseListFragment
+import xyz.donot.roselinx.view.fragment.user.RetweeterDialog
 
 
 abstract class TimeLineFragment : BaseListFragment<Status>() {
