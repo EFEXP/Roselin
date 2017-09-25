@@ -25,7 +25,6 @@ import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.CursorPositionListener
 import xyz.donot.roselinx.model.UserSuggestAdapter
 import xyz.donot.roselinx.model.realm.UserObject
-import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
 import xyz.donot.roselinx.util.extraUtils.show
 import xyz.donot.roselinx.util.getDeserialized
 import xyz.donot.roselinx.util.getMyId
@@ -38,11 +37,8 @@ import kotlin.properties.Delegates
 
 
 class EditTweetActivity : AppCompatActivity() {
-
     var viewmodel by Delegates.notNull<EditTweetViewModel>()
     private var pair: Pair<Uri, Int>? = null
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tweet_edit)
@@ -54,6 +50,7 @@ class EditTweetActivity : AppCompatActivity() {
             draft.observe(this@EditTweetActivity, android.arch.lifecycle.Observer {
                 it?.let {
                     editText_status.editableText.clear()
+                    it.replyToScreenName.isNotEmpty()
                     editText_status.append("@${it.replyToScreenName} ")
                     if (it.replyToStatusId!=0L)
                         viewmodel.statusId=it.replyToStatusId
@@ -136,10 +133,7 @@ class EditTweetActivity : AppCompatActivity() {
                         val selectedItem = resources.getStringArray(item)[int]
                         when (selectedItem) {
                             "#NowPlaying" -> {
-                                val track = defaultSharedPreferences.getString("track", "")
-                                val artists = defaultSharedPreferences.getString("artist", "")
-                                val album = defaultSharedPreferences.getString("album", "")
-                                editText_status.setText("♪ $track /$album /$artists #NowPlaying")
+                                editText_status.setText(viewmodel.getNowPlaying())
                             }
                             "突然の死" -> {
                                 editText_status.setText(viewmodel.suddenDeath(editText_status.text.toString()))

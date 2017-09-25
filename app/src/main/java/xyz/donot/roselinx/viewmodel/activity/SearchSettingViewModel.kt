@@ -22,7 +22,7 @@ class SearchSettingViewModel(app:Application):AndroidViewModel(app){
         }
 
         if (queryBundle.videos) {
-               querytext += " filter:videos"
+               querytext += " filter:native_video"
         }
 
         if (queryBundle.pictures) {
@@ -45,7 +45,7 @@ class SearchSettingViewModel(app:Application):AndroidViewModel(app){
             val it=queryBundle.dayTo
                  querytext += " until:${it.y}-${it.m}-${it.d}"
         }
-        querytext += " -rt"
+        querytext += " exclude:nativeretweets"
         query.resultType = Query.MIXED
         query.query = querytext
         mQuery.value=query

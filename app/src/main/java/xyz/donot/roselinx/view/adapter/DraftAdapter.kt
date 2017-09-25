@@ -29,7 +29,7 @@ class DraftAdapter(val context: Context, val realmResults: OrderedRealmCollectio
             viewHolder = convertView.tag as ViewHolder
         }
         val item = realmResults[position]
-        viewHolder.draftText?.text = "Weeeeeeeeeeeeeeeeeeee"
+        viewHolder.draftText?.text = item.text
         viewHolder.deleteDraft?.setOnClickListener {
             Realm.getDefaultInstance().use {
                 it.executeTransaction {

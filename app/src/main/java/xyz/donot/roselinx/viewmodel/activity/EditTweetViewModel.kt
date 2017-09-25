@@ -8,6 +8,7 @@ import twitter4j.StatusUpdate
 import xyz.donot.roselinx.Roselin
 import xyz.donot.roselinx.model.realm.DraftObject
 import xyz.donot.roselinx.service.TweetPostService
+import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
 import xyz.donot.roselinx.util.extraUtils.newIntent
 import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.util.getPath
@@ -23,6 +24,14 @@ class EditTweetViewModel(application: Application) : AndroidViewModel(applicatio
     var statusId by Delegates.notNull<Long>()
     val mAdapter = TwitterImageAdapter()
     var screenName: String = ""
+
+    fun getNowPlaying():String{
+      val pref=  getApplication<Roselin>(). defaultSharedPreferences
+        val track = pref.getString("track", "")
+        val artists = pref.getString("artist", "")
+        val album = pref.getString("album", "")
+        return "♪ $track /$album /$artists #NowPlaying"
+    }
 
     fun onSendClick(string: String) {
         if (string.codePointCount(0, string.length)<= 140){

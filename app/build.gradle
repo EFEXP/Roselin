@@ -23,7 +23,7 @@ android {
         applicationId "$PUBLISH_GROUP_ID.$PUBLISH_ARTIFACT_ID"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 13
+        versionCode 14
         versionName "$PUBLISH_VERSION"
         resConfigs "ja"
         multiDexEnabled true

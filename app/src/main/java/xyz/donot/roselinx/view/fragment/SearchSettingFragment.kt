@@ -62,7 +62,7 @@ class SearchSettingFragment:DialogFragment(){
                     if(day_to.tag!=null&&day_to.tag is String){
                         querytext +=day_to.tag
                     }
-                    querytext +=" -rt"
+                    querytext +=" exclude:nativeretweets"
                     query.resultType= Query.RECENT
                     query.query=querytext
                     toast(querytext)
