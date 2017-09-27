@@ -23,11 +23,8 @@ import xyz.donot.roselinx.model.realm.CustomProfileObject
 import xyz.donot.roselinx.model.realm.MuteObject
 import xyz.donot.roselinx.model.realm.UserObject
 import xyz.donot.roselinx.model.realm.saveUser
+import xyz.donot.roselinx.util.*
 import xyz.donot.roselinx.util.extraUtils.*
-import xyz.donot.roselinx.util.getDeserialized
-import xyz.donot.roselinx.util.getMyId
-import xyz.donot.roselinx.util.getSerialized
-import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.activity.EditProfileActivity
 import xyz.donot.roselinx.view.activity.PictureActivity
 import xyz.donot.roselinx.view.activity.UserListActivity
@@ -68,7 +65,7 @@ class UserTimeLineFragment : MainTimeLineFragment() {
     }
     private fun setUpViews(user: User): View =
             UserDetailView(activity).apply {
-                val iconIntent = Intent(activity, PictureActivity::class.java).putStringArrayListExtra("picture_urls", arrayListOf(user.originalProfileImageURLHttps))
+                val iconIntent =activity.getDragdismiss(PictureActivity.createIntent(activity,arrayListOf(user.originalProfileImageURLHttps)))
                 setUser(user)
                 iconClick = { startActivity(iconIntent) }
                 listClick = { activity.start<UsersListActivity>(Bundle { putLong("userId", user.id) }) }
@@ -118,6 +115,14 @@ class UserTimeLineFragment : MainTimeLineFragment() {
 
 
             }
+    companion object {
+        fun newInstance(userId:Long):UserTimeLineFragment{
+         return UserTimeLineFragment().apply {
+             arguments=xyz.donot.roselinx.util.extraUtils.Bundle {  putLong("userId",userId) }
+           }
+        }
+
+    }
 }
 
 class UserTimeLineViewModel(app: Application) : MainTimeLineViewModel(app) {

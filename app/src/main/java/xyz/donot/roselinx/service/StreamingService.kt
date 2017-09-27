@@ -10,10 +10,6 @@ import android.support.v4.app.RemoteInput
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.LocalBroadcastManager
 import io.realm.Realm
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
 import twitter4j.*
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.realm.NFAVORITE
@@ -96,10 +92,10 @@ class StreamingService : Service() {
                     LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewStatus").putExtra("Status", onStatus.getSerialized()))
                     if (onStatus.inReplyToStatusId>0&&!onStatus.isRetweet)
                     {
-                        launch(UI){
-                            val result= async(CommonPool){twitter.showStatus(onStatus.inReplyToStatusId)}.await()
-                            LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewStatus").putExtra("Status",result.getSerialized()))
-                        }
+                    //    launch(UI){
+                      //      val result= async(CommonPool){twitter.showStatus(onStatus.inReplyToStatusId)}.await()
+                    //        LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewStatus").putExtra("Status",result.getSerialized()))
+                   //    }
                     }
                 }
 

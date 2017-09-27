@@ -8,8 +8,6 @@ import android.view.inputmethod.EditorInfo
 import kotlinx.android.synthetic.main.activity_search_setting.*
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.hideSoftKeyboard
-import xyz.donot.roselinx.util.extraUtils.start
-import xyz.donot.roselinx.util.getSerialized
 import xyz.donot.roselinx.view.fragment.base.DatePickFragment
 import xyz.donot.roselinx.viewmodel.activity.QueryBundle
 import xyz.donot.roselinx.viewmodel.activity.SearchSettingViewModel
@@ -38,10 +36,7 @@ class SearchSettingActivity : AppCompatActivity() {
         })
         viewmodel.mQuery.observe(this, Observer {
             it?.let {
-                start<SearchActivity>(Bundle().apply {
-                    putByteArray("query_bundle", it.getSerialized())
-                    putString("query_text", search_setting_query.text.toString())
-                })
+                startActivity(SearchActivity.createIntent(this,it,search_setting_query.text.toString()))
             }
         })
 

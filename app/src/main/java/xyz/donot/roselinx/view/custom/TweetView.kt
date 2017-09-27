@@ -104,9 +104,9 @@ class TweetView(context: Context, attributeSet: AttributeSet? = null, defStyleAt
             textview_username.setCompoundDrawablesWithIntrinsicBounds(null, null, vrdraw, null)
             //鍵垢
             if (item.user.isProtected) {
-                textview_via.setCompoundDrawablesWithIntrinsicBounds(ResourcesCompat.getDrawable(context.resources, R.drawable.wrap_lock, null), null, null, null)
+                textview_username.setCompoundDrawablesWithIntrinsicBounds(null, null, ResourcesCompat.getDrawable(context.resources, R.drawable.wrap_lock, null), null)
             } else {
-                textview_via.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
+                textview_username.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null)
             }
             //引用
             item.quotedStatus?.let {

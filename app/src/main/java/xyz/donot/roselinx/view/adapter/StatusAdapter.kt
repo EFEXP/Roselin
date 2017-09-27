@@ -33,10 +33,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
             }
 
             pictureClick = { position, images ->
-                val i = mContext.getDragdismiss(mContext.newIntent<PictureActivity>(Bundle {
-                    putInt("start_page", position)
-                    putStringArrayList("picture_urls", images)
-                }))
+                val i = mContext.getDragdismiss(PictureActivity.createIntent(mContext,images,position))
                 (mContext as Activity).startActivity(i)
             }
             videoClick = { videoUrl, thumbUrl ->

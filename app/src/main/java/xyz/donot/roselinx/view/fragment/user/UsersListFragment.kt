@@ -26,6 +26,7 @@ import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.Bundle
 import xyz.donot.roselinx.util.extraUtils.mainThread
 import xyz.donot.roselinx.util.getTwitterInstance
+import xyz.donot.roselinx.view.activity.UsersListActivityViewModel
 import xyz.donot.roselinx.view.custom.DynamicViewPager
 import xyz.donot.roselinx.view.custom.MyLoadingView
 import xyz.donot.roselinx.view.fragment.base.ARecyclerFragment
@@ -33,7 +34,22 @@ import xyz.donot.roselinx.view.fragment.status.ListTimeLine
 
 
 class UsersListFragment : ARecyclerFragment() {
+    private val activityViewmodel: UsersListActivityViewModel by lazy { ViewModelProviders.of(activity).get(UsersListActivityViewModel::class.java) }
     private val viewmodel: UsersListViewModel by lazy { ViewModelProviders.of(this).get(UsersListViewModel::class.java) }
+
+    companion object {
+        fun newInstance(userId: Long, isAddedList: Boolean): UsersListFragment {
+            return UsersListFragment()
+                    .apply {
+                        arguments = xyz.donot.roselinx.util.extraUtils.Bundle {
+                            putLong("userId", userId)
+                            putBoolean("isAddedList", isAddedList)
+                        }
+                    }
+
+        }
+    }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewmodel.apply {
@@ -63,31 +79,25 @@ class UsersListFragment : ARecyclerFragment() {
             viewmodel.adapter.setEnableLoadMore(false)
             viewmodel.adapter.setOnItemClickListener { _, _, position ->
                 val item = viewmodel.adapter.data[position]
-                ListTimeLine().apply { arguments = Bundle { putLong("listId", item.id) } }.show(fragmentManager, "")
+                if (activityViewmodel.isSelect) {
+                    activityViewmodel.selectedList.value=item
+                } else {
+                    ListTimeLine().apply { arguments = Bundle { putLong("listId", item.id) } }.show(fragmentManager, "")
+                }
             }
         }
-
-
     }
+
+
 }
 
 class UsersListPagerAdapter(fm: FragmentManager, val userId: Long) : DynamicViewPager(fm) {
 
     override fun getItem(i: Int): Fragment {
         return if (i == 0)
-            UsersListFragment().apply {
-                arguments = Bundle {
-                    putLong("userId", userId)
-                    putBoolean("isAddedList", true)
-                }
-            }
+            UsersListFragment.newInstance(userId, true)
         else
-            UsersListFragment().apply {
-                arguments = Bundle {
-                    putLong("userId", userId)
-                    putBoolean("isAddedList", false)
-                }
-            }
+            UsersListFragment.newInstance(userId, false)
     }
 
     override fun getCount(): Int = 2
@@ -96,7 +106,6 @@ class UsersListPagerAdapter(fm: FragmentManager, val userId: Long) : DynamicView
             "追加されているリスト"
         else
             "保存しているリスト"
-
     }
 
 }
@@ -114,7 +123,7 @@ class UsersListViewModel(app: Application) : AndroidViewModel(app) {
             try {
 
                 if (mode) {
-                    val result = async(CommonPool){ twitter.getUserListMemberships(userId,cursor) }.await()
+                    val result = async(CommonPool) { twitter.getUserListMemberships(userId, cursor) }.await()
                     if (result.hasNext()) {
                         cursor = result.nextCursor
                         adapter.loadMoreComplete()
@@ -122,8 +131,7 @@ class UsersListViewModel(app: Application) : AndroidViewModel(app) {
                         endAdapter()
                     }
                     adapter.addData(result)
-                }
-                else{
+                } else {
                     val result = async(CommonPool) { twitter.getUserLists(userId) }.await()
                     if (result.isEmpty()) {
                         endAdapter()
@@ -136,15 +144,13 @@ class UsersListViewModel(app: Application) : AndroidViewModel(app) {
             } catch (e: Exception) {
                 adapter.loadMoreFail()
                 e.printStackTrace()
-               // exception.value = e
+                // exception.value = e
             }
         }
     }
     private fun endAdapter() = mainThread {
         adapter.loadMoreEnd(true)
     }
-
-
     inner class UserListAdapter : BaseQuickAdapter<UserList, BaseViewHolder>(R.layout.item_list) {
         override fun convert(helper: BaseViewHolder, item: UserList) {
             helper.getView<View>(R.id.item_list_root).apply {
@@ -156,4 +162,5 @@ class UsersListViewModel(app: Application) : AndroidViewModel(app) {
             }
 
         }
-    }}
+    }
+}

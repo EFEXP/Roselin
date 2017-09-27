@@ -51,7 +51,7 @@ class UserActivity : AppCompatActivity(),Target {
         Picasso.with(this).load(user_.profileBannerIPadRetinaURL).into(this)
 
         banner.setOnClickListener {
-                    startActivity( getDragdismiss(newIntent<PictureActivity>(Bundle().apply {putStringArrayList("picture_urls", arrayListOf(user_.profileBannerIPadRetinaURL)) })))
+                    startActivity( getDragdismiss(PictureActivity.createIntent(this, arrayListOf(user_.profileBannerIPadRetinaURL))))
         }
         toolbar.apply {
             title = user_.screenName

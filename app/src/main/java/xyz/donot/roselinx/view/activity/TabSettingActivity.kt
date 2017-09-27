@@ -20,7 +20,6 @@ import kotlinx.android.synthetic.main.activity_tab_setting.*
 import twitter4j.Query
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.realm.*
-import xyz.donot.roselinx.util.extraUtils.newIntent
 import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.util.getMyScreenName
 import xyz.donot.roselinx.util.getSerialized
@@ -84,10 +83,7 @@ class TabSettingActivity : AppCompatActivity() {
                                 realmRecreate()
                             }
                             "リスト" -> {
-                                startActivityForResult(newIntent<UsersListActivity>().apply {
-                                    putExtra("userId", getMyId())
-                                    putExtra("selectList", true)
-                                }, REQUEST_LISTS)
+                                startActivityForResult(UsersListActivity.newIntent(this, getMyId(),true), REQUEST_LISTS)
                             }
                             "リプライ" -> {
                                 mAdapter.addData(TabDataObject().apply {

@@ -18,6 +18,14 @@ class FavoriteTimeLine : TimeLineFragment() {
             async(CommonPool) { twitter.getFavorites(userId, Paging(viewmodel.page)) }
         }
     }
+    companion object {
+        fun newInstance(userId:Long):FavoriteTimeLine{
+            return FavoriteTimeLine().apply {
+               arguments=xyz.donot.roselinx.util.extraUtils.Bundle {  putLong("userId",userId) }
+            }
+        }
+
+    }
 
 }
 
