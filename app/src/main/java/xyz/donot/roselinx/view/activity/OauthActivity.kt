@@ -46,7 +46,6 @@ class OauthActivity : AppCompatActivity() {
         })
         login_button.callback = object : Callback<TwitterSession>() {
             override fun success(result: Result<TwitterSession>) {
-                //getString(R.string.twitter_official_consumer_key) getString(R.string.twitter_official_consumer_secret)
                 login_button.hide()
                 progressBar.show()
                 tv_information.startAnimation(anim)

@@ -2,6 +2,9 @@ package xyz.donot.roselinx.util
 
 import android.content.Context
 import android.content.Intent
+import android.support.v4.app.Fragment
+import android.support.v4.view.PagerAdapter
+import android.support.v4.view.ViewPager
 import io.realm.Realm
 import twitter4j.Status
 import twitter4j.Twitter
@@ -11,6 +14,8 @@ import xyz.donot.roselinx.model.realm.MuteObject
 import xyz.donot.roselinx.util.extraUtils.logd
 import xyz.klinker.android.drag_dismiss.DragDismissIntentBuilder
 import java.io.*
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 
 fun <T : Serializable> T.getSerialized(): ByteArray = ByteArrayOutputStream().use {
@@ -21,6 +26,9 @@ fun <T : Serializable> T.getSerialized(): ByteArray = ByteArrayOutputStream().us
     return bytes
 }
 
+fun String.getMatcher(charSequence: CharSequence): Matcher {
+    return Pattern.compile(this).matcher(charSequence)
+}
 
 fun <T> ByteArray.getDeserialized(): T {
     @Suppress("UNCHECKED_CAST")
@@ -32,7 +40,12 @@ fun getTwitterInstance(): twitter4j.Twitter = Realm.getDefaultInstance().use {
     return ac?.twitter?.getDeserialized<Twitter>() ?: throw IllegalStateException()
 }
 
+fun PagerAdapter.findFragmentByPosition(viewPager: ViewPager, position: Int): Fragment {
+    val fragment = instantiateItem(viewPager, position) as Fragment
+    finishUpdate(viewPager)
+    return fragment
 
+}
 
 fun getMyScreenName(): String = Realm.getDefaultInstance().use {
     val b = it.where(AccountObject::class.java).equalTo("isMain", true).findFirst()?.user!!.getDeserialized<User>()
@@ -64,8 +77,8 @@ fun canPass(status: Status): Boolean {
 }
 
 
-fun Context.getDragdismiss(i: Intent):Intent{
- return   DragDismissIntentBuilder(this)
+fun Context.getDragdismiss(i: Intent): Intent {
+    return DragDismissIntentBuilder(this)
             .setShowToolbar(false)
             .setDragElasticity(DragDismissIntentBuilder.DragElasticity.XXLARGE)
             .build(i)

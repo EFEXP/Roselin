@@ -1,12 +1,15 @@
 package xyz.donot.roselinx.viewmodel.activity
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import android.content.*
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import android.os.Handler
 import android.support.v4.app.RemoteInput
 import android.support.v4.content.LocalBroadcastManager
@@ -114,6 +117,23 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     screenName = getMyScreenName()
                 }
             }
+        }
+    }
+    fun initNotification(){
+        if (Build.VERSION.SDK_INT  >= 26&&!getApplication<Roselin>().defaultSharedPreferences.getBoolean("notification_initialized",false)) {
+            val channel = arrayListOf(
+                    NotificationChannel(
+                            "reply",
+                            "リプライ通知",
+                            NotificationManager.IMPORTANCE_DEFAULT
+                    ), NotificationChannel(
+                    "sending",
+                    "送信中通知",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            )
+            )
+            getApplication<Roselin>().getNotificationManager().createNotificationChannels(channel)
+            getApplication<Roselin>().defaultSharedPreferences.putBoolean("notification_initialized",true)
         }
     }
 

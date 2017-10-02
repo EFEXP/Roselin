@@ -1,4 +1,4 @@
-package xyz.donot.roselinx.viewmodel.activity
+﻿package xyz.donot.roselinx.viewmodel.activity
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
@@ -97,8 +97,6 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
             putString(FirebaseAnalytics.Param.CONTENT, user.screenName)
             putString("UserName", user.name)
         })
-
-
     }
 
     fun onSuccess(key: String, secret: String, result: Result<TwitterSession>) {

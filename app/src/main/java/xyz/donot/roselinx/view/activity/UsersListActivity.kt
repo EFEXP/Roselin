@@ -30,7 +30,7 @@ class UsersListActivity : AppCompatActivity() {
         viewmodel.isSelect=intent.getBooleanExtra("isSelect",false)
         val adapter=UsersListPagerAdapter(supportFragmentManager,userId)
         viewpager_list.adapter=adapter
-        viewpager_list.offscreenPageLimit = 2
+        viewpager_list.offscreenPageLimit = adapter.count
         viewmodel.selectedList.observe(this, Observer {
           it?.let {
               callbackMethod(it)

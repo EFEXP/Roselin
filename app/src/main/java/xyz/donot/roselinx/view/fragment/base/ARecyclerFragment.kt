@@ -14,6 +14,7 @@ import xyz.donot.roselinx.R
 
 open class ARecyclerFragment : AppCompatDialogFragment() {
 
+
     lateinit var recycler: RecyclerView
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.content_base_fragment, container, false)
@@ -29,10 +30,11 @@ open class ARecyclerFragment : AppCompatDialogFragment() {
                     addItemDecoration(dividerItemDecoration)
                 }
                 refresh.isEnabled = false
-
         }
+    }
 
-
+    fun scrollRecycler(position: Int) {
+        recycler.smoothScrollToPosition(position)
     }
 
 }

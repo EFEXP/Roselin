@@ -13,6 +13,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.design.widget.Snackbar
+import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AppCompatActivity
@@ -23,8 +24,10 @@ import kotlinx.android.synthetic.main.error_activity.*
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.realm.TabDataObject
 import xyz.donot.roselinx.util.extraUtils.*
+import xyz.donot.roselinx.util.findFragmentByPosition
 import xyz.donot.roselinx.util.haveToken
 import xyz.donot.roselinx.view.adapter.MainTimeLineAdapter
+import xyz.donot.roselinx.view.fragment.base.ARecyclerFragment
 import xyz.donot.roselinx.viewmodel.activity.MainViewModel
 
 
@@ -38,7 +41,6 @@ class MainActivity : AppCompatActivity() {
         } else if (isConnected()) {
             setUp(savedInstanceState)
         } else {
-
             setContentView(R.layout.error_activity)
             button_retry.onClick = {
                 if (isConnected()) {
@@ -48,8 +50,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun setUp(bundle: Bundle?) {
         setContentView(R.layout.activity_main)
+        viewmodel.initNotification()
         viewmodel.initTab()
         setUpView()
         viewmodel.apply {
@@ -96,6 +100,22 @@ class MainActivity : AppCompatActivity() {
                 main_coordinator.background = d2
             }
             tabs_main.setupWithViewPager(main_viewpager)
+            tabs_main.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+                override fun onTabReselected(tab: TabLayout.Tab) {
+                    val fragment =adapter.findFragmentByPosition(main_viewpager,tab.position)
+                    (fragment as? ARecyclerFragment)?.scrollRecycler(0)
+
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+                }
+
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+
+                }
+
+            })
             fab.setOnClickListener { start<EditTweetActivity>() }
             button_tweet.setOnClickListener {
                 viewmodel.sendTweet(text = editText_status.editableText.toString())

@@ -174,7 +174,7 @@ class StreamingService : Service() {
                 setContentTitle("${onStatus.user.name}からリプライ")
                 setContentText(onStatus.text)
                 addAction(action)
-            }, "Reply")
+            }, "reply")
         } else
             newNotification({
                 val intent = Intent(this@StreamingService,MainActivity::class.java).apply {
@@ -192,7 +192,7 @@ class StreamingService : Service() {
                 setSound(Uri.parse(defaultSharedPreferences.getString("notifications_ringtone", "")))
                 setContentIntent(pendingIntent)
                 setContentText(onStatus.text)
-            }, "Reply")
+            }, "reply")
         getNotificationManager().notify(REPLY_ID, notification)
     }
 

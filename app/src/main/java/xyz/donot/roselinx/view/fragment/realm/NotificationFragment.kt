@@ -16,8 +16,8 @@ import kotlinx.android.synthetic.main.item_notification.view.*
 import twitter4j.Status
 import twitter4j.User
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.NotificationObject
 import xyz.donot.roselinx.model.realm.NRETWEET
+import xyz.donot.roselinx.model.realm.NotificationObject
 import xyz.donot.roselinx.service.REPLY_ID
 import xyz.donot.roselinx.util.extraUtils.Bundle
 import xyz.donot.roselinx.util.extraUtils.getNotificationManager
@@ -73,7 +73,7 @@ class NotificationFragment : ARecyclerFragment() {
                 if (user != null && item != null && s != null) {
                     holder.apply {
                         card.setOnClickListener { activity.start<TwitterDetailActivity>(Bundle { putSerializable("Status", item) }) }
-                        sendericon.setOnClickListener { activity.start<UserActivity>(Bundle { putLong("user_id", user.id) }) }
+                        senderIcon.setOnClickListener { activity.start<UserActivity>(Bundle { putLong("user_id", user.id) }) }
                         name.text = item.user.name
                         if (it.type == NRETWEET) {
                             fromText.text = "${user.name}さんがあなたのツイートをリツイートしました"
@@ -83,7 +83,7 @@ class NotificationFragment : ARecyclerFragment() {
                             fromText.setCompoundDrawablesRelativeWithIntrinsicBounds(ResourcesCompat.getDrawable(resources, R.drawable.wrap_favorite_pressed, null), null, null, null)
                         }
                         text.text = getExpandedText(item)
-                        Picasso.with(activity).load(user.originalProfileImageURLHttps).into(sendericon)
+                        Picasso.with(activity).load(user.originalProfileImageURLHttps).into(senderIcon)
                         Picasso.with(activity).load(item.user.originalProfileImageURLHttps).into(icon)
                         screen.text = "@" + item.user.screenName
                     }
@@ -98,7 +98,7 @@ class NotificationFragment : ARecyclerFragment() {
             val name: TextView = view.tv_notification_myname
             val fromText: TextView = view.tv_notification_info
             val text: EmojiTextView = view.tv_notification_text
-            val sendericon: RoundedImageView = view.iv_notification_sender_icon
+            val senderIcon: RoundedImageView = view.iv_notification_sender_icon
             val icon: RoundedImageView = view.iv_notification_icon
             val screen: TextView = view.tv_notification_myscreen
             val card: ConstraintLayout = view.constraint2

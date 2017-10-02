@@ -13,8 +13,6 @@ class UserSuggestAdapter(mContext: Context, resource: Int, val objects: List<Str
     override fun getCount(): Int = suggests.size
     override fun getFilter(): Filter = filter
     override fun getItem(position: Int) = suggests[position]
-
-
     inner class UserFilter : Filter() {
         private val pattern = Regex.MENTION_PATTERN
         var start = 0

@@ -16,6 +16,8 @@ import xyz.donot.roselinx.view.fragment.user.DMListFragment
 import xyz.donot.roselinx.view.fragment.user.RoselinFragment
 
 
+
+
 class MainTimeLineAdapter(fm: FragmentManager, private val realmResults: List<TabDataObject>) : FragmentPagerAdapter(fm) {
 
     override fun getItem(i: Int): Fragment {
@@ -58,7 +60,6 @@ class MainTimeLineAdapter(fm: FragmentManager, private val realmResults: List<Ta
     }
 
     override fun getCount(): Int = realmResults.size
-
 
     override fun getPageTitle(position: Int): CharSequence =
             if (realmResults[position].screenName != null) "${toSimpleName(realmResults[position].type)}@${realmResults[position].screenName!!}"

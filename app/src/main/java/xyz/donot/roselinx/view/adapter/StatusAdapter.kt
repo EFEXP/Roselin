@@ -1,15 +1,18 @@
 package xyz.donot.roselinx.view.adapter
 
 import android.app.Activity
+import android.support.v7.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import io.realm.Realm
+import io.realm.RealmResults
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import twitter4j.Status
 import xyz.donot.roselinx.R
+import xyz.donot.roselinx.model.realm.CustomProfileObject
 import xyz.donot.roselinx.model.realm.MuteObject
 import xyz.donot.roselinx.util.extraUtils.*
 import xyz.donot.roselinx.util.getDragdismiss
@@ -23,17 +26,29 @@ import xyz.donot.roselinx.view.custom.TweetView
 class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_tweet_view) {
 
     private val kichitsui = Realm.getDefaultInstance().where(MuteObject::class.java).equalTo("kichitsui", true).findAll().filter { it.kichitsui }.mapNotNull { it.id }
+    private lateinit var customname: RealmResults<CustomProfileObject>
+    private lateinit var customnameId: List<Long>
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+        super.onAttachedToRecyclerView(recyclerView)
+        customname = Realm.getDefaultInstance().where(CustomProfileObject::class.java).findAll()
+        customnameId = customname.mapNotNull { it.id }
+    }
 
     override fun convert(helper: BaseViewHolder, status: Status) {
         helper.getView<TweetView>(R.id.tweetview).apply {
+            var stringName: String? = null
             if (status.isRetweet) {
-                setStatus(status, status.retweetedStatus,kichitsui.contains(status.user.id))
+                if (customnameId.contains(status.retweetedStatus.user.id))
+                    stringName = customname.first { it.id == status.retweetedStatus.user.id }.customname
+                setStatus(status, status.retweetedStatus, kichitsui.contains(status.retweetedStatus.user.id), stringName)
             } else {
-                setStatus(status, status,kichitsui.contains(status.user.id))
+                if (customnameId.contains(status.user.id))
+                    stringName = customname.first { it.id == status.user.id }.customname
+                setStatus(status, status, kichitsui.contains(status.user.id), stringName)
             }
 
             pictureClick = { position, images ->
-                val i = mContext.getDragdismiss(PictureActivity.createIntent(mContext,images,position))
+                val i = mContext.getDragdismiss(PictureActivity.createIntent(mContext, images, position))
                 (mContext as Activity).startActivity(i)
             }
             videoClick = { videoUrl, thumbUrl ->

@@ -10,12 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import com.klinker.android.link_builder.LinkBuilder
 import com.squareup.picasso.Picasso
-import io.realm.Realm
 import kotlinx.android.synthetic.main.item_classic_tweet.view.*
 import twitter4j.Status
 import twitter4j.User
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.CustomProfileObject
 import xyz.donot.roselinx.util.*
 import xyz.donot.roselinx.util.extraUtils.hide
 import xyz.donot.roselinx.util.extraUtils.onClick
@@ -41,7 +39,7 @@ class TweetView(context: Context, attributeSet: AttributeSet? = null, defStyleAt
         view = LayoutInflater.from(context).inflate(R.layout.item_classic_tweet, this)
     }
 
-    fun setStatus(status: Status, item: Status, kichitsui: Boolean) {
+    fun setStatus(status: Status, item: Status, kichitsui: Boolean,customName:String?) {
         view.apply {
             if (status.isRetweet) {
                 textview_is_retweet.text = "@${status.user.screenName}がリツイート"
@@ -60,12 +58,11 @@ class TweetView(context: Context, attributeSet: AttributeSet? = null, defStyleAt
                 //     textview_screenname.setTextColor(ContextCompat.getColor(context,s.resourceId))
                 textview_is_retweet.hide()
             }
-            Realm.getDefaultInstance().use { realm ->
-                val query = realm.where(CustomProfileObject::class.java).equalTo("id", item.user.id).findAll()
-                if (query.size > 0) {
-                    textview_username.text = query[0]?.customname
-                } else
-                    textview_username.text = item.user.name
+            if (customName!=null)
+                textview_username.text =customName
+            else
+                textview_username.text = item.user.name
+
 
                 if (kichitsui) {
                     val array = context.resources.getStringArray(R.array.ARRAY_KITITSUI)
@@ -78,7 +75,6 @@ class TweetView(context: Context, attributeSet: AttributeSet? = null, defStyleAt
                         textview_text.text = text
                         textview_text.show()
                     }
-                }
             }
             textview_date.text = getRelativeTime(item.createdAt)
             textview_screenname.text = "@" + item.user.screenName
@@ -137,7 +133,7 @@ class TweetView(context: Context, attributeSet: AttributeSet? = null, defStyleAt
                     }
                     mAdapter.setOnItemClickListener { _, _, position_ ->
                         if (item.hasVideo) {
-                            videoClick(item.getVideoURL()!!, item.mediaEntities[0].mediaURL)
+                            videoClick(item.getVideoURL()!!, item.mediaEntities[0].mediaURLHttps)
                         } else {
                             pictureClick(position_, item.images)
                         }
@@ -158,7 +154,7 @@ class TweetView(context: Context, attributeSet: AttributeSet? = null, defStyleAt
                     }
                     mAdapter.setOnItemClickListener { _, _, position_ ->
                         if (item.hasVideo) {
-                            videoClick(item.getVideoURL()!!, item.mediaEntities[0].mediaURL)
+                            videoClick(item.getVideoURL()!!, item.mediaEntities[0].mediaURLHttps)
                         } else {
                             pictureClick(position_, item.images)
                         }

@@ -26,7 +26,7 @@ class TweetPostService : IntentService("TweetPostService") {
                filePath=intent.getStringArrayListExtra("FilePath")
               val compressed =filePath.map { com.setQuality(Integer.parseInt(defaultSharedPreferences.getString("compress_preference",75.toString())))
                       .compressToFile(File(it)) }
-                notificate(id)
+                notify(id)
                 val uploadedMediaId = compressed.map {  twitter.uploadMedia(it).mediaId }
                 val array = LongArray(uploadedMediaId.size)
                 var i=0
@@ -47,9 +47,9 @@ class TweetPostService : IntentService("TweetPostService") {
         }
     }
 
-    private fun notificate(int:Int) {
+    private fun notify(int:Int) {
         val mNotificationManager =getNotificationManager()
-        val mNotification = NotificationCompat.Builder(this,"Sending")
+        val mNotification = NotificationCompat.Builder(this,"sending")
                 .setSmallIcon(R.drawable.ic_send_white_24dp)
                 .setContentTitle("送信中")
                 .setProgress(100,100,true)

@@ -131,7 +131,7 @@ class EditProfileActivity : AppCompatActivity() {
                        setProgress(100, 100, true)
                        setContentText("プロフィールを更新中…")
 
-                   },"UpdateProfile"))
+                   },"sending"))
         })
 
     }
