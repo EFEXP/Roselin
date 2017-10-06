@@ -4,7 +4,6 @@ import android.app.Application
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
