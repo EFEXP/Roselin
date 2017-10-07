@@ -1,4 +1,4 @@
-package xyz.donot.roselinx.model
+package xyz.donot.roselinx.model.room
 
 import android.arch.persistence.room.*
 import twitter4j.Twitter
@@ -13,9 +13,9 @@ data class TwitterAccount(
 )
 
 @Dao
-interface UserRoomDao {
+interface TwitterAccountDao {
     @Query("SELECT * FROM twitter_account WHERE id =:userId LIMIT 1")
-    fun findById(userId: Long):TwitterAccount
+    fun findById(userId: Long): TwitterAccount
 
     @Query("SELECT * FROM twitter_account LIMIT 1")
     fun getMyAccount(): TwitterAccount

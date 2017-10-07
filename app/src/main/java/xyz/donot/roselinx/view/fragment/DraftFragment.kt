@@ -2,45 +2,33 @@ package xyz.donot.roselinx.view.fragment
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ListView
-import io.realm.Realm
-import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.DraftObject
-import xyz.donot.roselinx.util.getMyId
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
+import xyz.donot.roselinx.model.room.RoselinDatabase
 import xyz.donot.roselinx.view.activity.EditTweetActivity
-import xyz.donot.roselinx.view.adapter.DraftAdapter
+import xyz.donot.roselinx.view.adapter.TweetDraftAdapter
+import xyz.donot.roselinx.view.fragment.base.ARecyclerFragment
 import xyz.donot.roselinx.viewmodel.activity.EditTweetViewModel
 
 
-class DraftFragment : DialogFragment() {
-    val realm: Realm = Realm.getDefaultInstance()
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        val view=inflater.inflate(R.layout.fragment_draft, container, false)
-        val mAdapter= DraftAdapter(context = context,realmResults =
-                realm.where(DraftObject::class.java)
-                .equalTo("accountId",getMyId()).findAll())
-        val list: ListView =view.findViewById(R.id.draft_list_view)
-        list.adapter=mAdapter
-        list.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _->
-            val parentList=parent as ListView
-            val item=parentList.getItemAtPosition(position)as DraftObject
-            if(activity is EditTweetActivity){
-                ViewModelProviders.of(activity).get(EditTweetViewModel::class.java).draft.value=item
+class DraftFragment : ARecyclerFragment() {
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+       view.apply {
+            val mAdapter= TweetDraftAdapter(activity)
+            mAdapter.onItemClick={item, _ ->
+                if(activity is EditTweetActivity){
+                    ViewModelProviders.of(activity).get(EditTweetViewModel::class.java).draft.value=item
+                }
+               launch {  RoselinDatabase.getInstance(activity).tweetDraftDao().delete(item) }
                 this@DraftFragment.dismiss()
             }
-            Realm.getDefaultInstance().executeTransaction { item.deleteFromRealm() }
-        }
-        return view
-    }
+            recycler.adapter=mAdapter
 
-    override fun onDestroy() {
-        super.onDestroy()
-        realm.close()
-    }
-}
+           launch (UI){
+               mAdapter.itemList=  async { RoselinDatabase.getInstance(getContext()).tweetDraftDao().getAll()}.await()
+           }
+
+        }}}

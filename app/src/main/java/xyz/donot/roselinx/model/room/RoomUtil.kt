@@ -1,7 +1,8 @@
-package xyz.donot.roselinx.model
+package xyz.donot.roselinx.model.room
 
 import android.arch.persistence.room.*
 import android.content.Context
+import android.support.v7.util.DiffUtil
 import twitter4j.Status
 import twitter4j.Twitter
 import twitter4j.User
@@ -10,15 +11,16 @@ import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
-@Database(entities = arrayOf(TwitterAccount::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(TwitterAccount::class,UserData::class,TweetDraft::class), version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class RoselinDatabase : RoomDatabase() {
-    abstract fun userRoomDao(): UserRoomDao
+    abstract fun twitterAccountDao():TwitterAccountDao
+    abstract fun userDataDao():UserDataDao
+    abstract fun tweetDraftDao():TweetDraftDao
     companion object {
-
         @Volatile private var INSTANCE:  RoselinDatabase? = null
 
-        fun getInstance(context: Context): RoselinDatabase=
+        fun getInstance(context: Context): RoselinDatabase =
                 INSTANCE ?: synchronized(this) {
                     INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
                 }
@@ -96,3 +98,4 @@ class Converters {
             }
         }
     }}
+

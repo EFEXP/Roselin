@@ -4,16 +4,14 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import android.net.Uri
-import io.realm.Realm
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import twitter4j.User
 import xyz.donot.roselinx.Roselin
-import xyz.donot.roselinx.model.realm.UserObject
+import xyz.donot.roselinx.model.room.RoselinDatabase
 import xyz.donot.roselinx.util.extraUtils.getNotificationManager
-import xyz.donot.roselinx.util.getDeserialized
 import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.util.getPath
 import xyz.donot.roselinx.util.getTwitterInstance
@@ -28,15 +26,19 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
     var iconUri: Uri? = null
     var bannerUri: Uri? = null
     fun initUser() {
-       val t= Realm.getDefaultInstance().where(UserObject::class.java).equalTo("id", getMyId()).findFirst()?.user
-        if(t==null)
         launch(UI) {
-            val result = async(CommonPool) { getTwitterInstance().verifyCredentials() }.await()
-            user.value = result
+            val t=    async {RoselinDatabase.getInstance(getApplication()).userDataDao().findById(getMyId())  }.await()
+            if(t==null)
+                launch(UI) {
+                    val result = async(CommonPool) { getTwitterInstance().verifyCredentials() }.await()
+                    user.value = result
+                }
+            else{
+                user.value=t.user
+            }
         }
-        else{
-            user.value=t.getDeserialized<User>()
-        }
+
+
     }
 
     fun clickFab(name: String, web: String, location: String, description: String) {

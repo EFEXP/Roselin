@@ -3,10 +3,9 @@ package xyz.donot.roselinx.viewmodel.activity
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
-import io.realm.Realm
 import twitter4j.StatusUpdate
 import xyz.donot.roselinx.Roselin
-import xyz.donot.roselinx.model.realm.DraftObject
+import xyz.donot.roselinx.model.room.TweetDraft
 import xyz.donot.roselinx.service.TweetPostService
 import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
 import xyz.donot.roselinx.util.extraUtils.newIntent
@@ -18,7 +17,7 @@ import xyz.donot.roselinx.view.custom.SingleLiveEvent
 import kotlin.properties.Delegates
 
 class EditTweetViewModel(application: Application) : AndroidViewModel(application) {
-    val draft: MutableLiveData<DraftObject> = MutableLiveData()
+    val draft: MutableLiveData<TweetDraft> = MutableLiveData()
     val hashtag: MutableLiveData<String> = MutableLiveData()
     val finish: SingleLiveEvent<Unit> = SingleLiveEvent()
     var statusId by Delegates.notNull<Long>()
@@ -47,15 +46,7 @@ class EditTweetViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun saveDraft(string: String) {
-        Realm.getDefaultInstance().executeTransaction {
-            it.createObject(DraftObject::class.java).apply {
-                text = string
-                replyToScreenName = screenName
-                replyToStatusId = statusId
-                accountId = getMyId()
-            }
-        }
-
+        TweetDraft.save(getApplication(), TweetDraft(getMyId(),string,statusId,screenName))
     }
 
     fun suddenDeath(string: String): String {

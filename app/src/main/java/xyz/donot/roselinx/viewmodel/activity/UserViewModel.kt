@@ -13,11 +13,10 @@ import twitter4j.User
 import xyz.donot.roselinx.Roselin
 import xyz.donot.roselinx.model.realm.CustomProfileObject
 import xyz.donot.roselinx.model.realm.MuteObject
-import xyz.donot.roselinx.model.realm.UserObject
-import xyz.donot.roselinx.model.realm.saveUser
+import xyz.donot.roselinx.model.room.RoselinDatabase
+import xyz.donot.roselinx.model.room.UserData
 import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.util.extraUtils.twitterExceptionMessage
-import xyz.donot.roselinx.util.getDeserialized
 import xyz.donot.roselinx.util.getSerialized
 import xyz.donot.roselinx.util.getTwitterInstance
 
@@ -35,11 +34,16 @@ class UserViewModel(app: Application) : AndroidViewModel(app) {
                 try {
                     val result= async(CommonPool) { getTwitterInstance().showUser(screenName) }.await()
                     mUser.value =result
-                    saveUser(result)
+                    UserData.save(getApplication(),result)
                 } catch (e: TwitterException) {
-                    val user=  realm.where(UserObject::class.java).equalTo("screenname",screenName).findFirst()
-                   mUser.value =user?.user?.getDeserialized<User>()
-                   getApplication<Roselin>().toast(twitterExceptionMessage(e))
+                    launch(UI) {
+                      val user=  async {
+                        RoselinDatabase.getInstance(getApplication()).userDataDao()
+                                .findByScreenName(screenName)
+                                .user}.await()
+                        mUser.value=user
+                        getApplication<Roselin>().toast(twitterExceptionMessage(e))
+                    }
                 }
             }
         }
@@ -54,10 +58,10 @@ class UserViewModel(app: Application) : AndroidViewModel(app) {
                 try {
                     val result= async(CommonPool) { getTwitterInstance().showUser(id) }.await()
                     mUser.value =result
-                    saveUser(result)
+                    UserData.save(getApplication(),result)
                 } catch (e: TwitterException) {
-                    val user=  realm.where(UserObject::class.java).equalTo("id",id).findFirst()
-                    mUser.value =user?.user?.getDeserialized<User>()
+                    val user=  async(CommonPool) { RoselinDatabase.getInstance(getApplication()).userDataDao().findById(id)}.await()
+                    mUser.value =user.user
                     getApplication<Roselin>().toast(twitterExceptionMessage(e))
                 }
             }

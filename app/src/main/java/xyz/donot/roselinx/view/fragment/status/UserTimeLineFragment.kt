@@ -20,10 +20,13 @@ import xyz.donot.roselinx.R
 import xyz.donot.roselinx.Roselin
 import xyz.donot.roselinx.model.realm.CustomProfileObject
 import xyz.donot.roselinx.model.realm.MuteObject
-import xyz.donot.roselinx.model.realm.UserObject
-import xyz.donot.roselinx.model.realm.saveUser
-import xyz.donot.roselinx.util.*
+import xyz.donot.roselinx.model.room.RoselinDatabase
+import xyz.donot.roselinx.model.room.UserData
 import xyz.donot.roselinx.util.extraUtils.*
+import xyz.donot.roselinx.util.getDragdismiss
+import xyz.donot.roselinx.util.getMyId
+import xyz.donot.roselinx.util.getSerialized
+import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.activity.EditProfileActivity
 import xyz.donot.roselinx.view.activity.PictureActivity
 import xyz.donot.roselinx.view.activity.UserListActivity
@@ -154,7 +157,7 @@ class UserTimeLineViewModel(app: Application) : MainTimeLineViewModel(app) {
         }
     }
 
-    private val realm by lazy { Realm.getDefaultInstance() }
+
     fun initUser(screenName: String) {
         if (mUser.value == null) {
             // val user=    realm.where(UserObject::class.java).equalTo("screenname",screenName).findFirst()
@@ -165,10 +168,10 @@ class UserTimeLineViewModel(app: Application) : MainTimeLineViewModel(app) {
                 try {
                     val result= async(CommonPool) { getTwitterInstance().showUser(screenName) }.await()
                     mUser.value =result
-                    saveUser(result)
+                    UserData.save(getApplication<Roselin>(),result)
                 } catch (e: TwitterException) {
-                    val user=  realm.where(UserObject::class.java).equalTo("screenname",screenName).findFirst()
-                    mUser.value =user?.user?.getDeserialized<User>()
+                    val user=  RoselinDatabase.getInstance(getApplication()).userDataDao().findByScreenName(screenName)
+                    mUser.value =user.user
                     getApplication<Roselin>().toast(twitterExceptionMessage(e))
                 }
             }
@@ -184,10 +187,10 @@ class UserTimeLineViewModel(app: Application) : MainTimeLineViewModel(app) {
                 try {
                     val result= async(CommonPool) { getTwitterInstance().showUser(id) }.await()
                     mUser.value =result
-                    saveUser(result)
+                    UserData.save(getApplication<Roselin>(),result)
                 } catch (e: TwitterException) {
-                    val user=  realm.where(UserObject::class.java).equalTo("id",id).findFirst()
-                    mUser.value =user?.user?.getDeserialized<User>()
+                    val user=    RoselinDatabase.getInstance(getApplication()).userDataDao().findById(id)
+                    mUser.value =user.user
                     getApplication<Roselin>().toast(twitterExceptionMessage(e))
                 }
             }
@@ -204,6 +207,8 @@ class UserTimeLineViewModel(app: Application) : MainTimeLineViewModel(app) {
         }
         getApplication<Roselin>().toast("ミュートしました")
     }
+
+    val realm by lazy { Realm.getDefaultInstance() }
 
     fun changeName(string: String) {
         realm.executeTransaction {

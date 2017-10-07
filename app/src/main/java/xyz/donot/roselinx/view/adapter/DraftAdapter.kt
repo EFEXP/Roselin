@@ -2,47 +2,43 @@ package xyz.donot.roselinx.view.adapter
 
 import android.content.Context
 import android.support.v7.widget.AppCompatImageButton
-import android.util.Log
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListAdapter
 import android.widget.TextView
-import io.realm.OrderedRealmCollection
-import io.realm.Realm
-import io.realm.RealmBaseAdapter
+import kotlinx.android.synthetic.main.item_draft.view.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.DraftObject
+import xyz.donot.roselinx.customrecycler.CalculableRecyclerAdapter
+import xyz.donot.roselinx.model.room.RoselinDatabase
+import xyz.donot.roselinx.model.room.TweetDraft
 import xyz.donot.roselinx.util.extraUtils.inflater
 
-class DraftAdapter(val context: Context, val realmResults: OrderedRealmCollection<DraftObject>) : RealmBaseAdapter<DraftObject>(realmResults), ListAdapter {
 
-    override fun getView(position: Int, convertView_: View?, parent: ViewGroup): View {
-        var convertView = convertView_
-        val viewHolder: ViewHolder
-        if (convertView == null) {
-            convertView = context.inflater.inflate(R.layout.item_draft, parent, false)
-            viewHolder = ViewHolder()
-            viewHolder.draftText = convertView.findViewById(R.id.draft_txt)
-            viewHolder.deleteDraft = convertView.findViewById(R.id.delete_draft)
-            convertView.tag = viewHolder
-        } else {
-            viewHolder = convertView.tag as ViewHolder
-        }
-        val item = realmResults[position]
-        viewHolder.draftText?.text = item.text
-        viewHolder.deleteDraft?.setOnClickListener {
-            Realm.getDefaultInstance().use {
-                it.executeTransaction {
-                    item.deleteFromRealm()
+class TweetDraftAdapter(private val androidContext: Context) : CalculableRecyclerAdapter<TweetDraftAdapter.DraftViewHolder,TweetDraft> (){
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DraftViewHolder = DraftViewHolder(androidContext.inflater.inflate(R.layout.item_draft, parent, false))
+
+    override fun onBindViewHolder(holder: DraftViewHolder, position: Int) {
+        val item = itemList[position]
+        holder.apply {
+            draftText.text = item.text
+            deleteDraft.setOnClickListener {
+                launch(UI) {
+                     async { RoselinDatabase.getInstance(androidContext).tweetDraftDao().delete(item)}.await()
+                    itemList-=item
                 }
             }
         }
-        Log.d("Realm", item.toString())
-        return convertView!!
     }
-
-    inner class ViewHolder {
-        var draftText: TextView? = null
-        var deleteDraft: AppCompatImageButton? = null
+    inner class DraftViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+        var draftText: TextView = view.draft_txt
+        var deleteDraft: AppCompatImageButton = view.delete_draft
     }
 }
+
+
+

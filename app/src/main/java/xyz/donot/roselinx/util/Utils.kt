@@ -40,6 +40,11 @@ fun getTwitterInstance(): twitter4j.Twitter = Realm.getDefaultInstance().use {
     return ac?.twitter?.getDeserialized<Twitter>() ?: throw IllegalStateException()
 }
 
+fun getAccountObject(): AccountObject = Realm.getDefaultInstance().use {
+    val ac = it.where(AccountObject::class.java).equalTo("isMain", true).findFirst()
+    return ac ?: throw IllegalStateException()
+}
+
 fun PagerAdapter.findFragmentByPosition(viewPager: ViewPager, position: Int): Fragment {
     val fragment = instantiateItem(viewPager, position) as Fragment
     finishUpdate(viewPager)

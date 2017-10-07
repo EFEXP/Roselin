@@ -17,8 +17,7 @@ import twitter4j.User
 import twitter4j.conf.ConfigurationBuilder
 import xyz.donot.roselinx.model.realm.AccountObject
 import xyz.donot.roselinx.model.realm.MuteObject
-import xyz.donot.roselinx.model.realm.UserObject
-import xyz.donot.roselinx.model.realm.saveUser
+import xyz.donot.roselinx.model.room.UserData
 import xyz.donot.roselinx.util.extraUtils.Bundle
 import xyz.donot.roselinx.util.getSerialized
 import xyz.donot.roselinx.view.custom.SingleLiveEvent
@@ -41,9 +40,9 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
                            it.id = user.id
                        }
                )
-
             }
-            saveUser(user)
+        UserData.save(getApplication(),user)
+
     }
 
     private var hasNext = false
@@ -77,13 +76,7 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
             val result = async(CommonPool) { tw.getFriendsList(u.id, -1, 50) }.await()
             realm.executeTransaction {
                 result.forEach { user_ ->
-                    realm.insertOrUpdate(
-                            UserObject().apply {
-                                user = user_.getSerialized()
-                                screenname = user_.screenName
-                                id = user_.id
-                            }
-                    )
+                    UserData.save(getApplication(),user_)
                 }
             }
         }
