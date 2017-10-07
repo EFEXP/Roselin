@@ -68,6 +68,9 @@ androidExtensions {
 dependencies {
     def lifecycleEx = "1.0.0-beta2"
     implementation "android.arch.lifecycle:extensions:${lifecycleEx}"
+    implementation "android.arch.persistence.room:runtime:${lifecycleEx}"
+    implementation "android.arch.persistence.room:rxjava2:${lifecycleEx}"
+    kapt "android.arch.persistence.room:compiler:${lifecycleEx}"
     def twitter4j = "4.0.6"
     implementation "org.twitter4j:twitter4j-core:${twitter4j}"
     implementation "org.twitter4j:twitter4j-media-support:${twitter4j}"

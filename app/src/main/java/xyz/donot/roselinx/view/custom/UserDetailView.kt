@@ -20,9 +20,10 @@ import xyz.donot.roselinx.util.getTagURLMention
 import xyz.donot.roselinx.util.getURLLink
 import java.text.SimpleDateFormat
 
-class UserDetailView(context: Context, attributeSet: AttributeSet? = null, defStyleAttr: Int = 0)  : ConstraintLayout(context, attributeSet, defStyleAttr) ,Target {
-    constructor(context: Context) : this(context, null, 0)
-    constructor(context: Context, attributeSet: AttributeSet?) : this(context, attributeSet, 0)
+class UserDetailView  : ConstraintLayout ,Target {
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     var iconClick: () -> Unit = {}
     var friendClick: () -> Unit = {}

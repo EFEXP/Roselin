@@ -90,6 +90,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
             }
             retweetClick = { retweeted, id ->
                 if (!retweeted) {
+
                     launch(UI) {
                         try {
                             val result = async(CommonPool) { getTwitterInstance().retweetStatus(id) }.await()

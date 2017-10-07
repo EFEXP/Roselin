@@ -18,57 +18,57 @@ import xyz.donot.roselinx.view.adapter.UserListAdapter
 
 
 class AccountSettingActivity : AppCompatActivity() {
-	val adapter by lazy { UserListAdapter() }
+    val adapter by lazy { UserListAdapter() }
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_account_setting)
-		setSupportActionBar(toolbar)
-		supportActionBar?.setDisplayHomeAsUpEnabled(true)
-		supportActionBar?.setDisplayShowHomeEnabled(true)
-		toolbar.title = "アカウントの選択"
-		val dividerItemDecoration = DividerItemDecoration(recycler_account.context,
-				LinearLayoutManager(this).orientation)
-		recycler_account.addItemDecoration(dividerItemDecoration)
-		recycler_account.layoutManager = LinearLayoutManager(this)
-		recycler_account.adapter = adapter
-		adapter.setOnItemLongClickListener { _, _, position ->
-			Realm.getDefaultInstance().use {
-				it.executeTransaction {
-					it.where(AccountObject::class.java).equalTo("id", adapter.data[position].id).findFirst()?.deleteFromRealm()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_account_setting)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        toolbar.title = "アカウントの選択"
+        val dividerItemDecoration = DividerItemDecoration(recycler_account.context,
+                LinearLayoutManager(this).orientation)
+        recycler_account.addItemDecoration(dividerItemDecoration)
+        recycler_account.layoutManager = LinearLayoutManager(this)
+        recycler_account.adapter = adapter
+        adapter.setOnItemLongClickListener { _, _, position ->
+            Realm.getDefaultInstance().use {
+                it.executeTransaction {
+                    it.where(AccountObject::class.java).equalTo("id", adapter.data[position].id).findFirst()?.deleteFromRealm()
 
-				}
-				toast("削除しました")
-				adapter.notifyItemRemoved(position)
-				true
-			}
-		}
-		adapter.setOnItemClickListener { _, _, position ->
-			Realm.getDefaultInstance().use {
-				it.executeTransaction {
-					it.where(AccountObject::class.java).equalTo("isMain", true).findFirst()?.isMain = false
-					it.where(AccountObject::class.java).equalTo("id", adapter.data[position].id).findFirst()?.apply {
-						isMain = true
-					}
-				}
-				val data = Intent()
-				data.putExtra("accountChanged", true)
-				setResult(AppCompatActivity.RESULT_OK, data)
-				finish()
-			}
-		}
-		 Realm.getDefaultInstance().use {realm->
-			val users = realm.where(AccountObject::class.java).findAll().map { it.user?.getDeserialized<User>() }
-				adapter.addData(users)
-			}
-		fab.setOnClickListener { _ ->
-			start<OauthActivity>()
-		}
-	}
+                }
+                toast("削除しました")
+                adapter.notifyItemRemoved(position)
+                true
+            }
+        }
+        adapter.setOnItemClickListener { _, _, position ->
+            Realm.getDefaultInstance().use {
+                it.executeTransaction {
+                    it.where(AccountObject::class.java).equalTo("isMain", true).findFirst()?.isMain = false
+                    it.where(AccountObject::class.java).equalTo("id", adapter.data[position].id).findFirst()?.apply {
+                        isMain = true
+                    }
+                }
+                val data = Intent()
+                data.putExtra("accountChanged", true)
+                setResult(AppCompatActivity.RESULT_OK, data)
+                finish()
+            }
+        }
+        Realm.getDefaultInstance().use { realm ->
+            val users = realm.where(AccountObject::class.java).findAll().map { it.user?.getDeserialized<User>() }
+            adapter.addData(users)
+        }
+        fab.setOnClickListener { _ ->
+            start<OauthActivity>()
+        }
+    }
 
-	override fun onSupportNavigateUp(): Boolean {
-		onBackPressed()
-		return super.onSupportNavigateUp()
-	}
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
 }
 
