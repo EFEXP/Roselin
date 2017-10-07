@@ -7,10 +7,9 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.widget.EditText
-import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_mute_setting.*
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.MuteObject
+import xyz.donot.roselinx.model.room.MuteFilter
 import xyz.donot.roselinx.view.fragment.realm.MuteUserFragment
 import xyz.donot.roselinx.view.fragment.realm.MuteWordFragment
 
@@ -30,13 +29,7 @@ class MuteSettingActivity : AppCompatActivity() {
                     .setTitle("ミュートワードを入力してください")
                     .setView(editView)
                     .setPositiveButton("OK", { _, _ ->
-                        Realm.getDefaultInstance().executeTransaction {
-                            it.createObject(MuteObject::class.java)
-                                    .apply {
-                                        text = editView.text.toString()
-                                        kichitsui=true
-                                    }
-                        }
+                        MuteFilter.save(this@MuteSettingActivity, MuteFilter(text = editView.text.toString(),user = null,kichitsui = 0,accountId = 0L))
                     })
                     .setNegativeButton("キャンセル", { _, _ -> })
                     .show()

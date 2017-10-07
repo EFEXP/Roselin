@@ -16,7 +16,7 @@ import twitter4j.TwitterFactory
 import twitter4j.User
 import twitter4j.conf.ConfigurationBuilder
 import xyz.donot.roselinx.model.realm.AccountObject
-import xyz.donot.roselinx.model.realm.MuteObject
+import xyz.donot.roselinx.model.room.MuteFilter
 import xyz.donot.roselinx.model.room.UserData
 import xyz.donot.roselinx.util.extraUtils.Bundle
 import xyz.donot.roselinx.util.getSerialized
@@ -53,16 +53,9 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
                 val result = async(CommonPool) { tw.getMutesList(cursor) }.await()
                 hasNext = result.hasNext()
                 if (result.hasNext()) cursor = result.nextCursor
-                realm.executeTransaction {
                     result.forEach { muser ->
-                        realm.insertOrUpdate(
-                                MuteObject().apply {
-                                    user = muser.getSerialized()
-                                    id = muser.id
-                                }
-                        )
+                        MuteFilter.save(getApplication(), MuteFilter(user = muser,accountId = muser.id))
                     }
-                }
                 if (hasNext) saveMute(tw)
                 else isFinished.call()
             } catch (e: Exception) {
@@ -74,11 +67,9 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
     private fun saveFollower(tw: Twitter, u: User) {
         launch(UI) {
             val result = async(CommonPool) { tw.getFriendsList(u.id, -1, 50) }.await()
-            realm.executeTransaction {
                 result.forEach { user_ ->
                     UserData.save(getApplication(),user_)
                 }
-            }
         }
     }
 

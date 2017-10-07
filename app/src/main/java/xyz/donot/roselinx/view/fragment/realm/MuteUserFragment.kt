@@ -1,5 +1,6 @@
 package xyz.donot.roselinx.view.fragment.realm
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.support.text.emoji.widget.EmojiAppCompatTextView
@@ -10,33 +11,45 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.squareup.picasso.Picasso
-import io.realm.OrderedRealmCollection
-import io.realm.Realm
-import io.realm.RealmRecyclerViewAdapter
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_user.view.*
-import twitter4j.User
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.MuteObject
-import xyz.donot.roselinx.util.getDeserialized
+import xyz.donot.roselinx.customrecycler.CalculableRecyclerAdapter
+import xyz.donot.roselinx.model.room.MuteFilter
+import xyz.donot.roselinx.model.room.RoselinDatabase
 import xyz.donot.roselinx.view.fragment.base.ARecyclerFragment
 
 
 class MuteUserFragment : ARecyclerFragment(){
-    val adapter by lazy { MuteUserAdapter(Realm.getDefaultInstance().where(MuteObject::class.java).notEqualTo("id",0L).findAll()) }
+    val adapter by lazy { MuteUserAdapter() }
 
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler.adapter=adapter
-
+        launch(UI) {
+            async {
+                RoselinDatabase.getInstance(activity).muteFilterDao().getMuteUser()
+            }.await()
+                    .observe(
+                            this@MuteUserFragment,
+                            Observer {
+                                it?.let {
+                                    adapter.itemList = it
+                                }
+                            }
+                    )
+        }
     }
 
-     inner class MuteUserAdapter(orderedRealmCollection: OrderedRealmCollection<MuteObject>): RealmRecyclerViewAdapter<MuteObject, MuteUserAdapter.ViewHolder>(orderedRealmCollection,true){
+     inner class MuteUserAdapter: CalculableRecyclerAdapter<MuteUserAdapter.ViewHolder,MuteFilter>(){
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val item=getItem(position)!!
-            val user=item.user?.getDeserialized<User>()
+            val item=itemList[position]
+            val user=item.user
             holder.apply {
                 screenname.text="@"+user?.screenName
                 Picasso.with(activity).load(user?.biggerProfileImageURLHttps).into(icon)
@@ -46,11 +59,7 @@ class MuteUserFragment : ARecyclerFragment(){
                     AlertDialog.Builder(activity)
                             .setTitle("削除しますか？")
                             .setPositiveButton("OK", {_, _ ->
-                                Realm.getDefaultInstance().use {
-                                    it.executeTransaction{
-                                        item.deleteFromRealm()
-                                    }
-                                }
+                              launch {   RoselinDatabase.getInstance(getContext()).muteFilterDao().delete(item) }
                             })
                             .setNegativeButton("キャンセル",  { _,_ -> })
                             .show()

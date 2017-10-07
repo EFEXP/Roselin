@@ -10,7 +10,7 @@ import twitter4j.Status
 import twitter4j.Twitter
 import twitter4j.User
 import xyz.donot.roselinx.model.realm.AccountObject
-import xyz.donot.roselinx.model.realm.MuteObject
+import xyz.donot.roselinx.model.room.RoselinDatabase
 import xyz.donot.roselinx.util.extraUtils.logd
 import xyz.klinker.android.drag_dismiss.DragDismissIntentBuilder
 import java.io.*
@@ -66,18 +66,18 @@ fun haveToken(): Boolean = Realm.getDefaultInstance().use {
     return it.where(AccountObject::class.java).count() > 0
 }
 
-fun canPass(status: Status): Boolean {
+fun canPass(status: Status, context: Context): Boolean {
     val userId = status.user.id
-    val text = status.text
-    Realm.getDefaultInstance().use { realm ->
-        if (realm.where(MuteObject::class.java).equalTo("id", userId).count() > 0) {
-            return false
-        }
-        if (realm.where(MuteObject::class.java).equalTo("text", text).count() > 0) {
-            return false
-        }
-    }
-    return true
+    val dao= RoselinDatabase.getInstance(context).muteFilterDao().getAllData()
+    val mutedUserIds=dao.map { it.user}.filterNotNull().map {  it.id }
+    val mutedWords=dao.map {it.text}.filterNotNull().filter { status.text.contains(it) }
+
+    if (mutedUserIds.contains(userId))
+        return false
+    if (mutedWords.isNotEmpty())
+        return false
+
+        return true
 
 }
 

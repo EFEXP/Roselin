@@ -13,7 +13,6 @@ import kotlinx.coroutines.experimental.launch
 import twitter4j.Status
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.realm.CustomProfileObject
-import xyz.donot.roselinx.model.realm.MuteObject
 import xyz.donot.roselinx.util.extraUtils.*
 import xyz.donot.roselinx.util.getDragdismiss
 import xyz.donot.roselinx.util.getTwitterInstance
@@ -25,13 +24,18 @@ import xyz.donot.roselinx.view.custom.TweetView
 
 class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_tweet_view) {
 
-    private val kichitsui = Realm.getDefaultInstance().where(MuteObject::class.java).equalTo("kichitsui", true).findAll().filter { it.kichitsui }.mapNotNull { it.id }
+  //  private lateinit var kichitsui :List<Long>
     private lateinit var customname: RealmResults<CustomProfileObject>
     private lateinit var customnameId: List<Long>
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
-        customname = Realm.getDefaultInstance().where(CustomProfileObject::class.java).findAll()
-        customnameId = customname.mapNotNull { it.id }
+        launch(UI) {
+          //  kichitsui=   async {  RoselinDatabase.getInstance(recyclerView.context).muteFilterDao().kichitsuiMuted().mapNotNull {it.id } }.await()
+            customname = Realm.getDefaultInstance().where(CustomProfileObject::class.java).findAll()
+            customnameId = customname.mapNotNull { it.id }
+        }
+
+
     }
 
     override fun convert(helper: BaseViewHolder, status: Status) {
@@ -40,11 +44,14 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
             if (status.isRetweet) {
                 if (customnameId.contains(status.retweetedStatus.user.id))
                     stringName = customname.first { it.id == status.retweetedStatus.user.id }.customname
-                setStatus(status, status.retweetedStatus, kichitsui.contains(status.retweetedStatus.user.id), stringName)
+                setStatus(status, status.retweetedStatus,
+                   false
+                        //kichitsui.contains(status.retweetedStatus.user.id)
+                        , stringName)
             } else {
                 if (customnameId.contains(status.user.id))
                     stringName = customname.first { it.id == status.user.id }.customname
-                setStatus(status, status, kichitsui.contains(status.user.id), stringName)
+                setStatus(status, status,false, stringName)
             }
 
             pictureClick = { position, images ->

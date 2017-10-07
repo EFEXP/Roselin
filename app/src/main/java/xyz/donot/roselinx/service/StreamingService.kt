@@ -88,7 +88,7 @@ class StreamingService : Service() {
                     if (defaultSharedPreferences.getBoolean("notification_reply", true)) replyNotification(onStatus)
                     LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewReply").putExtra("Status", onStatus.getSerialized()))
                 }
-                if (canPass(onStatus)) {
+                if (canPass(onStatus,this@StreamingService)) {
                     LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewStatus").putExtra("Status", onStatus.getSerialized()))
                     if (onStatus.inReplyToStatusId>0&&!onStatus.isRetweet)
                     {

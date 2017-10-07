@@ -19,13 +19,12 @@ import twitter4j.User
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.Roselin
 import xyz.donot.roselinx.model.realm.CustomProfileObject
-import xyz.donot.roselinx.model.realm.MuteObject
+import xyz.donot.roselinx.model.room.MuteFilter
 import xyz.donot.roselinx.model.room.RoselinDatabase
 import xyz.donot.roselinx.model.room.UserData
 import xyz.donot.roselinx.util.extraUtils.*
 import xyz.donot.roselinx.util.getDragdismiss
 import xyz.donot.roselinx.util.getMyId
-import xyz.donot.roselinx.util.getSerialized
 import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.activity.EditProfileActivity
 import xyz.donot.roselinx.view.activity.PictureActivity
@@ -198,14 +197,12 @@ class UserTimeLineViewModel(app: Application) : MainTimeLineViewModel(app) {
     }
 
     fun muteUser() {
-        realm.executeTransaction {
-            it.createObject(MuteObject::class.java)
-                    .apply {
-                        id = mUser.value!!.id
-                        user = mUser.value?.getSerialized()
-                    }
+        launch(UI) {
+            async {
+                MuteFilter.save(getApplication(), MuteFilter(accountId =mUser.value!!.id,user = mUser.value))
+            }.await()
+            getApplication<Roselin>().toast("ミュートしました")
         }
-        getApplication<Roselin>().toast("ミュートしました")
     }
 
     val realm by lazy { Realm.getDefaultInstance() }

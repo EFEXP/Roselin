@@ -12,12 +12,11 @@ import twitter4j.TwitterException
 import twitter4j.User
 import xyz.donot.roselinx.Roselin
 import xyz.donot.roselinx.model.realm.CustomProfileObject
-import xyz.donot.roselinx.model.realm.MuteObject
+import xyz.donot.roselinx.model.room.MuteFilter
 import xyz.donot.roselinx.model.room.RoselinDatabase
 import xyz.donot.roselinx.model.room.UserData
 import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.util.extraUtils.twitterExceptionMessage
-import xyz.donot.roselinx.util.getSerialized
 import xyz.donot.roselinx.util.getTwitterInstance
 
 
@@ -69,13 +68,7 @@ class UserViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun muteUser() {
-        realm.executeTransaction {
-            it.createObject(MuteObject::class.java)
-                    .apply {
-                        id = mUser.value!!.id
-                        user = mUser.value?.getSerialized()
-                    }
-        }
+        MuteFilter.save(getApplication(), MuteFilter(accountId= mUser.value!!.id,user = mUser.value))
         getApplication<Roselin>().toast("ミュートしました")
     }
 
