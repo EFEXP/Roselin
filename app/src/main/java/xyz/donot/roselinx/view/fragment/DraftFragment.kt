@@ -1,5 +1,6 @@
 package xyz.donot.roselinx.view.fragment
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.View
@@ -16,19 +17,26 @@ import xyz.donot.roselinx.viewmodel.activity.EditTweetViewModel
 class DraftFragment : ARecyclerFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-       view.apply {
-            val mAdapter= TweetDraftAdapter(activity)
-            mAdapter.onItemClick={item, _ ->
-                if(activity is EditTweetActivity){
-                    ViewModelProviders.of(activity).get(EditTweetViewModel::class.java).draft.value=item
+        view.apply {
+            val mAdapter = TweetDraftAdapter(context)
+            mAdapter.onItemClick = { item, _ ->
+                if (activity is EditTweetActivity) {
+                    ViewModelProviders.of(activity).get(EditTweetViewModel::class.java).draft.value = item
                 }
-               launch {  RoselinDatabase.getInstance(activity).tweetDraftDao().delete(item) }
+                launch { RoselinDatabase.getInstance(activity).tweetDraftDao().delete(item) }
                 this@DraftFragment.dismiss()
             }
-            recycler.adapter=mAdapter
+            recycler.adapter = mAdapter
+            launch(UI) {
+                 async { RoselinDatabase.getInstance(getContext()).tweetDraftDao().getAllLiveData() }.await()
+                .observe(this@DraftFragment, Observer {
+                    it?.let {
+                        mAdapter.itemList=it
+                    }
+                })
+            }
 
-           launch (UI){
-               mAdapter.itemList=  async { RoselinDatabase.getInstance(getContext()).tweetDraftDao().getAll()}.await()
-           }
+        }
+    }
+}
 
-        }}}

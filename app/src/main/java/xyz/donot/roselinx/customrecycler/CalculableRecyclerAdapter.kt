@@ -2,19 +2,13 @@ package xyz.donot.roselinx.customrecycler
 
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
 import kotlin.properties.Delegates
 
 abstract class CalculableRecyclerAdapter<VH : RecyclerView.ViewHolder, T : Diffable> : RecyclerView.Adapter<VH>() {
     var onItemClick: (item: T, position: Int) -> Unit = { x, y -> }
 
     var itemList: List<T> by Delegates.observable(emptyList()) { _, old, new ->
-        launch(UI) {
-            val result = async { calculateDiff(old, new) }.await()
-            result.dispatchUpdatesTo(this@CalculableRecyclerAdapter)
-        }
+            calculateDiff(old, new).dispatchUpdatesTo(this@CalculableRecyclerAdapter)
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {

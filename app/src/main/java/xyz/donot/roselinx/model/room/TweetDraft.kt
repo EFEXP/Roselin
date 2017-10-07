@@ -1,5 +1,6 @@
 package xyz.donot.roselinx.model.room
 
+import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
 import android.content.Context
 import kotlinx.coroutines.experimental.android.UI
@@ -30,8 +31,11 @@ interface TweetDraftDao {
     @Query("SELECT * FROM tweet_draft")
     fun getAll(): List<TweetDraft>
 
+    @Query("SELECT * FROM tweet_draft")
+    fun getAllLiveData(): LiveData<List<TweetDraft>>
+
     @Query("SELECT * FROM tweet_draft WHERE accountId=:id")
-    fun equalToIdDrafts(id:Long): List<TweetDraft>
+    fun equalToIdDrafts(id:Long): LiveData<List<TweetDraft>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertDraft(draft: TweetDraft): Long

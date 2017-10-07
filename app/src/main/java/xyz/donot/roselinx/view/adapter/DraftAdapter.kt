@@ -23,13 +23,13 @@ class TweetDraftAdapter(private val androidContext: Context) : CalculableRecycle
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DraftViewHolder = DraftViewHolder(androidContext.inflater.inflate(R.layout.item_draft, parent, false))
 
     override fun onBindViewHolder(holder: DraftViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
         val item = itemList[position]
         holder.apply {
             draftText.text = item.text
             deleteDraft.setOnClickListener {
                 launch(UI) {
                      async { RoselinDatabase.getInstance(androidContext).tweetDraftDao().delete(item)}.await()
-                    itemList-=item
                 }
             }
         }
