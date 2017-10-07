@@ -9,16 +9,17 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.app.RemoteInput
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.LocalBroadcastManager
-import io.realm.Realm
 import twitter4j.*
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.NFAVORITE
-import xyz.donot.roselinx.model.realm.NRETWEET
-import xyz.donot.roselinx.model.realm.NotificationObject
+import xyz.donot.roselinx.model.room.NFAVORITE
+import xyz.donot.roselinx.model.room.NRETWEET
+import xyz.donot.roselinx.model.room.Notification
+import xyz.donot.roselinx.model.room.RoselinDatabase
 import xyz.donot.roselinx.util.*
 import xyz.donot.roselinx.util.extraUtils.*
 import xyz.donot.roselinx.view.activity.MainActivity
 import xyz.donot.roselinx.viewmodel.activity.SendReplyReceiver
+import java.util.*
 import kotlin.concurrent.thread
 
 
@@ -70,16 +71,9 @@ class StreamingService : Service() {
                 //RT
                 if (onStatus.retweetedStatus.user.id == getMyId()) {
                     if (defaultSharedPreferences.getBoolean("notification_retweet", true)) toast("${onStatus.user.name}にRTされました")
-                    mainThread {
-                        val realm = Realm.getDefaultInstance()
-                        realm.executeTransaction {
-                            it.createObject(NotificationObject::class.java).apply {
-                                status = onStatus.getSerialized()
-                                sourceUser = onStatus.user.getSerialized()
-                                type = NRETWEET
-                            }
-                        }
-                    }
+                    RoselinDatabase.getInstance(this@StreamingService).notificationDao().insertNotification(
+                            Notification(sourceUser = onStatus.user,status = onStatus,type = NRETWEET,date = Date())
+                    )
                 }
             }
             else {
@@ -119,14 +113,9 @@ class StreamingService : Service() {
             super.onFavorite(source, target, favoritedStatus)
             if (source.id != getMyId()) {
                 if (defaultSharedPreferences.getBoolean("notification_favorite", true)) toast("${source.name}にいいねされました")
-                val realm = Realm.getDefaultInstance()
-                realm.executeTransaction {
-                    it.createObject(NotificationObject::class.java).apply {
-                        status = favoritedStatus.getSerialized()
-                        sourceUser = source.getSerialized()
-                        type = NFAVORITE
-                    }
-                }
+                RoselinDatabase.getInstance(this@StreamingService).notificationDao().insertNotification(
+                        Notification(sourceUser =source,status =favoritedStatus,type = NFAVORITE,date = Date())
+                )
             }
         }
     }

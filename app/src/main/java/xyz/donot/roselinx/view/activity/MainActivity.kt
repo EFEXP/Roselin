@@ -18,11 +18,14 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.error_activity.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.TabDataObject
+import xyz.donot.roselinx.model.room.RoselinDatabase
+import xyz.donot.roselinx.model.room.SavedTab
 import xyz.donot.roselinx.util.extraUtils.*
 import xyz.donot.roselinx.util.findFragmentByPosition
 import xyz.donot.roselinx.util.haveToken
@@ -55,72 +58,73 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         viewmodel.initNotification()
         viewmodel.initTab()
-        setUpView()
-        viewmodel.apply {
-            registerReceivers()
-            initUser()
-            if (bundle == null) {
-                initStream()
+        launch(UI) {
+            val result = async { RoselinDatabase.getInstance(this@MainActivity).savedTabDao().getAllData() }.await()
+            setUpView(result)
+            viewmodel.apply {
+                registerReceivers()
+                initUser()
+                if (bundle == null) {
+                    initStream()
+                }
             }
+            initialRequestPermission()
         }
-        initialRequestPermission()
     }
 
     @SuppressLint("NewApi")
-    private fun setUpView() {
+    private fun setUpView(result: List<SavedTab>) {
         if (!defaultSharedPreferences.getBoolean("quick_tweet", false)) {
             editText_layout.visibility = View.GONE
         }
-
         //pager
-        Realm.getDefaultInstance().use {
-            val list = it.copyFromRealm(it.where(TabDataObject::class.java).findAll()).toList()
-            val adapter = MainTimeLineAdapter(supportFragmentManager, list)
-            main_viewpager.adapter = adapter
-            main_viewpager.offscreenPageLimit = adapter.count
-            main_viewpager.currentItem = 1
 
-            viewmodel.postSucceed.observe(this, Observer {
-                editText_status.hideSoftKeyboard()
-                it?.let { status ->
-                    editText_status.editableText.clear()
-                    Snackbar.make(main_coordinator, "投稿しました", Snackbar.LENGTH_SHORT).setAction("取り消し", { viewmodel.deleteTweet(status.id) }).show()
-                }
-            })
-            viewmodel.deleteSucceed.observe(this, Observer { Snackbar.make(main_coordinator, "削除しました", Snackbar.LENGTH_SHORT).show() })
+        val adapter = MainTimeLineAdapter(supportFragmentManager, result)
+        main_viewpager.adapter = adapter
+        main_viewpager.offscreenPageLimit = adapter.count
 
-            val uriString = defaultSharedPreferences.getString("BackGroundUri", "")
-            if (!uriString.isEmpty()) {
-                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.parse(uriString))
-                val bitmapDrawable = BitmapDrawable(resources, bitmap)
-                val porter = if (defaultSharedPreferences.getBoolean("night", true)) PorterDuff.Mode.DARKEN else PorterDuff.Mode.LIGHTEN
-                val d2 = DrawableCompat.wrap(bitmapDrawable)
-                DrawableCompat.setTint(d2, ContextCompat.getColor(this@MainActivity, R.color.overlay_background))
-                DrawableCompat.setTintMode(d2, porter)
-                main_coordinator.background = d2
+        main_viewpager.currentItem = 1
+        viewmodel.postSucceed.observe(this, Observer {
+            editText_status.hideSoftKeyboard()
+            it?.let { status ->
+                editText_status.editableText.clear()
+                Snackbar.make(main_coordinator, "投稿しました", Snackbar.LENGTH_SHORT).setAction("取り消し", { viewmodel.deleteTweet(status.id) }).show()
             }
-            tabs_main.setupWithViewPager(main_viewpager)
-            tabs_main.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabReselected(tab: TabLayout.Tab) {
-                    val fragment =adapter.findFragmentByPosition(main_viewpager,tab.position)
-                    (fragment as? ARecyclerFragment)?.scrollRecycler(0)
+        })
+        viewmodel.deleteSucceed.observe(this, Observer { Snackbar.make(main_coordinator, "削除しました", Snackbar.LENGTH_SHORT).show() })
 
-                }
-
-                override fun onTabUnselected(tab: TabLayout.Tab?) {
-
-                }
-
-                override fun onTabSelected(tab: TabLayout.Tab?) {
-
-                }
-
-            })
-            fab.setOnClickListener { start<EditTweetActivity>() }
-            button_tweet.setOnClickListener {
-                viewmodel.sendTweet(text = editText_status.editableText.toString())
-            }
+        val uriString = defaultSharedPreferences.getString("BackGroundUri", "")
+        if (!uriString.isEmpty()) {
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.parse(uriString))
+            val bitmapDrawable = BitmapDrawable(resources, bitmap)
+            val porter = if (defaultSharedPreferences.getBoolean("night", true)) PorterDuff.Mode.DARKEN else PorterDuff.Mode.LIGHTEN
+            val d2 = DrawableCompat.wrap(bitmapDrawable)
+            DrawableCompat.setTint(d2, ContextCompat.getColor(this@MainActivity, R.color.overlay_background))
+            DrawableCompat.setTintMode(d2, porter)
+            main_coordinator.background = d2
         }
+        tabs_main.setupWithViewPager(main_viewpager)
+        tabs_main.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab) {
+                val fragment = main_viewpager.adapter.findFragmentByPosition(main_viewpager, tab.position)
+                (fragment as? ARecyclerFragment)?.scrollRecycler(0)
+
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+
+            }
+
+        })
+        fab.setOnClickListener { start<EditTweetActivity>() }
+        button_tweet.setOnClickListener {
+            viewmodel.sendTweet(text = editText_status.editableText.toString())
+        }
+
     }
 
     //Permission

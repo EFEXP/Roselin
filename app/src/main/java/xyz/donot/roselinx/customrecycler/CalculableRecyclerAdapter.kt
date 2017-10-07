@@ -1,14 +1,28 @@
 package xyz.donot.roselinx.customrecycler
 
 import android.support.v7.util.DiffUtil
+import android.support.v7.util.ListUpdateCallback
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import kotlin.properties.Delegates
 
-abstract class CalculableRecyclerAdapter<VH : RecyclerView.ViewHolder, T : Diffable> : RecyclerView.Adapter<VH>() {
-    var onItemClick: (item: T, position: Int) -> Unit = { x, y -> }
 
+abstract class CalculableRecyclerAdapter<VH : RecyclerView.ViewHolder, T : Diffable> : RecyclerView.Adapter<VH>() {
+    internal val binder = MyCallback<VH, CalculableRecyclerAdapter<VH, T>>()
+    private var recycler: RecyclerView? = null
+    var onItemClick: (item: T, position: Int) -> Unit = { x, y -> }
     var itemList: List<T> by Delegates.observable(emptyList()) { _, old, new ->
-            calculateDiff(old, new).dispatchUpdatesTo(this@CalculableRecyclerAdapter)
+        calculateDiff(old, new).dispatchUpdatesTo(binder)
+        if (binder.firstInsert==0&&(recycler?.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()==0) {
+            recycler?.smoothScrollToPosition(binder.firstInsert)
+        }
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+        super.onAttachedToRecyclerView(recyclerView)
+        recycler = recyclerView
+        binder.bind(this@CalculableRecyclerAdapter)
+
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
@@ -33,7 +47,6 @@ private class Callback(
         val old: List<Diffable>,
         val new: List<Diffable>
 ) : DiffUtil.Callback() {
-
     override fun getOldListSize() = old.size
     override fun getNewListSize() = new.size
 
@@ -45,6 +58,34 @@ private class Callback(
         return old[oldItemPosition].isContentsTheSame(new[newItemPosition])
     }
 }
+
+internal class MyCallback<VH : RecyclerView.ViewHolder, Adapter : RecyclerView.Adapter<VH>> : ListUpdateCallback {
+    var firstInsert = -1
+    var adapter: Adapter? = null
+    fun bind(adapter: Adapter) {
+        this.adapter = adapter
+    }
+
+    override fun onChanged(position: Int, count: Int, payload: Any) {
+        adapter!!.notifyItemRangeChanged(position, count, payload)
+    }
+
+    override fun onInserted(position: Int, count: Int) {
+        if (firstInsert == -1 || firstInsert > position) {
+            firstInsert = position
+        }
+        adapter!!.notifyItemRangeInserted(position, count)
+    }
+
+    override fun onMoved(fromPosition: Int, toPosition: Int) {
+        adapter!!.notifyItemMoved(fromPosition, toPosition)
+    }
+
+    override fun onRemoved(position: Int, count: Int) {
+        adapter!!.notifyItemRangeRemoved(position, count)
+    }
+}
+
 
 fun calculateDiff(
         old: List<Diffable>,

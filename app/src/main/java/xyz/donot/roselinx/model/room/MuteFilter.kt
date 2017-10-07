@@ -9,9 +9,6 @@ import kotlinx.coroutines.experimental.launch
 import twitter4j.User
 import xyz.donot.roselinx.customrecycler.Diffable
 
-
-
-
 @Entity(tableName = "mute_filter")
 data class MuteFilter(
         var accountId: Long =0L,

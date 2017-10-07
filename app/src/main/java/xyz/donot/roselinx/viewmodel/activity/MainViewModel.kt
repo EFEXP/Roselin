@@ -24,7 +24,7 @@ import twitter4j.StatusUpdate
 import twitter4j.User
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.Roselin
-import xyz.donot.roselinx.model.realm.*
+import xyz.donot.roselinx.model.room.*
 import xyz.donot.roselinx.service.REPLY_ID
 import xyz.donot.roselinx.service.SearchStreamService
 import xyz.donot.roselinx.service.StreamingService
@@ -92,35 +92,28 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val realm = Realm.getDefaultInstance()
     //realm
     fun initTab() {
-        if (realm.where(TabDataObject::class.java).count() <= 0) {
-            realm.executeTransaction {
-                it.createObject(TabDataObject::class.java).apply {
-                    order = 0
-                    type = SETTING
-                }
-                it.createObject(TabDataObject::class.java).apply {
-                    order = 1
-                    type = HOME
-                    accountId = getMyId()
-                    screenName = getMyScreenName()
-                }
-                it.createObject(TabDataObject::class.java).apply {
-                    order = 3
-                    type = NOTIFICATION
-                    accountId = getMyId()
-                    screenName = getMyScreenName()
-                }
-                it.createObject(TabDataObject::class.java).apply {
-                    order = 2
-                    type = MENTION
-                    accountId = getMyId()
-                    screenName = getMyScreenName()
-                }
+        launch(UI) {
+            val count = async { RoselinDatabase.getInstance(getApplication()).savedTabDao().countTab()}.await()
+            if (count <= 0) {
+                SavedTab.save(getApplication(), SavedTab(type = SETTING))
+                SavedTab.save(getApplication(), SavedTab(
+                        type = HOME,
+                        accountId = getMyId(),
+                        screenName = getMyScreenName()))
+                SavedTab.save(getApplication(), SavedTab(
+                        type = MENTION,
+                        accountId = getMyId(),
+                        screenName = getMyScreenName()))
+                SavedTab.save(getApplication(), SavedTab(
+                        type = NOTIFICATION,
+                        accountId = getMyId(),
+                        screenName = getMyScreenName()))
             }
         }
     }
-    fun initNotification(){
-        if (Build.VERSION.SDK_INT  >= 26&&!getApplication<Roselin>().defaultSharedPreferences.getBoolean("notification_initialized",false)) {
+
+    fun initNotification() {
+        if (Build.VERSION.SDK_INT >= 26 && !getApplication<Roselin>().defaultSharedPreferences.getBoolean("notification_initialized", false)) {
             val channel = arrayListOf(
                     NotificationChannel(
                             "reply",
@@ -133,7 +126,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             )
             )
             getApplication<Roselin>().getNotificationManager().createNotificationChannels(channel)
-            getApplication<Roselin>().defaultSharedPreferences.putBoolean("notification_initialized",true)
+            getApplication<Roselin>().defaultSharedPreferences.putBoolean("notification_initialized", true)
         }
     }
 
@@ -162,6 +155,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
     //User
     val user: MutableLiveData<User> = MutableLiveData()
 
@@ -178,7 +172,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         if (app.defaultSharedPreferences.getBoolean("use_home_stream", true)) {
             app.startService<StreamingService>()
         }
-      //  app.startService<SearchStreamService>()
+        //  app.startService<SearchStreamService>()
     }
 
     //Destroy
