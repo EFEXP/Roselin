@@ -14,7 +14,6 @@ import android.os.Handler
 import android.support.v4.app.RemoteInput
 import android.support.v4.content.LocalBroadcastManager
 import android.util.Log
-import io.realm.Realm
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -87,22 +86,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private val realm = Realm.getDefaultInstance()
+
     //realm
     fun initTab() {
         launch(UI) {
-            val count = async { RoselinDatabase.getInstance().savedTabDao().countTab()}.await()
+            val count = async { RoselinDatabase.getInstance().savedTabDao().countTab() }.await()
             if (count <= 0) {
                 SavedTab.save(SavedTab(type = SETTING))
-                SavedTab.save( SavedTab(
+                SavedTab.save(SavedTab(
                         type = HOME,
                         accountId = twitter.id,
-                        screenName =twitter.user.screenName))
-                SavedTab.save( SavedTab(
+                        screenName = twitter.user.screenName))
+                SavedTab.save(SavedTab(
                         type = MENTION,
                         accountId = twitter.id,
-                        screenName =twitter.user.screenName))
-                SavedTab.save( SavedTab(
+                        screenName = twitter.user.screenName))
+                SavedTab.save(SavedTab(
                         type = NOTIFICATION,
                         accountId = twitter.id,
                         screenName = twitter.user.screenName))
@@ -133,7 +132,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         if (!text.isBlank() && text.codePointCount(0, text.length) <= 140) {
             launch(UI) {
                 try {
-                    val status = async(CommonPool) {twitter.account.updateStatus(text) }.await()
+                    val status = async(CommonPool) { twitter.account.updateStatus(text) }.await()
                     postSucceed.value = status
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -189,7 +188,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
         app.stopService(app.newIntent<SearchStreamService>())
         app.stopService(app.newIntent<StreamingService>())
-        realm.close()
+
     }
 
 
@@ -219,7 +218,7 @@ class SendReplyReceiver : BroadcastReceiver() {
         launch(UI) {
             try {
                 async(CommonPool) {
-                    twitter.account .updateStatus(StatusUpdate("@$screenname  $text").apply {
+                    twitter.account.updateStatus(StatusUpdate("@$screenname  $text").apply {
                         inReplyToStatusId = statusId
                     })
                 }.await()

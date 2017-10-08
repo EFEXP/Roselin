@@ -13,8 +13,6 @@ import com.google.android.gms.ads.MobileAds
 import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
-import io.realm.Realm
-import io.realm.RealmConfiguration
 import xyz.donot.roselinx.util.Key.xxxxx
 import xyz.donot.roselinx.util.Key.yyyyyy
 import xyz.donot.roselinx.util.extraUtils.RoselinxConfig
@@ -27,14 +25,9 @@ class Roselin : MultiDexApplication() {
         //Twitter
         val twitterConfig = TwitterConfig.Builder(this).twitterAuthConfig(TwitterAuthConfig(yyyyyy, xxxxx)).build()
         Twitter.initialize(twitterConfig)
-        //realm
-        Realm.init(this)
-        val config = RealmConfiguration.Builder()
-                .deleteRealmIfMigrationNeeded()
-                .build()
-        Realm.setDefaultConfiguration(config)
-      if(BuildConfig.DEBUG)
-          RoselinxConfig.logEnabled = true
+
+        if (BuildConfig.DEBUG)
+            RoselinxConfig.logEnabled = true
         /*
         val config = RealmConfiguration.Builder().schemaVersion(0L)
                 .migration(MyRealmMigration())
@@ -74,14 +67,16 @@ class Roselin : MultiDexApplication() {
 
 }
 
-class ContextHolder(val context: Context){
+class ContextHolder(val context: Context) {
     companion object {
         @SuppressLint("StaticFieldLeak")
         lateinit private var instance: ContextHolder
-        fun onCreateApplication(context: Context){
-            instance= ContextHolder(context)
+
+        fun onCreateApplication(context: Context) {
+            instance = ContextHolder(context)
         }
-        fun getContext():Context{
+
+        fun getContext(): Context {
             return instance.context
         }
     }

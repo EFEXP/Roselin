@@ -7,7 +7,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import io.realm.Realm
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
@@ -18,7 +17,7 @@ import twitter4j.TwitterException
 import twitter4j.User
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.Roselin
-import xyz.donot.roselinx.model.realm.CustomProfileObject
+import xyz.donot.roselinx.model.room.CustomProfile
 import xyz.donot.roselinx.model.room.MuteFilter
 import xyz.donot.roselinx.model.room.RoselinDatabase
 import xyz.donot.roselinx.model.room.UserData
@@ -166,7 +165,7 @@ class UserTimeLineViewModel(app: Application) : MainTimeLineViewModel(app) {
                 try {
                     val result= async(CommonPool) { getAccount().account.showUser(screenName) }.await()
                     mUser.value =result
-                    UserData.save(getApplication<Roselin>(),result)
+                    UserData.save(UserData(user = result,id = result.id,screenname = result.screenName))
                 } catch (e: TwitterException) {
                     val user=  RoselinDatabase.getInstance().userDataDao().findByScreenName(screenName)
                     mUser.value =user.user
@@ -185,7 +184,7 @@ class UserTimeLineViewModel(app: Application) : MainTimeLineViewModel(app) {
                 try {
                     val result= async(CommonPool) {getAccount().account.showUser(id) }.await()
                     mUser.value =result
-                    UserData.save(getApplication<Roselin>(),result)
+                    UserData.save(UserData(user = result,id = result.id,screenname = result.screenName))
                 } catch (e: TwitterException) {
                     val user=    RoselinDatabase.getInstance().userDataDao().findById(id)
                     mUser.value =user.user
@@ -204,31 +203,17 @@ class UserTimeLineViewModel(app: Application) : MainTimeLineViewModel(app) {
         }
     }
 
-    val realm by lazy { Realm.getDefaultInstance() }
+
 
     fun changeName(string: String) {
-        realm.executeTransaction {
-            it.copyToRealmOrUpdate(
-                    CustomProfileObject().apply {
-                        id = mUser.value!!.id
-                        customname = string
-                    }
-            )
-        }
+        CustomProfile.save(CustomProfile(string,mUser.value!!.id))
         getApplication<Roselin>().toast("変更しました")
     }
 
     fun revertName(){
-        realm.executeTransaction {
-            it.where(CustomProfileObject::class.java).equalTo("id",mUser.value!!.id).findAll().forEach {
-                it.customname=null
-            }
-        }
+        CustomProfile.save(CustomProfile(null,mUser.value!!.id))
         getApplication<Roselin>().toast("戻しました")
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        realm.close()
-    }
+
 }

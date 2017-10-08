@@ -2,7 +2,6 @@ package xyz.donot.roselinx.view.activity
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -18,12 +17,9 @@ import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.activity_user.*
 import twitter4j.User
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.util.extraUtils.newIntent
 import xyz.donot.roselinx.util.getDragdismiss
 import xyz.donot.roselinx.view.adapter.UserTimeLineAdapter
 import xyz.donot.roselinx.view.fragment.status.UserTimeLineViewModel
-import xyz.donot.roselinx.viewmodel.activity.UserViewModel
-import kotlin.properties.Delegates
 
 
 class UserActivity : AppCompatActivity(),Target {

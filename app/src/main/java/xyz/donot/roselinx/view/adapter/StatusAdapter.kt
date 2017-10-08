@@ -4,15 +4,14 @@ import android.app.Activity
 import android.support.v7.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import io.realm.Realm
-import io.realm.RealmResults
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import twitter4j.Status
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.CustomProfileObject
+import xyz.donot.roselinx.model.room.CustomProfile
+import xyz.donot.roselinx.model.room.RoselinDatabase
 import xyz.donot.roselinx.util.extraUtils.*
 import xyz.donot.roselinx.util.getAccount
 import xyz.donot.roselinx.util.getDragdismiss
@@ -24,15 +23,15 @@ import xyz.donot.roselinx.view.custom.TweetView
 
 class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_tweet_view) {
 
-  //  private lateinit var kichitsui :List<Long>
-    private lateinit var customname: RealmResults<CustomProfileObject>
+    //  private lateinit var kichitsui :List<Long>
+    private lateinit var customname: List<CustomProfile>
     private lateinit var customnameId: List<Long>
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         launch(UI) {
-          //  kichitsui=   async {  RoselinDatabase.getInstance(recyclerView.context).muteFilterDao().kichitsuiMuted().mapNotNull {it.id } }.await()
-            customname = Realm.getDefaultInstance().where(CustomProfileObject::class.java).findAll()
-            customnameId = customname.mapNotNull { it.id }
+            //  kichitsui=   async {  RoselinDatabase.getInstance(recyclerView.context).muteFilterDao().kichitsuiMuted().mapNotNull {it.id } }.await()
+            customname = async { RoselinDatabase.getInstance().customProfileDao().getAllData() }.await()
+            customnameId = customname.mapNotNull { it.userId }
         }
 
 
@@ -43,15 +42,15 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
             var stringName: String? = null
             if (status.isRetweet) {
                 if (customnameId.contains(status.retweetedStatus.user.id))
-                    stringName = customname.first { it.id == status.retweetedStatus.user.id }.customname
+                    stringName = customname.first { it.userId == status.retweetedStatus.user.id }.customname
                 setStatus(status, status.retweetedStatus,
-                   false
+                        false
                         //kichitsui.contains(status.retweetedStatus.user.id)
                         , stringName)
             } else {
                 if (customnameId.contains(status.user.id))
-                    stringName = customname.first { it.id == status.user.id }.customname
-                setStatus(status, status,false, stringName)
+                    stringName = customname.first { it.userId == status.user.id }.customname
+                setStatus(status, status, false, stringName)
             }
 
             pictureClick = { position, images ->
@@ -87,7 +86,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
                 } else {
                     launch(UI) {
                         try {
-                            val result = async(CommonPool) {getAccount().account.createFavorite(id) }.await()
+                            val result = async(CommonPool) { getAccount().account.createFavorite(id) }.await()
                             setData(helper.adapterPosition - headerLayoutCount, result)
                         } catch (e: Exception) {
                             e.printStackTrace()

@@ -14,7 +14,9 @@ import java.io.ObjectOutputStream
 import java.util.*
 
 
-@Database(entities = arrayOf(TwitterAccount::class, UserData::class, TweetDraft::class, MuteFilter::class, Notification::class, SavedTab::class), version = 1, exportSchema = false)
+
+
+@Database(entities = arrayOf(TwitterAccount::class, UserData::class, TweetDraft::class, MuteFilter::class, Notification::class, SavedTab::class,CustomProfile::class), version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class RoselinDatabase : RoomDatabase() {
     abstract fun twitterAccountDao(): TwitterAccountDao
@@ -23,7 +25,7 @@ abstract class RoselinDatabase : RoomDatabase() {
     abstract fun muteFilterDao(): MuteFilterDao
     abstract fun notificationDao(): NotificationDao
     abstract fun savedTabDao(): SavedTabDao
-
+    abstract fun customProfileDao(): CustomProfileDao
     companion object {
         @Volatile private var INSTANCE: RoselinDatabase? = null
         @Volatile private var ALLOWEDINSTANCE: RoselinDatabase? = null
@@ -53,13 +55,13 @@ class Converters {
     companion object {
         //Date
         @TypeConverter
-        @JvmStatic fun fromTimeToDate(time: Long): Date {
-            return Date(time)
+        @JvmStatic fun fromTimeToDate(time: Long): Date? {
+            return if (time == 0L) null else Date(time)
         }
 
         @TypeConverter
-        @JvmStatic fun fromDateToTime(date: Date): Long {
-            return date.time
+        @JvmStatic fun fromDateToTime(date: Date?): Long {
+            return date?.time ?: 0L
         }
 
         //Query

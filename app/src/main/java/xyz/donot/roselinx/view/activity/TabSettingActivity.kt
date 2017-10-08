@@ -62,7 +62,7 @@ class TabSettingActivity : AppCompatActivity() {
 
 
         //Configure Adapter
-        mAdapter.onItemClick = { item, position ->
+        mAdapter.onItemClick = { item, _ ->
             if (item.type != SETTING)
                 AlertDialog.Builder(this@TabSettingActivity)
                         .setTitle("削除しますか？")

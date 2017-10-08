@@ -6,7 +6,6 @@ import android.arch.lifecycle.MutableLiveData
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.twitter.sdk.android.core.Result
 import com.twitter.sdk.android.core.TwitterSession
-import io.realm.Realm
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -23,7 +22,7 @@ import xyz.donot.roselinx.util.extraUtils.Bundle
 import xyz.donot.roselinx.view.custom.SingleLiveEvent
 
 class OauthViewModel(app: Application) : AndroidViewModel(app) {
-    private val realm by lazy { Realm.getDefaultInstance() }
+
     val information = MutableLiveData<String>()
     val isFinished = SingleLiveEvent<Unit>()
     private fun saveToken(tw: Twitter, user: User) {
@@ -36,7 +35,7 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
             }
             dao.insertUser(TwitterAccount(isMain = true, user = user, id = user.id, account = tw))
         }
-        UserData.save(getApplication(), user)
+        UserData.save(UserData(user = user,id = user.id,screenname = user.screenName))
 
     }
 
@@ -49,7 +48,7 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
                 hasNext = result.hasNext()
                 if (result.hasNext()) cursor = result.nextCursor
                 result.forEach { muser ->
-                    MuteFilter.save( MuteFilter(user = muser, accountId = muser.id))
+                    MuteFilter.save(MuteFilter(user = muser, accountId = muser.id))
                 }
                 if (hasNext) saveMute(tw)
                 else isFinished.call()
@@ -62,9 +61,7 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
     private fun saveFollower(tw: Twitter, u: User) {
         launch(UI) {
             val result = async(CommonPool) { tw.getFriendsList(u.id, -1, 50) }.await()
-            result.forEach { user_ ->
-                UserData.save(getApplication(), user_)
-            }
+            UserData.saveAll(result.map { UserData(it,it.screenName,it.id) }.toTypedArray())
         }
     }
 
@@ -109,9 +106,5 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        realm.close()
-    }
 
 }

@@ -1,7 +1,6 @@
 package xyz.donot.roselinx.model.room
 
 import android.arch.persistence.room.*
-import android.content.Context
 import kotlinx.coroutines.experimental.launch
 import twitter4j.User
 import xyz.donot.roselinx.customrecycler.Diffable
@@ -15,11 +14,12 @@ data class UserData(
 ): Diffable {
     override fun isTheSame(other: Diffable) = id == (other as? SavedTab)?.id
     companion object {
-  fun save(context: Context,user_:User)=  launch {
-        RoselinDatabase.getInstance().userDataDao().insertUser(
-                UserData(user_,user_.screenName,user_.id)
-        )
+  fun save(user_:UserData)=  launch {
+        RoselinDatabase.getInstance().userDataDao().insertUser(user_)
     }
+        fun saveAll(user_:Array<UserData>)=  launch {
+            RoselinDatabase.getInstance().userDataDao().insertUsers(user_)
+        }
     }
 }
 
@@ -39,6 +39,9 @@ interface UserDataDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertUser(user:UserData):Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertUsers(user:Array<UserData>)
 
     @Query("DELETE FROM user_data")
     fun deleteAll()

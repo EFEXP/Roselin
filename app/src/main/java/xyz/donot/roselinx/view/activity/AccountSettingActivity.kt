@@ -41,7 +41,7 @@ class AccountSettingActivity : AppCompatActivity() {
                 toast("削除しました")
                 adapter.notifyItemRemoved(position)
         }
-        adapter.onItemClick={item,position->
+        adapter.onItemClick={_,position->
             launch (UI){
                 async {
                     val dao=RoselinDatabase.getInstance().twitterAccountDao()

@@ -17,7 +17,6 @@ import com.mlsdev.rximagepicker.Sources
 import com.squareup.picasso.Picasso
 import com.yalantis.ucrop.UCrop
 import com.yalantis.ucrop.UCropActivity
-import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_tweet_edit.*
 import kotlinx.android.synthetic.main.content_tweet_edit.*
 import kotlinx.coroutines.experimental.android.UI
@@ -53,7 +52,7 @@ class EditTweetActivity : AppCompatActivity() {
                     editText_status.editableText.clear()
                     it.replyToScreenName.isNotEmpty()
                     if (!it.replyToScreenName.isNullOrBlank())
-                    editText_status.append("@${it.replyToScreenName} ")
+                        editText_status.append("@${it.replyToScreenName} ")
                     if (it.replyToStatusId != 0L)
                         viewmodel.statusId = it.replyToStatusId
                     editText_status.append(it.text)
@@ -88,11 +87,11 @@ class EditTweetActivity : AppCompatActivity() {
             reply_for_status.text = intent.getStringExtra("status_txt")
             reply_for_status.show()
         }
-        Realm.getDefaultInstance().use {
-            val user = getAccount().user
-            Picasso.with(this).load(user.biggerProfileImageURLHttps).fit().into(iv_icon)
-            editText_status_layout.hint = "@${user.screenName}からツイート"
-        }
+
+        val user = getAccount().user
+        Picasso.with(this).load(user.biggerProfileImageURLHttps).fit().into(iv_icon)
+        editText_status_layout.hint = "@${user.screenName}からツイート"
+
         send_status.setOnClickListener {
             viewmodel.onSendClick(editText_status.text.toString())
         }

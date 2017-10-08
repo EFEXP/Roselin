@@ -2,7 +2,6 @@ package xyz.donot.roselinx.model.room
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
-import android.content.Context
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
@@ -19,7 +18,7 @@ data class TwitterAccount(
 ): Diffable {
     override fun isTheSame(other: Diffable) = id == (other as? SavedTab)?.id
     companion object {
-        fun save(context: Context, account: TwitterAccount) = launch(UI) {
+        fun save(account: TwitterAccount) = launch(UI) {
             async { RoselinDatabase.getInstance().twitterAccountDao().insertUser(account) }.await()
         }
     }
