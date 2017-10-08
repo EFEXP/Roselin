@@ -1,24 +1,26 @@
 package xyz.donot.roselinx.view.activity
 
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_account_setting.*
 import kotlinx.android.synthetic.main.content_account_setting.*
-import twitter4j.User
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.AccountObject
+import xyz.donot.roselinx.model.room.RoselinDatabase
+import xyz.donot.roselinx.model.room.UserData
 import xyz.donot.roselinx.util.extraUtils.start
 import xyz.donot.roselinx.util.extraUtils.toast
-import xyz.donot.roselinx.util.getDeserialized
-import xyz.donot.roselinx.view.adapter.UserListAdapter
+import xyz.donot.roselinx.view.adapter.TwitterUserAdapter
 
 
 class AccountSettingActivity : AppCompatActivity() {
-    val adapter by lazy { UserListAdapter() }
+    val adapter by lazy { TwitterUserAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,35 +34,38 @@ class AccountSettingActivity : AppCompatActivity() {
         recycler_account.addItemDecoration(dividerItemDecoration)
         recycler_account.layoutManager = LinearLayoutManager(this)
         recycler_account.adapter = adapter
-        adapter.setOnItemLongClickListener { _, _, position ->
-            Realm.getDefaultInstance().use {
-                it.executeTransaction {
-                    it.where(AccountObject::class.java).equalTo("id", adapter.data[position].id).findFirst()?.deleteFromRealm()
-
-                }
+        adapter.onItemLongClick= {  _, position ->
+            launch {
+                RoselinDatabase.getInstance().twitterAccountDao().deleteById(adapter.itemList[position].id)
+            }
                 toast("削除しました")
                 adapter.notifyItemRemoved(position)
-                true
-            }
         }
-        adapter.setOnItemClickListener { _, _, position ->
-            Realm.getDefaultInstance().use {
-                it.executeTransaction {
-                    it.where(AccountObject::class.java).equalTo("isMain", true).findFirst()?.isMain = false
-                    it.where(AccountObject::class.java).equalTo("id", adapter.data[position].id).findFirst()?.apply {
-                        isMain = true
-                    }
-                }
+        adapter.onItemClick={item,position->
+            launch (UI){
+                async {
+                    val dao=RoselinDatabase.getInstance().twitterAccountDao()
+                    val selected= dao.findById(adapter.itemList[position].id).copy(isMain = true)
+                    dao.update(selected)
+                    val wasMain=dao.getMainAccount(true).copy(isMain = false)
+                    dao.update(wasMain)
+                }.await()
                 val data = Intent()
                 data.putExtra("accountChanged", true)
                 setResult(AppCompatActivity.RESULT_OK, data)
                 finish()
             }
         }
-        Realm.getDefaultInstance().use { realm ->
-            val users = realm.where(AccountObject::class.java).findAll().map { it.user?.getDeserialized<User>() }
-            adapter.addData(users)
+        launch (UI){
+            async { RoselinDatabase.getInstance().twitterAccountDao().allData() }.await()
+                    .observe(this@AccountSettingActivity, Observer {
+                        it?.let {
+                            adapter.itemList=it.map { it.user }.map { UserData(it,it.screenName,it.id) }
+                        }
+                    })
         }
+
+
         fab.setOnClickListener { _ ->
             start<OauthActivity>()
         }

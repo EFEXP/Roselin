@@ -13,7 +13,7 @@ import xyz.donot.roselinx.Roselin
 import xyz.donot.roselinx.util.extraUtils.mainThread
 import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.util.extraUtils.twitterExceptionMessage
-import xyz.donot.roselinx.util.getTwitterInstance
+import xyz.donot.roselinx.util.getAccount
 import xyz.donot.roselinx.view.custom.SingleLiveEvent
 import kotlin.properties.Delegates
 
@@ -22,11 +22,11 @@ open class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
     var isBackground = MutableLiveData<Boolean>()
     var twitter by Delegates.notNull<Twitter>()
     val exception = MutableLiveData<TwitterException>()
-    val mainTwitter by lazy { getTwitterInstance() }
+    val mainTwitter by lazy { getAccount() }
     val dataInserted = SingleLiveEvent<Unit>()
     val dataRefreshed = SingleLiveEvent<Unit>()
     val dataStore: ArrayList<T> = ArrayList()
-    var adapter: BaseQuickAdapter<T, BaseViewHolder>?=null
+    var adapter:BaseQuickAdapter<T, BaseViewHolder>?=null
     set(value) {
         if (field==null)
         field=value

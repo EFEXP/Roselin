@@ -2,7 +2,6 @@ package xyz.donot.roselinx.model.room
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
-import android.content.Context
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
@@ -21,8 +20,8 @@ data class MuteFilter(
     override fun isTheSame(other: Diffable) = id == (other as? MuteFilter)?.id
 
     companion object {
-        fun save(context: Context,filter: MuteFilter) = launch (UI){
-            async {RoselinDatabase.getInstance(context).muteFilterDao().insertMute(filter)}.await()
+        fun save(filter: MuteFilter) = launch (UI){
+            async {RoselinDatabase.getInstance().muteFilterDao().insertMute(filter)}.await()
         }
     }
 }

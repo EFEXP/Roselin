@@ -29,7 +29,7 @@ class MuteSettingActivity : AppCompatActivity() {
                     .setTitle("ミュートワードを入力してください")
                     .setView(editView)
                     .setPositiveButton("OK", { _, _ ->
-                        MuteFilter.save(this@MuteSettingActivity, MuteFilter(text = editView.text.toString(),user = null,kichitsui = 0,accountId = 0L))
+                        MuteFilter.save(MuteFilter(text = editView.text.toString(),user = null,kichitsui = 0,accountId = 0L))
                     })
                     .setNegativeButton("キャンセル", { _, _ -> })
                     .show()

@@ -9,7 +9,7 @@ import twitter4j.User
 import xyz.donot.roselinx.R
 
 
-class UserListAdapter : BaseQuickAdapter<User,BaseViewHolder>(R.layout.item_user) {
+class UserListAdapter : BaseQuickAdapter<User, BaseViewHolder>(R.layout.item_user) {
 
     override fun convert(helper:BaseViewHolder, item: User) {
         helper.apply {

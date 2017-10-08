@@ -7,14 +7,14 @@ import twitter4j.StatusUpdate
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
 import xyz.donot.roselinx.util.extraUtils.getNotificationManager
+import xyz.donot.roselinx.util.getAccount
 import xyz.donot.roselinx.util.getDeserialized
-import xyz.donot.roselinx.util.getTwitterInstance
 import java.io.File
 import java.util.*
 
 
 class TweetPostService : IntentService("TweetPostService") {
-    val twitter by lazy { getTwitterInstance() }
+    val twitter by lazy { getAccount() }
     override fun onHandleIntent(intent: Intent) {
         val filePath: ArrayList<String>
         val com=id.zelory.compressor.Compressor(this)
@@ -27,7 +27,7 @@ class TweetPostService : IntentService("TweetPostService") {
               val compressed =filePath.map { com.setQuality(Integer.parseInt(defaultSharedPreferences.getString("compress_preference",75.toString())))
                       .compressToFile(File(it)) }
                 notify(id)
-                val uploadedMediaId = compressed.map {  twitter.uploadMedia(it).mediaId }
+                val uploadedMediaId = compressed.map { twitter.account.uploadMedia(it).mediaId }
                 val array = LongArray(uploadedMediaId.size)
                 var i=0
                 while (i < uploadedMediaId.size) {
@@ -37,7 +37,7 @@ class TweetPostService : IntentService("TweetPostService") {
                 updateStatus.setMediaIds(*array)
             }
           try {
-              twitter.updateStatus(updateStatus)
+              twitter.account.updateStatus(updateStatus)
           }
             catch(e:Exception){
                 mNotificationManager.cancel(id)

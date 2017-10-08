@@ -20,7 +20,6 @@ import twitter4j.User
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.newIntent
 import xyz.donot.roselinx.util.getDragdismiss
-import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.view.adapter.UserTimeLineAdapter
 import xyz.donot.roselinx.view.fragment.status.UserTimeLineViewModel
 import xyz.donot.roselinx.viewmodel.activity.UserViewModel

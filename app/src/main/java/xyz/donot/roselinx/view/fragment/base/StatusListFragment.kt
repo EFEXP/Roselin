@@ -22,19 +22,18 @@ import twitter4j.Twitter
 import twitter4j.TwitterException
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.*
-import xyz.donot.roselinx.util.getMyId
-import xyz.donot.roselinx.util.getTwitterInstance
+import xyz.donot.roselinx.util.getAccount
 import xyz.donot.roselinx.view.activity.EditTweetActivity
 import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.adapter.StatusAdapter
 import xyz.donot.roselinx.view.custom.SingleLiveEvent
-import xyz.donot.roselinx.view.fragment.user.RetweeterDialog
+import xyz.donot.roselinx.view.fragment.user.RetweetUserDialog
 import kotlin.properties.Delegates
 
 abstract class MainTimeLineViewModel(app: Application) : AndroidViewModel(app) {
     val adapter by lazy { StatusAdapter() }
     var twitter by Delegates.notNull<Twitter>()
-    val mainTwitter by lazy { getTwitterInstance() }
+    val mainTwitter by lazy { getAccount() }
     val dataInserted = SingleLiveEvent<Unit>()
     val dataRefreshed = SingleLiveEvent<Unit>()
     private val dataStore: ArrayList<Status> = ArrayList()
@@ -97,7 +96,7 @@ abstract class MainTimeLineFragment: ARecyclerFragment(){
                     status
                 }
                 if (!activity.isFinishing) {
-                    val tweetItem = if (getMyId() == status.user.id) {
+                    val tweetItem = if (mainTwitter.id == status.user.id) {
                         R.array.tweet_my_menu
                     } else {
                         R.array.tweet_menu
@@ -122,7 +121,7 @@ abstract class MainTimeLineFragment: ARecyclerFragment(){
                             "削除" -> {
                                 launch(UI) {
                                     try {
-                                        async(CommonPool) { viewmodel.mainTwitter.destroyStatus(status.id) }.await()
+                                        async(CommonPool) { viewmodel.mainTwitter.account.destroyStatus(status.id) }.await()
                                         toast("削除しました")
                                     } catch (e: Exception) {
                                         toast(e.localizedMessage)
@@ -140,9 +139,7 @@ abstract class MainTimeLineFragment: ARecyclerFragment(){
 
                             }
                             "RTした人" -> {
-                                val rd = RetweeterDialog()
-                                rd.arguments = Bundle { putLong("tweetId", item.id) }
-                                rd.show(activity.supportFragmentManager, "")
+                                RetweetUserDialog.getInstance(item.id).show(childFragmentManager, "")
                             }
                             "共有" -> {
                                 context.startActivity(Intent().apply {

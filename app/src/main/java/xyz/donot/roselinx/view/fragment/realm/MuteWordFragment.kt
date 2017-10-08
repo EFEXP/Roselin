@@ -26,7 +26,7 @@ class MuteWordFragment : ARecyclerFragment() {
         recycler.adapter = adapter
         launch(UI) {
             async {
-                RoselinDatabase.getInstance(activity).muteFilterDao().getMuteWord()
+                RoselinDatabase.getInstance().muteFilterDao().getMuteWord()
             }.await()
                     .observe(
                             this@MuteWordFragment,
@@ -50,13 +50,13 @@ class MuteWordFragment : ARecyclerFragment() {
                         val selectedItem = context.resources.getStringArray(tweetItem)[int]
                         when (selectedItem) {
                             "削除" -> {
-                                launch { RoselinDatabase.getInstance(getContext()).muteFilterDao().delete(item)  }
+                                launch { RoselinDatabase.getInstance().muteFilterDao().delete(item)  }
 
                             }
                             "置き換えミュート" -> {
                                 val boolean = if (item.kichitsui == 0) 1 else 0
                                 val modified = item.copy(kichitsui = boolean)
-                                launch { RoselinDatabase.getInstance(getContext()).muteFilterDao().update(modified) }
+                                launch { RoselinDatabase.getInstance().muteFilterDao().update(modified) }
                             }
                         }
                     }).show()

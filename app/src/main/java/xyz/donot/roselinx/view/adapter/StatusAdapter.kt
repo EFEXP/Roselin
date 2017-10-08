@@ -14,8 +14,8 @@ import twitter4j.Status
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.realm.CustomProfileObject
 import xyz.donot.roselinx.util.extraUtils.*
+import xyz.donot.roselinx.util.getAccount
 import xyz.donot.roselinx.util.getDragdismiss
-import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.activity.PictureActivity
 import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.activity.UserActivity
@@ -78,7 +78,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
                 if (favorited) {
                     launch(UI) {
                         try {
-                            val result = async(CommonPool) { getTwitterInstance().destroyFavorite(id) }.await()
+                            val result = async(CommonPool) { getAccount().account.destroyFavorite(id) }.await()
                             setData(helper.adapterPosition - headerLayoutCount, result)
                         } catch (e: Exception) {
                             e.printStackTrace()
@@ -87,7 +87,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
                 } else {
                     launch(UI) {
                         try {
-                            val result = async(CommonPool) { getTwitterInstance().createFavorite(id) }.await()
+                            val result = async(CommonPool) {getAccount().account.createFavorite(id) }.await()
                             setData(helper.adapterPosition - headerLayoutCount, result)
                         } catch (e: Exception) {
                             e.printStackTrace()
@@ -100,7 +100,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
 
                     launch(UI) {
                         try {
-                            val result = async(CommonPool) { getTwitterInstance().retweetStatus(id) }.await()
+                            val result = async(CommonPool) { getAccount().account.retweetStatus(id) }.await()
                             setData(helper.adapterPosition - headerLayoutCount, result)
                             mContext.toast("RTしました")
                         } catch (e: Exception) {

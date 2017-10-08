@@ -25,7 +25,7 @@ import twitter4j.UserList
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.Bundle
 import xyz.donot.roselinx.util.extraUtils.mainThread
-import xyz.donot.roselinx.util.getTwitterInstance
+import xyz.donot.roselinx.util.getAccount
 import xyz.donot.roselinx.view.activity.UsersListActivityViewModel
 import xyz.donot.roselinx.view.custom.DynamicViewPager
 import xyz.donot.roselinx.view.custom.MyLoadingView
@@ -112,7 +112,7 @@ class UsersListPagerAdapter(fm: FragmentManager, val userId: Long) : DynamicView
 
 class UsersListViewModel(app: Application) : AndroidViewModel(app) {
     val adapter by lazy { UserListAdapter() }
-    val twitter by lazy { getTwitterInstance() }
+    val twitter by lazy { getAccount() }
     val exception = MutableLiveData<TwitterException>()
     var userId: Long = 0
     var mode: Boolean = false
@@ -123,7 +123,7 @@ class UsersListViewModel(app: Application) : AndroidViewModel(app) {
             try {
 
                 if (mode) {
-                    val result = async(CommonPool) { twitter.getUserListMemberships(userId, cursor) }.await()
+                    val result = async(CommonPool) {twitter.account.getUserListMemberships(userId, cursor) }.await()
                     if (result.hasNext()) {
                         cursor = result.nextCursor
                         adapter.loadMoreComplete()
@@ -132,7 +132,7 @@ class UsersListViewModel(app: Application) : AndroidViewModel(app) {
                     }
                     adapter.addData(result)
                 } else {
-                    val result = async(CommonPool) { twitter.getUserLists(userId) }.await()
+                    val result = async(CommonPool) { twitter.account.getUserLists(userId) }.await()
                     if (result.isEmpty()) {
                         endAdapter()
                     } else {

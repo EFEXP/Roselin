@@ -35,7 +35,7 @@ class NotificationFragment : ARecyclerFragment() {
         super.onViewCreated(view, savedInstanceState)
         val adapter = NotificationAdapter()
         recycler.adapter = adapter
-       RoselinDatabase.getInstance(context).notificationDao().getAllLiveData().observe(this, Observer {
+       RoselinDatabase.getInstance().notificationDao().getAllLiveData().observe(this, Observer {
            it?.let {
                adapter.itemList=it
            }

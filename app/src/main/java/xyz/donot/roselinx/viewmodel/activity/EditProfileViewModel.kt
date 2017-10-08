@@ -12,9 +12,8 @@ import twitter4j.User
 import xyz.donot.roselinx.Roselin
 import xyz.donot.roselinx.model.room.RoselinDatabase
 import xyz.donot.roselinx.util.extraUtils.getNotificationManager
-import xyz.donot.roselinx.util.getMyId
+import xyz.donot.roselinx.util.getAccount
 import xyz.donot.roselinx.util.getPath
-import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.activity.UPDATE_PROFILE_NOTIFICATION
 import xyz.donot.roselinx.view.custom.SingleLiveEvent
 import java.io.File
@@ -23,14 +22,15 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
     val updated = MutableLiveData<User>()
     val user = MutableLiveData<User>()
     val notify = SingleLiveEvent<Unit>()
+    val account by lazy { getAccount() }
     var iconUri: Uri? = null
     var bannerUri: Uri? = null
     fun initUser() {
         launch(UI) {
-            val t=    async {RoselinDatabase.getInstance(getApplication()).userDataDao().findById(getMyId())  }.await()
+            val t=    async {RoselinDatabase.getInstance().userDataDao().findById(account.id)  }.await()
             if(t==null)
                 launch(UI) {
-                    val result = async(CommonPool) { getTwitterInstance().verifyCredentials() }.await()
+                    val result = async(CommonPool) {account.account.verifyCredentials() }.await()
                     user.value = result
                 }
             else{
@@ -44,7 +44,7 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
     fun clickFab(name: String, web: String, location: String, description: String) {
         launch(UI) {
             updated.value = async(CommonPool) {
-                getTwitterInstance().updateProfile(
+                account.account.updateProfile(
                         name,
                         web,
                         location,
@@ -52,8 +52,8 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
             }.await()
         }
         if (bannerUri != null || iconUri != null) {
-            val iconJob = async(CommonPool) { getTwitterInstance().updateProfileImage(File(getPath(getApplication(), iconUri!!))) }
-            val bannerJob = async(CommonPool) { getTwitterInstance().updateProfileBanner(File(getPath(getApplication(), bannerUri!!))) }
+            val iconJob = async(CommonPool) { account.account.updateProfileImage(File(getPath(getApplication(), iconUri!!))) }
+            val bannerJob = async(CommonPool) { account.account.updateProfileBanner(File(getPath(getApplication(), bannerUri!!))) }
             launch(UI){
                 notify.call()
                 if (iconUri!=null)

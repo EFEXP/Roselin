@@ -10,7 +10,10 @@ import kotlin.properties.Delegates
 abstract class CalculableRecyclerAdapter<VH : RecyclerView.ViewHolder, T : Diffable> : RecyclerView.Adapter<VH>() {
     internal val binder = MyCallback<VH, CalculableRecyclerAdapter<VH, T>>()
     private var recycler: RecyclerView? = null
-    var onItemClick: (item: T, position: Int) -> Unit = { x, y -> }
+    var onItemClick: (item: T, position: Int) -> Unit ={ _, _ -> }
+    var onItemLongClick: (item: T, position: Int) -> Unit = { _, _ -> }
+    var onLoadMore: () -> Unit = {  }
+
     var itemList: List<T> by Delegates.observable(emptyList()) { _, old, new ->
         calculateDiff(old, new).dispatchUpdatesTo(binder)
         if (binder.firstInsert==0&&(recycler?.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()==0) {
@@ -26,7 +29,11 @@ abstract class CalculableRecyclerAdapter<VH : RecyclerView.ViewHolder, T : Diffa
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.itemView.setOnClickListener { onItemClick(itemList[position], position) }
+        val item=itemList[position]
+        if (position==itemList.size) { onLoadMore()}
+        holder.itemView.setOnClickListener { onItemClick(item, position) }
+        holder.itemView.setOnLongClickListener { onItemLongClick(item, position)
+            true }
     }
 
 
@@ -34,7 +41,7 @@ abstract class CalculableRecyclerAdapter<VH : RecyclerView.ViewHolder, T : Diffa
         return itemList.size
     }
 }
-
+//InterFace
 interface Diffable {
     // otherと同じIDを持つかどうか
     fun isTheSame(other: Diffable): Boolean

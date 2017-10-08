@@ -27,19 +27,20 @@ import twitter4j.TwitterException
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.Roselin
 import xyz.donot.roselinx.util.extraUtils.*
+import xyz.donot.roselinx.util.getAccount
 import xyz.donot.roselinx.util.getDeserialized
-import xyz.donot.roselinx.util.getMyId
-import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.activity.EditTweetActivity
 import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.adapter.StatusAdapter
 import xyz.donot.roselinx.view.custom.MyLoadingView
 import xyz.donot.roselinx.view.custom.SingleLiveEvent
 import xyz.donot.roselinx.view.fragment.base.ARecyclerFragment
-import xyz.donot.roselinx.view.fragment.user.RetweeterDialog
+import xyz.donot.roselinx.view.fragment.user.RetweetUserDialog
 
 class SearchTimeline : ARecyclerFragment() {
     val viewmodel: SearchViewModel by lazy { ViewModelProviders.of(this).get(SearchViewModel::class.java) }
+    val account by lazy { getAccount() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewmodel.query.value = arguments.getByteArray("query_bundle").getDeserialized<Query>()
@@ -59,7 +60,7 @@ class SearchTimeline : ARecyclerFragment() {
                                 status
                             }
                             if (!(context as Activity).isFinishing) {
-                                val tweetItem = if (getMyId() == status.user.id) {
+                                val tweetItem = if (account.id== status.user.id) {
                                     R.array.tweet_my_menu
                                 } else {
                                     R.array.tweet_menu
@@ -85,7 +86,7 @@ class SearchTimeline : ARecyclerFragment() {
                                                 "削除" -> {
                                                     launch(UI) {
                                                         try {
-                                                            async(CommonPool) { viewmodel.mainTwitter.destroyStatus(status.id) }.await()
+                                                            async(CommonPool) { viewmodel.mainTwitter.account.destroyStatus(status.id) }.await()
                                                             toast("削除しました")
                                                         } catch (e: Exception) {
                                                             toast(e.localizedMessage)
@@ -103,9 +104,7 @@ class SearchTimeline : ARecyclerFragment() {
 
                                                 }
                                                 "RTした人" -> {
-                                                    val rd = RetweeterDialog()
-                                                    rd.arguments = Bundle { putLong("tweetId", item.id) }
-                                                    rd.show(activity.supportFragmentManager, "")
+                                                    RetweetUserDialog.getInstance(item.id).show(childFragmentManager, "")
                                                 }
                                                 "共有" -> {
                                                     context.startActivity(Intent().apply {
@@ -166,7 +165,7 @@ class SearchTimeline : ARecyclerFragment() {
 class SearchViewModel(application: Application) : AndroidViewModel(application) {
     var query: MutableLiveData<Query> = MutableLiveData()
     val exception = MutableLiveData<TwitterException>()
-    val mainTwitter by lazy { getTwitterInstance() }
+    val mainTwitter by lazy { getAccount() }
     val dataRefreshed = SingleLiveEvent<Unit>()
     val adapter: BaseQuickAdapter<Status, BaseViewHolder> by lazy { StatusAdapter() }
     val data = MutableLiveData<List<Status>>()
@@ -190,7 +189,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     fun loadMoreData() {
         launch(UI) {
             try {
-                val result = async(CommonPool) {mainTwitter.search(query.value) }.await()
+                val result = async(CommonPool) {mainTwitter.account.search(query.value) }.await()
                 if (result.hasNext()) {
                     query.value = result.nextQuery()
                     adapter.loadMoreComplete()

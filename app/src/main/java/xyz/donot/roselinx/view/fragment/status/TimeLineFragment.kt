@@ -17,13 +17,16 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import twitter4j.Status
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.util.extraUtils.*
-import xyz.donot.roselinx.util.getMyId
+import xyz.donot.roselinx.util.extraUtils.delayed
+import xyz.donot.roselinx.util.extraUtils.newIntent
+import xyz.donot.roselinx.util.extraUtils.start
+import xyz.donot.roselinx.util.extraUtils.toast
+import xyz.donot.roselinx.util.getAccount
 import xyz.donot.roselinx.view.activity.EditTweetActivity
 import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.adapter.StatusAdapter
 import xyz.donot.roselinx.view.fragment.base.BaseListFragment
-import xyz.donot.roselinx.view.fragment.user.RetweeterDialog
+import xyz.donot.roselinx.view.fragment.user.RetweetUserDialog
 
 
 abstract class TimeLineFragment : BaseListFragment<Status>() {
@@ -45,7 +48,7 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                 status
             }
             if (!(context as Activity).isFinishing) {
-                val tweetItem = if (getMyId() == status.user.id) {
+                val tweetItem = if (getAccount().id == status.user.id) {
                     R.array.tweet_my_menu
                 } else {
                     R.array.tweet_menu
@@ -71,7 +74,7 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                                 "削除" -> {
                                     launch(UI) {
                                         try {
-                                            async(CommonPool) { viewmodel.mainTwitter.destroyStatus(status.id) }.await()
+                                            async(CommonPool) { viewmodel.mainTwitter.account.destroyStatus(status.id) }.await()
                                             toast("削除しました")
                                         } catch (e: Exception) {
                                             toast(e.localizedMessage)
@@ -89,9 +92,7 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
 
                                 }
                                 "RTした人" -> {
-                                    val rd = RetweeterDialog()
-                                    rd.arguments = Bundle { putLong("tweetId", item.id) }
-                                    rd.show(activity.supportFragmentManager, "")
+                                    RetweetUserDialog.getInstance(item.id).show(childFragmentManager, "")
                                 }
                                 "共有" -> {
                                     context.startActivity(Intent().apply {

@@ -4,6 +4,7 @@ import android.arch.persistence.room.*
 import android.content.Context
 import kotlinx.coroutines.experimental.launch
 import twitter4j.User
+import xyz.donot.roselinx.customrecycler.Diffable
 
 
 @Entity(tableName = "user_data")
@@ -11,10 +12,11 @@ data class UserData(
         val user: User,
         val screenname: String,
         @PrimaryKey(autoGenerate = false) val id: Long
-){
+): Diffable {
+    override fun isTheSame(other: Diffable) = id == (other as? SavedTab)?.id
     companion object {
   fun save(context: Context,user_:User)=  launch {
-        RoselinDatabase.getInstance(context).userDataDao().insertUser(
+        RoselinDatabase.getInstance().userDataDao().insertUser(
                 UserData(user_,user_.screenName,user_.id)
         )
     }

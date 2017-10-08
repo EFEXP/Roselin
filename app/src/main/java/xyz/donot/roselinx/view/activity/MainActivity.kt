@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         viewmodel.initNotification()
         viewmodel.initTab()
         launch(UI) {
-            val result = async { RoselinDatabase.getInstance(this@MainActivity).savedTabDao().getAllData() }.await()
+            val result = async { RoselinDatabase.getInstance().savedTabDao().getAllData() }.await()
             setUpView(result)
             viewmodel.apply {
                 registerReceivers()

@@ -23,14 +23,12 @@ import kotlinx.android.synthetic.main.content_tweet_edit.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
-import twitter4j.User
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.CursorPositionListener
 import xyz.donot.roselinx.model.UserSuggestAdapter
 import xyz.donot.roselinx.model.room.RoselinDatabase
 import xyz.donot.roselinx.util.extraUtils.show
-import xyz.donot.roselinx.util.getAccountObject
-import xyz.donot.roselinx.util.getDeserialized
+import xyz.donot.roselinx.util.getAccount
 import xyz.donot.roselinx.view.fragment.DraftFragment
 import xyz.donot.roselinx.view.fragment.TrendFragment
 import xyz.donot.roselinx.viewmodel.activity.EditTweetViewModel
@@ -91,9 +89,9 @@ class EditTweetActivity : AppCompatActivity() {
             reply_for_status.show()
         }
         Realm.getDefaultInstance().use {
-            val user =   getAccountObject().user?.getDeserialized<User>()
-            Picasso.with(this).load(user?.biggerProfileImageURLHttps).fit().into(iv_icon)
-            editText_status_layout.hint = "@${user?.screenName}からツイート"
+            val user = getAccount().user
+            Picasso.with(this).load(user.biggerProfileImageURLHttps).fit().into(iv_icon)
+            editText_status_layout.hint = "@${user.screenName}からツイート"
         }
         send_status.setOnClickListener {
             viewmodel.onSendClick(editText_status.text.toString())
@@ -174,7 +172,7 @@ class EditTweetActivity : AppCompatActivity() {
 
     private fun setUpSuggest() {
         launch(UI) {
-            val screenname = async { RoselinDatabase.getInstance(this@EditTweetActivity).userDataDao().getAll().map { "@" + it.screenname } }.await()
+            val screenname = async { RoselinDatabase.getInstance().userDataDao().getAll().map { "@" + it.screenname } }.await()
             val adapter = UserSuggestAdapter(this@EditTweetActivity, android.R.layout.simple_dropdown_item_1line, screenname)
             adapter.listener = object : CursorPositionListener {
                 override fun currentCursorPosition() = editText_status.selectionStart

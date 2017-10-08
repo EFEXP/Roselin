@@ -6,6 +6,7 @@ import twitter4j.Query
 import twitter4j.Status
 import twitter4j.Twitter
 import twitter4j.User
+import xyz.donot.roselinx.ContextHolder
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
@@ -25,11 +26,20 @@ abstract class RoselinDatabase : RoomDatabase() {
 
     companion object {
         @Volatile private var INSTANCE: RoselinDatabase? = null
-
-        fun getInstance(context: Context): RoselinDatabase =
+        @Volatile private var ALLOWEDINSTANCE: RoselinDatabase? = null
+        fun getInstance(): RoselinDatabase =
                 INSTANCE ?: synchronized(this) {
-                    INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+                    INSTANCE ?: buildDatabase(ContextHolder.getContext()).also { INSTANCE = it }
                 }
+        fun getAllowedInstance(): RoselinDatabase =
+                ALLOWEDINSTANCE ?: synchronized(this) {
+                    ALLOWEDINSTANCE ?: buildAllowedDatabase(ContextHolder.getContext()).also {  ALLOWEDINSTANCE = it }
+                }
+        private fun buildAllowedDatabase(context: Context) =
+                Room.databaseBuilder(context.applicationContext,
+                        RoselinDatabase::class.java, "roselin.db")
+                        .allowMainThreadQueries()
+                        .build()
 
         private fun buildDatabase(context: Context) =
                 Room.databaseBuilder(context.applicationContext,
@@ -122,8 +132,20 @@ class Converters {
                 return it.toByteArray()
             }
         }
+        //Boolean
+        @TypeConverter
+        @JvmStatic fun booleanToInt(value:Boolean): Int{
+         return if (value) 1 else 0
+        }
+
+        @TypeConverter
+        @JvmStatic fun intToBoolean(value:Int):Boolean{
+            return value != 0
+
+        }
 
 
+        //Status
         @TypeConverter
         @JvmStatic fun statusSerialize(value: Status): ByteArray {
             ByteArrayOutputStream().use {

@@ -32,7 +32,7 @@ class MuteUserFragment : ARecyclerFragment(){
         recycler.adapter=adapter
         launch(UI) {
             async {
-                RoselinDatabase.getInstance(activity).muteFilterDao().getMuteUser()
+                RoselinDatabase.getInstance().muteFilterDao().getMuteUser()
             }.await()
                     .observe(
                             this@MuteUserFragment,
@@ -59,7 +59,7 @@ class MuteUserFragment : ARecyclerFragment(){
                     AlertDialog.Builder(activity)
                             .setTitle("削除しますか？")
                             .setPositiveButton("OK", {_, _ ->
-                              launch {   RoselinDatabase.getInstance(getContext()).muteFilterDao().delete(item) }
+                              launch {   RoselinDatabase.getInstance().muteFilterDao().delete(item) }
                             })
                             .setNegativeButton("キャンセル",  { _,_ -> })
                             .show()

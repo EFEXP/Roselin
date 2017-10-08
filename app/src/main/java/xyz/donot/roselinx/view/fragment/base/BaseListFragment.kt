@@ -13,8 +13,8 @@ import kotlinx.android.synthetic.main.content_base_fragment.*
 import kotlinx.android.synthetic.main.item_ad.view.*
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.delayed
+import xyz.donot.roselinx.util.getAccount
 import xyz.donot.roselinx.util.getDeserialized
-import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.custom.MyLoadingView
 import xyz.donot.roselinx.viewmodel.fragment.BaseListViewModel
 
@@ -25,7 +25,7 @@ abstract class BaseListFragment<T> : ARecyclerFragment() {
         viewmodel.apply {
             twitter = if (arguments != null && arguments.containsKey("twitter")) {
                 arguments.getByteArray("twitter").getDeserialized()
-            } else getTwitterInstance()
+            } else getAccount().account
             adapter!!.apply {
                 setOnLoadMoreListener({ viewmodel.loadMoreData() }, recycler)
                 setLoadMoreView(MyLoadingView())
@@ -84,9 +84,6 @@ abstract class BaseListFragment<T> : ARecyclerFragment() {
         super.onStop()
         viewmodel.isBackground.value = true
     }
-
-
-    fun reselect() = recycler.smoothScrollToPosition(0)
 
 
 }

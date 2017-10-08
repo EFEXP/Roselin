@@ -1,6 +1,8 @@
 package xyz.donot.roselinx
 
+import android.annotation.SuppressLint
 import android.app.UiModeManager
+import android.content.Context
 import android.support.multidex.MultiDexApplication
 import android.support.text.emoji.EmojiCompat
 import android.support.text.emoji.FontRequestEmojiCompatConfig
@@ -53,6 +55,7 @@ class Roselin : MultiDexApplication() {
         val conf = FontRequestEmojiCompatConfig(this, fontRequest)
                 .setReplaceAll(true)
         EmojiCompat.init(conf)
+        ContextHolder.onCreateApplication(this)
         //Ad
         MobileAds.initialize(this, getString(R.string.app_ad_id))
         //Delegate
@@ -69,4 +72,17 @@ class Roselin : MultiDexApplication() {
     }
 
 
+}
+
+class ContextHolder(val context: Context){
+    companion object {
+        @SuppressLint("StaticFieldLeak")
+        lateinit private var instance: ContextHolder
+        fun onCreateApplication(context: Context){
+            instance= ContextHolder(context)
+        }
+        fun getContext():Context{
+            return instance.context
+        }
+    }
 }

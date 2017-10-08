@@ -23,12 +23,12 @@ class DraftFragment : ARecyclerFragment() {
                 if (activity is EditTweetActivity) {
                     ViewModelProviders.of(activity).get(EditTweetViewModel::class.java).draft.value = item
                 }
-                launch { RoselinDatabase.getInstance(activity).tweetDraftDao().delete(item) }
+                launch { RoselinDatabase.getInstance().tweetDraftDao().delete(item) }
                 this@DraftFragment.dismiss()
             }
             recycler.adapter = mAdapter
             launch(UI) {
-                 async { RoselinDatabase.getInstance(getContext()).tweetDraftDao().getAllLiveData() }.await()
+                 async { RoselinDatabase.getInstance().tweetDraftDao().getAllLiveData() }.await()
                 .observe(this@DraftFragment, Observer {
                     it?.let {
                         mAdapter.itemList=it

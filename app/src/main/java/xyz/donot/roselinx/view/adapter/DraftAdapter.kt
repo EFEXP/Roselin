@@ -29,7 +29,7 @@ class TweetDraftAdapter(private val androidContext: Context) : CalculableRecycle
             draftText.text = item.text
             deleteDraft.setOnClickListener {
                 launch(UI) {
-                     async { RoselinDatabase.getInstance(androidContext).tweetDraftDao().delete(item)}.await()
+                     async { RoselinDatabase.getInstance().tweetDraftDao().delete(item)}.await()
                 }
             }
         }

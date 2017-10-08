@@ -29,9 +29,7 @@ import xyz.donot.roselinx.service.REPLY_ID
 import xyz.donot.roselinx.service.SearchStreamService
 import xyz.donot.roselinx.service.StreamingService
 import xyz.donot.roselinx.util.extraUtils.*
-import xyz.donot.roselinx.util.getMyId
-import xyz.donot.roselinx.util.getMyScreenName
-import xyz.donot.roselinx.util.getTwitterInstance
+import xyz.donot.roselinx.util.getAccount
 import xyz.donot.roselinx.view.custom.SingleLiveEvent
 
 
@@ -40,7 +38,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val disConnectionReceiver by lazy { DisConnectionReceiver() }
     private val connectionReceiver by lazy { ConnectionReceiver() }
     private val sendReplyReceiver by lazy { SendReplyReceiver() }
-    private val twitter by lazy { getTwitterInstance() }
+    private val twitter by lazy { getAccount() }
     val isConnectedStream = MutableLiveData<Boolean>()
     val postSucceed = MutableLiveData<Status>()
     val deleteSucceed = SingleLiveEvent<Unit>()
@@ -93,21 +91,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     //realm
     fun initTab() {
         launch(UI) {
-            val count = async { RoselinDatabase.getInstance(getApplication()).savedTabDao().countTab()}.await()
+            val count = async { RoselinDatabase.getInstance().savedTabDao().countTab()}.await()
             if (count <= 0) {
-                SavedTab.save(getApplication(), SavedTab(type = SETTING))
-                SavedTab.save(getApplication(), SavedTab(
+                SavedTab.save(SavedTab(type = SETTING))
+                SavedTab.save( SavedTab(
                         type = HOME,
-                        accountId = getMyId(),
-                        screenName = getMyScreenName()))
-                SavedTab.save(getApplication(), SavedTab(
+                        accountId = twitter.id,
+                        screenName =twitter.user.screenName))
+                SavedTab.save( SavedTab(
                         type = MENTION,
-                        accountId = getMyId(),
-                        screenName = getMyScreenName()))
-                SavedTab.save(getApplication(), SavedTab(
+                        accountId = twitter.id,
+                        screenName =twitter.user.screenName))
+                SavedTab.save( SavedTab(
                         type = NOTIFICATION,
-                        accountId = getMyId(),
-                        screenName = getMyScreenName()))
+                        accountId = twitter.id,
+                        screenName = twitter.user.screenName))
             }
         }
     }
@@ -135,7 +133,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         if (!text.isBlank() && text.codePointCount(0, text.length) <= 140) {
             launch(UI) {
                 try {
-                    val status = async(CommonPool) { getTwitterInstance().updateStatus(text) }.await()
+                    val status = async(CommonPool) {twitter.account.updateStatus(text) }.await()
                     postSucceed.value = status
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -148,7 +146,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun deleteTweet(id: Long) {
         launch(UI) {
             try {
-                async(CommonPool) { twitter.destroyStatus(id) }.await()
+                async(CommonPool) { twitter.account.destroyStatus(id) }.await()
                 deleteSucceed.call()
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -162,7 +160,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun initUser() {
         if (user.value == null)
             launch(UI) {
-                user.value = async(CommonPool) { twitter.verifyCredentials() }.await()
+                user.value = async(CommonPool) { twitter.account.verifyCredentials() }.await()
             }
     }
 
@@ -214,12 +212,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 class SendReplyReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val text = getMessageText(intent) as String?
+        val twitter by lazy { getAccount() }
         val screenname = intent.getStringExtra("screen_name")
         val statusId = intent.getLongExtra("status_id", 0L)
+
         launch(UI) {
             try {
                 async(CommonPool) {
-                    getTwitterInstance().updateStatus(StatusUpdate("@$screenname  $text").apply {
+                    twitter.account .updateStatus(StatusUpdate("@$screenname  $text").apply {
                         inReplyToStatusId = statusId
                     })
                 }.await()

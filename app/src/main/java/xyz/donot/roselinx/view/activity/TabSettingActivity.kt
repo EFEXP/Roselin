@@ -26,13 +26,13 @@ import xyz.donot.roselinx.R
 import xyz.donot.roselinx.customrecycler.DraggableAdapter
 import xyz.donot.roselinx.customrecycler.ItemDragAndSwipeCallback
 import xyz.donot.roselinx.model.room.*
-import xyz.donot.roselinx.util.getMyId
-import xyz.donot.roselinx.util.getMyScreenName
+import xyz.donot.roselinx.util.getAccount
 import xyz.donot.roselinx.view.fragment.SearchSettingFragment
 
 
 class TabSettingActivity : AppCompatActivity() {
     private val REQUEST_LISTS = 1
+    val account by lazy { getAccount() }
 
     private val mAdapter by lazy { TabItemAdapter() }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +52,7 @@ class TabSettingActivity : AppCompatActivity() {
 
         launch(UI) {
             async {
-                RoselinDatabase.getInstance(this@TabSettingActivity).savedTabDao().getAllLiveData().observe(this@TabSettingActivity, Observer {
+                RoselinDatabase.getInstance().savedTabDao().getAllLiveData().observe(this@TabSettingActivity, Observer {
                     it?.let {
                         mAdapter.itemList = it
                     }
@@ -68,7 +68,7 @@ class TabSettingActivity : AppCompatActivity() {
                         .setTitle("削除しますか？")
                         .setPositiveButton("OK", { _, _ ->
                             launch(UI) {
-                                async { RoselinDatabase.getInstance(this@TabSettingActivity).savedTabDao().delete(item) }.await()
+                                async { RoselinDatabase.getInstance().savedTabDao().delete(item) }.await()
                                 realmRecreate()
                             }
 
@@ -84,26 +84,26 @@ class TabSettingActivity : AppCompatActivity() {
                         val selectedItem = resources.getStringArray(tabMenu)[int]
                         when (selectedItem) {
                             "ホーム" -> {
-                                SavedTab.save(this@TabSettingActivity, SavedTab(type = HOME, accountId = getMyId(), screenName = getMyScreenName()))
+                                SavedTab.save(SavedTab(type = HOME, accountId = account.id, screenName =account.user.screenName))
                                 realmRecreate()
                             }
                             "リスト" -> {
-                                startActivityForResult(UsersListActivity.newIntent(this, getMyId(), true), REQUEST_LISTS)
+                                startActivityForResult(UsersListActivity.newIntent(this, account.id, true), REQUEST_LISTS)
                             }
                             "リプライ" -> {
-                                SavedTab.save(this@TabSettingActivity, SavedTab(type = MENTION,
-                                        accountId = getMyId(),
-                                        screenName = getMyScreenName()))
+                                SavedTab.save(SavedTab(type = MENTION,
+                                        accountId = account.id,
+                                        screenName =account.user.screenName))
                                 realmRecreate()
                             }
                             "トレンド" -> {
-                                SavedTab.save(this@TabSettingActivity, SavedTab(type = TREND))
+                                SavedTab.save( SavedTab(type = TREND))
                                 realmRecreate()
                             }
                             "ダイレクトメール" -> {
-                                SavedTab.save(this@TabSettingActivity, SavedTab(type = DM,
-                                        accountId = getMyId(),
-                                        screenName = getMyScreenName()))
+                                SavedTab.save( SavedTab(type = DM,
+                                        accountId = account.id,
+                                        screenName = account.user.screenName))
                                 realmRecreate()
                             }
                             "検索" -> {
@@ -111,9 +111,9 @@ class TabSettingActivity : AppCompatActivity() {
                             }
 
                             "通知" -> {
-                                SavedTab.save(this@TabSettingActivity, SavedTab(type = NOTIFICATION,
-                                        accountId = getMyId(),
-                                        screenName = getMyScreenName()))
+                                SavedTab.save(SavedTab(type = NOTIFICATION,
+                                        accountId = account.id,
+                                        screenName =account.user.screenName))
                                 realmRecreate()
                             }
                         }
@@ -127,7 +127,7 @@ class TabSettingActivity : AppCompatActivity() {
     }
 
     fun setSearchWord(query: Query, querytext: String) {
-        SavedTab.save(this@TabSettingActivity, SavedTab(type = SEARCH,
+        SavedTab.save( SavedTab(type = SEARCH,
                 searchQuery = query,
                 searchWord = querytext))
 
@@ -136,10 +136,10 @@ class TabSettingActivity : AppCompatActivity() {
 
     fun realmRecreate() {
         launch {
-            RoselinDatabase.getInstance(this@TabSettingActivity).savedTabDao().deleteAll()
+            RoselinDatabase.getInstance().savedTabDao().deleteAll()
             for (i in 0 until mAdapter.itemList.size) {
                 val data = mAdapter.itemList[i]
-                SavedTab.save(this@TabSettingActivity, SavedTab(
+                SavedTab.save( SavedTab(
                         type = data.type,
                         screenName = data.screenName,
                         listId = data.listId,
@@ -157,7 +157,7 @@ class TabSettingActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (data != null && resultCode == Activity.RESULT_OK) {
             if (requestCode == REQUEST_LISTS) {
-                SavedTab.save(this@TabSettingActivity, SavedTab(
+                SavedTab.save( SavedTab(
                         type = LIST,
                         listName = data.getStringExtra("listName"),
                         listId = data.getLongExtra("listId", 0L),

@@ -17,11 +17,12 @@ import xyz.donot.roselinx.model.room.RoselinDatabase
 import xyz.donot.roselinx.model.room.UserData
 import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.util.extraUtils.twitterExceptionMessage
-import xyz.donot.roselinx.util.getTwitterInstance
+import xyz.donot.roselinx.util.getAccount
 
 
 class UserViewModel(app: Application) : AndroidViewModel(app) {
     var mUser: MutableLiveData<User> = MutableLiveData()
+    val account by lazy { getAccount() }
     private val realm by lazy { Realm.getDefaultInstance() }
     fun initUser(screenName: String) {
         if (mUser.value == null) {
@@ -31,13 +32,13 @@ class UserViewModel(app: Application) : AndroidViewModel(app) {
          //   }?:
             launch(UI) {
                 try {
-                    val result= async(CommonPool) { getTwitterInstance().showUser(screenName) }.await()
+                    val result= async(CommonPool) { account.account.showUser(screenName) }.await()
                     mUser.value =result
                     UserData.save(getApplication(),result)
                 } catch (e: TwitterException) {
                     launch(UI) {
                       val user=  async {
-                        RoselinDatabase.getInstance(getApplication()).userDataDao()
+                        RoselinDatabase.getInstance().userDataDao()
                                 .findByScreenName(screenName)
                                 .user}.await()
                         mUser.value=user
@@ -55,11 +56,11 @@ class UserViewModel(app: Application) : AndroidViewModel(app) {
          //   }?:
             launch(UI) {
                 try {
-                    val result= async(CommonPool) { getTwitterInstance().showUser(id) }.await()
+                    val result= async(CommonPool) {account.account.showUser(id) }.await()
                     mUser.value =result
                     UserData.save(getApplication(),result)
                 } catch (e: TwitterException) {
-                    val user=  async(CommonPool) { RoselinDatabase.getInstance(getApplication()).userDataDao().findById(id)}.await()
+                    val user=  async(CommonPool) { RoselinDatabase.getInstance().userDataDao().findById(id)}.await()
                     mUser.value =user.user
                     getApplication<Roselin>().toast(twitterExceptionMessage(e))
                 }
@@ -68,7 +69,7 @@ class UserViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun muteUser() {
-        MuteFilter.save(getApplication(), MuteFilter(accountId= mUser.value!!.id,user = mUser.value))
+        MuteFilter.save(MuteFilter(accountId= mUser.value!!.id,user = mUser.value))
         getApplication<Roselin>().toast("ミュートしました")
     }
 

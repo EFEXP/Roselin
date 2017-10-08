@@ -15,11 +15,11 @@ import twitter4j.Twitter
 import twitter4j.TwitterFactory
 import twitter4j.User
 import twitter4j.conf.ConfigurationBuilder
-import xyz.donot.roselinx.model.realm.AccountObject
 import xyz.donot.roselinx.model.room.MuteFilter
+import xyz.donot.roselinx.model.room.RoselinDatabase
+import xyz.donot.roselinx.model.room.TwitterAccount
 import xyz.donot.roselinx.model.room.UserData
 import xyz.donot.roselinx.util.extraUtils.Bundle
-import xyz.donot.roselinx.util.getSerialized
 import xyz.donot.roselinx.view.custom.SingleLiveEvent
 
 class OauthViewModel(app: Application) : AndroidViewModel(app) {
@@ -27,21 +27,16 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
     val information = MutableLiveData<String>()
     val isFinished = SingleLiveEvent<Unit>()
     private fun saveToken(tw: Twitter, user: User) {
-            val realmAccounts = realm.where(AccountObject::class.java).equalTo("isMain", true)
-            realm.executeTransaction {
-                if (realmAccounts.findFirst() != null) {
-                    realmAccounts.findFirst()?.isMain = false
-                }
-               realm.insertOrUpdate(
-                       AccountObject().also {
-                           it.twitter = tw.getSerialized()
-                           it.isMain = true
-                           it.user = user.getSerialized()
-                           it.id = user.id
-                       }
-               )
+        launch {
+            val dao = RoselinDatabase.getInstance().twitterAccountDao()
+            val count = async { dao.count() }.await()
+            if (count > 0) {
+                val account = async { dao.getMainAccount(true).copy(isMain = false) }.await()
+                dao.update(account)
             }
-        UserData.save(getApplication(),user)
+            dao.insertUser(TwitterAccount(isMain = true, user = user, id = user.id, account = tw))
+        }
+        UserData.save(getApplication(), user)
 
     }
 
@@ -53,9 +48,9 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
                 val result = async(CommonPool) { tw.getMutesList(cursor) }.await()
                 hasNext = result.hasNext()
                 if (result.hasNext()) cursor = result.nextCursor
-                    result.forEach { muser ->
-                        MuteFilter.save(getApplication(), MuteFilter(user = muser,accountId = muser.id))
-                    }
+                result.forEach { muser ->
+                    MuteFilter.save( MuteFilter(user = muser, accountId = muser.id))
+                }
                 if (hasNext) saveMute(tw)
                 else isFinished.call()
             } catch (e: Exception) {
@@ -67,9 +62,9 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
     private fun saveFollower(tw: Twitter, u: User) {
         launch(UI) {
             val result = async(CommonPool) { tw.getFriendsList(u.id, -1, 50) }.await()
-                result.forEach { user_ ->
-                    UserData.save(getApplication(),user_)
-                }
+            result.forEach { user_ ->
+                UserData.save(getApplication(), user_)
+            }
         }
     }
 

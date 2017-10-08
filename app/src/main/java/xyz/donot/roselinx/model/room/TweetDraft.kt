@@ -2,7 +2,6 @@ package xyz.donot.roselinx.model.room
 
 import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.*
-import android.content.Context
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
@@ -20,8 +19,8 @@ data class TweetDraft(
     override fun isTheSame(other: Diffable) = id == (other as? TweetDraft)?.id
 
     companion object {
-        fun save(context: Context, tweetDraft: TweetDraft) = launch (UI){
-            async {RoselinDatabase.getInstance(context).tweetDraftDao().insertDraft(tweetDraft) }.await()
+        fun save(tweetDraft: TweetDraft) = launch (UI){
+            async {RoselinDatabase.getInstance().tweetDraftDao().insertDraft(tweetDraft) }.await()
         }
     }
 }

@@ -9,7 +9,7 @@ import xyz.donot.roselinx.model.room.TweetDraft
 import xyz.donot.roselinx.service.TweetPostService
 import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
 import xyz.donot.roselinx.util.extraUtils.newIntent
-import xyz.donot.roselinx.util.getMyId
+import xyz.donot.roselinx.util.getAccount
 import xyz.donot.roselinx.util.getPath
 import xyz.donot.roselinx.util.getSerialized
 import xyz.donot.roselinx.view.adapter.TwitterImageAdapter
@@ -46,7 +46,7 @@ class EditTweetViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun saveDraft(string: String) {
-        TweetDraft.save(getApplication(), TweetDraft(getMyId(),string,statusId,screenName))
+        TweetDraft.save(TweetDraft(getAccount().id,string,statusId,screenName))
     }
 
     fun suddenDeath(string: String): String {

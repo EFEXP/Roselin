@@ -23,9 +23,8 @@ import xyz.donot.roselinx.model.room.MuteFilter
 import xyz.donot.roselinx.model.room.RoselinDatabase
 import xyz.donot.roselinx.model.room.UserData
 import xyz.donot.roselinx.util.extraUtils.*
+import xyz.donot.roselinx.util.getAccount
 import xyz.donot.roselinx.util.getDragdismiss
-import xyz.donot.roselinx.util.getMyId
-import xyz.donot.roselinx.util.getTwitterInstance
 import xyz.donot.roselinx.view.activity.EditProfileActivity
 import xyz.donot.roselinx.view.activity.PictureActivity
 import xyz.donot.roselinx.view.activity.UserListActivity
@@ -41,7 +40,7 @@ class UserTimeLineFragment : MainTimeLineFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewmodel.apply {
-            twitter= getTwitterInstance()
+            twitter= getAccount().account
                 adapter.apply {
                     setOnLoadMoreListener({ viewmodel.loadMoreData(userId) }, recycler)
                     setLoadMoreView(MyLoadingView())
@@ -107,8 +106,8 @@ class UserTimeLineFragment : MainTimeLineFragment() {
 
                 launch(UI) {
                     try {
-                        val result = async(CommonPool) { viewmodel.twitter.showFriendship(getMyId(), user.id) }.await()
-                        setRelation(result, getMyId() == user.id)
+                        val result = async(CommonPool) { viewmodel.twitter.showFriendship(viewmodel.twitter.id, user.id) }.await()
+                        setRelation(result, viewmodel.twitter.id == user.id)
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
@@ -165,11 +164,11 @@ class UserTimeLineViewModel(app: Application) : MainTimeLineViewModel(app) {
             //   }?:
             launch(UI) {
                 try {
-                    val result= async(CommonPool) { getTwitterInstance().showUser(screenName) }.await()
+                    val result= async(CommonPool) { getAccount().account.showUser(screenName) }.await()
                     mUser.value =result
                     UserData.save(getApplication<Roselin>(),result)
                 } catch (e: TwitterException) {
-                    val user=  RoselinDatabase.getInstance(getApplication()).userDataDao().findByScreenName(screenName)
+                    val user=  RoselinDatabase.getInstance().userDataDao().findByScreenName(screenName)
                     mUser.value =user.user
                     getApplication<Roselin>().toast(twitterExceptionMessage(e))
                 }
@@ -184,11 +183,11 @@ class UserTimeLineViewModel(app: Application) : MainTimeLineViewModel(app) {
             //   }?:
             launch(UI) {
                 try {
-                    val result= async(CommonPool) { getTwitterInstance().showUser(id) }.await()
+                    val result= async(CommonPool) {getAccount().account.showUser(id) }.await()
                     mUser.value =result
                     UserData.save(getApplication<Roselin>(),result)
                 } catch (e: TwitterException) {
-                    val user=    RoselinDatabase.getInstance(getApplication()).userDataDao().findById(id)
+                    val user=    RoselinDatabase.getInstance().userDataDao().findById(id)
                     mUser.value =user.user
                     getApplication<Roselin>().toast(twitterExceptionMessage(e))
                 }
@@ -199,7 +198,7 @@ class UserTimeLineViewModel(app: Application) : MainTimeLineViewModel(app) {
     fun muteUser() {
         launch(UI) {
             async {
-                MuteFilter.save(getApplication(), MuteFilter(accountId =mUser.value!!.id,user = mUser.value))
+                MuteFilter.save(MuteFilter(accountId =mUser.value!!.id,user = mUser.value))
             }.await()
             getApplication<Roselin>().toast("ミュートしました")
         }

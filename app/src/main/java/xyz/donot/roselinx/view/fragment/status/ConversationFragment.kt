@@ -17,19 +17,22 @@ import kotlinx.coroutines.experimental.launch
 import twitter4j.Query
 import twitter4j.Status
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.util.extraUtils.*
-import xyz.donot.roselinx.util.getMyId
-import xyz.donot.roselinx.util.getTwitterInstance
+import xyz.donot.roselinx.util.extraUtils.logd
+import xyz.donot.roselinx.util.extraUtils.newIntent
+import xyz.donot.roselinx.util.extraUtils.start
+import xyz.donot.roselinx.util.extraUtils.toast
+import xyz.donot.roselinx.util.getAccount
 import xyz.donot.roselinx.view.activity.EditTweetActivity
 import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.adapter.StatusAdapter
 import xyz.donot.roselinx.view.fragment.base.ARecyclerFragment
-import xyz.donot.roselinx.view.fragment.user.RetweeterDialog
+import xyz.donot.roselinx.view.fragment.user.RetweetUserDialog
 
 
 class ConversationFragment : ARecyclerFragment() {
     val status by lazy { arguments.getSerializable("status") as Status }
     val adapter by lazy { StatusAdapter() }
+    val account by lazy { getAccount() }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter.addData(status)
@@ -50,7 +53,7 @@ class ConversationFragment : ARecyclerFragment() {
             }
 
             if (!(context as Activity).isFinishing) {
-                val tweetItem = if (getMyId() == status.user.id) {
+                val tweetItem = if (account.id  == status.user.id) {
                     R.array.tweet_my_menu
                 } else {
                     R.array.tweet_menu
@@ -69,7 +72,7 @@ class ConversationFragment : ARecyclerFragment() {
                                 "削除" -> {
                                     launch(UI) {
                                         try {
-                                            async(CommonPool) { getTwitterInstance().destroyStatus(status.id) }.await()
+                                            async(CommonPool) { account.account.destroyStatus(status.id) }.await()
                                             toast("削除しました")
                                         } catch (e: Exception) {
                                             toast(e.localizedMessage)
@@ -87,9 +90,7 @@ class ConversationFragment : ARecyclerFragment() {
 
                                 }
                                 "RTした人" -> {
-                                    val rd = RetweeterDialog()
-                                    rd.arguments = Bundle { putLong("tweetId", item.id) }
-                                    rd.show(activity.supportFragmentManager, "")
+                                    RetweetUserDialog.getInstance(item.id).show(childFragmentManager, "")
                                 }
                                 "共有" -> {
                                     context.startActivity(Intent().apply {
@@ -124,7 +125,7 @@ class ConversationFragment : ARecyclerFragment() {
     private fun loadReply(long: Long) {
         launch(UI) {
             try {
-                val result = async(CommonPool) { getTwitterInstance().showStatus(long) }.await()
+                val result = async(CommonPool) {account.account.showStatus(long) }.await()
                 adapter.addData(0, result)
                 val voo = result.inReplyToStatusId > 0
                 if (voo) {
@@ -138,13 +139,13 @@ class ConversationFragment : ARecyclerFragment() {
 
 
     private fun getDiscuss(status: Status) {
-        val twitter by lazy { getTwitterInstance() }
+        val twitter by lazy { getAccount() }
         val query = Query("to:" + status.user.screenName)
         query.count = 100
         context.logd { query.count.toString() }
         launch(UI) {
             try {
-                val result = async(CommonPool) { twitter.search(query) }.await()
+                val result = async(CommonPool) { twitter.account.search(query) }.await()
                 result.tweets
                         .filter { it.inReplyToStatusId == status.id }
                         .forEach { adapter.addData(it) }

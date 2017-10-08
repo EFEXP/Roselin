@@ -2,7 +2,6 @@ package xyz.donot.roselinx.view.fragment.user
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.res.ResourcesCompat
@@ -15,8 +14,8 @@ import kotlinx.android.synthetic.main.content_roselin.view.*
 import twitter4j.Query
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.*
+import xyz.donot.roselinx.util.getAccount
 import xyz.donot.roselinx.util.getDragdismiss
-import xyz.donot.roselinx.util.getMyId
 import xyz.donot.roselinx.view.activity.*
 import xyz.donot.roselinx.viewmodel.activity.MainViewModel
 
@@ -74,7 +73,7 @@ class RoselinFragment : Fragment() {
             }
         })
         view.bt_profile.onClick = {
-            activity.startActivity(context.getDragdismiss(context.newIntent<UserActivity>(Bundle().apply { putLong("user_id", getMyId()) })))
+            activity.startActivity(context.getDragdismiss(context.newIntent<UserActivity>(Bundle().apply { putLong("user_id", getAccount().id) })))
         }
         view.bt_setting.onClick = { activity.start<SettingsActivity>() }
         view.bt_account.onClick = { activity.startForResult<AccountSettingActivity>(0) }

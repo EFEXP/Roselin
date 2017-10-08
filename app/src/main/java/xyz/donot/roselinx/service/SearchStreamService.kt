@@ -10,13 +10,11 @@ import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import twitter4j.*
 import xyz.donot.roselinx.util.StreamCreateUtil
-import xyz.donot.roselinx.util.getMyId
-import xyz.donot.roselinx.util.getTwitterInstance
+import xyz.donot.roselinx.util.getAccount
 
 class SearchStreamService : IntentService("SearchStreamService") {
-    private val twitter by lazy { getTwitterInstance() }
-    private val id by lazy { getMyId() }
-    private val stream: TwitterStream by lazy { TwitterStreamFactory().getInstance(twitter.authorization) }
+    private val twitter by lazy { getAccount() }
+    private val stream: TwitterStream by lazy { TwitterStreamFactory().getInstance(twitter.account.authorization) }
     private var query: String? = null
 
     override fun onHandleIntent(intent: Intent) {
@@ -34,14 +32,14 @@ class SearchStreamService : IntentService("SearchStreamService") {
     inner class MyStreamAdapter : UserStreamAdapter() {
         override fun onStatus(status: Status) {
             super.onStatus(status)
-            if (!status.isRetweet && status.user.id != id&&(status.source.contains("iPhone")||status.source.contains("Android")||status.source.contains("Web"))) {
+            if (!status.isRetweet && status.user.id !=twitter.id&&(status.source.contains("iPhone")||status.source.contains("Android")||status.source.contains("Web"))) {
                 Log.d("114514",status.user.screenName+"の"+status.text.toString())
 
                 launch(UI){
                     try {
                      async(CommonPool){
                         delay(1000)
-                        twitter.updateStatus("ンン！@${status.user.screenName} が114514って言ったゾ!!!!! やっぱ好きなんすね～^")}.await()
+                        twitter.account.updateStatus("ンン！@${status.user.screenName} が114514って言ったゾ!!!!! やっぱ好きなんすね～^")}.await()
                     }
                     catch (e:Exception){
                         Log.w("114514",e.localizedMessage)

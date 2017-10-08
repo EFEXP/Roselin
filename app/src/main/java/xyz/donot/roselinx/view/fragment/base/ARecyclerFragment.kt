@@ -32,9 +32,9 @@ open class ARecyclerFragment : AppCompatDialogFragment() {
                 refresh.isEnabled = false
         }
     }
-
     fun scrollRecycler(position: Int) {
         recycler.smoothScrollToPosition(position)
     }
+    fun reselect() = recycler.smoothScrollToPosition(0)
 
 }

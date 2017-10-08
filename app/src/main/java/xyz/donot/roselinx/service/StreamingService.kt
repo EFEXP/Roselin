@@ -15,8 +15,11 @@ import xyz.donot.roselinx.model.room.NFAVORITE
 import xyz.donot.roselinx.model.room.NRETWEET
 import xyz.donot.roselinx.model.room.Notification
 import xyz.donot.roselinx.model.room.RoselinDatabase
-import xyz.donot.roselinx.util.*
+import xyz.donot.roselinx.util.StreamCreateUtil
+import xyz.donot.roselinx.util.canPass
 import xyz.donot.roselinx.util.extraUtils.*
+import xyz.donot.roselinx.util.getAccount
+import xyz.donot.roselinx.util.getSerialized
 import xyz.donot.roselinx.view.activity.MainActivity
 import xyz.donot.roselinx.viewmodel.activity.SendReplyReceiver
 import java.util.*
@@ -27,8 +30,8 @@ const val REPLY_ID = 10
 const val REPLY_GROUP_KEY = "Reply"
 
 class StreamingService : Service() {
-    private val twitter by lazy { getTwitterInstance() }
-    private val stream: TwitterStream by lazy { TwitterStreamFactory().getInstance(twitter.authorization) }
+    private val twitter by lazy { getAccount() }
+    private val stream: TwitterStream by lazy { TwitterStreamFactory().getInstance(twitter.account.authorization) }
     private fun handleActionStream() {
         StreamCreateUtil.addStatusListener(stream, MyStreamAdapter())
         stream.addConnectionLifeCycleListener(MyConnectionListener())
@@ -69,20 +72,20 @@ class StreamingService : Service() {
             //通知用
             if (onStatus.isRetweet) {
                 //RT
-                if (onStatus.retweetedStatus.user.id == getMyId()) {
+                if (onStatus.retweetedStatus.user.id == twitter.id) {
                     if (defaultSharedPreferences.getBoolean("notification_retweet", true)) toast("${onStatus.user.name}にRTされました")
-                    RoselinDatabase.getInstance(this@StreamingService).notificationDao().insertNotification(
+                    RoselinDatabase.getInstance().notificationDao().insertNotification(
                             Notification(sourceUser = onStatus.user,status = onStatus,type = NRETWEET,date = Date())
                     )
                 }
             }
             else {
                 //通知用
-                if (onStatus.inReplyToUserId == getMyId()) {
+                if (onStatus.inReplyToUserId == twitter.id) {
                     if (defaultSharedPreferences.getBoolean("notification_reply", true)) replyNotification(onStatus)
                     LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewReply").putExtra("Status", onStatus.getSerialized()))
                 }
-                if (canPass(onStatus,this@StreamingService)) {
+                if (canPass(onStatus)) {
                     LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewStatus").putExtra("Status", onStatus.getSerialized()))
                     if (onStatus.inReplyToStatusId>0&&!onStatus.isRetweet)
                     {
@@ -111,9 +114,9 @@ class StreamingService : Service() {
 
         override fun onFavorite(source: User, target: User, favoritedStatus: Status) {
             super.onFavorite(source, target, favoritedStatus)
-            if (source.id != getMyId()) {
+            if (source.id != twitter.id) {
                 if (defaultSharedPreferences.getBoolean("notification_favorite", true)) toast("${source.name}にいいねされました")
-                RoselinDatabase.getInstance(this@StreamingService).notificationDao().insertNotification(
+                RoselinDatabase.getInstance().notificationDao().insertNotification(
                         Notification(sourceUser =source,status =favoritedStatus,type = NFAVORITE,date = Date())
                 )
             }
