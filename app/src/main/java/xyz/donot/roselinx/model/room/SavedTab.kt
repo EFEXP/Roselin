@@ -54,7 +54,7 @@ data class SavedTab(
 @Dao
 interface SavedTabDao {
 
-    @Query("SELECT COUNT(*) FROM saved_tab  ")
+    @Query("SELECT COUNT(*) FROM saved_tab")
     fun countTab(): Int
 
     @Query("SELECT MAX(tabOrder) FROM saved_tab  ")
@@ -68,6 +68,9 @@ interface SavedTabDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertSavedTab(tab: SavedTab): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertSavedTabs(tab: Array<SavedTab>)
 
     @Delete
     fun delete(tab: SavedTab)

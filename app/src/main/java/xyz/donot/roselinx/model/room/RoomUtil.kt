@@ -16,7 +16,7 @@ import java.util.*
 
 
 
-@Database(entities = arrayOf(TwitterAccount::class, UserData::class, TweetDraft::class, MuteFilter::class, Notification::class, SavedTab::class,CustomProfile::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(TwitterAccount::class, UserData::class, TweetDraft::class, MuteFilter::class, Notification::class, SavedTab::class,CustomProfile::class,Tweet::class), version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class RoselinDatabase : RoomDatabase() {
     abstract fun twitterAccountDao(): TwitterAccountDao
@@ -26,6 +26,7 @@ abstract class RoselinDatabase : RoomDatabase() {
     abstract fun notificationDao(): NotificationDao
     abstract fun savedTabDao(): SavedTabDao
     abstract fun customProfileDao(): CustomProfileDao
+    abstract fun tweetDao(): TweetDao
     companion object {
         @Volatile private var INSTANCE: RoselinDatabase? = null
         @Volatile private var ALLOWEDINSTANCE: RoselinDatabase? = null

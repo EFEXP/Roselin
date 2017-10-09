@@ -14,8 +14,6 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 
-
-
 fun <T : Serializable> T.getSerialized(): ByteArray = ByteArrayOutputStream().use {
     val out = ObjectOutputStream(it)
     out.writeObject(this)
@@ -40,26 +38,30 @@ fun PagerAdapter.findFragmentByPosition(viewPager: ViewPager, position: Int): Fr
 
 }
 
-fun getAccount():TwitterAccount{
+fun getAccount(): TwitterAccount {
     return RoselinDatabase.getAllowedInstance().twitterAccountDao().getMainAccount(true)
 }
 
-fun haveToken():Boolean{
-    return RoselinDatabase.getAllowedInstance().twitterAccountDao().count()>0
+fun haveToken(): Boolean {
+    return RoselinDatabase.getAllowedInstance().twitterAccountDao().count() > 0
 }
 
 fun canPass(status: Status): Boolean {
     val userId = status.user.id
-    val dao= RoselinDatabase.getInstance().muteFilterDao().getAllData()
-    val mutedUserIds=dao.map { it.user}.filterNotNull().map {  it.id }
-    val mutedWords=dao.map {it.text}.filterNotNull().filter { status.text.contains(it) }
+    val dao = RoselinDatabase.getInstance().muteFilterDao().getAllData()
+    val mutedUserIds = dao.map { it.user }.filterNotNull().map { it.id }
+    val containMutedWords = dao.map { it.text }.filterNotNull()
 
     if (mutedUserIds.contains(userId))
         return false
-    if (mutedWords.isNotEmpty())
-        return false
+    containMutedWords.forEach {
+        if (status.text.contains(it))
+            return false
+    }
 
-        return true
+
+    return true
+
 
 }
 

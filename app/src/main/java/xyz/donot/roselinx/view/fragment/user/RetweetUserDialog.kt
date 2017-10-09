@@ -73,8 +73,6 @@ class RetweetUserViewModel(app: Application) : AndroidViewModel(app) {
                     list.addAll(users)
                     userList.value=list }
             }
-
-
     }
 
 

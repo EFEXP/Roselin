@@ -64,8 +64,6 @@ class AccountSettingActivity : AppCompatActivity() {
                         }
                     })
         }
-
-
         fab.setOnClickListener { _ ->
             start<OauthActivity>()
         }

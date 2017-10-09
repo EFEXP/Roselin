@@ -41,6 +41,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val isConnectedStream = MutableLiveData<Boolean>()
     val postSucceed = MutableLiveData<Status>()
     val deleteSucceed = SingleLiveEvent<Unit>()
+
     fun registerReceivers() {
         val app: Roselin = getApplication()
         LocalBroadcastManager.getInstance(app).apply {
@@ -72,11 +73,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     inner class MusicReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val bundle = intent.extras
-            //  val app:Roselin=getApplication()
-            // val t=  getAlbumart(app, bundle.getLong("id",-1))
-            //   if (t!=null){
-            //       app.toast("Good Work!")
-            //   }
             context.defaultSharedPreferences.edit().apply {
                 putString("track", bundle.getString("track"))
                 putString("artist", bundle.getString("artist"))
@@ -89,22 +85,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     //realm
     fun initTab() {
-        launch(UI) {
+       launch(UI) {
             val count = async { RoselinDatabase.getInstance().savedTabDao().countTab() }.await()
             if (count <= 0) {
-                SavedTab.save(SavedTab(type = SETTING))
-                SavedTab.save(SavedTab(
-                        type = HOME,
-                        accountId = twitter.id,
-                        screenName = twitter.user.screenName))
-                SavedTab.save(SavedTab(
-                        type = MENTION,
-                        accountId = twitter.id,
-                        screenName = twitter.user.screenName))
-                SavedTab.save(SavedTab(
-                        type = NOTIFICATION,
-                        accountId = twitter.id,
-                        screenName = twitter.user.screenName))
+                async {
+                    val maxOrder=RoselinDatabase.getInstance().savedTabDao().maxOrder()
+                    RoselinDatabase.getInstance().savedTabDao().insertSavedTabs(arrayOf(
+                        SavedTab(type = SETTING,tabOrder = maxOrder+1),
+                        SavedTab(type = HOME, accountId = twitter.id, screenName = twitter.user.screenName,tabOrder = maxOrder+2),
+                        SavedTab(type = MENTION, accountId = twitter.id, screenName = twitter.user.screenName,tabOrder = maxOrder+3),
+                        SavedTab(type = NOTIFICATION, accountId = twitter.id, screenName = twitter.user.screenName,tabOrder = maxOrder+4)
+                )) }.await()
+
             }
         }
     }

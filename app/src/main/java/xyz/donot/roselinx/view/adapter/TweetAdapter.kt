@@ -1,17 +1,21 @@
 package xyz.donot.roselinx.view.adapter
 
 import android.app.Activity
+import android.content.Context
 import android.support.v7.widget.RecyclerView
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
+import android.view.View
+import android.view.ViewGroup
+import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_tweet_view.view.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
-import twitter4j.Status
 import xyz.donot.roselinx.R
+import xyz.donot.roselinx.customrecycler.CalculableRecyclerAdapter
 import xyz.donot.roselinx.model.room.CustomProfile
 import xyz.donot.roselinx.model.room.RoselinDatabase
+import xyz.donot.roselinx.model.room.Tweet
 import xyz.donot.roselinx.util.extraUtils.*
 import xyz.donot.roselinx.util.getAccount
 import xyz.donot.roselinx.util.getDragdismiss
@@ -19,26 +23,28 @@ import xyz.donot.roselinx.view.activity.PictureActivity
 import xyz.donot.roselinx.view.activity.TwitterDetailActivity
 import xyz.donot.roselinx.view.activity.UserActivity
 import xyz.donot.roselinx.view.activity.VideoActivity
-import xyz.donot.roselinx.view.custom.TweetView
 
-class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_tweet_view) {
 
+class KViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
+class TweetAdapter(val mContext: Context, val type: Int) : CalculableRecyclerAdapter< KViewHolder, Tweet>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  KViewHolder = KViewHolder(parent.context.inflate(R.layout.item_tweet_view, parent, false))
     //  private lateinit var kichitsui :List<Long>
     private lateinit var customname: List<CustomProfile>
     private lateinit var customnameId: List<Long>
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
         super.onAttachedToRecyclerView(recyclerView)
         launch(UI) {
             //  kichitsui=   async {  RoselinDatabase.getInstance(recyclerView.context).muteFilterDao().kichitsuiMuted().mapNotNull {it.tweetId } }.await()
             customname = async { RoselinDatabase.getInstance().customProfileDao().getAllData() }.await()
             customnameId = customname.mapNotNull { it.userId }
         }
-
-
     }
 
-    override fun convert(helper: BaseViewHolder, status: Status) {
-        helper.getView<TweetView>(R.id.tweetview).apply {
+    override fun onBindViewHolder(holder: KViewHolder, position: Int) {
+        super.onBindViewHolder(holder, position)
+        val status = itemList[position].status
+        holder.containerView.
+                tweetview.apply {
             var stringName: String? = null
             if (status.isRetweet) {
                 if (customnameId.contains(status.retweetedStatus.user.id))
@@ -78,7 +84,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
                     launch(UI) {
                         try {
                             val result = async(CommonPool) { getAccount().account.destroyFavorite(id) }.await()
-                            setData(helper.adapterPosition - headerLayoutCount, result)
+                            Tweet.save(result, type)
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
@@ -87,7 +93,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
                     launch(UI) {
                         try {
                             val result = async(CommonPool) { getAccount().account.createFavorite(id) }.await()
-                            setData(helper.adapterPosition - headerLayoutCount, result)
+                            Tweet.save(result, type)
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
@@ -96,11 +102,10 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
             }
             retweetClick = { retweeted, id ->
                 if (!retweeted) {
-
                     launch(UI) {
                         try {
                             val result = async(CommonPool) { getAccount().account.retweetStatus(id) }.await()
-                            setData(helper.adapterPosition - headerLayoutCount, result)
+                            Tweet.save(result, type)
                             mContext.toast("RTしました")
                         } catch (e: Exception) {
                             e.printStackTrace()
@@ -110,8 +115,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
             }
 
         }
+
+
     }
-
-
 }
-

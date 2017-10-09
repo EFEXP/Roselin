@@ -56,33 +56,39 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUp(bundle: Bundle?) {
         setContentView(R.layout.activity_main)
+        launch(UI) {
+            async { RoselinDatabase.getInstance().savedTabDao().getAllLiveData() }.await()
+                    .observe(this@MainActivity, Observer {
+                        it?.let { tabUpdated(it) }
+                    })
+        }
         viewmodel.initNotification()
         viewmodel.initTab()
-        launch(UI) {
-            val result = async { RoselinDatabase.getInstance().savedTabDao().getAllData() }.await()
-            setUpView(result)
-            viewmodel.apply {
-                registerReceivers()
-                initUser()
-                if (bundle == null) {
-                    initStream()
-                }
+        setUpView()
+        viewmodel.apply {
+            registerReceivers()
+            initUser()
+            if (bundle == null) {
+                initStream()
             }
-            initialRequestPermission()
         }
+        initialRequestPermission()
+
+    }
+
+    private fun tabUpdated(list: List<SavedTab>) {
+        val adapter = MainTimeLineAdapter(supportFragmentManager, list)
+        main_viewpager.adapter = adapter
+        main_viewpager.offscreenPageLimit = adapter.count
+        tabs_main.setupWithViewPager(main_viewpager)
     }
 
     @SuppressLint("NewApi")
-    private fun setUpView(result: List<SavedTab>) {
-        if (!defaultSharedPreferences.getBoolean("quick_tweet", false)) {
-            editText_layout.visibility = View.GONE
+    private fun setUpView() {
+        if (defaultSharedPreferences.getBoolean("quick_tweet", false)) {
+            editText_layout.visibility = View.VISIBLE
         }
         //pager
-
-        val adapter = MainTimeLineAdapter(supportFragmentManager, result)
-        main_viewpager.adapter = adapter
-        main_viewpager.offscreenPageLimit = adapter.count
-
         main_viewpager.currentItem = 1
         viewmodel.postSucceed.observe(this, Observer {
             editText_status.hideSoftKeyboard()
@@ -103,12 +109,10 @@ class MainActivity : AppCompatActivity() {
             DrawableCompat.setTintMode(d2, porter)
             main_coordinator.background = d2
         }
-        tabs_main.setupWithViewPager(main_viewpager)
         tabs_main.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab) {
                 val fragment = main_viewpager.adapter.findFragmentByPosition(main_viewpager, tab.position)
                 (fragment as? ARecyclerFragment)?.scrollRecycler(0)
-
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {

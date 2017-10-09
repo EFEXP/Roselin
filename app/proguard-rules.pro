@@ -7,7 +7,6 @@
 }
 -dontwarn com.bumptech.glide.**
 -dontwarn xyz.donot.roselinx.view.**
--keep public class  * extends io.realm.RealmRecyclerViewAdapter {*;}
 -dontwarn com.yalantis.**
 -dontwarn okio.**
 -dontwarn com.squareup.okhttp.**

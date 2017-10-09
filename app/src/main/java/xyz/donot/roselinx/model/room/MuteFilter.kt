@@ -11,7 +11,7 @@ import xyz.donot.roselinx.customrecycler.Diffable
 @Entity(tableName = "mute_filter")
 data class MuteFilter(
         var accountId: Long =0L,
-        val text: String="" ,
+        val text: String?=null ,
         val kichitsui:Int=0,
         val user: User?
 ) : Diffable {

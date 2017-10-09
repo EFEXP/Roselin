@@ -22,12 +22,12 @@ import xyz.donot.roselinx.viewmodel.activity.MainViewModel
 
 class RoselinFragment : Fragment() {
     val viewmodel: MainViewModel by lazy { ViewModelProviders.of(activity).get(MainViewModel::class.java) }
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.content_roselin, null, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.content_roselin, container, false)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewmodel.user.observe(this@RoselinFragment, Observer {
             it?.let {
-                val iconIntent = activity.getDragdismiss(PictureActivity.createIntent(activity,arrayListOf(it.originalProfileImageURLHttps)))
+                val iconIntent = activity.getDragdismiss(PictureActivity.createIntent(activity, arrayListOf(it.originalProfileImageURLHttps)))
                 view.user_detail_view.apply {
                     iconClick = { startActivity(iconIntent) }
                     listClick = { activity.start<UsersListActivity>(Bundle { putLong("userId", it.id) }) }
@@ -79,33 +79,33 @@ class RoselinFragment : Fragment() {
         view.bt_account.onClick = { activity.startForResult<AccountSettingActivity>(0) }
         view.bt_search.onClick = { activity.start<SearchSettingActivity>() }
         search_view.setOnQueryTextListener(
-            object :SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(p0: String?): Boolean {
-                    if (!p0.isNullOrEmpty()) {
-                        val q = Query()
-                        var string = p0
-                        string += " exclude:nativeretweets"
-                        q.apply {
-                            query = string
-                            resultType = Query.MIXED
+                object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextSubmit(p0: String?): Boolean {
+                        if (!p0.isNullOrEmpty()) {
+                            val q = Query()
+                            var string = p0
+                            string += " exclude:nativeretweets"
+                            q.apply {
+                                query = string
+                                resultType = Query.MIXED
+                            }
+                            startActivity(SearchActivity.createIntent(activity, q, p0))
+                            search_view.setQuery("", false)
+                            search_view.onActionViewCollapsed()
+                            search_view.clearFocus()
                         }
-                        startActivity(SearchActivity.createIntent(activity, q, p0))
-                        search_view.setQuery("",false)
-                        search_view.onActionViewCollapsed()
-                        search_view.clearFocus()
+                        return false
                     }
-                    return false
-                }
 
 
-                override fun onQueryTextChange(p0: String?): Boolean {
+                    override fun onQueryTextChange(p0: String?): Boolean {
 
-                    return false
+                        return false
 
-                }
+                    }
 
-            })
+                })
 
 
-
-}}
+    }
+}

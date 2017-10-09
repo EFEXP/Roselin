@@ -25,9 +25,8 @@ class Roselin : MultiDexApplication() {
         //Twitter
         val twitterConfig = TwitterConfig.Builder(this).twitterAuthConfig(TwitterAuthConfig(yyyyyy, xxxxx)).build()
         Twitter.initialize(twitterConfig)
-
-        if (BuildConfig.DEBUG)
-            RoselinxConfig.logEnabled = true
+      if(BuildConfig.DEBUG)
+          RoselinxConfig.logEnabled = true
         /*
         val config = RealmConfiguration.Builder().schemaVersion(0L)
                 .migration(MyRealmMigration())
@@ -67,16 +66,14 @@ class Roselin : MultiDexApplication() {
 
 }
 
-class ContextHolder(val context: Context) {
+class ContextHolder(val context: Context){
     companion object {
         @SuppressLint("StaticFieldLeak")
         lateinit private var instance: ContextHolder
-
-        fun onCreateApplication(context: Context) {
-            instance = ContextHolder(context)
+        fun onCreateApplication(context: Context){
+            instance= ContextHolder(context)
         }
-
-        fun getContext(): Context {
+        fun getContext():Context{
             return instance.context
         }
     }

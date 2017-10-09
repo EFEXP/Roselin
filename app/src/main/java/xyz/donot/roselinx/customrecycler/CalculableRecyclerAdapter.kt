@@ -4,6 +4,7 @@ import android.support.v7.util.DiffUtil
 import android.support.v7.util.ListUpdateCallback
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import xyz.donot.roselinx.util.extraUtils.logd
 import kotlin.properties.Delegates
 
 
@@ -14,7 +15,7 @@ abstract class CalculableRecyclerAdapter<VH : RecyclerView.ViewHolder, T : Diffa
     var onItemLongClick: (item: T, position: Int) -> Unit = { _, _ -> }
     var onLoadMore: () -> Unit = {  }
 
-    var itemList: List<T> by Delegates.observable(emptyList()) { _, old, new ->
+    var itemList: List<T> by Delegates.observable(ArrayList()) { _, old, new ->
         calculateDiff(old, new).dispatchUpdatesTo(binder)
         if (binder.firstInsert==0&&(recycler?.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()==0) {
             recycler?.smoothScrollToPosition(binder.firstInsert)
@@ -30,12 +31,12 @@ abstract class CalculableRecyclerAdapter<VH : RecyclerView.ViewHolder, T : Diffa
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         val item=itemList[position]
-        if (position==itemList.size) { onLoadMore()}
+        logd{"${position+1} == ${itemList.size}"}
+        if (position+1==itemList.size&&itemList.size>5) { onLoadMore()}
         holder.itemView.setOnClickListener { onItemClick(item, position) }
         holder.itemView.setOnLongClickListener { onItemLongClick(item, position)
             true }
     }
-
 
     override fun getItemCount(): Int {
         return itemList.size
