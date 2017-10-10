@@ -24,10 +24,6 @@ fun Context.networkTypeName(): String {
     return result
 }
 
-fun Context.networkOperator(): String {
-    val tm = this.getTelephonyManager()
-    return tm.networkOperator
-}
 
 fun Context.networkType(): NetworkType {
     val cm = this.getConnectivityManager()

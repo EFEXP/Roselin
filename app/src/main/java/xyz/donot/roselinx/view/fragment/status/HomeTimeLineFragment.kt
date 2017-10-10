@@ -2,8 +2,10 @@ package xyz.donot.roselinx.view.fragment.status
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.arch.paging.PagedList
 import android.content.*
 import android.net.Uri
 import android.os.Bundle
@@ -35,7 +37,6 @@ import xyz.donot.roselinx.view.fragment.base.ARecyclerFragment
 import xyz.donot.roselinx.view.fragment.user.RetweetUserDialog
 import kotlin.properties.Delegates
 
-
 class HomeTimeLineFragment : ARecyclerFragment() {
     val viewmodel: HomeTimeLineViewModel by lazy { ViewModelProviders.of(this).get(HomeTimeLineViewModel::class.java) }
     val adapter by lazy { TweetAdapter(activity, HOME_TIMELINE) }
@@ -44,11 +45,8 @@ class HomeTimeLineFragment : ARecyclerFragment() {
         viewmodel.apply {
             twitter = arguments.getByteArray("twitter").getDeserialized()
             adapter.apply {
-                onLoadMore = {
-                    viewmodel.loadMoreData(true)
-                }
-                adapter.onItemClick = { _, position ->
-                    val status = adapter.itemList[position].status
+                onLoadMore = {  viewmodel.loadMoreData(true) }
+                adapter.onItemClick = { (status), _->
                     val item = if (status.isRetweet) {
                         status.retweetedStatus
                     } else {
@@ -127,14 +125,13 @@ class HomeTimeLineFragment : ARecyclerFragment() {
             if (savedInstanceState == null) {
                 initService()
             }
-            launch(UI) {
-                async { RoselinDatabase.getInstance().tweetDao().getAllLiveData(HOME_TIMELINE) }.await().observe(this@HomeTimeLineFragment, Observer {
-                    it?.let {
-                        if (it.isEmpty()){ viewmodel.loadMoreData(false)}
-                        adapter.itemList = it
-                    }
+            dataSource.observe(this@HomeTimeLineFragment, Observer {
+                it?.let {
+                    if (it.isEmpty())
+                        viewmodel.loadMoreData(false)
+                    adapter.setList(it)
+                }
                 })
-            }
             recycler.adapter = adapter
             recycler.isNestedScrollingEnabled = false
             refresh.setOnRefreshListener {
@@ -154,16 +151,27 @@ class HomeTimeLineViewModel(app: Application) : AndroidViewModel(app) {
     var twitter by Delegates.notNull<Twitter>()
     val mainTwitter by lazy { getAccount() }
     val dataRefreshed = SingleLiveEvent<Unit>()
+    val dataSource: LiveData<PagedList<Tweet>> = RoselinDatabase.getInstance().tweetDao().getAllDataSource(HOME_TIMELINE)
+            .create(0, PagedList.Config.Builder().setPageSize(50).setPrefetchDistance(50).build())
     var page: Int = 0
         get() {
             field++
-            return field }
+            return field
+        }
 
     fun pullDown() {
         launch(UI) {
+            try {
             val newestId = async { RoselinDatabase.getInstance().tweetDao().getNewestTweet(HOME_TIMELINE).tweetId }.await()
             async { twitter.getHomeTimeline(Paging(newestId)) }.await()?.let { Tweet.save(it, HOME_TIMELINE) }
-            dataRefreshed.call()
+            }
+            catch (e:Exception){
+                e.printStackTrace()
+            }
+            finally {
+                dataRefreshed.call()
+            }
+
         }
     }
 
@@ -215,4 +223,3 @@ class HomeTimeLineViewModel(app: Application) : AndroidViewModel(app) {
     }
 
 }
-

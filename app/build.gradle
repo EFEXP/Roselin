@@ -48,11 +48,13 @@ androidExtensions {
     experimental = true
 }
 dependencies {
-    def lifecycleEx = "1.0.0-beta2"
-    implementation "android.arch.lifecycle:extensions:${lifecycleEx}"
-    implementation "android.arch.persistence.room:runtime:${lifecycleEx}"
-    implementation "android.arch.persistence.room:rxjava2:${lifecycleEx}"
-    kapt "android.arch.persistence.room:compiler:${lifecycleEx}"
+    def arch = "1.0.0-beta2"
+    implementation "android.arch.lifecycle:extensions:${arch}"
+    implementation "android.arch.persistence.room:runtime:${arch}"
+    implementation "android.arch.lifecycle:runtime:1.0.0"
+    annotationProcessor "android.arch.lifecycle:compiler:1.0.0-beta2"
+    kapt "android.arch.persistence.room:compiler:${arch}"
+    implementation "android.arch.paging:runtime:1.0.0-alpha3"
     def twitter4j = "4.0.6"
     implementation "org.twitter4j:twitter4j-core:${twitter4j}"
     implementation "org.twitter4j:twitter4j-media-support:${twitter4j}"
@@ -65,10 +67,12 @@ dependencies {
     implementation "com.android.support:cardview-v7:${support}"
     implementation "com.android.support:customtabs:${support}"
     implementation "com.android.support:palette-v7:${support}"
+    implementation "com.android.support:recyclerview-v7:${support}"
+
     def coroutine_version = '0.19'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
-    def firebase='11.4.0'
+    def firebase='11.4.2'
     implementation "com.google.firebase:firebase-ads:$firebase"
     implementation "com.google.firebase:firebase-core:$firebase"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"

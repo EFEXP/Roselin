@@ -2,8 +2,10 @@ package xyz.donot.roselinx.view.fragment.status
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.arch.paging.PagedList
 import android.content.*
 import android.net.Uri
 import android.os.Bundle
@@ -49,8 +51,7 @@ class MentionTimeLine : ARecyclerFragment() {
                 onLoadMore = {
                     viewmodel.loadMoreData(true)
                 }
-                onItemClick = { _, position ->
-                    val status = adapter.itemList[position].status
+                onItemClick = { (status), _ ->
                     val item = if (status.isRetweet) {
                         status.retweetedStatus
                     } else {
@@ -139,14 +140,11 @@ class MentionTimeLine : ARecyclerFragment() {
             if (savedInstanceState == null) {
                 initService()
             }
-            launch(UI) {
-                async { RoselinDatabase.getInstance().tweetDao().getAllLiveData(MENTION_TIMELINE) }.await().observe(this@MentionTimeLine, Observer {
-                    it?.let {
-                        if (it.isEmpty()){ viewmodel.loadMoreData(false)}
-                        adapter.itemList = it
-                    }
-                })
-            }
+            dataSource.observe(this@MentionTimeLine, Observer {  it?.let {
+                if (it.isEmpty())
+                    viewmodel.loadMoreData(false)
+                adapter.setList(it)
+            } })
             recycler.adapter = adapter
             refresh.setOnRefreshListener {
                 Handler().delayed(1000, {
@@ -165,6 +163,8 @@ class MentionViewModel(application: Application) : AndroidViewModel(application)
     var twitter by Delegates.notNull<Twitter>()
     val mainTwitter by lazy { getAccount() }
     val dataRefreshed = SingleLiveEvent<Unit>()
+    val dataSource: LiveData<PagedList<Tweet>> = RoselinDatabase.getInstance().tweetDao().getAllDataSource(MENTION_TIMELINE)
+            .create(0, PagedList.Config.Builder().setPageSize(50).setPrefetchDistance(50).build())
     var page: Int = 0
         get() {
             field++
@@ -179,9 +179,17 @@ class MentionViewModel(application: Application) : AndroidViewModel(application)
 
     fun pullDown() {
         launch(UI) {
+            try {
             val newestId = async { RoselinDatabase.getInstance().tweetDao().getNewestTweet(MENTION_TIMELINE).tweetId }.await()
             async { twitter.getMentionsTimeline(Paging(newestId)) }.await()?.let { Tweet.save(it, MENTION_TIMELINE) }
-            dataRefreshed.call()
+            }
+            catch (e:Exception){
+                e.printStackTrace()
+            }
+            finally {
+                dataRefreshed.call()
+            }
+
         }
     }
 

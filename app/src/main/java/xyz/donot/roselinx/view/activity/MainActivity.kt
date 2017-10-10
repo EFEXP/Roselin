@@ -19,7 +19,6 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.error_activity.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
@@ -41,15 +40,9 @@ class MainActivity : AppCompatActivity() {
         if (!haveToken()) {
             startActivity(intent<OauthActivity>())
             this.finish()
-        } else if (isConnected()) {
+        }
+        else{
             setUp(savedInstanceState)
-        } else {
-            setContentView(R.layout.error_activity)
-            button_retry.onClick = {
-                if (isConnected()) {
-                    setUp(savedInstanceState)
-                }
-            }
         }
     }
 
@@ -81,6 +74,7 @@ class MainActivity : AppCompatActivity() {
         main_viewpager.adapter = adapter
         main_viewpager.offscreenPageLimit = adapter.count
         tabs_main.setupWithViewPager(main_viewpager)
+        main_viewpager.currentItem = 1
     }
 
     @SuppressLint("NewApi")
@@ -89,7 +83,6 @@ class MainActivity : AppCompatActivity() {
             editText_layout.visibility = View.VISIBLE
         }
         //pager
-        main_viewpager.currentItem = 1
         viewmodel.postSucceed.observe(this, Observer {
             editText_status.hideSoftKeyboard()
             it?.let { status ->
@@ -132,7 +125,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Permission
-    private val REQUEST_WRITE_READ = 0
+   companion object {
+        private const val REQUEST_WRITE_READ = 0
+   }
 
     @SuppressLint("NewApi")
     private fun initialRequestPermission() = fromApi(23, true) {

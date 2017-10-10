@@ -23,11 +23,6 @@ const val TREND = 4
 const val SEARCH = 5
 const val DM = 6
 const val SETTING = 7
-
-
-
-
-
 @Entity(tableName = "saved_tab")
 data class SavedTab(
         val type: Int,

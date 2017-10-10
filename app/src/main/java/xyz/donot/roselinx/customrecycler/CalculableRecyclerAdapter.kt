@@ -9,13 +9,13 @@ import kotlin.properties.Delegates
 
 
 abstract class CalculableRecyclerAdapter<VH : RecyclerView.ViewHolder, T : Diffable> : RecyclerView.Adapter<VH>() {
-    internal val binder = MyCallback<VH, CalculableRecyclerAdapter<VH, T>>()
+    private val binder = MyCallback<VH, CalculableRecyclerAdapter<VH, T>>()
     private var recycler: RecyclerView? = null
     var onItemClick: (item: T, position: Int) -> Unit ={ _, _ -> }
     var onItemLongClick: (item: T, position: Int) -> Unit = { _, _ -> }
     var onLoadMore: () -> Unit = {  }
 
-    var itemList: List<T> by Delegates.observable(ArrayList()) { _, old, new ->
+    var itemList: List<T> by Delegates.observable(emptyList()) { _, old, new ->
         calculateDiff(old, new).dispatchUpdatesTo(binder)
         if (binder.firstInsert==0&&(recycler?.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()==0) {
             recycler?.smoothScrollToPosition(binder.firstInsert)

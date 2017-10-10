@@ -2,9 +2,9 @@ package xyz.donot.roselinx.util.extraUtils
 
 import android.app.DownloadManager
 import android.app.NotificationManager
+import android.app.job.JobScheduler
 import android.content.Context
 import android.net.ConnectivityManager
-import android.telephony.TelephonyManager
 import android.view.inputmethod.InputMethodManager
 
 fun Context.getConnectivityManager(): ConnectivityManager =
@@ -19,8 +19,8 @@ fun Context.getInputMethodManager(): InputMethodManager =
 fun Context.getNotificationManager(): NotificationManager =
         getSystemServiceAs(Context.NOTIFICATION_SERVICE)
 
-fun Context.getTelephonyManager(): TelephonyManager =
-        getSystemServiceAs(Context.TELEPHONY_SERVICE)
+fun Context.getJobScheduler(): JobScheduler =
+        getSystemServiceAs(Context.JOB_SCHEDULER_SERVICE)
 
 @Suppress("UNCHECKED_CAST")
 fun <T> Context.getSystemServiceAs(serviceName: String): T =

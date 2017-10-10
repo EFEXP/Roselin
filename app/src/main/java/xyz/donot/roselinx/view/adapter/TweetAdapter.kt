@@ -4,15 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.view.ViewGroup
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_tweet_view.view.*
-import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.customrecycler.CalculableRecyclerAdapter
+import xyz.donot.roselinx.customrecycler.CalculableTweetAdapter
 import xyz.donot.roselinx.model.room.CustomProfile
 import xyz.donot.roselinx.model.room.RoselinDatabase
 import xyz.donot.roselinx.model.room.Tweet
@@ -26,23 +24,23 @@ import xyz.donot.roselinx.view.activity.VideoActivity
 
 
 class KViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
-class TweetAdapter(val mContext: Context, val type: Int) : CalculableRecyclerAdapter< KViewHolder, Tweet>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  KViewHolder = KViewHolder(parent.context.inflate(R.layout.item_tweet_view, parent, false))
+
+class TweetAdapter(private val mContext: Context, val type: Int) : CalculableTweetAdapter<Tweet>(R.layout.item_tweet_view) {
     //  private lateinit var kichitsui :List<Long>
     private lateinit var customname: List<CustomProfile>
     private lateinit var customnameId: List<Long>
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         launch(UI) {
             //  kichitsui=   async {  RoselinDatabase.getInstance(recyclerView.context).muteFilterDao().kichitsuiMuted().mapNotNull {it.tweetId } }.await()
             customname = async { RoselinDatabase.getInstance().customProfileDao().getAllData() }.await()
-            customnameId = customname.mapNotNull { it.userId }
+            customnameId = customname.map { it.userId }
         }
     }
 
     override fun onBindViewHolder(holder: KViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
-        val status = itemList[position].status
+        val status = getItem(position)!!.status
         holder.containerView.
                 tweetview.apply {
             var stringName: String? = null
@@ -83,7 +81,7 @@ class TweetAdapter(val mContext: Context, val type: Int) : CalculableRecyclerAda
                 if (favorited) {
                     launch(UI) {
                         try {
-                            val result = async(CommonPool) { getAccount().account.destroyFavorite(id) }.await()
+                            val result = async{ getAccount().account.destroyFavorite(id) }.await()
                             Tweet.save(result, type)
                         } catch (e: Exception) {
                             e.printStackTrace()
@@ -92,7 +90,7 @@ class TweetAdapter(val mContext: Context, val type: Int) : CalculableRecyclerAda
                 } else {
                     launch(UI) {
                         try {
-                            val result = async(CommonPool) { getAccount().account.createFavorite(id) }.await()
+                            val result = async{ getAccount().account.createFavorite(id) }.await()
                             Tweet.save(result, type)
                         } catch (e: Exception) {
                             e.printStackTrace()
@@ -104,7 +102,7 @@ class TweetAdapter(val mContext: Context, val type: Int) : CalculableRecyclerAda
                 if (!retweeted) {
                     launch(UI) {
                         try {
-                            val result = async(CommonPool) { getAccount().account.retweetStatus(id) }.await()
+                            val result = async { getAccount().account.retweetStatus(id) }.await()
                             Tweet.save(result, type)
                             mContext.toast("RTしました")
                         } catch (e: Exception) {

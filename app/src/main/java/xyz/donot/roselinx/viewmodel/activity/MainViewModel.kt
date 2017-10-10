@@ -151,7 +151,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun initUser() {
         if (user.value == null)
             launch(UI) {
-                user.value = async(CommonPool) { twitter.account.verifyCredentials() }.await()
+              try {
+                  user.value = async { twitter.account.verifyCredentials() }.await()
+              }
+              catch (e:Exception){
+                  e.printStackTrace()
+              }
+
             }
     }
 

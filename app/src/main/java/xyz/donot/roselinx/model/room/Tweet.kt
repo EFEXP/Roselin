@@ -1,6 +1,7 @@
 package xyz.donot.roselinx.model.room
 
 import android.arch.lifecycle.LiveData
+import android.arch.paging.LivePagedListProvider
 import android.arch.persistence.room.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -37,6 +38,9 @@ data class Tweet(
 interface TweetDao {
     @Query("SELECT * FROM tweet WHERE type=:type order by date DESC")
     fun getAllLiveData(type: Int): LiveData<List<Tweet>>
+
+    @Query("SELECT * FROM tweet WHERE type=:type order by date DESC")
+    fun getAllDataSource(type: Int): LivePagedListProvider<Int, Tweet>
 
     @Query("SELECT * FROM tweet WHERE date=(SELECT MIN(date) FROM tweet WHERE type=:type)")
     fun getOldestTweet(type:Int):Tweet
