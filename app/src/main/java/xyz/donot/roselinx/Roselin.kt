@@ -13,8 +13,8 @@ import com.google.android.gms.ads.MobileAds
 import com.twitter.sdk.android.core.Twitter
 import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
-import xyz.donot.roselinx.util.Key.xxxxx
-import xyz.donot.roselinx.util.Key.yyyyyy
+import xyz.donot.roselinx.ui.util.Key.xxxxx
+import xyz.donot.roselinx.ui.util.Key.yyyyyy
 import xyz.donot.roselinx.util.extraUtils.RoselinxConfig
 import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
 
@@ -62,6 +62,7 @@ class Roselin : MultiDexApplication() {
         (getSystemService(UI_MODE_SERVICE) as UiModeManager).nightMode = UiModeManager.MODE_NIGHT_AUTO
 
     }
+
 
 
 }

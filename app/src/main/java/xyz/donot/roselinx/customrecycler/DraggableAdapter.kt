@@ -2,12 +2,16 @@ package xyz.donot.roselinx.customrecycler
 
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.view.ViewGroup
+import xyz.donot.roselinx.util.extraUtils.inflate
+import xyz.donot.roselinx.ui.status.KViewHolder
 import java.util.*
 
 
-abstract class DraggableAdapter<VH : RecyclerView.ViewHolder, T : Diffable> : CalculableRecyclerAdapter<VH, T>() {
+abstract class DraggableAdapter<T : Diffable>(layout:Int) : CalculableRecyclerAdapter<T>(layout) {
 
     var onMoveEnd:()->Unit={}
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = KViewHolder(parent.context.inflate(layout, parent, false))
 
     fun onItemDragEnd(){
         onMoveEnd()
@@ -17,7 +21,7 @@ abstract class DraggableAdapter<VH : RecyclerView.ViewHolder, T : Diffable> : Ca
         val to =target.adapterPosition
         if (inRange(from) && inRange(to)) {
             if (from < to) {
-                for (i in from..to - 1) {
+                for (i in from until to) {
                     Collections.swap(itemList, i, i + 1)
                 }
             } else {
@@ -37,7 +41,7 @@ abstract class DraggableAdapter<VH : RecyclerView.ViewHolder, T : Diffable> : Ca
 }
 
 
-class ItemDragAndSwipeCallback(private val mAdapter: DraggableAdapter<*,*>) : ItemTouchHelper.Callback() {
+class ItemDragAndSwipeCallback(private val mAdapter: DraggableAdapter<*>) : ItemTouchHelper.Callback() {
     override fun getMovementFlags(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?): Int {
                 return makeFlag(ItemTouchHelper.ACTION_STATE_IDLE, ItemTouchHelper.RIGHT) or makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN or ItemTouchHelper.UP)
 

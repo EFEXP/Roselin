@@ -9,8 +9,8 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import twitter4j.*
-import xyz.donot.roselinx.util.StreamCreateUtil
-import xyz.donot.roselinx.util.getAccount
+import xyz.donot.roselinx.ui.util.StreamCreateUtil
+import xyz.donot.roselinx.ui.util.getAccount
 
 class SearchStreamService : IntentService("SearchStreamService") {
     private val twitter by lazy { getAccount() }

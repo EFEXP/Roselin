@@ -7,8 +7,8 @@ import twitter4j.StatusUpdate
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
 import xyz.donot.roselinx.util.extraUtils.getNotificationManager
-import xyz.donot.roselinx.util.getAccount
-import xyz.donot.roselinx.util.getDeserialized
+import xyz.donot.roselinx.ui.util.getAccount
+import xyz.donot.roselinx.ui.util.getDeserialized
 import java.io.File
 import java.util.*
 

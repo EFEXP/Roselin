@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="xyz.donot.roselinx.view.activity.EditTweetActivity">
+    tools:context="xyz.donot.roselinx.ui.editteweet.EditTweetActivity">
 
   <android.support.v7.widget.RecyclerView
       android:id="@+id/draft_list_view"
