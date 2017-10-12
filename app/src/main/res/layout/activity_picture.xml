@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="xyz.donot.roselinx.view.activity.PictureActivity">
+    tools:context="xyz.donot.roselinx.ui.picture.PictureActivity">
 
     <include layout="@layout/content_picture" />
 

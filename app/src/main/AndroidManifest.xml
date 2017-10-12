@@ -21,7 +21,7 @@
     >
     <activity
       android:label="OauthActivity"
-      android:name=".view.activity.OauthActivity"
+      android:name=".ui.oauth.OauthActivity"
       android:theme="@style/AppTheme.NoActionBar"/>
 
     <meta-data
@@ -30,7 +30,7 @@
 
     <activity
       android:label="@string/app_name"
-      android:name=".view.activity.MainActivity"
+      android:name=".ui.main.MainActivity"
       android:theme="@style/AppTheme.NoActionBar">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -39,32 +39,32 @@
     </activity>
     <activity
       android:label="@string/title_activity_picture"
-      android:name=".view.activity.PictureActivity"
+      android:name=".ui.picture.PictureActivity"
       android:theme="@style/DragDismissTheme"/>
     <activity
       android:configChanges="orientation|screenSize|keyboardHidden"
-      android:name=".view.activity.VideoActivity"
+      android:name=".ui.video.VideoActivity"
       android:screenOrientation="portrait"
       android:theme="@style/DragDismissTheme"/>
     <activity
       android:label="@string/title_activity_user"
-      android:name=".view.activity.UserActivity"
+      android:name=".ui.detailuser.UserActivity"
       android:theme="@style/AppTheme.Translucent.User"/>
     <activity
       android:label="SettingsActivity"
-      android:name=".view.activity.SettingsActivity"
+      android:name=".ui.setting.SettingsActivity"
       android:theme="@style/AppTheme.NoActionBar"/>
     <activity
       android:label="@string/title_activity_tweet_edit"
-      android:name=".view.activity.EditTweetActivity"
+      android:name=".ui.editteweet.EditTweetActivity"
       android:theme="@style/AppTheme.NoActionBar"/>
     <activity
       android:label="@string/title_activity_twitter_detail"
-      android:name=".view.activity.TwitterDetailActivity"
+      android:name=".ui.detailtweet.TwitterDetailActivity"
       android:theme="@style/AppTheme.NoActionBar"/>
     <activity
       android:label="EditProfileActivity"
-      android:name=".view.activity.EditProfileActivity"
+      android:name=".ui.editprofile.EditProfileActivity"
       android:theme="@style/AppTheme.NoActionBar"/>
 
     <service
@@ -75,18 +75,18 @@
       android:name=".service.SearchStreamService"/>
 
     <activity
-      android:name=".view.activity.SearchActivity"
+      android:name=".ui.search.SearchActivity"
       android:theme="@style/AppTheme.NoActionBar"/>
     <activity
       android:name="com.yalantis.ucrop.UCropActivity"
       android:screenOrientation="portrait"
       android:theme="@style/AppTheme.NoActionBar"/>
     <activity
-      android:name=".view.activity.SearchSettingActivity"
+      android:name=".ui.search.SearchSettingActivity"
       android:theme="@style/AppTheme.NoActionBar"/>
     <activity
       android:label="@string/title_activity_back_image"
-      android:name=".view.activity.BackImageActivity"
+      android:name=".ui.setting.BackImageActivity"
       android:theme="@style/AppTheme.NoActionBar">
       <intent-filter>
         <action android:name="xyz.donot.roselinx.view.activity.BackImageActivity"/>
@@ -94,10 +94,10 @@
       </intent-filter>
     </activity>
     <activity
-      android:name=".view.activity.UserListActivity"
+      android:name=".ui.userlist.UserListActivity"
       android:theme="@style/AppTheme.NoActionBar"/>
     <activity
-      android:name=".view.activity.TabSettingActivity"
+      android:name=".ui.setting.TabSettingActivity"
       android:theme="@style/AppTheme.NoActionBar">
       <intent-filter>
         <action android:name="xyz.donot.roselinx.view.activity.TabSettingActivity"/>
@@ -106,21 +106,21 @@
     </activity>
     <activity
       android:label="@string/title_activity_user_lists"
-      android:name=".view.activity.UsersListActivity"
+      android:name=".ui.userslist.UsersListActivity"
       android:theme="@style/AppTheme.NoActionBar"/>
     <activity
       android:label="@string/title_activity_account_setting"
-      android:name=".view.activity.AccountSettingActivity"
+      android:name=".ui.account.AccountSettingActivity"
       android:theme="@style/AppTheme.NoActionBar"/>
 
     <service
-      android:enabled="true"
       android:exported="false"
+      android:permission="android.permission.BIND_JOB_SERVICE"
       android:name=".service.StreamingService"/>
 
     <activity
       android:label="@string/title_activity_mute_setting"
-      android:name=".view.activity.MuteSettingActivity"
+      android:name=".ui.mutesetting.MuteSettingActivity"
       android:theme="@style/AppTheme.NoActionBar">
       <intent-filter>
         <action android:name="xyz.donot.roselinx.view.activity.MuteSettingActivity"/>
@@ -129,7 +129,7 @@
     </activity>
     <activity
       android:label="@string/title_activity_help"
-      android:name=".view.activity.HelpActivity"
+      android:name=".ui.setting.HelpActivity"
       android:theme="@style/AppTheme.NoActionBar">
       <intent-filter>
         <action android:name="xyz.donot.roselinx.view.activity.HelpActivity"/>
@@ -140,7 +140,7 @@
     <receiver
       android:enabled="true"
       android:exported="false"
-      android:name=".viewmodel.activity.SendReplyReceiver"/>
+      android:name=".ui.main.SendReplyReceiver"/>
   </application>
 
 </manifest>

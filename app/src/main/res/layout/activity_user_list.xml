@@ -4,6 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/container"
-    tools:context="xyz.donot.roselinx.view.activity.UserListActivity">
+    tools:context="xyz.donot.roselinx.ui.userlist.UserListActivity">
 
 </android.support.constraint.ConstraintLayout>

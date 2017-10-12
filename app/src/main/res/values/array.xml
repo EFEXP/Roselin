@@ -12,7 +12,7 @@
         <item>共有</item>
     </string-array>
     <string-array name="mute">
-        <item>置き換えミュート</item>
+       <!-- <item>置き換えミュート</item>-->
         <item>削除</item>
     </string-array>
     <string-array name="tweet_my_menu">

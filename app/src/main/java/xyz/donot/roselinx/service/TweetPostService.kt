@@ -1,21 +1,21 @@
 package xyz.donot.roselinx.service
 
-import android.app.IntentService
 import android.content.Intent
+import android.support.v4.app.JobIntentService
 import android.support.v4.app.NotificationCompat
 import twitter4j.StatusUpdate
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
 import xyz.donot.roselinx.util.extraUtils.getNotificationManager
-import xyz.donot.roselinx.util.getDeserialized
-import xyz.donot.roselinx.util.getTwitterInstance
+import xyz.donot.roselinx.ui.util.getAccount
+import xyz.donot.roselinx.ui.util.getDeserialized
 import java.io.File
 import java.util.*
 
 
-class TweetPostService : IntentService("TweetPostService") {
-    val twitter by lazy { getTwitterInstance() }
-    override fun onHandleIntent(intent: Intent) {
+class TweetPostService : JobIntentService() {
+    val twitter by lazy { getAccount() }
+    override fun onHandleWork(intent: Intent) {
         val filePath: ArrayList<String>
         val com=id.zelory.compressor.Compressor(this)
         val id= Random().nextInt(100)+1
@@ -23,11 +23,11 @@ class TweetPostService : IntentService("TweetPostService") {
             val mNotificationManager = getNotificationManager()
             val updateStatus= intent.getByteArrayExtra("StatusUpdate").getDeserialized<StatusUpdate>()
             if(intent.hasExtra("FilePath")){
-               filePath=intent.getStringArrayListExtra("FilePath")
-              val compressed =filePath.map { com.setQuality(Integer.parseInt(defaultSharedPreferences.getString("compress_preference",75.toString())))
-                      .compressToFile(File(it)) }
+                filePath=intent.getStringArrayListExtra("FilePath")
+                val compressed =filePath.map { com.setQuality(Integer.parseInt(defaultSharedPreferences.getString("compress_preference",75.toString())))
+                        .compressToFile(File(it)) }
                 notify(id)
-                val uploadedMediaId = compressed.map {  twitter.uploadMedia(it).mediaId }
+                val uploadedMediaId = compressed.map { twitter.account.uploadMedia(it).mediaId }
                 val array = LongArray(uploadedMediaId.size)
                 var i=0
                 while (i < uploadedMediaId.size) {
@@ -36,13 +36,13 @@ class TweetPostService : IntentService("TweetPostService") {
                 }
                 updateStatus.setMediaIds(*array)
             }
-          try {
-              twitter.updateStatus(updateStatus)
-          }
+            try {
+                twitter.account.updateStatus(updateStatus)
+            }
             catch(e:Exception){
                 mNotificationManager.cancel(id)
             }
-          mNotificationManager.cancel(id)
+            mNotificationManager.cancel(id)
 
         }
     }

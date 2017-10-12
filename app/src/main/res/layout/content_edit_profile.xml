@@ -11,7 +11,7 @@
 <RelativeLayout
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context=".view.activity.EditProfileActivity"
+  tools:context=".ui.editprofile.EditProfileActivity"
   tools:showIn="@layout/activity_edit_profile">
 
   <android.support.v7.widget.AppCompatImageView

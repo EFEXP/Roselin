@@ -9,16 +9,20 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.app.RemoteInput
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.LocalBroadcastManager
-import io.realm.Realm
 import twitter4j.*
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.model.realm.NFAVORITE
-import xyz.donot.roselinx.model.realm.NRETWEET
-import xyz.donot.roselinx.model.realm.NotificationObject
-import xyz.donot.roselinx.util.*
+import xyz.donot.roselinx.model.entity.NFAVORITE
+import xyz.donot.roselinx.model.entity.NRETWEET
+import xyz.donot.roselinx.model.entity.Notification
+import xyz.donot.roselinx.model.entity.RoselinDatabase
+import xyz.donot.roselinx.ui.main.MainActivity
+import xyz.donot.roselinx.ui.main.SendReplyReceiver
+import xyz.donot.roselinx.ui.util.StreamCreateUtil
+import xyz.donot.roselinx.ui.util.canPass
+import xyz.donot.roselinx.ui.util.getAccount
+import xyz.donot.roselinx.ui.util.getSerialized
 import xyz.donot.roselinx.util.extraUtils.*
-import xyz.donot.roselinx.view.activity.MainActivity
-import xyz.donot.roselinx.viewmodel.activity.SendReplyReceiver
+import java.util.*
 import kotlin.concurrent.thread
 
 
@@ -26,8 +30,8 @@ const val REPLY_ID = 10
 const val REPLY_GROUP_KEY = "Reply"
 
 class StreamingService : Service() {
-    private val twitter by lazy { getTwitterInstance() }
-    private val stream: TwitterStream by lazy { TwitterStreamFactory().getInstance(twitter.authorization) }
+    private val twitter by lazy { getAccount() }
+    private val stream: TwitterStream by lazy { TwitterStreamFactory().getInstance(twitter.account.authorization) }
     private fun handleActionStream() {
         StreamCreateUtil.addStatusListener(stream, MyStreamAdapter())
         stream.addConnectionLifeCycleListener(MyConnectionListener())
@@ -39,6 +43,7 @@ class StreamingService : Service() {
         try {
             handleActionStream()
         } catch (e: TwitterException) {
+            e.printStackTrace()
             toast(twitterExceptionMessage(e))
         }
     }
@@ -46,7 +51,7 @@ class StreamingService : Service() {
     override fun onBind(intent: Intent): IBinder? = null
     inner class MyConnectionListener : ConnectionLifeCycleListener {
         override fun onConnect() {
-            LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("OnConnect"))
+            LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("connection").putExtra("connection", true))
         }
 
         override fun onCleanUp() {
@@ -54,7 +59,7 @@ class StreamingService : Service() {
         }
 
         override fun onDisconnect() {
-            LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("OnDisconnect"))
+            LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("connection").putExtra("connection", false))
         }
     }
 
@@ -68,40 +73,31 @@ class StreamingService : Service() {
             //通知用
             if (onStatus.isRetweet) {
                 //RT
-                if (onStatus.retweetedStatus.user.id == getMyId()) {
+                if (onStatus.retweetedStatus.user.id == twitter.id) {
                     if (defaultSharedPreferences.getBoolean("notification_retweet", true)) toast("${onStatus.user.name}にRTされました")
-                    mainThread {
-                        val realm = Realm.getDefaultInstance()
-                        realm.executeTransaction {
-                            it.createObject(NotificationObject::class.java).apply {
-                                status = onStatus.getSerialized()
-                                sourceUser = onStatus.user.getSerialized()
-                                type = NRETWEET
-                            }
-                        }
-                    }
+                    RoselinDatabase.getInstance().notificationDao().insertNotification(
+                            Notification(sourceUser = onStatus.user, status = onStatus, type = NRETWEET, date = Date())
+                    )
                 }
-            }
-            else {
+            } else {
                 //通知用
-                if (onStatus.inReplyToUserId == getMyId()) {
+                if (onStatus.inReplyToUserId == twitter.id) {
                     if (defaultSharedPreferences.getBoolean("notification_reply", true)) replyNotification(onStatus)
                     LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewReply").putExtra("Status", onStatus.getSerialized()))
                 }
+                logd { canPass(onStatus).toString() }
                 if (canPass(onStatus)) {
                     LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewStatus").putExtra("Status", onStatus.getSerialized()))
-                    if (onStatus.inReplyToStatusId>0&&!onStatus.isRetweet)
-                    {
-                    //    launch(UI){
-                      //      val result= async(CommonPool){twitter.showStatus(onStatus.inReplyToStatusId)}.await()
-                    //        LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewStatus").putExtra("Status",result.getSerialized()))
-                   //    }
+                    if (onStatus.inReplyToStatusId > 0 && !onStatus.isRetweet) {
+                        //    launch(UI){
+                        //      val result= async(CommonPool){twitter.showStatus(onStatus.inReplyToStatusId)}.await()
+                        //        LocalBroadcastManager.getInstance(this@StreamingService).sendBroadcast(Intent("NewStatus").putExtra("Status",result.getSerialized()))
+                        //    }
                     }
                 }
 
             }
             //TLに通すか
-
 
 
         }
@@ -117,16 +113,11 @@ class StreamingService : Service() {
 
         override fun onFavorite(source: User, target: User, favoritedStatus: Status) {
             super.onFavorite(source, target, favoritedStatus)
-            if (source.id != getMyId()) {
+            if (source.id != twitter.id) {
                 if (defaultSharedPreferences.getBoolean("notification_favorite", true)) toast("${source.name}にいいねされました")
-                val realm = Realm.getDefaultInstance()
-                realm.executeTransaction {
-                    it.createObject(NotificationObject::class.java).apply {
-                        status = favoritedStatus.getSerialized()
-                        sourceUser = source.getSerialized()
-                        type = NFAVORITE
-                    }
-                }
+                RoselinDatabase.getInstance().notificationDao().insertNotification(
+                        Notification(sourceUser = source, status = favoritedStatus, type = NFAVORITE, date = Date())
+                )
             }
         }
     }
@@ -149,17 +140,17 @@ class StreamingService : Service() {
     fun replyNotification(onStatus: Status) {
         val notification = if (version >= 24) {
             newNotification({
-                val activityIntent = Intent(this@StreamingService,MainActivity::class.java).apply {
+                val activityIntent = Intent(this@StreamingService, MainActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
-               val pendingIntent = PendingIntent.getActivity(this@StreamingService, 0, activityIntent,
+                val pendingIntent = PendingIntent.getActivity(this@StreamingService, 0, activityIntent,
                         PendingIntent.FLAG_CANCEL_CURRENT)
 
-                val sendReplyIntent=Intent(this@StreamingService, SendReplyReceiver::class.java).apply {
-                    putExtra("screen_name",onStatus.user.screenName)
-                    putExtra("status_id",onStatus.id)
+                val sendReplyIntent = Intent(this@StreamingService, SendReplyReceiver::class.java).apply {
+                    putExtra("screen_name", onStatus.user.screenName)
+                    putExtra("status_id", onStatus.id)
                 }
-                val replyPendingIntent = PendingIntent.getBroadcast(this@StreamingService, 0, sendReplyIntent,PendingIntent.FLAG_CANCEL_CURRENT)
+                val replyPendingIntent = PendingIntent.getBroadcast(this@StreamingService, 0, sendReplyIntent, PendingIntent.FLAG_CANCEL_CURRENT)
                 val remoteInput = RemoteInput.Builder("key_reply")
                         .setLabel("返信")
                         .build()
@@ -177,7 +168,7 @@ class StreamingService : Service() {
             }, "reply")
         } else
             newNotification({
-                val intent = Intent(this@StreamingService,MainActivity::class.java).apply {
+                val intent = Intent(this@StreamingService, MainActivity::class.java).apply {
                     putExtra("text", "Notification Activity")
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }

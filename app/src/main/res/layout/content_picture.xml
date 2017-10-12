@@ -5,9 +5,9 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  tools:context="xyz.donot.roselinx.view.activity.PictureActivity"
+  tools:context="xyz.donot.roselinx.ui.picture.PictureActivity"
   tools:showIn="@layout/activity_picture">
-  <xyz.donot.roselinx.view.custom.FixedViewPager
+  <xyz.donot.roselinx.ui.view.FixedViewPager
     android:id="@+id/picture_view_pager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
