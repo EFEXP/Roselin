@@ -6,7 +6,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import twitter4j.Status
-import xyz.donot.roselinx.customrecycler.Diffable
+import xyz.donot.roselinx.ui.util.diff.Distinguishable
 import java.util.*
 
 const val HOME_TIMELINE:Int=1000
@@ -19,10 +19,8 @@ data class Tweet(
         val type:Int,
         val date: Date,
         @PrimaryKey(autoGenerate =false) val tweetId: Long
-) : Diffable {
-
-    override fun isTheSame(other: Diffable) = tweetId == (other as? Tweet)?.tweetId
-
+) : Distinguishable {
+    override fun isTheSame(other: Distinguishable) = tweetId == (other as? Tweet)?.tweetId
     companion object {
         fun save(status: Status,type:Int,userId: Long=0L) = launch (UI){
             async {RoselinDatabase.getInstance().tweetDao().insert(Tweet(status,userId,type,status.createdAt,status.id)) }.await()

@@ -13,11 +13,20 @@ interface TweetDao {
     @Query("SELECT * FROM tweet WHERE type=:type order by date DESC")
     fun getAllDataSource(type: Int): LivePagedListProvider<Int, Tweet>
 
+    @Query("SELECT * FROM tweet WHERE type=:type AND userId=:userId order by date DESC")
+    fun getAllUserDataSource(type: Int,userId: Long): LivePagedListProvider<Int, Tweet>
+
+    @Query("SELECT * FROM tweet WHERE date=(SELECT MIN(date) FROM tweet WHERE type=:type AND userId=:userId)")
+    fun getOldestUserTweet(type:Int,userId:Long): Tweet
+
     @Query("SELECT * FROM tweet WHERE date=(SELECT MIN(date) FROM tweet WHERE type=:type)")
     fun getOldestTweet(type:Int): Tweet
 
     @Query("SELECT * FROM tweet WHERE date=(SELECT MAX(date) FROM tweet WHERE type=:type)")
     fun getNewestTweet(type:Int): Tweet
+
+    @Query("SELECT * FROM tweet WHERE date=(SELECT MAX(date) FROM tweet WHERE type=:type AND userId=:userId)")
+    fun getNewestUserTweet(type:Int,userId:Long): Tweet
 
     @Query("SELECT COUNT(*) FROM tweet WHERE type=:type")
     fun countTweet(type:Int):Int

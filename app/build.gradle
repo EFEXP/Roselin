@@ -51,8 +51,6 @@ dependencies {
     def arch = "1.0.0-beta2"
     implementation "android.arch.lifecycle:extensions:${arch}"
     implementation "android.arch.persistence.room:runtime:${arch}"
-    implementation "android.arch.lifecycle:runtime:1.0.0"
-    annotationProcessor "android.arch.lifecycle:compiler:1.0.0-beta2"
     kapt "android.arch.persistence.room:compiler:${arch}"
     implementation "android.arch.paging:runtime:1.0.0-alpha3"
     def twitter4j = "4.0.6"

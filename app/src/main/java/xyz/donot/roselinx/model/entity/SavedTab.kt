@@ -11,7 +11,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.customrecycler.Diffable
+import xyz.donot.roselinx.ui.util.diff.Distinguishable
 import java.lang.Exception
 
 
@@ -33,9 +33,9 @@ data class SavedTab(
         val listName: String? = null,
         var searchQuery: twitter4j.Query? = null,
         val searchWord: String? = null
-) : Diffable {
+) : Distinguishable {
     @PrimaryKey(autoGenerate = true) var id: Long = 0
-    override fun isTheSame(other: Diffable) = id == (other as? SavedTab)?.id
+    override fun isTheSame(other:Distinguishable) = id == (other as? SavedTab)?.id
     companion object {
         fun save(tab: SavedTab) = launch(UI) {
             async {

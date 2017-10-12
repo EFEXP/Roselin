@@ -10,22 +10,22 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.customrecycler.CalculableTweetAdapter
+import xyz.donot.roselinx.customrecycler.CalculableAdapter
 import xyz.donot.roselinx.model.entity.CustomProfile
 import xyz.donot.roselinx.model.entity.RoselinDatabase
 import xyz.donot.roselinx.model.entity.Tweet
-import xyz.donot.roselinx.util.extraUtils.*
-import xyz.donot.roselinx.ui.util.getAccount
-import xyz.donot.roselinx.ui.util.getDragdismiss
-import xyz.donot.roselinx.ui.picture.PictureActivity
 import xyz.donot.roselinx.ui.detailtweet.TwitterDetailActivity
 import xyz.donot.roselinx.ui.detailuser.UserActivity
+import xyz.donot.roselinx.ui.picture.PictureActivity
+import xyz.donot.roselinx.ui.util.getAccount
+import xyz.donot.roselinx.ui.util.getDragdismiss
 import xyz.donot.roselinx.ui.video.VideoActivity
+import xyz.donot.roselinx.util.extraUtils.*
 
 
 class KViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
 
-class TweetAdapter(private val mContext: Context, val type: Int) : CalculableTweetAdapter<Tweet>(R.layout.item_tweet_view) {
+class TweetAdapter(private val mContext: Context, val type: Int) : CalculableAdapter<Tweet>(R.layout.item_tweet_view) {
     //  private lateinit var kichitsui :List<Long>
     private lateinit var customname: List<CustomProfile>
     private lateinit var customnameId: List<Long>

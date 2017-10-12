@@ -12,11 +12,11 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.customrecycler.CalculableTweetAdapter
+import xyz.donot.roselinx.customrecycler.CalculableAdapter
 import xyz.donot.roselinx.model.entity.MuteFilter
 import xyz.donot.roselinx.model.entity.RoselinDatabase
-import xyz.donot.roselinx.ui.status.KViewHolder
 import xyz.donot.roselinx.ui.base.ARecyclerFragment
+import xyz.donot.roselinx.ui.status.KViewHolder
 
 
 class MuteUserFragment : ARecyclerFragment(){
@@ -37,7 +37,7 @@ class MuteUserFragment : ARecyclerFragment(){
         }
     }
 
-     inner class MuteUserAdapter: CalculableTweetAdapter<MuteFilter>(R.layout.item_user){
+     inner class MuteUserAdapter: CalculableAdapter<MuteFilter>(R.layout.item_user){
 
         override fun onBindViewHolder(holder: KViewHolder, position: Int) {
             val item=getItem(position)!!
