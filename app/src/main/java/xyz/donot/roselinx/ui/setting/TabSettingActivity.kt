@@ -27,7 +27,9 @@ import xyz.donot.roselinx.ui.util.getAccount
 
 
 class TabSettingActivity : AppCompatActivity() {
-    private val REQUEST_LISTS = 1
+   companion object {
+       private const val REQUEST_LISTS = 1
+   }
     val account by lazy { getAccount() }
 
     private val mAdapter by lazy { TabItemAdapter() }
@@ -61,15 +63,15 @@ class TabSettingActivity : AppCompatActivity() {
         mAdapter.onItemClick = { item, _ ->
             if (item.type != SETTING)
                 AlertDialog.Builder(this@TabSettingActivity)
-                        .setTitle("削除しますか？")
-                        .setPositiveButton("OK", { _, _ ->
+                        .setTitle(getString(R.string.dialog_question_delete))
+                        .setPositiveButton(getString(R.string.dialog_OK), { _, _ ->
                             launch(UI) {
                                 async { RoselinDatabase.getInstance().savedTabDao().delete(item) }.await()
                                 realmRecreate()
                             }
 
                         })
-                        .setNegativeButton("キャンセル", { _, _ -> })
+                        .setNegativeButton(getString(R.string.dialog_cancel), { _, _ -> })
                         .show()
         }
         tab_recycler.adapter = mAdapter
@@ -79,34 +81,34 @@ class TabSettingActivity : AppCompatActivity() {
                     .setItems(tabMenu, { _, int ->
                         val selectedItem = resources.getStringArray(tabMenu)[int]
                         when (selectedItem) {
-                            "ホーム" -> {
+                            getString(R.string.tabname_home) -> {
                                 SavedTab.save(SavedTab(type = HOME, accountId = account.id, screenName =account.user.screenName))
                                 realmRecreate()
                             }
-                            "リスト" -> {
+                            getString(R.string.tabname_lost) -> {
                                 startActivityForResult(UsersListActivity.newIntent(this, account.id, true), REQUEST_LISTS)
                             }
-                            "リプライ" -> {
+                            getString(R.string.tabname_reply) -> {
                                 SavedTab.save(SavedTab(type = MENTION,
                                         accountId = account.id,
                                         screenName =account.user.screenName))
                                 realmRecreate()
                             }
-                            "トレンド" -> {
+                            getString(R.string.tabname_trend) -> {
                                 SavedTab.save( SavedTab(type = TREND))
                                 realmRecreate()
                             }
-                            "ダイレクトメール" -> {
+                            getString(R.string.tabname_dm) -> {
                                 SavedTab.save( SavedTab(type = DM,
                                         accountId = account.id,
                                         screenName = account.user.screenName))
                                 realmRecreate()
                             }
-                            "検索" -> {
+                            getString(R.string.tabname_search) -> {
                                 SearchSettingFragment().show(supportFragmentManager, "")
                             }
 
-                            "通知" -> {
+                            getString(R.string.tabname_notification) -> {
                                 SavedTab.save(SavedTab(type = NOTIFICATION,
                                         accountId = account.id,
                                         screenName =account.user.screenName))
@@ -130,7 +132,7 @@ class TabSettingActivity : AppCompatActivity() {
         realmRecreate()
     }
 
-    fun realmRecreate() {
+    private fun realmRecreate() {
         launch {
             RoselinDatabase.getInstance().savedTabDao().deleteAll()
             (0 until mAdapter.itemList.size)

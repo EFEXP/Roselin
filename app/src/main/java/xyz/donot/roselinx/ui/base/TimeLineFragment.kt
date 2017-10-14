@@ -21,7 +21,9 @@ import xyz.donot.roselinx.ui.detailtweet.TwitterDetailActivity
 import xyz.donot.roselinx.ui.dialog.RetweetUserDialog
 import xyz.donot.roselinx.ui.editteweet.EditTweetActivity
 import xyz.donot.roselinx.ui.status.StatusAdapter
-import xyz.donot.roselinx.ui.util.extraUtils.*
+import xyz.donot.roselinx.ui.util.extraUtils.delayed
+import xyz.donot.roselinx.ui.util.extraUtils.newIntent
+import xyz.donot.roselinx.ui.util.extraUtils.toast
 import xyz.donot.roselinx.ui.util.getAccount
 
 
@@ -54,18 +56,7 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                             val selectedItem = context.resources.getStringArray(tweetItem)[int]
                             when (selectedItem) {
                                 "返信" -> {
-                                    bundle  {
-                                        putString("status_txt", item.text)
-                                        putLong("status_id", item.id)
-                                        putString("user_screen_name", item.user.screenName)
-                                    }
-                                    activity.start<EditTweetActivity>(
-                                            bundle  {
-                                                putString("status_txt", item.text)
-                                                putLong("status_id", item.id)
-                                                putString("user_screen_name", item.user.screenName)
-                                            }
-                                    )
+                                    startActivity(EditTweetActivity.newIntent(activity,item.text,item.id, item.user.screenName))
                                 }
                                 "削除" -> {
                                     launch(UI) {

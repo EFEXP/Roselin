@@ -48,4 +48,14 @@
   <string name="banner_ad_unit_id">ca-app-pub-1408046229935275/9021983012</string>
   <string name="app_ad_id">ca-app-pub-1408046229935275~7619904456</string>
   <string name="reply_from">~からのリプライ</string>
+  <string name="dialog_question_delete">削除しますか？</string>
+  <string name="dialog_OK">OK</string>
+  <string name="dialog_cancel">キャンセル</string>
+  <string name="tabname_home">ホーム</string>
+  <string name="tabname_lost">リスト</string>
+  <string name="tabname_reply">リプライ</string>
+  <string name="tabname_trend">トレンド</string>
+  <string name="tabname_dm">ダイレクトメール</string>
+  <string name="tabname_search">検索</string>
+  <string name="tabname_notification">通知</string>
 </resources>

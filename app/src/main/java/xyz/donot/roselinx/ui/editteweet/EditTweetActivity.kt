@@ -2,6 +2,7 @@ package xyz.donot.roselinx.ui.editteweet
 
 import android.Manifest
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -25,6 +26,8 @@ import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.entity.RoselinDatabase
 import xyz.donot.roselinx.ui.dialog.TrendFragment
+import xyz.donot.roselinx.ui.util.extraUtils.bundle
+import xyz.donot.roselinx.ui.util.extraUtils.newIntent
 import xyz.donot.roselinx.ui.util.extraUtils.show
 import xyz.donot.roselinx.ui.util.getAccount
 import java.io.File
@@ -195,6 +198,15 @@ class EditTweetActivity : AppCompatActivity() {
         return super.onSupportNavigateUp()
     }
 
+    companion object {
+        fun newIntent(context: Context,txt:String,statusId: Long,screenName:String):Intent{
+            return context.newIntent<EditTweetActivity>(bundle {
+                putString("status_txt",txt)
+                putLong("status_id",statusId)
+                putString("user_screen_name",screenName)
+            })
+        }
+    }
 
     private fun addPhotos(uri: Uri) = viewmodel.mAdapter.addData(uri)
 

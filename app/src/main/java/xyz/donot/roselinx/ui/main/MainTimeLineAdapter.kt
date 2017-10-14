@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentPagerAdapter
 import xyz.donot.roselinx.model.entity.*
 import xyz.donot.roselinx.ui.dialog.TrendFragment
 import xyz.donot.roselinx.ui.directmassage.DMListFragment
+import xyz.donot.roselinx.ui.home.HomeTimeLineFragment
+import xyz.donot.roselinx.ui.mention.MentionTimeLine
 import xyz.donot.roselinx.ui.search.SearchTimeline
 import xyz.donot.roselinx.ui.util.extraUtils.bundle
 import xyz.donot.roselinx.ui.util.getSerialized
@@ -14,12 +16,9 @@ import xyz.donot.roselinx.ui.util.getSerialized
 class MainTimeLineAdapter(fm: FragmentManager, private val tabSetting: List<SavedTab>) : FragmentPagerAdapter(fm) {
     override fun getItem(i: Int): Fragment {
         return when (tabSetting[i].type) {
-        //HomeTimeLineFragment()
             HOME -> HomeTimeLineFragment().apply {
                 val tw = RoselinDatabase.getAllowedInstance().twitterAccountDao().findById(tabSetting[i].accountId)
                 arguments = bundle  { putByteArray("twitter", tw.account.getSerialized()) }
-
-
             }
             MENTION ->
                 MentionTimeLine().apply {

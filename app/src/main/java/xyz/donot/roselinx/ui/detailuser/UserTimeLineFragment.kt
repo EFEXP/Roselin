@@ -83,18 +83,7 @@ class UserTimeLineFragment : ARecyclerFragment() {
                             val selectedItem = context.resources.getStringArray(tweetItem)[int]
                             when (selectedItem) {
                                 "返信" -> {
-                                    bundle  {
-                                        putString("status_txt", item.text)
-                                        putLong("status_id", item.id)
-                                        putString("user_screen_name", item.user.screenName)
-                                    }
-                                    activity.start<EditTweetActivity>(
-                                            bundle {
-                                                putString("status_txt", item.text)
-                                                putLong("status_id", item.id)
-                                                putString("user_screen_name", item.user.screenName)
-                                            }
-                                    )
+                                    startActivity(EditTweetActivity.newIntent(activity,item.text,item.id, item.user.screenName))
                                 }
                                 "削除" -> {
                                     launch(UI) {
@@ -160,16 +149,10 @@ class UserTimeLineFragment : ARecyclerFragment() {
                     iconClick = { startActivity(iconIntent) }
                     listClick = { activity.start<UsersListActivity>(bundle { putLong("userId", user.id) }) }
                     friendClick = {
-                        activity.start<UserListActivity>(bundle {
-                            putLong("userId", user.id)
-                            putBoolean("isFriend", true)
-                        })
+                        startActivity(UserListActivity.newIntent(activity,true,user.id))
                     }
                     followerClick = {
-                        activity.start<UserListActivity>(bundle {
-                            putLong("userId", user.id)
-                            putBoolean("isFriend", false)
-                        })
+                       startActivity(UserListActivity.newIntent(activity,false,user.id))
                     }
                     editClick = { activity.start<EditProfileActivity>() }
 
