@@ -22,10 +22,9 @@ import xyz.donot.roselinx.ui.util.getDragdismiss
 import xyz.donot.roselinx.ui.video.VideoActivity
 import xyz.donot.roselinx.util.extraUtils.*
 
-
 class KViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
 
-class TweetAdapter(private val mContext: Context, val type: Int) : CalculableAdapter<Tweet>(R.layout.item_tweet_view) {
+class TweetAdapter(private val mContext: Context) : CalculableAdapter<Tweet>(R.layout.item_tweet_view) {
     //  private lateinit var kichitsui :List<Long>
     private lateinit var customname: List<CustomProfile>
     private lateinit var customnameId: List<Long>
@@ -82,7 +81,7 @@ class TweetAdapter(private val mContext: Context, val type: Int) : CalculableAda
                     launch(UI) {
                         try {
                             val result = async{ getAccount().account.destroyFavorite(id) }.await()
-                            Tweet.update(result, type)
+                            Tweet.update(result)
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
@@ -91,7 +90,7 @@ class TweetAdapter(private val mContext: Context, val type: Int) : CalculableAda
                     launch(UI) {
                         try {
                             val result = async{ getAccount().account.createFavorite(id) }.await()
-                            Tweet.update(result, type)
+                            Tweet.update(result)
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
@@ -103,7 +102,7 @@ class TweetAdapter(private val mContext: Context, val type: Int) : CalculableAda
                     launch(UI) {
                         try {
                             val result = async { getAccount().account.retweetStatus(id) }.await()
-                            Tweet.update(result, type)
+                            Tweet.update(result)
                             mContext.toast("RTしました")
                         } catch (e: Exception) {
                             e.printStackTrace()

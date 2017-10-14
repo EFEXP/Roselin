@@ -18,6 +18,7 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import twitter4j.User
 import xyz.donot.roselinx.R
+import xyz.donot.roselinx.R.string.twitter
 import xyz.donot.roselinx.model.entity.RoselinDatabase
 import xyz.donot.roselinx.model.entity.USER_TIMELINE
 import xyz.donot.roselinx.ui.base.ARecyclerFragment
@@ -37,10 +38,10 @@ import xyz.donot.roselinx.util.extraUtils.*
 
 class UserTimeLineFragment : ARecyclerFragment() {
     val viewmodel: UserTimeLineViewModel by lazy { ViewModelProviders.of(activity).get(UserTimeLineViewModel::class.java) }
-    val adapter by lazy { TweetAdapter(activity, USER_TIMELINE) }
+    val adapter by lazy { TweetAdapter(activity) }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewmodel.twitter = getAccount().account
+        viewmodel.twitter = getAccount()
         viewmodel.dataRefreshed.observe(this@UserTimeLineFragment, Observer {
             refresh.setRefreshing(false)
         })
@@ -49,13 +50,14 @@ class UserTimeLineFragment : ARecyclerFragment() {
             userId?.let {
                 launch(UI) {
                     async {
-                        RoselinDatabase.getInstance().tweetDao().getAllUserDataSource(USER_TIMELINE, userId)
+                        RoselinDatabase.getInstance().tweetDao().getAllUserDataSource(USER_TIMELINE,viewmodel.twitter.id,arguments.getLong("userId"))
                                 .create(0, PagedList.Config.Builder().setPageSize(50).setPrefetchDistance(50).build())
                     }.await()
                             .observe(this@UserTimeLineFragment, Observer {
                                 it?.let {
-                                    if (it.isEmpty()){
-                                        viewmodel.loadMoreData(false, userId)}
+                                    if (it.isEmpty()) {
+                                        viewmodel.loadMoreData(false, userId)
+                                    }
                                     adapter.setList(it)
                                 }
                             })
@@ -63,10 +65,10 @@ class UserTimeLineFragment : ARecyclerFragment() {
 
                 viewmodel.mUser.observe(this@UserTimeLineFragment, Observer {
                     it?.let {
-                //        adapter.setHeaderView(setUpViews(it))
+                        //        adapter.setHeaderView(setUpViews(it))
                     }
                 })
-                adapter.onItemClick = { (status), position ->
+                adapter.onItemClick = { (status), _ ->
                     val item = if (status.isRetweet) {
                         status.retweetedStatus
                     } else {
@@ -147,7 +149,7 @@ class UserTimeLineFragment : ARecyclerFragment() {
 
             }
         })
-        viewmodel.mUserID.value=arguments.getLong("userId")
+        viewmodel.mUserID.value = arguments.getLong("userId")
         refresh.isEnabled = true
     }
 
@@ -175,7 +177,7 @@ class UserTimeLineFragment : ARecyclerFragment() {
                     followClick = {
                         launch(UI) {
                             try {
-                                async(CommonPool) { viewmodel.twitter.createFriendship(user.id) }.await()
+                                async(CommonPool) { viewmodel.twitter.account.createFriendship(user.id) }.await()
                                 toast("フォローしました")
                             } catch (e: Exception) {
                                 toast(e.localizedMessage)
@@ -185,7 +187,7 @@ class UserTimeLineFragment : ARecyclerFragment() {
                     destroyFollowClick = {
                         try {
                             launch(UI) {
-                                async(CommonPool) { viewmodel.twitter.destroyFriendship(user.id) }.await()
+                                async(CommonPool) { viewmodel.twitter.account.destroyFriendship(user.id) }.await()
                                 toast("フォロー解除しました")
                             }
                         } catch (e: Exception) {
@@ -195,7 +197,7 @@ class UserTimeLineFragment : ARecyclerFragment() {
 
                     launch(UI) {
                         try {
-                            val result = async(CommonPool) { viewmodel.twitter.showFriendship(viewmodel.twitter.id, user.id) }.await()
+                            val result = async(CommonPool) { viewmodel.twitter.account.showFriendship(viewmodel.twitter.id, user.id) }.await()
                             setRelation(result, viewmodel.twitter.id == user.id)
                         } catch (e: Exception) {
                             e.printStackTrace()
@@ -209,7 +211,7 @@ class UserTimeLineFragment : ARecyclerFragment() {
     companion object {
         fun newInstance(userId: Long): UserTimeLineFragment {
             return UserTimeLineFragment().apply {
-                arguments = xyz.donot.roselinx.util.extraUtils.Bundle { putLong("userId", userId) }
+                arguments = Bundle { putLong("userId", userId) }
             }
         }
 

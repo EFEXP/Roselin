@@ -8,7 +8,6 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import twitter4j.Paging
-import twitter4j.Twitter
 import twitter4j.TwitterException
 import twitter4j.User
 import xyz.donot.roselinx.Roselin
@@ -20,7 +19,7 @@ import xyz.donot.roselinx.util.extraUtils.twitterExceptionMessage
 import kotlin.properties.Delegates
 
 class UserTimeLineViewModel(app: Application) : AndroidViewModel(app) {
-    var twitter by Delegates.notNull<Twitter>()
+    var twitter by Delegates.notNull<TwitterAccount>()
     val dataRefreshed = SingleLiveEvent<Unit>()
     val mainTwitter by lazy { getAccount() }
     var page: Int = 0
@@ -36,11 +35,11 @@ class UserTimeLineViewModel(app: Application) : AndroidViewModel(app) {
             try {
                 val paging = Paging(page)
                 if (hasData) {
-                    val oldestId = async { RoselinDatabase.getInstance().tweetDao().getOldestUserTweet(USER_TIMELINE, userID).tweetId }.await()
+                    val oldestId = async { RoselinDatabase.getInstance().tweetDao().getUserOldestTweet(USER_TIMELINE,twitter.id,userID).tweetId}.await()
                     paging.maxId = oldestId
                 }
-                val result = async { twitter.getUserTimeline(userID, paging) }.await()
-                Tweet.save(result,USER_TIMELINE)
+                val result = async { twitter.account.getUserTimeline(userID, paging) }.await()
+                Tweet.save(result,USER_TIMELINE,twitter.id)
             } catch (e: TwitterException) {
                 //  adapter.loadMoreFail()
                 getApplication<Roselin>().toast(twitterExceptionMessage(e))
@@ -50,8 +49,8 @@ class UserTimeLineViewModel(app: Application) : AndroidViewModel(app) {
     fun pullDown(userID:Long) {
         launch(UI) {
             try {
-                val newestId = async { RoselinDatabase.getInstance().tweetDao().getNewestUserTweet(USER_TIMELINE,userID).tweetId }.await()
-                async { twitter.getHomeTimeline(Paging(newestId)) }.await()?.let { Tweet.save(it,USER_TIMELINE) }
+                val newestId = async { RoselinDatabase.getInstance().tweetDao().getUserNewestTweet(USER_TIMELINE,twitter.id,userID).tweetId }.await()
+                async {  twitter.account.getHomeTimeline(Paging(newestId)) }.await()?.let { Tweet.save(it,USER_TIMELINE,twitter.id) }
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
