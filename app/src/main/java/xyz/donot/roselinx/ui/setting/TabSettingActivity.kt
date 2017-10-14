@@ -20,10 +20,10 @@ import xyz.donot.roselinx.R
 import xyz.donot.roselinx.customrecycler.DraggableAdapter
 import xyz.donot.roselinx.customrecycler.ItemDragAndSwipeCallback
 import xyz.donot.roselinx.model.entity.*
-import xyz.donot.roselinx.ui.util.getAccount
-import xyz.donot.roselinx.ui.userslist.UsersListActivity
-import xyz.donot.roselinx.ui.status.KViewHolder
 import xyz.donot.roselinx.ui.search.SearchSettingFragment
+import xyz.donot.roselinx.ui.status.KViewHolder
+import xyz.donot.roselinx.ui.userslist.UsersListActivity
+import xyz.donot.roselinx.ui.util.getAccount
 
 
 class TabSettingActivity : AppCompatActivity() {
@@ -133,18 +133,19 @@ class TabSettingActivity : AppCompatActivity() {
     fun realmRecreate() {
         launch {
             RoselinDatabase.getInstance().savedTabDao().deleteAll()
-            for (i in 0 until mAdapter.itemList.size) {
-                val data = mAdapter.itemList[i]
-                SavedTab.save( SavedTab(
-                        type = data.type,
-                        screenName = data.screenName,
-                        listId = data.listId,
-                        listName = data.listName,
-                        accountId = data.accountId,
-                        searchQuery = data.searchQuery,
-                        searchWord = data.searchWord
-                ))
-            }
+            (0 until mAdapter.itemList.size)
+                    .map { mAdapter.itemList[it] }
+                    .forEach {
+                        SavedTab.save( SavedTab(
+                                type = it.type,
+                                screenName = it.screenName,
+                                listId = it.listId,
+                                listName = it.listName,
+                                accountId = it.accountId,
+                                searchQuery = it.searchQuery,
+                                searchWord = it.searchWord
+                        ))
+                    }
         }
     }
 

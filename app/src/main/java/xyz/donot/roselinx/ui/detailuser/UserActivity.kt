@@ -22,7 +22,7 @@ import xyz.donot.roselinx.ui.util.getDragdismiss
 
 
 class UserActivity : AppCompatActivity(),Target {
-    val viewmodel by lazy { ViewModelProviders.of(this).get(UserTimeLineViewModel::class.java) }
+    val viewmodel: UserTimeLineViewModel by lazy { ViewModelProviders.of(this).get(UserTimeLineViewModel::class.java) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

@@ -1,7 +1,6 @@
 package xyz.donot.roselinx.ui.status
 
 import android.app.Activity
-import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -19,8 +18,8 @@ import xyz.donot.roselinx.ui.picture.PictureActivity
 import xyz.donot.roselinx.ui.util.extraUtils.*
 import xyz.donot.roselinx.ui.util.getAccount
 import xyz.donot.roselinx.ui.util.getDragdismiss
-import xyz.donot.roselinx.ui.view.TweetView
 import xyz.donot.roselinx.ui.video.VideoActivity
+import xyz.donot.roselinx.ui.view.TweetView
 
 class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_tweet_view) {
 

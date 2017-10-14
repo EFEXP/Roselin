@@ -83,18 +83,18 @@ val Status.images: ArrayList<String>
 
 val Status.hasVideo: Boolean
     get() {
-        if (mediaEntities.isNotEmpty()) {
+        return if (mediaEntities.isNotEmpty()) {
             val mediaEntity = mediaEntities[0]
             val url = mediaEntity.mediaURLHttps
-            if (url.matches(PIC_TWITTER_GIF.toRegex())) {
-                return true
+            return if (url.matches(PIC_TWITTER_GIF.toRegex())) {
+                true
             } else {
                 mediaEntities.forEach {
                     if (it.videoVariants != null && it.videoVariants.isNotEmpty()) return true
                 }
-                return false
+                false
             }
-        } else return false
+        } else false
     }
 
 fun Status.getVideoURL(): String? {

@@ -7,7 +7,6 @@ import kotlinx.coroutines.experimental.async
 import twitter4j.PagableResponseList
 import twitter4j.User
 import xyz.donot.roselinx.ui.base.BaseListFragment
-import xyz.donot.roselinx.ui.userlist.UserListAdapter
 
 abstract class UserListFragment : BaseListFragment<User>() {
     private var cursor: Long = -1L

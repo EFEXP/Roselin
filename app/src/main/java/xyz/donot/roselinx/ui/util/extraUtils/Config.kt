@@ -17,14 +17,3 @@ class RoselinxConfig {
 
 fun threadName(): String = Thread.currentThread().name
 
-inline fun doIf(condition: Boolean?, action: () -> Unit) {
-    if (condition == true) action()
-}
-
-inline fun doIf(condition: () -> Boolean?, action: () -> Unit) {
-    if (condition() == true ) action()
-}
-
-inline fun doIf(any: Any?, action: () -> Unit) {
-    if (any != null ) action()
-}

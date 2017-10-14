@@ -59,7 +59,7 @@ fun twitterExceptionMessage(exception: TwitterException):String {
             "アプリケーションに書き込み権限がありません。"
         }
         else -> {
-            logw("twitterExceptionMessage", "Code is ${exception.errorCode}${exception}")
+            logw("twitterExceptionMessage", "Code is ${exception.errorCode}$exception")
             throw IllegalArgumentException()
         }
     }

@@ -49,8 +49,8 @@ fun haveToken(): Boolean {
 fun canPass(status: Status): Boolean {
     val userId = status.user.id
     val dao = RoselinDatabase.getInstance().muteFilterDao().getAllData()
-    val mutedUserIds = dao.map { it.user }.filterNotNull().map { it.id }
-    val containMutedWords = dao.map { it.text }.filterNotNull()
+    val mutedUserIds = dao.mapNotNull { it.user }.map { it.id }
+    val containMutedWords = dao.mapNotNull { it.text }
 
     if (mutedUserIds.contains(userId))
         return false

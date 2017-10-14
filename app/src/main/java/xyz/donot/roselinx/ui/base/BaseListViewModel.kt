@@ -48,15 +48,6 @@ open class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
     }
 
 
-    fun insertDataBackground(data: T) = mainThread {
-        if (isBackground.value!!) {
-            dataStore.add(0, data)
-        } else {
-            adapter?.addData(0, data)
-            dataInserted.call()
-        }
-    }
-
     lateinit var pullToRefresh: (Twitter) -> Deferred<List<T>>?
 
     fun pullDown() {

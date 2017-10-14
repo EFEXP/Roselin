@@ -251,7 +251,7 @@ object Regex {
     private val URL_VALID_URL_QUERY_CHARS = "[a-z0-9!?\\*'\\(\\);:&=\\+\\$/%#\\[\\]\\-_\\.,~\\|@]"
     private val URL_VALID_URL_QUERY_ENDING_CHARS = "[a-z0-9_&=#/]"
     private val VALID_URL_PATTERN_STRING =
-            "(((https?://)?($URL_VALID_DOMAIN)(?::($URL_VALID_PORT_NUMBER))?(/${URL_VALID_PATH}*+)?(\\?$URL_VALID_URL_QUERY_CHARS*$URL_VALID_URL_QUERY_ENDING_CHARS)?))"
+            "(((https?://)?($URL_VALID_DOMAIN)(?::($URL_VALID_PORT_NUMBER))?(/$URL_VALID_PATH*+)?(\\?$URL_VALID_URL_QUERY_CHARS*$URL_VALID_URL_QUERY_ENDING_CHARS)?))"
 
     private val AT_SIGNS_CHARS = "@\uFF20"
 
