@@ -24,9 +24,9 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.entity.RoselinDatabase
-import xyz.donot.roselinx.util.extraUtils.show
-import xyz.donot.roselinx.ui.util.getAccount
 import xyz.donot.roselinx.ui.dialog.TrendFragment
+import xyz.donot.roselinx.ui.util.extraUtils.show
+import xyz.donot.roselinx.ui.util.getAccount
 import java.io.File
 import java.util.*
 import kotlin.properties.Delegates
@@ -47,7 +47,7 @@ class EditTweetActivity : AppCompatActivity() {
                 it?.let {
                     editText_status.editableText.clear()
                     it.replyToScreenName.isNotEmpty()
-                    if (!it.replyToScreenName.isNullOrBlank())
+                    if (!it.replyToScreenName.isBlank())
                         editText_status.append("@${it.replyToScreenName} ")
                     if (it.replyToStatusId != 0L)
                         viewmodel.statusId = it.replyToStatusId
@@ -97,7 +97,7 @@ class EditTweetActivity : AppCompatActivity() {
             AlertDialog.Builder(this@EditTweetActivity).setTitle("写真")
                     .setMessage("何をしますか？")
                     /*	.setNegativeButton("確認", { _, _ ->
-                            start<PictureActivity>(Bundle {
+                            start<PictureActivity>(bundle {
                                 putStringArrayList("picture_urls", arrayListOf(mAdapter.data[position].toString()))
                             })
                         })*/

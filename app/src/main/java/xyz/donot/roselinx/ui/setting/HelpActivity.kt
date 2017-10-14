@@ -14,12 +14,12 @@ import kotlinx.android.synthetic.main.item_changelog.view.*
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.ui.editteweet.EditTweetActivity
-import xyz.donot.roselinx.util.extraUtils.Bundle
-import xyz.donot.roselinx.util.extraUtils.onClick
-import xyz.donot.roselinx.util.extraUtils.start
-import xyz.donot.roselinx.util.extraUtils.startPlayStoreLink
 import xyz.donot.roselinx.ui.base.BaseListFragment
+import xyz.donot.roselinx.ui.editteweet.EditTweetActivity
+import xyz.donot.roselinx.ui.util.extraUtils.bundle
+import xyz.donot.roselinx.ui.util.extraUtils.onClick
+import xyz.donot.roselinx.ui.util.extraUtils.start
+import xyz.donot.roselinx.ui.util.extraUtils.startPlayStoreLink
 
 class HelpActivity : AppCompatActivity() {
 
@@ -39,7 +39,7 @@ class HelpActivity : AppCompatActivity() {
             FeaturesFragment().show(supportFragmentManager, "")
         }
         contact_support.onClick {
-            val bundle = Bundle { putString("user_screen_name", "JlowoiL") }
+            val bundle = bundle{ putString("user_screen_name", "JlowoiL") }
             start<EditTweetActivity>(bundle)
         }
 

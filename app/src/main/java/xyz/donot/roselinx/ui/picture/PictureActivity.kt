@@ -15,10 +15,10 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.content_picture.*
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.util.extraUtils.hide
-import xyz.donot.roselinx.util.extraUtils.logd
-import xyz.donot.roselinx.util.extraUtils.newIntent
-import xyz.donot.roselinx.util.extraUtils.onClick
+import xyz.donot.roselinx.ui.util.extraUtils.hide
+import xyz.donot.roselinx.ui.util.extraUtils.logd
+import xyz.donot.roselinx.ui.util.extraUtils.newIntent
+import xyz.donot.roselinx.ui.util.extraUtils.onClick
 import xyz.klinker.android.drag_dismiss.activity.DragDismissActivity
 
 

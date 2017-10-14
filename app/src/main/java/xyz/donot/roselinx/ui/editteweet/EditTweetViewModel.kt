@@ -7,8 +7,8 @@ import twitter4j.StatusUpdate
 import xyz.donot.roselinx.Roselin
 import xyz.donot.roselinx.model.entity.TweetDraft
 import xyz.donot.roselinx.service.TweetPostService
-import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
-import xyz.donot.roselinx.util.extraUtils.newIntent
+import xyz.donot.roselinx.ui.util.extraUtils.defaultSharedPreferences
+import xyz.donot.roselinx.ui.util.extraUtils.newIntent
 import xyz.donot.roselinx.ui.util.getAccount
 import xyz.donot.roselinx.ui.util.getPath
 import xyz.donot.roselinx.ui.util.getSerialized

@@ -14,11 +14,12 @@ import kotlinx.android.synthetic.main.person_item.view.*
 import twitter4j.Relationship
 import twitter4j.User
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.util.extraUtils.show
-import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.ui.util.getTagURLMention
 import xyz.donot.roselinx.ui.util.getURLLink
 import java.text.SimpleDateFormat
+import xyz.donot.roselinx.ui.util.extraUtils.hide
+import xyz.donot.roselinx.ui.util.extraUtils.show
+import xyz.donot.roselinx.ui.util.extraUtils.toast
 
 class UserDetailView  : ConstraintLayout ,Target {
     constructor(context: Context) : super(context)

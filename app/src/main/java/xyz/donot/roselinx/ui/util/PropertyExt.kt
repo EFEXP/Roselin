@@ -24,50 +24,50 @@ val Status.images: ArrayList<String>
     get() {
         val imageUrls = java.util.ArrayList<String>()
         for (url in urlEntities) {
-            val twitpic_matcher = TWITPIC_PATTERN.getMatcher(url.expandedURL)
-            if (twitpic_matcher.find()) {
-                imageUrls.add("http://twitpic.com/show/full/" + twitpic_matcher.group(1))
-                continue
-            }
-            val twipple_matcher = TWIPPLE_PATTERN.getMatcher(url.expandedURL)
-            if (twipple_matcher.find()) {
-                imageUrls.add("http://p.twpl.jp/show/orig/" + twipple_matcher.group(1))
-                continue
-            }
-            val instagram_matcher = INSTAGRAM_PATTERN.getMatcher(url.expandedURL)
-            if (instagram_matcher.find()) {
+            val instagramMatcher = INSTAGRAM_PATTERN.getMatcher(url.expandedURL)
+            if (instagramMatcher.find()) {
                 imageUrls.add(url.expandedURL + "media?size=l")
                 continue
             }
-            val photozou_matcher = PHOTOZOU_PATTERN.getMatcher(url.expandedURL)
-            if (photozou_matcher.find()) {
-                imageUrls.add("http://photozou.jp/p/img/" + photozou_matcher.group(1))
+            val youtubeMatcher = YOUTUBE_PATTERN.getMatcher(url.expandedURL)
+            if (youtubeMatcher.find()) {
+                imageUrls.add("http://i.ytimg.com/vi/" + youtubeMatcher.group(1) + "/hqdefault.jpg")
                 continue
             }
-            val youtube_matcher = YOUTUBE_PATTERN.getMatcher(url.expandedURL)
-            if (youtube_matcher.find()) {
-                imageUrls.add("http://i.ytimg.com/vi/" + youtube_matcher.group(1) + "/hqdefault.jpg")
-                continue
-            }
-            val niconico_matcher = NICONICO_PATTERN.getMatcher(url.expandedURL)
-            if (niconico_matcher.find()) {
-                val id = Integer.valueOf(niconico_matcher.group(1))!!
+            val niconicoMatcher = NICONICO_PATTERN.getMatcher(url.expandedURL)
+            if (niconicoMatcher.find()) {
+                val id = Integer.valueOf(niconicoMatcher.group(1))!!
                 val host = id % 4 + 1
                 imageUrls.add("http://tn-skr$host.smilevideo.jp/smile?i=$id.L")
                 continue
             }
-            val pixiv_matcher = PIXIV_PATTERN.getMatcher(url.expandedURL)
-            if (pixiv_matcher.find()) {
-                imageUrls.add("http://embed.pixiv.net/decorate.php?illust_id=" + pixiv_matcher.group(1))
+            val pixivMatcher = PIXIV_PATTERN.getMatcher(url.expandedURL)
+            if (pixivMatcher.find()) {
+                imageUrls.add("http://embed.pixiv.net/decorate.php?illust_id=" + pixivMatcher.group(1))
                 continue
             }
-            val gyazo_matcher = GYAZO_PATTERN.getMatcher(url.expandedURL)
-            if (gyazo_matcher.find()) {
-                imageUrls.add("https://i.gyazo.com/" + gyazo_matcher.group(1) + ".png")
+            val twitpicMatcher = TWITPIC_PATTERN.getMatcher(url.expandedURL)
+            if (twitpicMatcher.find()) {
+                imageUrls.add("http://twitpic.com/show/full/" + twitpicMatcher.group(1))
                 continue
             }
-            val images_matcher = IMAGES_PATTERN.getMatcher(url.expandedURL)
-            if (images_matcher.find()) {
+            val photozouMatcher = PHOTOZOU_PATTERN.getMatcher(url.expandedURL)
+            if (photozouMatcher.find()) {
+                imageUrls.add("http://photozou.jp/p/img/" + photozouMatcher.group(1))
+                continue
+            }
+            val twippleMatcher = TWIPPLE_PATTERN.getMatcher(url.expandedURL)
+            if (twippleMatcher.find()) {
+                imageUrls.add("http://p.twpl.jp/show/orig/" + twippleMatcher.group(1))
+                continue
+            }
+            val gyazoMatcher = GYAZO_PATTERN.getMatcher(url.expandedURL)
+            if (gyazoMatcher.find()) {
+                imageUrls.add("https://i.gyazo.com/" + gyazoMatcher.group(1) + ".png")
+                continue
+            }
+            val imagesMatcher = IMAGES_PATTERN.getMatcher(url.expandedURL)
+            if (imagesMatcher.find()) {
                 imageUrls.add(url.expandedURL)
             }
         }

@@ -5,8 +5,8 @@ import android.support.v4.app.JobIntentService
 import android.support.v4.app.NotificationCompat
 import twitter4j.StatusUpdate
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
-import xyz.donot.roselinx.util.extraUtils.getNotificationManager
+import xyz.donot.roselinx.ui.util.extraUtils.defaultSharedPreferences
+import xyz.donot.roselinx.ui.util.extraUtils.getNotificationManager
 import xyz.donot.roselinx.ui.util.getAccount
 import xyz.donot.roselinx.ui.util.getDeserialized
 import java.io.File

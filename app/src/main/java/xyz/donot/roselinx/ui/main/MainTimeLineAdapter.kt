@@ -4,11 +4,11 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import xyz.donot.roselinx.model.entity.*
-import xyz.donot.roselinx.util.extraUtils.Bundle
-import xyz.donot.roselinx.ui.util.getSerialized
 import xyz.donot.roselinx.ui.dialog.TrendFragment
-import xyz.donot.roselinx.ui.search.SearchTimeline
 import xyz.donot.roselinx.ui.directmassage.DMListFragment
+import xyz.donot.roselinx.ui.search.SearchTimeline
+import xyz.donot.roselinx.ui.util.extraUtils.bundle
+import xyz.donot.roselinx.ui.util.getSerialized
 
 
 class MainTimeLineAdapter(fm: FragmentManager, private val tabSetting: List<SavedTab>) : FragmentPagerAdapter(fm) {
@@ -17,7 +17,7 @@ class MainTimeLineAdapter(fm: FragmentManager, private val tabSetting: List<Save
         //HomeTimeLineFragment()
             HOME -> HomeTimeLineFragment().apply {
                 val tw = RoselinDatabase.getAllowedInstance().twitterAccountDao().findById(tabSetting[i].accountId)
-                arguments = Bundle { putByteArray("twitter", tw.account.getSerialized()) }
+                arguments = bundle  { putByteArray("twitter", tw.account.getSerialized()) }
 
 
             }
@@ -25,13 +25,13 @@ class MainTimeLineAdapter(fm: FragmentManager, private val tabSetting: List<Save
                 MentionTimeLine().apply {
 
                     val tw = RoselinDatabase.getAllowedInstance().twitterAccountDao().findById(tabSetting[i].accountId)
-                    arguments = Bundle { putByteArray("twitter", tw.account.getSerialized()) }
+                    arguments =bundle { putByteArray("twitter", tw.account.getSerialized()) }
 
                 }
 
 
             SEARCH -> SearchTimeline().apply {
-                arguments = Bundle {
+                arguments = bundle  {
                     putString("query_text", tabSetting[i].searchWord)
                     putByteArray("query_bundle", tabSetting[i].searchQuery?.getSerialized())
                 }
@@ -39,7 +39,7 @@ class MainTimeLineAdapter(fm: FragmentManager, private val tabSetting: List<Save
             LIST -> ListTimeLine().apply {
 
                 val tw = RoselinDatabase.getAllowedInstance().twitterAccountDao().findById(tabSetting[i].accountId)
-                arguments = Bundle {
+                arguments =bundle  {
                     putLong("listId", tabSetting[i].listId)
                     putByteArray("twitter", tw.account.getSerialized())
                 }
@@ -50,7 +50,7 @@ class MainTimeLineAdapter(fm: FragmentManager, private val tabSetting: List<Save
             TREND -> TrendFragment()
             DM -> DMListFragment().apply {
                 val tw = RoselinDatabase.getAllowedInstance().twitterAccountDao().findById(tabSetting[i].accountId)
-                arguments = Bundle { putByteArray("twitter", tw.account.getSerialized()) }
+                arguments = bundle { putByteArray("twitter", tw.account.getSerialized()) }
 
             }
             SETTING -> RoselinFragment()

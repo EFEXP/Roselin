@@ -15,9 +15,9 @@ import com.yalantis.ucrop.UCropActivity
 import kotlinx.android.synthetic.main.activity_edit_profile.*
 import kotlinx.android.synthetic.main.content_edit_profile.*
 import xyz.donot.roselinx.R
+import xyz.donot.roselinx.ui.util.extraUtils.getNotificationManager
+import xyz.donot.roselinx.ui.util.extraUtils.newNotification
 import xyz.donot.roselinx.ui.util.getSerialized
-import xyz.donot.roselinx.util.extraUtils.getNotificationManager
-import xyz.donot.roselinx.util.extraUtils.newNotification
 import java.io.File
 import java.util.*
 

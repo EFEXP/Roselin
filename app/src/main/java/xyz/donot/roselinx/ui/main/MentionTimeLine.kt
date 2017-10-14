@@ -33,10 +33,10 @@ import xyz.donot.roselinx.ui.detailtweet.TwitterDetailActivity
 import xyz.donot.roselinx.ui.dialog.RetweetUserDialog
 import xyz.donot.roselinx.ui.editteweet.EditTweetActivity
 import xyz.donot.roselinx.ui.status.TweetAdapter
+import xyz.donot.roselinx.ui.util.extraUtils.*
 import xyz.donot.roselinx.ui.util.getAccount
 import xyz.donot.roselinx.ui.util.getDeserialized
 import xyz.donot.roselinx.ui.view.SingleLiveEvent
-import xyz.donot.roselinx.util.extraUtils.*
 import kotlin.properties.Delegates
 
 class MentionTimeLine : ARecyclerFragment() {
@@ -66,13 +66,13 @@ class MentionTimeLine : ARecyclerFragment() {
                             val selectedItem = context.resources.getStringArray(tweetItem)[int]
                             when (selectedItem) {
                                 "返信" -> {
-                                    Bundle {
+                                    bundle  {
                                         putString("status_txt", item.text)
                                         putLong("status_id", item.id)
                                         putString("user_screen_name", item.user.screenName)
                                     }
                                     activity.start<EditTweetActivity>(
-                                            Bundle {
+                                            bundle  {
                                                 putString("status_txt", item.text)
                                                 putLong("status_id", item.id)
                                                 putString("user_screen_name", item.user.screenName)

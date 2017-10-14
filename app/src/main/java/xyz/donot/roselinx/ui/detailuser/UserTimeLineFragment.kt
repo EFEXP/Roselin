@@ -18,7 +18,6 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import twitter4j.User
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.R.string.twitter
 import xyz.donot.roselinx.model.entity.RoselinDatabase
 import xyz.donot.roselinx.model.entity.USER_TIMELINE
 import xyz.donot.roselinx.ui.base.ARecyclerFragment
@@ -30,10 +29,10 @@ import xyz.donot.roselinx.ui.picture.PictureActivity
 import xyz.donot.roselinx.ui.status.TweetAdapter
 import xyz.donot.roselinx.ui.userlist.UserListActivity
 import xyz.donot.roselinx.ui.userslist.UsersListActivity
+import xyz.donot.roselinx.ui.util.extraUtils.*
 import xyz.donot.roselinx.ui.util.getAccount
 import xyz.donot.roselinx.ui.util.getDragdismiss
 import xyz.donot.roselinx.ui.view.UserDetailView
-import xyz.donot.roselinx.util.extraUtils.*
 
 
 class UserTimeLineFragment : ARecyclerFragment() {
@@ -84,13 +83,13 @@ class UserTimeLineFragment : ARecyclerFragment() {
                             val selectedItem = context.resources.getStringArray(tweetItem)[int]
                             when (selectedItem) {
                                 "返信" -> {
-                                    Bundle {
+                                    bundle  {
                                         putString("status_txt", item.text)
                                         putLong("status_id", item.id)
                                         putString("user_screen_name", item.user.screenName)
                                     }
                                     activity.start<EditTweetActivity>(
-                                            Bundle {
+                                            bundle {
                                                 putString("status_txt", item.text)
                                                 putLong("status_id", item.id)
                                                 putString("user_screen_name", item.user.screenName)
@@ -159,15 +158,15 @@ class UserTimeLineFragment : ARecyclerFragment() {
                     val iconIntent = activity.getDragdismiss(PictureActivity.createIntent(activity, arrayListOf(user.originalProfileImageURLHttps)))
                     setUser(user)
                     iconClick = { startActivity(iconIntent) }
-                    listClick = { activity.start<UsersListActivity>(Bundle { putLong("userId", user.id) }) }
+                    listClick = { activity.start<UsersListActivity>(bundle { putLong("userId", user.id) }) }
                     friendClick = {
-                        activity.start<UserListActivity>(Bundle {
+                        activity.start<UserListActivity>(bundle {
                             putLong("userId", user.id)
                             putBoolean("isFriend", true)
                         })
                     }
                     followerClick = {
-                        activity.start<UserListActivity>(Bundle {
+                        activity.start<UserListActivity>(bundle {
                             putLong("userId", user.id)
                             putBoolean("isFriend", false)
                         })
@@ -211,7 +210,7 @@ class UserTimeLineFragment : ARecyclerFragment() {
     companion object {
         fun newInstance(userId: Long): UserTimeLineFragment {
             return UserTimeLineFragment().apply {
-                arguments = Bundle { putLong("userId", userId) }
+                arguments = bundle { putLong("userId", userId) }
             }
         }
 

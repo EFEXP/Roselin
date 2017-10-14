@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.content_search.*
 import twitter4j.Query
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.util.extraUtils.newIntent
+import xyz.donot.roselinx.ui.util.extraUtils.newIntent
 import xyz.donot.roselinx.ui.util.getDeserialized
 import xyz.donot.roselinx.ui.util.getSerialized
 

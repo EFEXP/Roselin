@@ -1,5 +1,4 @@
-package xyz.donot.roselinx.util.extraUtils
-
+package xyz.donot.roselinx.ui.util.extraUtils
 import android.os.Handler
 import android.os.Looper
 

@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
+import xyz.donot.roselinx.ui.util.extraUtils.defaultSharedPreferences
 
 class MusicReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {

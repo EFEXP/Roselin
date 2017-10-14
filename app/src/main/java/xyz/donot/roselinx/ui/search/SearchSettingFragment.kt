@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_search_setting.view.*
 import twitter4j.Query
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.ui.setting.TabSettingActivity
 import xyz.donot.roselinx.ui.base.DatePickFragment
+import xyz.donot.roselinx.ui.util.extraUtils.toast
 
 class SearchSettingFragment:DialogFragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

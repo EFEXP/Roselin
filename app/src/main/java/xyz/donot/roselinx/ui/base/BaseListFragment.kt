@@ -12,10 +12,10 @@ import com.google.android.gms.ads.AdRequest
 import kotlinx.android.synthetic.main.content_base_fragment.*
 import kotlinx.android.synthetic.main.item_ad.view.*
 import xyz.donot.roselinx.R
+import xyz.donot.roselinx.ui.util.extraUtils.delayed
 import xyz.donot.roselinx.ui.util.getAccount
 import xyz.donot.roselinx.ui.util.getDeserialized
 import xyz.donot.roselinx.ui.view.MyLoadingView
-import xyz.donot.roselinx.util.extraUtils.delayed
 
 abstract class BaseListFragment<T> : ARecyclerFragment() {
     protected val viewmodel: BaseListViewModel<T> by lazy { ViewModelProviders.of(this).get(BaseListViewModel::class.java) as BaseListViewModel<T> }

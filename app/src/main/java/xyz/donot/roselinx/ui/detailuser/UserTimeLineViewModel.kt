@@ -12,11 +12,12 @@ import twitter4j.TwitterException
 import twitter4j.User
 import xyz.donot.roselinx.Roselin
 import xyz.donot.roselinx.model.entity.*
+import xyz.donot.roselinx.ui.util.extraUtils.toast
+import xyz.donot.roselinx.ui.util.extraUtils.twitterExceptionMessage
 import xyz.donot.roselinx.ui.util.getAccount
 import xyz.donot.roselinx.ui.view.SingleLiveEvent
-import xyz.donot.roselinx.util.extraUtils.toast
-import xyz.donot.roselinx.util.extraUtils.twitterExceptionMessage
 import kotlin.properties.Delegates
+
 
 class UserTimeLineViewModel(app: Application) : AndroidViewModel(app) {
     var twitter by Delegates.notNull<TwitterAccount>()

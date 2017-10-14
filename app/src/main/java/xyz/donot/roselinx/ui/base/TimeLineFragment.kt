@@ -17,15 +17,12 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import twitter4j.Status
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.ui.editteweet.EditTweetActivity
-import xyz.donot.roselinx.ui.util.getAccount
-import xyz.donot.roselinx.util.extraUtils.delayed
-import xyz.donot.roselinx.util.extraUtils.newIntent
-import xyz.donot.roselinx.util.extraUtils.start
-import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.ui.detailtweet.TwitterDetailActivity
-import xyz.donot.roselinx.ui.status.StatusAdapter
 import xyz.donot.roselinx.ui.dialog.RetweetUserDialog
+import xyz.donot.roselinx.ui.editteweet.EditTweetActivity
+import xyz.donot.roselinx.ui.status.StatusAdapter
+import xyz.donot.roselinx.ui.util.extraUtils.*
+import xyz.donot.roselinx.ui.util.getAccount
 
 
 abstract class TimeLineFragment : BaseListFragment<Status>() {
@@ -57,13 +54,13 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                             val selectedItem = context.resources.getStringArray(tweetItem)[int]
                             when (selectedItem) {
                                 "返信" -> {
-                                    xyz.donot.roselinx.util.extraUtils.Bundle {
+                                    bundle  {
                                         putString("status_txt", item.text)
                                         putLong("status_id", item.id)
                                         putString("user_screen_name", item.user.screenName)
                                     }
                                     activity.start<EditTweetActivity>(
-                                            xyz.donot.roselinx.util.extraUtils.Bundle {
+                                            bundle  {
                                                 putString("status_txt", item.text)
                                                 putLong("status_id", item.id)
                                                 putString("user_screen_name", item.user.screenName)

@@ -8,10 +8,10 @@ import android.support.customtabs.CustomTabsIntent
 import android.support.v4.content.ContextCompat
 import com.klinker.android.link_builder.Link
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.util.extraUtils.Bundle
-import xyz.donot.roselinx.util.extraUtils.start
-import xyz.donot.roselinx.ui.search.SearchActivity
 import xyz.donot.roselinx.ui.detailuser.UserActivity
+import xyz.donot.roselinx.ui.search.SearchActivity
+import xyz.donot.roselinx.ui.util.extraUtils.bundle
+import xyz.donot.roselinx.ui.util.extraUtils.start
 
 
 fun Context.getTagURLMention() :MutableList<Link> = mutableListOf(
@@ -38,7 +38,7 @@ fun Context.getTagURLMention() :MutableList<Link> = mutableListOf(
                 .setUnderlined(false)
                 .setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
                 .setOnClickListener {
-                    (this as Activity).start<SearchActivity>(Bundle { putString("query_text","$it -rt") })
+                    (this as Activity).start<SearchActivity>(bundle  { putString("query_text","$it -rt") })
                 }
 )
 fun Context.getURLLink() :MutableList<Link> = arrayListOf(

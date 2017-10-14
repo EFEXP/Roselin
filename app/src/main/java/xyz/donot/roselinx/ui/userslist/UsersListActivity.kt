@@ -14,7 +14,8 @@ import kotlinx.android.synthetic.main.activity_user_lists.*
 import kotlinx.android.synthetic.main.content_user_lists.*
 import twitter4j.UserList
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.util.extraUtils.newIntent
+import xyz.donot.roselinx.ui.util.extraUtils.bundle
+import xyz.donot.roselinx.ui.util.extraUtils.newIntent
 
 class UsersListActivity : AppCompatActivity() {
 
@@ -49,7 +50,7 @@ class UsersListActivity : AppCompatActivity() {
 
     companion object {
         fun newIntent(context: Context,userId:Long,isSelect:Boolean=false):Intent{
-          return context.newIntent<UsersListActivity>(xyz.donot.roselinx.util.extraUtils.Bundle {
+          return context.newIntent<UsersListActivity>(bundle {
                 putLong("userId",userId)
                 putBoolean("isSelect",isSelect)
             })

@@ -15,10 +15,10 @@ import twitter4j.Status
 import twitter4j.User
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.ui.util.*
-import xyz.donot.roselinx.util.extraUtils.hide
-import xyz.donot.roselinx.util.extraUtils.onClick
-import xyz.donot.roselinx.util.extraUtils.show
 import xyz.donot.roselinx.ui.status.TweetCardPicAdapter
+import xyz.donot.roselinx.ui.util.extraUtils.hide
+import xyz.donot.roselinx.ui.util.extraUtils.onClick
+import xyz.donot.roselinx.ui.util.extraUtils.show
 import java.util.*
 import kotlin.properties.Delegates
 

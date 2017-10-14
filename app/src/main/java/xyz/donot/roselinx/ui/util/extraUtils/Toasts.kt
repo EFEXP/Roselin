@@ -1,5 +1,4 @@
-package xyz.donot.roselinx.util.extraUtils
-
+package xyz.donot.roselinx.ui.util.extraUtils
 import android.content.Context
 import android.support.v4.app.Fragment
 import android.widget.Toast

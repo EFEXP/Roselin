@@ -9,8 +9,8 @@ import xyz.donot.roselinx.model.entity.TweetUser
 const val JOIN_TWEET = "tweet JOIN tweet_type JOIN tweet_user ON tweet.tweetId=tweet_type.tweetId AND tweet.tweetId=tweet_user.tweetId"
 const val EQUALS_TYPE = "type=:type"
 const val EQUALS_ME = "userId=:userId"
-const val EQUALS_TWEETER = "tweetedUserId=:tweetedUserId"
-const val SELECT_TWEET="status,date,tweet.tweetId,tweetedUserId"
+const val EQUALS_TWEETER = "tweeterId=:tweetedUserId"
+const val SELECT_TWEET="status,date,tweet.tweetId,tweeterId"
 
 @Dao
 interface TweetDao {

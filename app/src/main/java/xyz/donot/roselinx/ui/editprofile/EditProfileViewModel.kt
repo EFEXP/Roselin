@@ -11,10 +11,9 @@ import kotlinx.coroutines.experimental.launch
 import twitter4j.User
 import xyz.donot.roselinx.Roselin
 import xyz.donot.roselinx.model.entity.RoselinDatabase
-import xyz.donot.roselinx.util.extraUtils.getNotificationManager
+import xyz.donot.roselinx.ui.util.extraUtils.getNotificationManager
 import xyz.donot.roselinx.ui.util.getAccount
 import xyz.donot.roselinx.ui.util.getPath
-import xyz.donot.roselinx.ui.editprofile.UPDATE_PROFILE_NOTIFICATION
 import xyz.donot.roselinx.ui.view.SingleLiveEvent
 import java.io.File
 
@@ -28,14 +27,11 @@ class EditProfileViewModel(application: Application) : AndroidViewModel(applicat
     fun initUser() {
         launch(UI) {
             val t=    async {RoselinDatabase.getInstance().userDataDao().findById(account.id)  }.await()
-            if(t==null)
-                launch(UI) {
-                    val result = async(CommonPool) {account.account.verifyCredentials() }.await()
-                    user.value = result
-                }
-            else{
+               // launch(UI) {
+                  //  val result = async(CommonPool) {account.account.verifyCredentials() }.await()
+                  //  user.value = result
+              //  }
                 user.value=t.user
-            }
         }
 
 

@@ -8,9 +8,8 @@ import xyz.donot.roselinx.ui.status.KViewHolder
 import xyz.donot.roselinx.ui.util.diff.Distinguishable
 import xyz.donot.roselinx.ui.util.diff.DistinguishableCallback
 import xyz.donot.roselinx.ui.util.diff.MyDiffCallback
-import xyz.donot.roselinx.util.extraUtils.inflate
-import xyz.donot.roselinx.util.extraUtils.logd
-
+import xyz.donot.roselinx.ui.util.extraUtils.inflate
+import xyz.donot.roselinx.ui.util.extraUtils.logd
 
 
 abstract class CalculableAdapter<T:Distinguishable>(val layout:Int):PagedListAdapter<T, KViewHolder>(DistinguishableCallback<T>()){

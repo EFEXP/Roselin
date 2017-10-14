@@ -15,8 +15,8 @@ import com.twitter.sdk.android.core.TwitterAuthConfig
 import com.twitter.sdk.android.core.TwitterConfig
 import xyz.donot.roselinx.ui.util.Key.xxxxx
 import xyz.donot.roselinx.ui.util.Key.yyyyyy
-import xyz.donot.roselinx.util.extraUtils.RoselinxConfig
-import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
+import xyz.donot.roselinx.ui.util.extraUtils.RoselinxConfig
+import xyz.donot.roselinx.ui.util.extraUtils.defaultSharedPreferences
 
 
 class Roselin : MultiDexApplication() {

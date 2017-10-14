@@ -13,7 +13,7 @@ import com.yalantis.ucrop.UCropActivity
 import kotlinx.android.synthetic.main.activity_back_image.*
 import kotlinx.android.synthetic.main.content_back_image.*
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.util.extraUtils.defaultSharedPreferences
+import xyz.donot.roselinx.ui.util.extraUtils.defaultSharedPreferences
 import java.io.File
 import java.util.*
 

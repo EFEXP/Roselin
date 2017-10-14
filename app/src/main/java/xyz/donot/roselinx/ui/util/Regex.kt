@@ -173,17 +173,17 @@ object Regex {
             "\\u0300-\\u036f" + // Combining diacritics
 
             "\\u1e00-\\u1eff" // Latin Extended Additional (mostly for Vietnamese)
-    private val HASHTAG_ALPHA_CHARS = "a-z${LATIN_ACCENTS_CHARS}\\u0400-\\u04ff\\u0500-\\u0527\\u2de0-\\u2dff\\ua640-\\ua69f\\u0591-\\u05bf\\u05c1-\\u05c2\\u05c4-\\u05c5\\u05c7\\u05d0-\\u05ea\\u05f0-\\u05f4\\ufb1d-\\ufb28\\ufb2a-\\ufb36\\ufb38-\\ufb3c\\ufb3e\\ufb40-\\ufb41\\ufb43-\\ufb44\\ufb46-\\ufb4f\\u0610-\\u061a\\u0620-\\u065f\\u066e-\\u06d3\\u06d5-\\u06dc\\u06de-\\u06e8\\u06ea-\\u06ef\\u06fa-\\u06fc\\u06ff\\u0750-\\u077f\\u08a0\\u08a2-\\u08ac\\u08e4-\\u08fe\\ufb50-\\ufbb1\\ufbd3-\\ufd3d\\ufd50-\\ufd8f\\ufd92-\\ufdc7\\ufdf0-\\ufdfb\\ufe70-\\ufe74\\ufe76-\\ufefc\\u200c\\u0e01-\\u0e3a\\u0e40-\\u0e4e\\u1100-\\u11ff\\u3130-\\u3185\\uA960-\\uA97F\\uAC00-\\uD7AF\\uD7B0-\\uD7FF\\p{InHiragana}\\p{InKatakana}\\p{InCJKUnifiedIdeographs}\\u3003\\u3005\\u303b\\uff21-\\uff3a\\uff41-\\uff5a\\uff66-\\uff9f\\uffa1-\\uffdc"                  // half width Hangul (Korean)
-    private val HASHTAG_ALPHA_NUMERIC_CHARS = "0-9\\uff10-\\uff19_${HASHTAG_ALPHA_CHARS}"
-    private val HASHTAG_ALPHA = "[${HASHTAG_ALPHA_CHARS}]"
-    private val HASHTAG_ALPHA_NUMERIC = "[${HASHTAG_ALPHA_NUMERIC_CHARS}]"
+    private val HASHTAG_ALPHA_CHARS = "a-z$LATIN_ACCENTS_CHARS\\u0400-\\u04ff\\u0500-\\u0527\\u2de0-\\u2dff\\ua640-\\ua69f\\u0591-\\u05bf\\u05c1-\\u05c2\\u05c4-\\u05c5\\u05c7\\u05d0-\\u05ea\\u05f0-\\u05f4\\ufb1d-\\ufb28\\ufb2a-\\ufb36\\ufb38-\\ufb3c\\ufb3e\\ufb40-\\ufb41\\ufb43-\\ufb44\\ufb46-\\ufb4f\\u0610-\\u061a\\u0620-\\u065f\\u066e-\\u06d3\\u06d5-\\u06dc\\u06de-\\u06e8\\u06ea-\\u06ef\\u06fa-\\u06fc\\u06ff\\u0750-\\u077f\\u08a0\\u08a2-\\u08ac\\u08e4-\\u08fe\\ufb50-\\ufbb1\\ufbd3-\\ufd3d\\ufd50-\\ufd8f\\ufd92-\\ufdc7\\ufdf0-\\ufdfb\\ufe70-\\ufe74\\ufe76-\\ufefc\\u200c\\u0e01-\\u0e3a\\u0e40-\\u0e4e\\u1100-\\u11ff\\u3130-\\u3185\\uA960-\\uA97F\\uAC00-\\uD7AF\\uD7B0-\\uD7FF\\p{InHiragana}\\p{InKatakana}\\p{InCJKUnifiedIdeographs}\\u3003\\u3005\\u303b\\uff21-\\uff3a\\uff41-\\uff5a\\uff66-\\uff9f\\uffa1-\\uffdc"                  // half width Hangul (Korean)
+    private val HASHTAG_ALPHA_NUMERIC_CHARS = "0-9\\uff10-\\uff19_$HASHTAG_ALPHA_CHARS"
+    private val HASHTAG_ALPHA = "[$HASHTAG_ALPHA_CHARS]"
+    private val HASHTAG_ALPHA_NUMERIC = "[$HASHTAG_ALPHA_NUMERIC_CHARS]"
 
     /* URL related hash regex collection */
     private val URL_VALID_PRECEEDING_CHARS = "(?:[^A-Z0-9@＠$#＃\u202A-\u202E]|^)"
 
-    private val URL_VALID_CHARS = "[\\p{Alnum}${LATIN_ACCENTS_CHARS}]"
-    private val URL_VALID_SUBDOMAIN = "(?>(?:${URL_VALID_CHARS}[${URL_VALID_CHARS}\\-_]*)?${URL_VALID_CHARS}\\.)"
-    private val URL_VALID_DOMAIN_NAME = "(?:(?:${URL_VALID_CHARS}[${URL_VALID_CHARS}\\-]*)?${URL_VALID_CHARS}\\.)"
+    private val URL_VALID_CHARS = "[\\p{Alnum}$LATIN_ACCENTS_CHARS]"
+    private val URL_VALID_SUBDOMAIN = "(?>(?:$URL_VALID_CHARS[$URL_VALID_CHARS\\-_]*)?$URL_VALID_CHARS\\.)"
+    private val URL_VALID_DOMAIN_NAME = "(?:(?:$URL_VALID_CHARS[$URL_VALID_CHARS\\-]*)?$URL_VALID_CHARS\\.)"
     /* Any non-space, non-punctuation characters. \p{Z} = any kind of whitespace or invisible separator. */
     private val URL_VALID_UNICODE_CHARS = "[.[^\\p{Punct}\\s\\p{Z}\\p{InGeneralPunctuation}]]"
 
@@ -229,29 +229,29 @@ object Regex {
     private val SPECIAL_URL_VALID_CCTLD = "(?:(?:" + "co|tv" + ")(?=[^\\p{Alnum}@]|$))"
 
     private val URL_VALID_DOMAIN =
-            "(?:${URL_VALID_SUBDOMAIN}+${URL_VALID_DOMAIN_NAME}(?:${URL_VALID_GTLD}|${URL_VALID_CCTLD}|${URL_PUNYCODE}))|(?:${URL_VALID_DOMAIN_NAME}(?:${URL_VALID_GTLD}|${URL_PUNYCODE}|${SPECIAL_URL_VALID_CCTLD}))|(?:(?<=https?://)(?:(?:${URL_VALID_DOMAIN_NAME}${URL_VALID_CCTLD})|(?:${URL_VALID_UNICODE_CHARS}+\\.(?:${URL_VALID_GTLD}|${URL_VALID_CCTLD}))))|(?:${URL_VALID_DOMAIN_NAME}${URL_VALID_CCTLD}(?=/))"
+            "(?:$URL_VALID_SUBDOMAIN+$URL_VALID_DOMAIN_NAME(?:$URL_VALID_GTLD|$URL_VALID_CCTLD|$URL_PUNYCODE))|(?:$URL_VALID_DOMAIN_NAME(?:$URL_VALID_GTLD|$URL_PUNYCODE|$SPECIAL_URL_VALID_CCTLD))|(?:(?<=https?://)(?:(?:$URL_VALID_DOMAIN_NAME$URL_VALID_CCTLD)|(?:$URL_VALID_UNICODE_CHARS+\\.(?:$URL_VALID_GTLD|$URL_VALID_CCTLD))))|(?:$URL_VALID_DOMAIN_NAME$URL_VALID_CCTLD(?=/))"
 
     private val URL_VALID_PORT_NUMBER = "[0-9]++"
 
-    private val URL_VALID_GENERAL_PATH_CHARS = "[a-z0-9!\\*';:=\\+,.\\$/%#\\[\\]\\-_~\\|&@${LATIN_ACCENTS_CHARS}]"
+    private val URL_VALID_GENERAL_PATH_CHARS = "[a-z0-9!\\*';:=\\+,.\\$/%#\\[\\]\\-_~\\|&@$LATIN_ACCENTS_CHARS]"
     /** Allow URL paths to contain up to two nested levels of balanced parens
      * 1. Used in Wikipedia URLs like /Primer_(film)
      * 2. Used in IIS sessions like /S(dfd346)/
      * 3. Used in Rdio URLs like /track/We_Up_(Album_Version_(Edited))/
      */
-    private val URL_BALANCED_PARENS = "\\((?:${URL_VALID_GENERAL_PATH_CHARS}+|(?:${URL_VALID_GENERAL_PATH_CHARS}*\\(${URL_VALID_GENERAL_PATH_CHARS}+\\)${URL_VALID_GENERAL_PATH_CHARS}*))\\)"
+    private val URL_BALANCED_PARENS = "\\((?:$URL_VALID_GENERAL_PATH_CHARS+|(?:$URL_VALID_GENERAL_PATH_CHARS*\\($URL_VALID_GENERAL_PATH_CHARS+\\)$URL_VALID_GENERAL_PATH_CHARS*))\\)"
 
     /** Valid end-of-path characters (so /foo. does not gobble the period).
      * 2. Allow =&# for empty URL parameters and other URL-join artifacts
      */
-    private val URL_VALID_PATH_ENDING_CHARS = "[a-z0-9=_#/\\-\\+${LATIN_ACCENTS_CHARS}]|(?:${URL_BALANCED_PARENS})"
+    private val URL_VALID_PATH_ENDING_CHARS = "[a-z0-9=_#/\\-\\+$LATIN_ACCENTS_CHARS]|(?:$URL_BALANCED_PARENS)"
 
-    private val URL_VALID_PATH = "(?:(?:${URL_VALID_GENERAL_PATH_CHARS}*(?:${URL_BALANCED_PARENS}${URL_VALID_GENERAL_PATH_CHARS}*)*${URL_VALID_PATH_ENDING_CHARS})|(?:@${URL_VALID_GENERAL_PATH_CHARS}+/))"
+    private val URL_VALID_PATH = "(?:(?:$URL_VALID_GENERAL_PATH_CHARS*(?:$URL_BALANCED_PARENS$URL_VALID_GENERAL_PATH_CHARS*)*$URL_VALID_PATH_ENDING_CHARS)|(?:@$URL_VALID_GENERAL_PATH_CHARS+/))"
 
     private val URL_VALID_URL_QUERY_CHARS = "[a-z0-9!?\\*'\\(\\);:&=\\+\\$/%#\\[\\]\\-_\\.,~\\|@]"
     private val URL_VALID_URL_QUERY_ENDING_CHARS = "[a-z0-9_&=#/]"
     private val VALID_URL_PATTERN_STRING =
-            "(((https?://)?(${URL_VALID_DOMAIN})(?::(${URL_VALID_PORT_NUMBER}))?(/${URL_VALID_PATH}*+)?(\\?${URL_VALID_URL_QUERY_CHARS}*${URL_VALID_URL_QUERY_ENDING_CHARS})?))"
+            "(((https?://)?($URL_VALID_DOMAIN)(?::($URL_VALID_PORT_NUMBER))?(/${URL_VALID_PATH}*+)?(\\?$URL_VALID_URL_QUERY_CHARS*$URL_VALID_URL_QUERY_ENDING_CHARS)?))"
 
     private val AT_SIGNS_CHARS = "@\uFF20"
 
@@ -260,24 +260,24 @@ object Regex {
 
     /* Begin public constants */
 
-    val HASHTAG_PATTERN: Pattern = Pattern.compile("(#)(${HASHTAG_ALPHA_NUMERIC}*${HASHTAG_ALPHA}${HASHTAG_ALPHA_NUMERIC}*)", Pattern.CASE_INSENSITIVE)
+    val HASHTAG_PATTERN: Pattern = Pattern.compile("(#)($HASHTAG_ALPHA_NUMERIC*$HASHTAG_ALPHA$HASHTAG_ALPHA_NUMERIC*)", Pattern.CASE_INSENSITIVE)
     val VALID_HASHTAG_GROUP_BEFORE = 1
     val VALID_HASHTAG_GROUP_HASH = 2
     val VALID_HASHTAG_GROUP_TAG = 3
     val INVALID_HASHTAG_MATCH_END: Pattern = Pattern.compile("^(?:[#＃]|://)")
     val RTL_CHARACTERS: Pattern = Pattern.compile("[\u0600-\u06FF\u0750-\u077F\u0590-\u05FF\uFE70-\uFEFF]")
 
-    private val AT_SIGNS: Pattern = Pattern.compile("[${AT_SIGNS_CHARS}]")
-    val MENTION_PATTERN: Pattern = Pattern.compile("(${AT_SIGNS}+)([a-z0-9_]{1,20})(/[a-z][a-z0-9_\\-]{0,24})?", Pattern.CASE_INSENSITIVE)
+    private val AT_SIGNS: Pattern = Pattern.compile("[$AT_SIGNS_CHARS]")
+    val MENTION_PATTERN: Pattern = Pattern.compile("($AT_SIGNS+)([a-z0-9_]{1,20})(/[a-z][a-z0-9_\\-]{0,24})?", Pattern.CASE_INSENSITIVE)
     val VALID_MENTION_OR_LIST_GROUP_BEFORE = 1
     val VALID_MENTION_OR_LIST_GROUP_AT = 2
     val VALID_MENTION_OR_LIST_GROUP_USERNAME = 3
     val VALID_MENTION_OR_LIST_GROUP_LIST = 4
 
-    val VALID_REPLY: Pattern = Pattern.compile("^(?:${UNICODE_SPACES})*${AT_SIGNS}([a-z0-9_]{1,20})", Pattern.CASE_INSENSITIVE)
+    val VALID_REPLY: Pattern = Pattern.compile("^(?:$UNICODE_SPACES)*$AT_SIGNS([a-z0-9_]{1,20})", Pattern.CASE_INSENSITIVE)
     val VALID_REPLY_GROUP_USERNAME = 1
 
-    val INVALID_MENTION_MATCH_END: Pattern = Pattern.compile("^(?:[${AT_SIGNS_CHARS}${LATIN_ACCENTS_CHARS}]|://)")
+    val INVALID_MENTION_MATCH_END: Pattern = Pattern.compile("^(?:[$AT_SIGNS_CHARS$LATIN_ACCENTS_CHARS]|://)")
 
     val VALID_URL: Pattern = Pattern.compile(VALID_URL_PATTERN_STRING, Pattern.CASE_INSENSITIVE)
     val VALID_URL_GROUP_ALL = 1

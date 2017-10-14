@@ -7,14 +7,14 @@ import twitter4j.PagableResponseList
 import twitter4j.User
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.ui.detailuser.UserActivity
-import xyz.donot.roselinx.util.extraUtils.Bundle
-import xyz.donot.roselinx.util.extraUtils.intent
+import xyz.donot.roselinx.ui.util.extraUtils.bundle
+import xyz.donot.roselinx.ui.util.extraUtils.intent
 
 class UserListActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_user_list)
-		val bundle = Bundle { putLong("userId", intent.getLongExtra("userId", 0L)) }
+		val bundle = bundle { putLong("userId", intent.getLongExtra("userId", 0L)) }
 		val fragment = if (intent.getBooleanExtra("isFriend", true))
             FriendUserList()
 				else

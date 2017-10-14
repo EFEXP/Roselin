@@ -19,9 +19,9 @@ import xyz.donot.roselinx.ui.base.ARecyclerFragment
 import xyz.donot.roselinx.ui.detailtweet.TwitterDetailActivity
 import xyz.donot.roselinx.ui.detailuser.UserActivity
 import xyz.donot.roselinx.ui.status.KViewHolder
+import xyz.donot.roselinx.ui.util.extraUtils.bundle
+import xyz.donot.roselinx.ui.util.extraUtils.start
 import xyz.donot.roselinx.ui.util.getExpandedText
-import xyz.donot.roselinx.util.extraUtils.Bundle
-import xyz.donot.roselinx.util.extraUtils.start
 
 class NotificationFragment : ARecyclerFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -47,8 +47,8 @@ class NotificationFragment : ARecyclerFragment() {
                 val item = s.retweetedStatus ?: s
                 val user = it.sourceUser
                 holder.containerView.apply {
-                    constraint2.setOnClickListener { activity.start<TwitterDetailActivity>(Bundle { putSerializable("Status", item) }) }
-                    iv_notification_sender_icon.setOnClickListener { activity.start<UserActivity>(Bundle { putLong("user_id", user.id) }) }
+                    constraint2.setOnClickListener { activity.start<TwitterDetailActivity>(bundle  { putSerializable("Status", item) }) }
+                    iv_notification_sender_icon.setOnClickListener { activity.start<UserActivity>(bundle  { putLong("user_id", user.id) }) }
                     tv_notification_myname.text = item.user.name
                     if (it.type == NRETWEET) {
                         tv_notification_info.text = "${user.name}さんがあなたのツイートをリツイートしました"

@@ -23,10 +23,9 @@ import xyz.donot.roselinx.ui.base.ARecyclerFragment
 import xyz.donot.roselinx.ui.editteweet.EditTweetActivity
 import xyz.donot.roselinx.ui.editteweet.EditTweetViewModel
 import xyz.donot.roselinx.ui.search.SearchActivity
+import xyz.donot.roselinx.ui.util.extraUtils.toast
+import xyz.donot.roselinx.ui.util.extraUtils.twitterExceptionMessage
 import xyz.donot.roselinx.ui.util.getAccount
-import xyz.donot.roselinx.util.extraUtils.toast
-import xyz.donot.roselinx.util.extraUtils.twitterExceptionMessage
-
 class TrendFragment : ARecyclerFragment() {
    private val viewmodel: TrendViewModel by lazy { ViewModelProviders.of(this).get(TrendViewModel::class.java)  }
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

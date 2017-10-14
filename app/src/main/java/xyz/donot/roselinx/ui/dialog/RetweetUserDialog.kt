@@ -11,10 +11,10 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.model.entity.TwitterAccount
 import xyz.donot.roselinx.model.entity.UserData
-import xyz.donot.roselinx.util.extraUtils.Bundle
-import xyz.donot.roselinx.ui.util.getAccount
-import xyz.donot.roselinx.ui.userlist.TwitterUserPreAdapter
 import xyz.donot.roselinx.ui.base.ARecyclerFragment
+import xyz.donot.roselinx.ui.userlist.TwitterUserPreAdapter
+import xyz.donot.roselinx.ui.util.extraUtils.bundle
+import xyz.donot.roselinx.ui.util.getAccount
 
 class RetweetUserDialog : ARecyclerFragment() {
     val viewmodel: RetweetUserViewModel by lazy { ViewModelProviders.of(this).get(RetweetUserViewModel::class.java) }
@@ -39,7 +39,7 @@ class RetweetUserDialog : ARecyclerFragment() {
     companion object {
         fun getInstance(tweetId: Long): RetweetUserDialog {
             return RetweetUserDialog().apply {
-                arguments = Bundle { putLong("tweetId", tweetId) }
+                arguments = bundle { putLong("tweetId", tweetId) }
             }
         }
 

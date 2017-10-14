@@ -24,12 +24,12 @@ import twitter4j.TwitterException
 import twitter4j.UserList
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.ui.base.ARecyclerFragment
+import xyz.donot.roselinx.ui.main.ListTimeLine
+import xyz.donot.roselinx.ui.util.extraUtils.bundle
+import xyz.donot.roselinx.ui.util.extraUtils.mainThread
 import xyz.donot.roselinx.ui.util.getAccount
 import xyz.donot.roselinx.ui.view.DynamicViewPager
 import xyz.donot.roselinx.ui.view.MyLoadingView
-import xyz.donot.roselinx.util.extraUtils.Bundle
-import xyz.donot.roselinx.util.extraUtils.mainThread
-import xyz.donot.roselinx.ui.main.ListTimeLine
 
 
 class UsersListFragment : ARecyclerFragment() {
@@ -40,7 +40,7 @@ class UsersListFragment : ARecyclerFragment() {
         fun newInstance(userId: Long, isAddedList: Boolean): UsersListFragment {
             return UsersListFragment()
                     .apply {
-                        arguments = Bundle {
+                        arguments = bundle  {
                             putLong("userId", userId)
                             putBoolean("isAddedList", isAddedList)
                         }
@@ -81,7 +81,7 @@ class UsersListFragment : ARecyclerFragment() {
                 if (activityViewmodel.isSelect) {
                     activityViewmodel.selectedList.value=item
                 } else {
-                    ListTimeLine().apply { arguments = Bundle { putLong("listId", item.id) } }.show(fragmentManager, "")
+                    ListTimeLine().apply { arguments = bundle { putLong("listId", item.id) } }.show(fragmentManager, "")
                 }
             }
         }

@@ -18,7 +18,7 @@ import xyz.donot.roselinx.model.entity.MuteFilter
 import xyz.donot.roselinx.model.entity.RoselinDatabase
 import xyz.donot.roselinx.model.entity.TwitterAccount
 import xyz.donot.roselinx.model.entity.UserData
-import xyz.donot.roselinx.util.extraUtils.Bundle
+import xyz.donot.roselinx.ui.util.extraUtils.bundle
 import xyz.donot.roselinx.ui.view.SingleLiveEvent
 
 class OauthViewModel(app: Application) : AndroidViewModel(app) {
@@ -69,7 +69,7 @@ class OauthViewModel(app: Application) : AndroidViewModel(app) {
         FirebaseAnalytics.getInstance(getApplication()).apply {
             setUserProperty("screenname", user.screenName)
             setUserId(user.id.toString())
-        }.logEvent(FirebaseAnalytics.Event.LOGIN, Bundle {
+        }.logEvent(FirebaseAnalytics.Event.LOGIN, bundle {
             putString(FirebaseAnalytics.Param.CONTENT, user.screenName)
             putString("UserName", user.name)
         })

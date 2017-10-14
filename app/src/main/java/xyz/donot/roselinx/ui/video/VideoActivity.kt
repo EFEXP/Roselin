@@ -13,8 +13,8 @@ import cn.jzvd.JZVideoPlayerStandard
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_video.*
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.util.extraUtils.getDownloadManager
-import xyz.donot.roselinx.util.extraUtils.logd
+import xyz.donot.roselinx.ui.util.extraUtils.getDownloadManager
+import xyz.donot.roselinx.ui.util.extraUtils.logd
 import xyz.klinker.android.drag_dismiss.activity.DragDismissActivity
 import java.util.*
 

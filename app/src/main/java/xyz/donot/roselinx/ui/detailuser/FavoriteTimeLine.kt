@@ -6,6 +6,7 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import twitter4j.Paging
 import xyz.donot.roselinx.ui.base.TimeLineFragment
+import xyz.donot.roselinx.ui.util.extraUtils.bundle
 
 
 class FavoriteTimeLine : TimeLineFragment() {
@@ -22,7 +23,7 @@ class FavoriteTimeLine : TimeLineFragment() {
     companion object {
         fun newInstance(userId:Long): FavoriteTimeLine {
             return FavoriteTimeLine().apply {
-               arguments=xyz.donot.roselinx.util.extraUtils.Bundle {  putLong("userId",userId) }
+               arguments= bundle  {  putLong("userId",userId) }
             }
         }
 

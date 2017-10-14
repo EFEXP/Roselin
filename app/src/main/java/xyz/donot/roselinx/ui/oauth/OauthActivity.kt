@@ -16,10 +16,10 @@ import xyz.donot.roselinx.R
 import xyz.donot.roselinx.ui.main.MainActivity
 import xyz.donot.roselinx.ui.util.Key.xxxxx
 import xyz.donot.roselinx.ui.util.Key.yyyyyy
-import xyz.donot.roselinx.util.extraUtils.hide
-import xyz.donot.roselinx.util.extraUtils.show
-import xyz.donot.roselinx.util.extraUtils.start
-import xyz.donot.roselinx.util.extraUtils.toast
+import xyz.donot.roselinx.ui.util.extraUtils.hide
+import xyz.donot.roselinx.ui.util.extraUtils.show
+import xyz.donot.roselinx.ui.util.extraUtils.start
+import xyz.donot.roselinx.ui.util.extraUtils.toast
 
 
 class OauthActivity : AppCompatActivity() {

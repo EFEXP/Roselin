@@ -16,15 +16,15 @@ import xyz.donot.roselinx.R
 import xyz.donot.roselinx.ui.account.AccountSettingActivity
 import xyz.donot.roselinx.ui.detailuser.UserActivity
 import xyz.donot.roselinx.ui.editprofile.EditProfileActivity
-import xyz.donot.roselinx.util.extraUtils.*
-import xyz.donot.roselinx.ui.util.getAccount
-import xyz.donot.roselinx.ui.util.getDragdismiss
 import xyz.donot.roselinx.ui.picture.PictureActivity
 import xyz.donot.roselinx.ui.search.SearchActivity
 import xyz.donot.roselinx.ui.search.SearchSettingActivity
 import xyz.donot.roselinx.ui.setting.SettingsActivity
 import xyz.donot.roselinx.ui.userlist.UserListActivity
 import xyz.donot.roselinx.ui.userslist.UsersListActivity
+import xyz.donot.roselinx.ui.util.extraUtils.*
+import xyz.donot.roselinx.ui.util.getAccount
+import xyz.donot.roselinx.ui.util.getDragdismiss
 
 
 class RoselinFragment : Fragment() {
@@ -37,15 +37,15 @@ class RoselinFragment : Fragment() {
                 val iconIntent = activity.getDragdismiss(PictureActivity.createIntent(activity, arrayListOf(it.originalProfileImageURLHttps)))
                 view.user_detail_view.apply {
                     iconClick = { startActivity(iconIntent) }
-                    listClick = { activity.start<UsersListActivity>(Bundle { putLong("userId", it.id) }) }
+                    listClick = { activity.start<UsersListActivity>(bundle { putLong("userId", it.id) }) }
                     friendClick = {
-                        activity.start<UserListActivity>(Bundle {
+                        activity.start<UserListActivity>(bundle {
                             putLong("userId", it.id)
                             putBoolean("isFriend", true)
                         })
                     }
                     followerClick = {
-                        activity.start<UserListActivity>(Bundle {
+                        activity.start<UserListActivity>(bundle {
                             putLong("userId", it.id)
                             putBoolean("isFriend", false)
                         })
@@ -54,15 +54,15 @@ class RoselinFragment : Fragment() {
                     user_detail_view.setUser(it)
                     user_detail_view.setRelation(null, true)
                     user_detail_view.iconClick = { startActivity(iconIntent) }
-                    user_detail_view.listClick = { activity.start<UsersListActivity>(Bundle { putLong("userId", it.id) }) }
+                    user_detail_view.listClick = { activity.start<UsersListActivity>(bundle { putLong("userId", it.id) }) }
                     user_detail_view.friendClick = {
-                        activity.start<UserListActivity>(Bundle {
+                        activity.start<UserListActivity>(bundle{
                             putLong("userId", it.id)
                             putBoolean("isFriend", true)
                         })
                     }
                     user_detail_view.followerClick = {
-                        activity.start<UserListActivity>(Bundle {
+                        activity.start<UserListActivity>(bundle {
                             putLong("userId", it.id)
                             putBoolean("isFriend", false)
                         })

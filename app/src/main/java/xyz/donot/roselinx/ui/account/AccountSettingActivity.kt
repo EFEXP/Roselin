@@ -17,9 +17,9 @@ import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.entity.RoselinDatabase
 import xyz.donot.roselinx.ui.oauth.OauthActivity
-import xyz.donot.roselinx.util.extraUtils.start
-import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.ui.userlist.TwitterAccountAdapter
+import xyz.donot.roselinx.ui.util.extraUtils.start
+import xyz.donot.roselinx.ui.util.extraUtils.toast
 
 
 class AccountSettingActivity : AppCompatActivity() {

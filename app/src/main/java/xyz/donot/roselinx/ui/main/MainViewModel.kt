@@ -32,9 +32,9 @@ import xyz.donot.roselinx.receiver.MusicReceiver
 import xyz.donot.roselinx.service.REPLY_ID
 import xyz.donot.roselinx.service.SearchStreamService
 import xyz.donot.roselinx.service.StreamingService
+import xyz.donot.roselinx.ui.util.extraUtils.*
 import xyz.donot.roselinx.ui.util.getAccount
 import xyz.donot.roselinx.ui.view.SingleLiveEvent
-import xyz.donot.roselinx.util.extraUtils.*
 
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {

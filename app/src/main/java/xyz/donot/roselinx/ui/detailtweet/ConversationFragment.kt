@@ -20,12 +20,12 @@ import xyz.donot.roselinx.R
 import xyz.donot.roselinx.ui.base.ARecyclerFragment
 import xyz.donot.roselinx.ui.editteweet.EditTweetActivity
 import xyz.donot.roselinx.ui.util.getAccount
-import xyz.donot.roselinx.util.extraUtils.logd
-import xyz.donot.roselinx.util.extraUtils.newIntent
-import xyz.donot.roselinx.util.extraUtils.start
-import xyz.donot.roselinx.util.extraUtils.toast
 import xyz.donot.roselinx.ui.status.StatusAdapter
 import xyz.donot.roselinx.ui.dialog.RetweetUserDialog
+import xyz.donot.roselinx.ui.util.extraUtils.logd
+import xyz.donot.roselinx.ui.util.extraUtils.newIntent
+import xyz.donot.roselinx.ui.util.extraUtils.start
+import xyz.donot.roselinx.ui.util.extraUtils.toast
 
 
 class ConversationFragment : ARecyclerFragment() {

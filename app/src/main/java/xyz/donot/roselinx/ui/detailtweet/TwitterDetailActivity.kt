@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_twitter_detail.*
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.util.extraUtils.Bundle
+import xyz.donot.roselinx.ui.util.extraUtils.bundle
 
 
 class TwitterDetailActivity : AppCompatActivity() {
@@ -17,7 +17,7 @@ class TwitterDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportFragmentManager.beginTransaction()
-                .add(R.id.conversation_container, ConversationFragment().apply { arguments=Bundle{putSerializable("status",intent.extras.getSerializable("Status"))} })
+                .add(R.id.conversation_container, ConversationFragment().apply { arguments= bundle {putSerializable("status",intent.extras.getSerializable("Status"))} })
                 .commit()
 
     }

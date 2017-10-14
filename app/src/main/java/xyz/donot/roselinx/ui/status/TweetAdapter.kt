@@ -17,10 +17,10 @@ import xyz.donot.roselinx.model.entity.Tweet
 import xyz.donot.roselinx.ui.detailtweet.TwitterDetailActivity
 import xyz.donot.roselinx.ui.detailuser.UserActivity
 import xyz.donot.roselinx.ui.picture.PictureActivity
+import xyz.donot.roselinx.ui.util.extraUtils.*
 import xyz.donot.roselinx.ui.util.getAccount
 import xyz.donot.roselinx.ui.util.getDragdismiss
 import xyz.donot.roselinx.ui.video.VideoActivity
-import xyz.donot.roselinx.util.extraUtils.*
 
 class KViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
 
@@ -61,15 +61,15 @@ class TweetAdapter(private val mContext: Context) : CalculableAdapter<Tweet>(R.l
                 (mContext as Activity).startActivity(i)
             }
             videoClick = { videoUrl, thumbUrl ->
-                val i = mContext.newIntent<VideoActivity>(Bundle {
+                val i = mContext.newIntent<VideoActivity>(bundle {
                     putString("video_url", videoUrl)
                     putString("thumbUrl", thumbUrl)
                 })
                 (mContext as Activity).startActivity(i)
             }
-            userNameClick = { userName -> (mContext as Activity).startActivity(mContext.newIntent<UserActivity>(Bundle { putString("screen_name", userName.replace("@", "")) })) }
+            userNameClick = { userName -> (mContext as Activity).startActivity(mContext.newIntent<UserActivity>(bundle { putString("screen_name", userName.replace("@", "")) })) }
             quoteClick = {
-                (mContext as Activity).start<TwitterDetailActivity>(Bundle { putSerializable("Status", it) })
+                (mContext as Activity).start<TwitterDetailActivity>(bundle { putSerializable("Status", it) })
             }
             iconClick = {
                 val intent = mContext.intent<UserActivity>()

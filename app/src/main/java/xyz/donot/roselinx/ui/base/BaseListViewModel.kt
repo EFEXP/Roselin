@@ -10,9 +10,9 @@ import kotlinx.coroutines.experimental.launch
 import twitter4j.Twitter
 import twitter4j.TwitterException
 import xyz.donot.roselinx.Roselin
-import xyz.donot.roselinx.util.extraUtils.mainThread
-import xyz.donot.roselinx.util.extraUtils.toast
-import xyz.donot.roselinx.util.extraUtils.twitterExceptionMessage
+import xyz.donot.roselinx.ui.util.extraUtils.mainThread
+import xyz.donot.roselinx.ui.util.extraUtils.toast
+import xyz.donot.roselinx.ui.util.extraUtils.twitterExceptionMessage
 import xyz.donot.roselinx.ui.util.getAccount
 import xyz.donot.roselinx.ui.view.SingleLiveEvent
 import kotlin.properties.Delegates

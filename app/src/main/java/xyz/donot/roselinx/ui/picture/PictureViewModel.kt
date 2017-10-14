@@ -11,7 +11,7 @@ import android.provider.MediaStore
 import android.support.v7.graphics.Palette
 import com.squareup.picasso.Picasso
 import xyz.donot.roselinx.Roselin
-import xyz.donot.roselinx.util.extraUtils.toast
+import xyz.donot.roselinx.ui.util.extraUtils.toast
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException

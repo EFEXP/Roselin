@@ -1,6 +1,7 @@
 package xyz.donot.roselinx.ui.status
 
 import android.app.Activity
+import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -15,10 +16,10 @@ import xyz.donot.roselinx.model.entity.RoselinDatabase
 import xyz.donot.roselinx.ui.detailtweet.TwitterDetailActivity
 import xyz.donot.roselinx.ui.detailuser.UserActivity
 import xyz.donot.roselinx.ui.picture.PictureActivity
+import xyz.donot.roselinx.ui.util.extraUtils.*
 import xyz.donot.roselinx.ui.util.getAccount
 import xyz.donot.roselinx.ui.util.getDragdismiss
 import xyz.donot.roselinx.ui.view.TweetView
-import xyz.donot.roselinx.util.extraUtils.*
 import xyz.donot.roselinx.ui.video.VideoActivity
 
 class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_tweet_view) {
@@ -31,7 +32,7 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
         launch(UI) {
             //  kichitsui=   async {  RoselinDatabase.getInstance(recyclerView.context).muteFilterDao().kichitsuiMuted().mapNotNull {it.tweetId } }.await()
             customname = async { RoselinDatabase.getInstance().customProfileDao().getAllData() }.await()
-            customnameId = customname.mapNotNull { it.userId }
+            customnameId = customname.map { it.userId }
         }
 
 
@@ -58,15 +59,15 @@ class StatusAdapter : BaseQuickAdapter<Status, BaseViewHolder>(R.layout.item_twe
                 (mContext as Activity).startActivity(i)
             }
             videoClick = { videoUrl, thumbUrl ->
-                val i = mContext.newIntent<VideoActivity>(Bundle {
+                val i = mContext.newIntent<VideoActivity>(bundle {
                     putString("video_url", videoUrl)
                     putString("thumbUrl", thumbUrl)
                 })
                 (mContext as Activity).startActivity(i)
             }
-            userNameClick = { userName -> (mContext as Activity).startActivity(mContext.newIntent<UserActivity>(Bundle { putString("screen_name", userName.replace("@", "")) })) }
+            userNameClick = { userName -> (mContext as Activity).startActivity(mContext.newIntent<UserActivity>(bundle  { putString("screen_name", userName.replace("@", "")) })) }
             quoteClick = {
-                (mContext as Activity).start<TwitterDetailActivity>(Bundle { putSerializable("Status", it) })
+                (mContext as Activity).start<TwitterDetailActivity>(bundle { putSerializable("Status", it) })
             }
             iconClick = {
                 val intent = mContext.intent<UserActivity>()

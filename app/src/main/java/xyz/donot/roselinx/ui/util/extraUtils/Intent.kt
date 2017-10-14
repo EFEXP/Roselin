@@ -1,4 +1,4 @@
-package xyz.donot.roselinx.util.extraUtils
+package xyz.donot.roselinx.ui.util.extraUtils
 
 import android.app.Activity
 import android.app.Service

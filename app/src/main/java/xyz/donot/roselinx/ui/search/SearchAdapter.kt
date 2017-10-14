@@ -8,21 +8,21 @@ import android.view.View
 import twitter4j.PagableResponseList
 import twitter4j.Query
 import twitter4j.User
-import xyz.donot.roselinx.util.extraUtils.Bundle
-import xyz.donot.roselinx.util.extraUtils.intent
-import xyz.donot.roselinx.util.extraUtils.mainThread
-import xyz.donot.roselinx.ui.util.getSerialized
 import xyz.donot.roselinx.ui.detailuser.UserActivity
 import xyz.donot.roselinx.ui.dialog.TrendFragment
 import xyz.donot.roselinx.ui.userlist.UserListFragment
+import xyz.donot.roselinx.ui.util.extraUtils.bundle
+import xyz.donot.roselinx.ui.util.extraUtils.intent
+import xyz.donot.roselinx.ui.util.extraUtils.mainThread
+import xyz.donot.roselinx.ui.util.getSerialized
 
 class SearchAdapter(private val query: Query, private val queryText: String, fm: FragmentManager) : FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment = when (position) {
         0 -> {
-            SearchTimeline().apply { arguments = Bundle { putByteArray("query_bundle", query.getSerialized()) } }
+            SearchTimeline().apply { arguments = bundle { putByteArray("query_bundle", query.getSerialized()) } }
         }
         1 -> {
-            UserSearch().apply { arguments = Bundle { putString("query_text", queryText) } }
+            UserSearch().apply { arguments = bundle{ putString("query_text", queryText) } }
         }
         2 -> TrendFragment()
 

@@ -5,7 +5,7 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.ViewGroup
 import xyz.donot.roselinx.ui.status.KViewHolder
 import xyz.donot.roselinx.ui.util.diff.Distinguishable
-import xyz.donot.roselinx.util.extraUtils.inflate
+import xyz.donot.roselinx.ui.util.extraUtils.inflate
 import java.util.*
 
 

@@ -7,8 +7,8 @@ import android.support.v7.app.AppCompatActivity
 import android.view.inputmethod.EditorInfo
 import kotlinx.android.synthetic.main.activity_search_setting.*
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.util.extraUtils.hideSoftKeyboard
 import xyz.donot.roselinx.ui.base.DatePickFragment
+import xyz.donot.roselinx.ui.util.extraUtils.hideSoftKeyboard
 
 
 class SearchSettingActivity : AppCompatActivity() {

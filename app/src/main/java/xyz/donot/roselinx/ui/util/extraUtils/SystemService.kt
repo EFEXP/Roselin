@@ -1,5 +1,4 @@
-package xyz.donot.roselinx.util.extraUtils
-
+package xyz.donot.roselinx.ui.util.extraUtils
 import android.app.DownloadManager
 import android.app.NotificationManager
 import android.app.job.JobScheduler

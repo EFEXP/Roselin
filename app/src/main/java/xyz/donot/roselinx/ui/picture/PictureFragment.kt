@@ -16,8 +16,6 @@ import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.fragment_picture.view.*
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.util.extraUtils.logd
-
 
 class PictureFragment : Fragment(),Target {
     private val page by lazy { arguments.getInt("page") }
@@ -27,7 +25,6 @@ class PictureFragment : Fragment(),Target {
         viewmodel = ViewModelProviders.of(activity).get(PictureViewModel::class.java)
         viewmodel.urlList.observe(this, Observer {
             it?.let {
-                logd { it[page] }
                 Picasso.with(activity).load(it[page]).into(this)
             }
         })
