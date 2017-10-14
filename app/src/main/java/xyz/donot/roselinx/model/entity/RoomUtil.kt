@@ -15,9 +15,7 @@ import java.io.ObjectOutputStream
 import java.util.*
 
 
-
-
-@Database(entities = arrayOf(TwitterAccount::class, UserData::class, TweetDraft::class, MuteFilter::class, Notification::class, SavedTab::class,CustomProfile::class,Tweet::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(TwitterAccount::class, UserData::class, TweetDraft::class, MuteFilter::class, Notification::class, SavedTab::class, CustomProfile::class, Tweet::class, TweetType::class, TweetUser::class), version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class RoselinDatabase : RoomDatabase() {
     abstract fun twitterAccountDao(): TwitterAccountDao
@@ -28,27 +26,27 @@ abstract class RoselinDatabase : RoomDatabase() {
     abstract fun savedTabDao(): SavedTabDao
     abstract fun customProfileDao(): CustomProfileDao
     abstract fun tweetDao(): TweetDao
+
     companion object {
         @Volatile private var INSTANCE: RoselinDatabase? = null
-        @Volatile private var ALLOWEDINSTANCE: RoselinDatabase? = null
+        @Volatile private var MAIN_THREAD_INSTANCE: RoselinDatabase? = null
         fun getInstance(): RoselinDatabase =
                 INSTANCE ?: synchronized(this) {
-                    INSTANCE ?: buildDatabase(ContextHolder.getContext()).also { INSTANCE = it }
+                    INSTANCE ?: buildDatabase(ContextHolder.getContext(),false).also { INSTANCE = it }
                 }
         fun getAllowedInstance(): RoselinDatabase =
-                ALLOWEDINSTANCE ?: synchronized(this) {
-                    ALLOWEDINSTANCE ?: buildAllowedDatabase(ContextHolder.getContext()).also {  ALLOWEDINSTANCE = it }
+                MAIN_THREAD_INSTANCE ?: synchronized(this) {
+                    MAIN_THREAD_INSTANCE ?: buildDatabase(ContextHolder.getContext(),true).also {   MAIN_THREAD_INSTANCE = it }
                 }
-        private fun buildAllowedDatabase(context: Context) =
-                Room.databaseBuilder(context.applicationContext,
-                        RoselinDatabase::class.java, "roselin.db")
-                        .allowMainThreadQueries()
-                        .build()
 
-        private fun buildDatabase(context: Context) =
-                Room.databaseBuilder(context.applicationContext,
-                        RoselinDatabase::class.java, "roselin.db")
-                        .build()
+        private fun buildDatabase(context: Context, canExecuteOnMainThread: Boolean):RoselinDatabase {
+            val instance = Room.databaseBuilder(context.applicationContext, RoselinDatabase::class.java, "roselin.db")
+            if (canExecuteOnMainThread)
+                instance.allowMainThreadQueries()
+            return instance.build()
+
+        }
+
     }
 
 }
@@ -57,18 +55,21 @@ class Converters {
     companion object {
         //Date
         @TypeConverter
-        @JvmStatic fun fromTimeToDate(time: Long): Date? {
+        @JvmStatic
+        fun fromTimeToDate(time: Long): Date? {
             return if (time == 0L) null else Date(time)
         }
 
         @TypeConverter
-        @JvmStatic fun fromDateToTime(date: Date?): Long {
+        @JvmStatic
+        fun fromDateToTime(date: Date?): Long {
             return date?.time ?: 0L
         }
 
         //Query
         @TypeConverter
-        @JvmStatic fun nullableQuerySerialize(value: Query?): ByteArray? {
+        @JvmStatic
+        fun nullableQuerySerialize(value: Query?): ByteArray? {
             if (value != null)
                 ByteArrayOutputStream().use {
                     ObjectOutputStream(it).use {
@@ -80,8 +81,9 @@ class Converters {
         }
 
         @TypeConverter
-        @JvmStatic fun nullableQueryDeserialize(byteArray: ByteArray?): Query? {
-                if (byteArray != null)
+        @JvmStatic
+        fun nullableQueryDeserialize(byteArray: ByteArray?): Query? {
+            if (byteArray != null)
                 ByteArrayInputStream(byteArray).use { stream ->
                     ObjectInputStream(stream).use {
                         return it.readObject() as Query
@@ -94,7 +96,8 @@ class Converters {
         //user
 
         @TypeConverter
-        @JvmStatic fun nullableUserDeserialize(byteArray: ByteArray?): User? {
+        @JvmStatic
+        fun nullableUserDeserialize(byteArray: ByteArray?): User? {
             if (byteArray != null)
                 ByteArrayInputStream(byteArray).use { stream ->
                     ObjectInputStream(stream).use {
@@ -106,7 +109,8 @@ class Converters {
         }
 
         @TypeConverter
-        @JvmStatic fun nullableUserSerialize(value: User?): ByteArray? {
+        @JvmStatic
+        fun nullableUserSerialize(value: User?): ByteArray? {
             if (value != null)
                 ByteArrayOutputStream().use {
                     ObjectOutputStream(it).use {
@@ -119,7 +123,8 @@ class Converters {
 
         //Twitter
         @TypeConverter
-        @JvmStatic fun deserialize(byteArray: ByteArray): Twitter {
+        @JvmStatic
+        fun deserialize(byteArray: ByteArray): Twitter {
             ByteArrayInputStream(byteArray).use { stream ->
                 ObjectInputStream(stream).use {
                     return it.readObject() as Twitter
@@ -128,7 +133,8 @@ class Converters {
         }
 
         @TypeConverter
-        @JvmStatic fun serialize(value: Twitter): ByteArray {
+        @JvmStatic
+        fun serialize(value: Twitter): ByteArray {
             ByteArrayOutputStream().use {
                 ObjectOutputStream(it).use {
                     it.writeObject(value)
@@ -136,14 +142,17 @@ class Converters {
                 return it.toByteArray()
             }
         }
+
         //Boolean
         @TypeConverter
-        @JvmStatic fun booleanToInt(value:Boolean): Int{
-         return if (value) 1 else 0
+        @JvmStatic
+        fun booleanToInt(value: Boolean): Int {
+            return if (value) 1 else 0
         }
 
         @TypeConverter
-        @JvmStatic fun intToBoolean(value:Int):Boolean{
+        @JvmStatic
+        fun intToBoolean(value: Int): Boolean {
             return value != 0
 
         }
@@ -151,7 +160,8 @@ class Converters {
 
         //Status
         @TypeConverter
-        @JvmStatic fun statusSerialize(value: Status): ByteArray {
+        @JvmStatic
+        fun statusSerialize(value: Status): ByteArray {
             ByteArrayOutputStream().use {
                 ObjectOutputStream(it).use {
                     it.writeObject(value)
@@ -161,8 +171,9 @@ class Converters {
         }
 
         @TypeConverter
-        @JvmStatic fun statusDeserialize(byteArray: ByteArray): Status {
-               ByteArrayInputStream(byteArray).use { stream ->
+        @JvmStatic
+        fun statusDeserialize(byteArray: ByteArray): Status {
+            ByteArrayInputStream(byteArray).use { stream ->
                 ObjectInputStream(stream).use {
                     return it.readObject() as Status
                 }

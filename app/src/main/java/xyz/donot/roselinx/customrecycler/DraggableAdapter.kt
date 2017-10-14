@@ -3,12 +3,13 @@ package xyz.donot.roselinx.customrecycler
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.ViewGroup
-import xyz.donot.roselinx.util.extraUtils.inflate
 import xyz.donot.roselinx.ui.status.KViewHolder
+import xyz.donot.roselinx.ui.util.diff.Distinguishable
+import xyz.donot.roselinx.util.extraUtils.inflate
 import java.util.*
 
 
-abstract class DraggableAdapter<T : Diffable>(layout:Int) : CalculableRecyclerAdapter<T>(layout) {
+abstract class DraggableAdapter<T :Distinguishable>(layout:Int) : CalculableRecyclerAdapter<T>(layout) {
 
     var onMoveEnd:()->Unit={}
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = KViewHolder(parent.context.inflate(layout, parent, false))

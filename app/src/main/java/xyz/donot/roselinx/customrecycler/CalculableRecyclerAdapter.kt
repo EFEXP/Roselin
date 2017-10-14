@@ -3,13 +3,16 @@ package xyz.donot.roselinx.customrecycler
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import xyz.donot.roselinx.ui.status.KViewHolder
+import xyz.donot.roselinx.ui.util.diff.Distinguishable
+import xyz.donot.roselinx.ui.util.diff.MyDiffCallback
+import xyz.donot.roselinx.ui.util.diff.calculateDiff
 import xyz.donot.roselinx.util.extraUtils.inflate
 import xyz.donot.roselinx.util.extraUtils.logd
-import xyz.donot.roselinx.ui.status.KViewHolder
 import kotlin.properties.Delegates
 
 
-abstract class CalculableRecyclerAdapter<T : Diffable>(val layout:Int) : RecyclerView.Adapter<KViewHolder>() {
+abstract class CalculableRecyclerAdapter<T : Distinguishable>(val layout:Int) : RecyclerView.Adapter<KViewHolder>() {
     private val binder = MyDiffCallback<CalculableRecyclerAdapter<T>>()
     private var recycler: RecyclerView? = null
     var onItemClick: (item: T, position: Int) -> Unit ={ _, _ -> }
@@ -40,8 +43,6 @@ abstract class CalculableRecyclerAdapter<T : Diffable>(val layout:Int) : Recycle
            setOnLongClickListener { onItemLongClick(item, position)
                true }
         }
-
-
     }
 
     override fun getItemCount(): Int {

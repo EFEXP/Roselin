@@ -23,7 +23,10 @@ import twitter4j.StatusUpdate
 import twitter4j.User
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.Roselin
-import xyz.donot.roselinx.model.entity.*
+import xyz.donot.roselinx.model.entity.HOME
+import xyz.donot.roselinx.model.entity.RoselinDatabase
+import xyz.donot.roselinx.model.entity.SETTING
+import xyz.donot.roselinx.model.entity.SavedTab
 import xyz.donot.roselinx.receiver.ConnectionReceiver
 import xyz.donot.roselinx.receiver.MusicReceiver
 import xyz.donot.roselinx.service.REPLY_ID
@@ -63,9 +66,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     val maxOrder = RoselinDatabase.getInstance().savedTabDao().maxOrder()
                     RoselinDatabase.getInstance().savedTabDao().insertSavedTabs(arrayOf(
                             SavedTab(type = SETTING, tabOrder = maxOrder + 1),
-                            SavedTab(type = HOME, accountId = twitter.id, screenName = twitter.user.screenName, tabOrder = maxOrder + 2),
-                            SavedTab(type = MENTION, accountId = twitter.id, screenName = twitter.user.screenName, tabOrder = maxOrder + 3),
-                            SavedTab(type = NOTIFICATION, accountId = twitter.id, screenName = twitter.user.screenName, tabOrder = maxOrder + 4)
+                            SavedTab(type = HOME, accountId = twitter.id, screenName = twitter.user.screenName, tabOrder = maxOrder + 2)
+                        //    SavedTab(type = MENTION, accountId = twitter.id, screenName = twitter.user.screenName, tabOrder = maxOrder + 3),
+                       //     SavedTab(type = NOTIFICATION, accountId = twitter.id, screenName = twitter.user.screenName, tabOrder = maxOrder + 4)
                     ))
                 }.await()
 

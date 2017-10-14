@@ -11,17 +11,17 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.customrecycler.CalculableTweetAdapter
+import xyz.donot.roselinx.customrecycler.CalculableAdapter
 import xyz.donot.roselinx.model.entity.NRETWEET
 import xyz.donot.roselinx.model.entity.Notification
 import xyz.donot.roselinx.model.entity.RoselinDatabase
 import xyz.donot.roselinx.ui.base.ARecyclerFragment
 import xyz.donot.roselinx.ui.detailtweet.TwitterDetailActivity
 import xyz.donot.roselinx.ui.detailuser.UserActivity
+import xyz.donot.roselinx.ui.status.KViewHolder
 import xyz.donot.roselinx.ui.util.getExpandedText
 import xyz.donot.roselinx.util.extraUtils.Bundle
 import xyz.donot.roselinx.util.extraUtils.start
-import xyz.donot.roselinx.ui.status.KViewHolder
 
 class NotificationFragment : ARecyclerFragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
@@ -40,7 +40,7 @@ class NotificationFragment : ARecyclerFragment() {
         }
     }
 
-    inner class NotificationAdapter: CalculableTweetAdapter<Notification>(R.layout.item_notification) {
+    inner class NotificationAdapter: CalculableAdapter<Notification>(R.layout.item_notification) {
         override fun onBindViewHolder(holder: KViewHolder, position: Int) {
             getItem(position)?.let {
                 val s = it.status

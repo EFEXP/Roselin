@@ -51,8 +51,6 @@ dependencies {
     def arch = "1.0.0-beta2"
     implementation "android.arch.lifecycle:extensions:${arch}"
     implementation "android.arch.persistence.room:runtime:${arch}"
-    implementation "android.arch.lifecycle:runtime:1.0.0"
-    annotationProcessor "android.arch.lifecycle:compiler:1.0.0-beta2"
     kapt "android.arch.persistence.room:compiler:${arch}"
     implementation "android.arch.paging:runtime:1.0.0-alpha3"
     def twitter4j = "4.0.6"
@@ -83,7 +81,7 @@ dependencies {
     implementation 'com.github.yalantis:ucrop:2.2.1'
     implementation 'id.zelory:compressor:2.1.0'
     implementation "io.reactivex.rxjava2:rxjava:2.1.5"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta2'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta3'
     implementation 'com.klinkerapps:link_builder:1.6.1'
     implementation 'cn.jzvd:jiaozivideoplayer:6.0.0'
     implementation 'com.dinuscxj:recyclerrefreshlayout:2.0.5'

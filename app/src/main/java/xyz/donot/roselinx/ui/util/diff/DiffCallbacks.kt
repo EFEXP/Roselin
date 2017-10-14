@@ -1,44 +1,13 @@
-package xyz.donot.roselinx.customrecycler
+package xyz.donot.roselinx.ui.util.diff
 
-import android.arch.paging.PagedListAdapter
 import android.support.v7.recyclerview.extensions.DiffCallback
 import android.support.v7.util.DiffUtil
 import android.support.v7.util.ListUpdateCallback
 import android.support.v7.widget.RecyclerView
-import android.view.ViewGroup
-import xyz.donot.roselinx.util.extraUtils.inflate
-import xyz.donot.roselinx.util.extraUtils.logd
 import xyz.donot.roselinx.ui.status.KViewHolder
 
-abstract class CalculableTweetAdapter<T:Diffable>(val layout:Int):PagedListAdapter<T, KViewHolder>(DiffableCallback<T>()){
-    private val binder = MyDiffCallback<CalculableTweetAdapter<T>>()
-    private var recycler: RecyclerView? = null
-    var onItemClick: (item: T, position: Int) -> Unit ={ _, _ -> }
-    var onItemLongClick: (item: T, position: Int) -> Unit = { _, _ -> }
-    var onLoadMore: () -> Unit = {  }
 
-
-
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        recycler = recyclerView
-    //   binder.bind(this@CalculableTweetAdapter)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = KViewHolder(parent.context.inflate(layout, parent, false))
-
-    override fun onBindViewHolder(holder: KViewHolder, position: Int) {
-        val item=getItem(position)!!
-        logd{"${position+1} == $itemCount"}
-        if (position+1==itemCount&&itemCount>5) { onLoadMore()}
-        holder.itemView.setOnClickListener { onItemClick(item, position) }
-        holder.itemView.setOnLongClickListener { onItemLongClick(item, position)
-            true }
-    }
-
-}
-
-class DiffableCallback<T:Diffable>:DiffCallback<T>() {
+class DistinguishableCallback<T: Distinguishable>: DiffCallback<T>() {
     override fun areContentsTheSame(oldItem: T, newItem: T): Boolean {
         return   oldItem.isTheSame(newItem)
     }
@@ -76,18 +45,11 @@ internal class MyDiffCallback<Adapter: RecyclerView.Adapter<KViewHolder>> : List
         adapter!!.notifyItemRangeRemoved(position, count)
     }
 }
-//InterFace
-interface Diffable {
-    // otherと同じIDを持つかどうか
-    fun isTheSame(other: Diffable): Boolean
 
-    // otherと完全一致するかどうか
-    fun isContentsTheSame(other: Diffable): Boolean = equals(other)
-}
 
 private class Callback(
-        val old: List<Diffable>,
-        val new: List<Diffable>
+        val old: List<Distinguishable>,
+        val new: List<Distinguishable>
 ) : DiffUtil.Callback() {
     override fun getOldListSize() = old.size
     override fun getNewListSize() = new.size
@@ -102,8 +64,8 @@ private class Callback(
 }
 
 fun calculateDiff(
-        old: List<Diffable>,
-        new: List<Diffable>,
+        old: List<Distinguishable>,
+        new: List<Distinguishable>,
         detectMoves: Boolean = false
 ): DiffUtil.DiffResult {
     return DiffUtil.calculateDiff(Callback(old, new), detectMoves)

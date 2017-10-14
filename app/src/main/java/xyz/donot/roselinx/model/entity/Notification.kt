@@ -7,7 +7,7 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import twitter4j.Status
 import twitter4j.User
-import xyz.donot.roselinx.customrecycler.Diffable
+import xyz.donot.roselinx.ui.util.diff.Distinguishable
 import java.util.*
 
 
@@ -19,9 +19,9 @@ data class Notification(
         val status: Status,
         val type: Int = 0,
         val date: Date
-) : Diffable {
+) : Distinguishable {
     @PrimaryKey(autoGenerate = true) var id: Long = 0
-    override fun isTheSame(other: Diffable) = id == (other as? Notification)?.id
+    override fun isTheSame(other: Distinguishable) = id == (other as? Notification)?.id
     companion object {
         fun save(notice: Notification) = launch(UI) {
             async { RoselinDatabase.getInstance().notificationDao().insertNotification(notice) }.await()
