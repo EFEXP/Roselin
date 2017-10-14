@@ -33,8 +33,11 @@ interface TweetDao {
     @Query("SELECT DISTINCT $SELECT_TWEET FROM $JOIN_TWEET WHERE date=(SELECT MAX(date) FROM $JOIN_TWEET WHERE $EQUALS_ME AND $EQUALS_TYPE AND $EQUALS_TWEETER)")
     fun getUserNewestTweet(type: Int, userId: Long,tweetedUserId:Long): Tweet
 
+  //  @Insert(onConflict = OnConflictStrategy.REPLACE)
+ //   fun insert(tweet: Tweet) ("INSERT INTO tweet(status,date,tweeterId,tweetId) VALUES (:tweet.status,:tweet.date,:tweet.tweeterId,:tweet.tweetId) ON DUPLICATE KEY UPDATE tweetId=:tweet.tweetId")
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(tweet: Tweet)
+     fun insert(tweet: Tweet)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(tweet:List<Tweet>)
@@ -54,7 +57,13 @@ interface TweetDao {
     @Update
     fun update(tweet: Tweet)
 
+    @Update
+    fun update(tweet: List<Tweet>)
+
     @Query("DELETE FROM tweet WHERE tweetId=:id")
     fun deleteById(id:Long)
+
+    @Query("SELECT COUNT(*) FROM tweet WHERE tweetId=:id")
+    fun exist(id:Long):Int
 }
 

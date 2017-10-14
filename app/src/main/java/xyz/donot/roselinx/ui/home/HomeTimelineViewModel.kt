@@ -57,11 +57,11 @@ class HomeTimelineViewModel(app: Application) : AndroidViewModel(app) {
             try {
                 val paging = Paging(page)
                 if (hasData) {
-                    val oldestId = async { RoselinDatabase.getInstance().tweetDao().getOldestTweet(HOME_TIMELINE, getAccount().id).tweetId }.await()
+                    val oldestId = async { RoselinDatabase.getInstance().tweetDao().getOldestTweet(HOME_TIMELINE, mainTwitter.id).tweetId }.await()
                     paging.maxId = oldestId
                 }
                 val result = async { twitter.getHomeTimeline(paging) }.await()
-                Tweet.save(result, HOME_TIMELINE,twitter.id)
+                Tweet.save(result, HOME_TIMELINE,mainTwitter.id)
             } catch (e: TwitterException) {
                 //  adapter.loadMoreFail()
                 getApplication<Roselin>().toast(twitterExceptionMessage(e))
@@ -88,7 +88,7 @@ class HomeTimelineViewModel(app: Application) : AndroidViewModel(app) {
         override fun onReceive(context: Context, intent: Intent) {
             val data = intent.extras.getByteArray("Status").getDeserialized<Status>()
             logd { "onReceived" }
-            Tweet.save(data, HOME_TIMELINE,twitter.id)
+            Tweet.save(data, HOME_TIMELINE,mainTwitter.id)
         }
     }
 

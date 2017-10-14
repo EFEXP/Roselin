@@ -40,7 +40,7 @@ class UserTimeLineViewModel(app: Application) : AndroidViewModel(app) {
                     paging.maxId = oldestId
                 }
                 val result = async { twitter.account.getUserTimeline(userID, paging) }.await()
-                Tweet.save(result,USER_TIMELINE,twitter.id)
+               Tweet.save(result,USER_TIMELINE,twitter.id)
             } catch (e: TwitterException) {
                 //  adapter.loadMoreFail()
                 getApplication<Roselin>().toast(twitterExceptionMessage(e))
@@ -51,7 +51,9 @@ class UserTimeLineViewModel(app: Application) : AndroidViewModel(app) {
         launch(UI) {
             try {
                 val newestId = async { RoselinDatabase.getInstance().tweetDao().getUserNewestTweet(USER_TIMELINE,twitter.id,userID).tweetId }.await()
-                async {  twitter.account.getHomeTimeline(Paging(newestId)) }.await()?.let { Tweet.save(it,USER_TIMELINE,twitter.id) }
+                async {  twitter.account.getHomeTimeline(Paging(newestId)) }.await()?.let {
+                    Tweet.save(it,USER_TIMELINE,twitter.id)
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {

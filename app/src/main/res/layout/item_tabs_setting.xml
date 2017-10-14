@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relative_user"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+  android:descendantFocusability="blocksDescendants"
+  >
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/iv_icon"
