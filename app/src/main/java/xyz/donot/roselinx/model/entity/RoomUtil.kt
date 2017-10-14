@@ -26,7 +26,6 @@ abstract class RoselinDatabase : RoomDatabase() {
     abstract fun savedTabDao(): SavedTabDao
     abstract fun customProfileDao(): CustomProfileDao
     abstract fun tweetDao(): TweetDao
-
     companion object {
         @Volatile private var INSTANCE: RoselinDatabase? = null
         @Volatile private var MAIN_THREAD_INSTANCE: RoselinDatabase? = null

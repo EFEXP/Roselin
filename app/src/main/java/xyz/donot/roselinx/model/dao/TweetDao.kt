@@ -6,31 +6,31 @@ import xyz.donot.roselinx.model.entity.Tweet
 import xyz.donot.roselinx.model.entity.TweetType
 import xyz.donot.roselinx.model.entity.TweetUser
 
-const val JoinTweet = "tweet JOIN tweet_type JOIN tweet_user ON tweet.tweetId=tweet_type.tweetId AND tweet.tweetId=tweet_user.tweetId"
-const val EqualsType = "type=:type"
-const val EqualsUser = "userId=:userId"
-const val EqualsUserTweet = "tweetedUserId=:tweetedUserId"
+const val JOIN_TWEET = "tweet JOIN tweet_type JOIN tweet_user ON tweet.tweetId=tweet_type.tweetId AND tweet.tweetId=tweet_user.tweetId"
+const val EQUALS_TYPE = "type=:type"
+const val EQUALS_ME = "userId=:userId"
+const val EQUALS_TWEETER = "tweetedUserId=:tweetedUserId"
 const val SELECT_TWEET="status,date,tweet.tweetId,tweetedUserId"
 
 @Dao
 interface TweetDao {
-    @Query("SELECT DISTINCT $SELECT_TWEET FROM $JoinTweet WHERE $EqualsType AND $EqualsUser order by date DESC")
+    @Query("SELECT DISTINCT $SELECT_TWEET FROM $JOIN_TWEET WHERE $EQUALS_TYPE AND $EQUALS_ME order by date DESC")
     fun getAllDataSource(type: Int, userId: Long): LivePagedListProvider<Int,Tweet>
 
-    @Query("SELECT DISTINCT $SELECT_TWEET FROM $JoinTweet WHERE date=(SELECT MIN(date) FROM $JoinTweet WHERE $EqualsUser AND $EqualsType)")
+    @Query("SELECT DISTINCT $SELECT_TWEET FROM $JOIN_TWEET WHERE date=(SELECT MIN(date) FROM $JOIN_TWEET WHERE $EQUALS_ME AND $EQUALS_TYPE)")
     fun getOldestTweet(type: Int, userId: Long): Tweet
 
-    @Query("SELECT DISTINCT $SELECT_TWEET FROM $JoinTweet WHERE date=(SELECT MAX(date) FROM $JoinTweet WHERE $EqualsUser AND $EqualsType)")
+    @Query("SELECT DISTINCT $SELECT_TWEET FROM $JOIN_TWEET WHERE date=(SELECT MAX(date) FROM $JOIN_TWEET WHERE $EQUALS_ME AND $EQUALS_TYPE)")
     fun getNewestTweet(type: Int, userId: Long): Tweet
 
     //User
-    @Query("SELECT DISTINCT $SELECT_TWEET FROM $JoinTweet WHERE $EqualsType AND $EqualsUser AND $EqualsUserTweet order by date DESC")
+    @Query("SELECT DISTINCT $SELECT_TWEET FROM $JOIN_TWEET WHERE $EQUALS_TYPE AND $EQUALS_ME AND $EQUALS_TWEETER order by date DESC")
     fun getAllUserDataSource(type: Int, userId: Long,tweetedUserId:Long): LivePagedListProvider<Int,Tweet>
 
-    @Query("SELECT DISTINCT $SELECT_TWEET FROM $JoinTweet WHERE date=(SELECT MIN(date) FROM $JoinTweet WHERE $EqualsUser AND $EqualsType AND $EqualsUserTweet)")
+    @Query("SELECT DISTINCT $SELECT_TWEET FROM $JOIN_TWEET WHERE date=(SELECT MIN(date) FROM $JOIN_TWEET WHERE $EQUALS_ME AND $EQUALS_TYPE AND $EQUALS_TWEETER)")
     fun getUserOldestTweet(type: Int, userId: Long,tweetedUserId:Long): Tweet
 
-    @Query("SELECT DISTINCT $SELECT_TWEET FROM $JoinTweet WHERE date=(SELECT MAX(date) FROM $JoinTweet WHERE $EqualsUser AND $EqualsType AND $EqualsUserTweet)")
+    @Query("SELECT DISTINCT $SELECT_TWEET FROM $JOIN_TWEET WHERE date=(SELECT MAX(date) FROM $JOIN_TWEET WHERE $EQUALS_ME AND $EQUALS_TYPE AND $EQUALS_TWEETER)")
     fun getUserNewestTweet(type: Int, userId: Long,tweetedUserId:Long): Tweet
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -56,27 +56,5 @@ interface TweetDao {
 
     @Query("DELETE FROM tweet WHERE tweetId=:id")
     fun deleteById(id:Long)
-
-/*
-    @Query("SELECT * FROM tweet WHERE type=:type order by date DESC")
-    fun getAllLiveData(type: Int): LiveData<List<Tweet>>
-
-    @Query("SELECT * FROM tweet WHERE type=:type order by date DESC")
-    fun getAllDataSource(type: Int): LivePagedListProvider<Int, Tweet>
-
-    @Query("SELECT * FROM tweet WHERE type=:type AND userId=:userId order by date DESC")
-    fun getAllUserDataSource(type: Int,userId: Long): LivePagedListProvider<Int, Tweet>
-
-    @Query("SELECT COUNT(*) FROM tweet WHERE type=:type")
-    fun countTweet(type:Int):Int
-
-    @Query("SELECT * FROM tweet WHERE tweetId=:id")
-    fun equalToIds(id:Long): LiveData<List<Tweet>>
-
-    @Update
-    fun update(tweet: Tweet)
-
-    @Query("DELETE FROM tweet WHERE tweetId=:id")
-    fun deleteById(id:Long)*/
 }
 

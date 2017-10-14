@@ -12,7 +12,7 @@ import java.util.*
 data class Tweet(
         val status: Status,
         val date: Date,
-        val tweetedUserId: Long,
+        val tweeterId: Long,
         @PrimaryKey(autoGenerate = false) val tweetId: Long
 ) : Distinguishable {
     override fun isTheSame(other: Distinguishable) = tweetId == (other as? Tweet)?.tweetId
