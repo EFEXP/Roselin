@@ -9,7 +9,6 @@ import android.util.AttributeSet
 import android.view.View
 import com.klinker.android.link_builder.LinkBuilder
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import kotlinx.android.synthetic.main.person_item.view.*
 import twitter4j.Relationship
 import twitter4j.User
@@ -20,7 +19,7 @@ import xyz.donot.roselinx.ui.util.getTagURLMention
 import xyz.donot.roselinx.ui.util.getURLLink
 import java.text.SimpleDateFormat
 
-class UserDetailView  : ConstraintLayout ,Target {
+class UserDetailView  : ConstraintLayout ,com.squareup.picasso.Target {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)

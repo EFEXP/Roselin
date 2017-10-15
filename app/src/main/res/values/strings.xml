@@ -58,4 +58,24 @@
   <string name="tabname_dm">ダイレクトメール</string>
   <string name="tabname_search">検索</string>
   <string name="tabname_notification">通知</string>
+  //TweetView
+  <string name="at_screenname">/@%1$s</string>
+  <string name="at_screenname_blank">/@%1$s </string>
+
+  //AccountSetting
+
+  //notification
+  <string name="notification_retweet_message">%1$sさんがリツイートしました</string>
+  <string name="notification_favorite_message">%1$sさんがいいねしました</string>
+  //dialog
+  <string name="deleted_item">削除しました</string>
+  <string name="delete">削除</string>
+  <string name="dialog_question_draft">下書きに保存しますか？</string>
+  <string name="dialog_edit">編集</string>
+  <string name="dialog_back">戻る</string>
+  <string name="dialog_question_delete_back">編集を削除して戻りますか？</string>
+  <string name="notf_updating_profile">プロフィールを更新中…</string>
+  <string name="notf_title_updating">更新中</string>
+  <string name="notif_send_complete">送信しました</string>
+  <string name="notif_update_failed">失敗しました</string>
 </resources>

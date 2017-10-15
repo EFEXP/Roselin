@@ -1,5 +1,6 @@
 package xyz.donot.roselinx.service
 
+import android.content.Context
 import android.content.Intent
 import android.support.v4.app.JobIntentService
 import android.support.v4.app.NotificationCompat
@@ -7,8 +8,10 @@ import twitter4j.StatusUpdate
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.ui.util.extraUtils.defaultSharedPreferences
 import xyz.donot.roselinx.ui.util.extraUtils.getNotificationManager
+import xyz.donot.roselinx.ui.util.extraUtils.newIntent
 import xyz.donot.roselinx.ui.util.getAccount
 import xyz.donot.roselinx.ui.util.getDeserialized
+import xyz.donot.roselinx.ui.util.getSerialized
 import java.io.File
 import java.util.*
 
@@ -45,6 +48,13 @@ class TweetPostService : JobIntentService() {
             mNotificationManager.cancel(id)
 
         }
+    }
+
+    companion object {
+      fun  getIntent(context:Context,picturesUrl:ArrayList<String>,update: StatusUpdate):Intent{
+      return   context.newIntent<TweetPostService>().putExtra("StatusUpdate",update.getSerialized())
+                  .putStringArrayListExtra("FilePath", picturesUrl)
+      }
     }
 
     private fun notify(int:Int) {

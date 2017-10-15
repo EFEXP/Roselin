@@ -31,7 +31,7 @@ class AccountSettingActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-        toolbar.title = "アカウントの選択"
+        toolbar.title =getString(R.string.title_account)
         val dividerItemDecoration = DividerItemDecoration(recycler_account.context,
                 LinearLayoutManager(this).orientation)
         recycler_account.addItemDecoration(dividerItemDecoration)
@@ -41,7 +41,7 @@ class AccountSettingActivity : AppCompatActivity() {
             launch {
                 RoselinDatabase.getInstance().twitterAccountDao().deleteById(item.id)
             }
-            toast("削除しました")
+            toast(getString(R.string.deleted_item))
             adapter.notifyItemRemoved(position)
         }
         adapter.onItemClick = { item, _ ->

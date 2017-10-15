@@ -1,6 +1,7 @@
 package xyz.donot.roselinx.ui.base
 
 import android.app.Application
+import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -18,7 +19,7 @@ import xyz.donot.roselinx.ui.view.SingleLiveEvent
 import kotlin.properties.Delegates
 
 
-open class BaseListViewModel<T>(app: Application) : ARecyclerViewModel(app) {
+open class BaseListViewModel<T>(app: Application) : AndroidViewModel(app) {
     var isBackground = MutableLiveData<Boolean>()
     var twitter by Delegates.notNull<Twitter>()
     val exception = MutableLiveData<TwitterException>()

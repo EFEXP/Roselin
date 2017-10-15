@@ -153,7 +153,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
         app.unregisterReceiver(receiver)
         app.unregisterReceiver(sendReplyReceiver)
-
         app.stopService(app.newIntent<SearchStreamService>())
         app.stopService(app.newIntent<StreamingService>())
 
@@ -191,13 +190,13 @@ class SendReplyReceiver : BroadcastReceiver() {
                     })
                 }.await()
                 Log.v("test", text.toString())
-                repliedNotification(context, "送信しました")
+                repliedNotification(context, context.getString(R.string.notif_send_complete))
                 Handler().delayed(2000, {
                     context.getNotificationManager().cancel(REPLY_ID)
                 })
             } catch (e: Exception) {
                 Log.v("test", "No message.")
-                repliedNotification(context, "失敗しました")
+                repliedNotification(context, context.getString(R.string.notif_update_failed))
             }
 
         }
@@ -211,7 +210,5 @@ class SendReplyReceiver : BroadcastReceiver() {
         }, "Reply")
         context.getNotificationManager().notify(REPLY_ID, repliedNotification)
     }
-
-    private fun getMessageText(intent: Intent) =
-            RemoteInput.getResultsFromIntent(intent)?.getCharSequence("key_reply")
+    private fun getMessageText(intent: Intent) = RemoteInput.getResultsFromIntent(intent)?.getCharSequence("key_reply")
 }

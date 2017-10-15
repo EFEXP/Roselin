@@ -51,7 +51,9 @@ class EditTweetActivity : AppCompatActivity() {
                     editText_status.editableText.clear()
                     it.replyToScreenName.isNotEmpty()
                     if (!it.replyToScreenName.isBlank())
-                        editText_status.append("@${it.replyToScreenName} ")
+                        editText_status.append(
+                                getString(R.string.at_screenname_blank,it.replyToScreenName)
+                        )
                     if (it.replyToStatusId != 0L)
                         viewmodel.statusId = it.replyToStatusId
                     editText_status.append(it.text)
@@ -78,7 +80,7 @@ class EditTweetActivity : AppCompatActivity() {
         //View#Set
         setUpSuggest()
         if (intent.hasExtra("user_screen_name")) {
-            viewmodel.screenName = "@${intent.getStringExtra("user_screen_name")} "
+            viewmodel.screenName = getString(R.string.at_screenname_blank,intent.getStringExtra("user_screen_name"))
         }
         editText_status.setText(viewmodel.screenName)
         editText_status.setSelection(editText_status.editableText.count())
@@ -97,14 +99,14 @@ class EditTweetActivity : AppCompatActivity() {
         viewmodel.mAdapter.setOnItemClickListener { _, _, position ->
             val item = viewmodel.mAdapter.getItem(position)
             val color = ContextCompat.getColor(this@EditTweetActivity, R.color.colorPrimary)
-            AlertDialog.Builder(this@EditTweetActivity).setTitle("写真")
+            AlertDialog.Builder(this@EditTweetActivity).setTitle(getString(R.string.title_activity_picture))
                     .setMessage("何をしますか？")
                     /*	.setNegativeButton("確認", { _, _ ->
                             start<PictureActivity>(bundle {
                                 putStringArrayList("picture_urls", arrayListOf(mAdapter.data[position].toString()))
                             })
                         })*/
-                    .setPositiveButton("編集", { _, _ ->
+                    .setPositiveButton(getString(R.string.dialog_edit), { _, _ ->
                         pair = Pair(item!!, position)
                         UCrop.of(item, Uri.fromFile(File(cacheDir, "${Date().time}.jpg")))
                                 .withOptions(UCrop.Options().apply {
@@ -116,7 +118,7 @@ class EditTweetActivity : AppCompatActivity() {
                                     setAllowedGestures(UCropActivity.SCALE, UCropActivity.SCALE, UCropActivity.SCALE)
                                 })
                                 .start(this@EditTweetActivity)
-                    }).setNeutralButton("削除", { _, _ ->
+                    }).setNeutralButton(getString(R.string.delete), { _, _ ->
                 viewmodel.mAdapter.remove(position)
             })
                     .show()
@@ -214,14 +216,14 @@ class EditTweetActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (!editText_status.editableText.isBlank() && !editText_status.editableText.isEmpty()) {
             AlertDialog.Builder(this@EditTweetActivity)
-                    .setTitle("戻る")
-                    .setMessage("下書きに保存しますか？")
-                    .setPositiveButton("はい", { _, _ ->
+                    .setTitle(getString(R.string.save))
+                    .setMessage(getString(R.string.dialog_question_draft))
+                    .setPositiveButton(getString(R.string.dialog_OK), { _, _ ->
                         viewmodel.saveDraft(editText_status.text.toString())
                         super.onBackPressed()
                     })
-                    .setNeutralButton("削除", { _, _ -> super.onBackPressed() })
-                    .setNegativeButton("キャンセル", { _, _ -> })
+                    .setNeutralButton(getString(R.string.delete), { _, _ -> super.onBackPressed() })
+                    .setNegativeButton(getString(R.string.dialog_cancel), { _, _ -> })
                     .show()
         } else {
             super.onBackPressed()

@@ -72,3 +72,5 @@ fun Context.getDragdismiss(i: Intent): Intent {
             .setDragElasticity(DragDismissIntentBuilder.DragElasticity.XXLARGE)
             .build(i)
 }
+
+

@@ -11,7 +11,7 @@ import java.util.*
 
 class DatePickFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val c = Calendar.getInstance()
+        val calendar = Calendar.getInstance()
 		val viewmodel=ViewModelProviders.of(activity).get(SearchSettingViewModel::class.java)
         //val minDate = Calendar.getInstance().apply {
         //    add(Calendar.DAY_OF_MONTH, -7)
@@ -23,9 +23,9 @@ class DatePickFragment : DialogFragment() {
             else{viewmodel.dayTo.value= DateCompact(year_, monthOfYear + 1, dayOfMonth)
                 }
         }
-        return DatePickerDialog(activity,listener,c.get(Calendar.YEAR),  c.get(Calendar.MONTH),c.get(Calendar.DAY_OF_MONTH))
+        return DatePickerDialog(activity,listener,calendar.get(Calendar.YEAR),  calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH))
                 .apply {
-                    datePicker.maxDate = c.timeInMillis
+                    datePicker.maxDate = calendar.timeInMillis
                     //   datePicker.minDate=minDate.timeInMillis
                 }
     }

@@ -43,10 +43,10 @@ class EditProfileActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         AlertDialog.Builder(this@EditProfileActivity)
-                .setTitle("戻る")
-                .setMessage("編集を削除して戻りますか？")
-                .setPositiveButton("はい", { _, _ -> super.onBackPressed() })
-                .setNegativeButton("いいえ", { dialogInterface, _ -> dialogInterface.cancel() })
+                .setTitle(getString(R.string.dialog_back))
+                .setMessage(getString(R.string.dialog_question_delete_back))
+                .setPositiveButton(getString(R.string.dialog_OK), { _, _ -> super.onBackPressed() })
+                .setNegativeButton(getString(R.string.dialog_cancel), { dialogInterface, _ -> dialogInterface.cancel() })
                 .show()
     }
 
@@ -126,10 +126,9 @@ class EditProfileActivity : AppCompatActivity() {
            getNotificationManager().notify(UPDATE_PROFILE_NOTIFICATION,
                    newNotification({
                        setSmallIcon(R.drawable.ic_launcher)
-                       setContentTitle("更新中")
+                       setContentTitle(getString(R.string.notf_title_updating))
                        setProgress(100, 100, true)
-                       setContentText("プロフィールを更新中…")
-
+                       setContentText(getString(R.string.notf_updating_profile))
                    },"sending"))
         })
 

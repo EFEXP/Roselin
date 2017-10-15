@@ -51,16 +51,16 @@ class NotificationFragment : ARecyclerFragment() {
                     iv_notification_sender_icon.setOnClickListener { activity.start<UserActivity>(bundle  { putLong("user_id", user.id) }) }
                     tv_notification_myname.text = item.user.name
                     if (it.type == NRETWEET) {
-                        tv_notification_info.text = "${user.name}さんがあなたのツイートをリツイートしました"
+                        tv_notification_info.text = getString(R.string.notification_retweet_message,user.name)
                         tv_notification_info.setCompoundDrawablesRelativeWithIntrinsicBounds(ResourcesCompat.getDrawable(resources, R.drawable.wrap_retweet_pressed, null), null, null, null)
                     } else {
-                        tv_notification_info.text = "${user.name}さんがあなたのツイートをいいねしました"
+                        tv_notification_info.text = getString(R.string.notification_favorite_message,user.name)
                         tv_notification_info.setCompoundDrawablesRelativeWithIntrinsicBounds(ResourcesCompat.getDrawable(resources, R.drawable.wrap_favorite_pressed, null), null, null, null)
                     }
                     tv_notification_text.text = getExpandedText(item)
                     Picasso.with(activity).load(user.originalProfileImageURLHttps).into(iv_notification_sender_icon)
                     Picasso.with(activity).load(item.user.originalProfileImageURLHttps).into(iv_notification_icon)
-                    tv_notification_myscreen.text = "@" + item.user.screenName
+                    tv_notification_myscreen.text =getString(R.string.at_screenname,item.user.screenName)
                 }
             }
         }

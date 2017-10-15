@@ -8,10 +8,8 @@ import xyz.donot.roselinx.Roselin
 import xyz.donot.roselinx.model.entity.TweetDraft
 import xyz.donot.roselinx.service.TweetPostService
 import xyz.donot.roselinx.ui.util.extraUtils.defaultSharedPreferences
-import xyz.donot.roselinx.ui.util.extraUtils.newIntent
 import xyz.donot.roselinx.ui.util.getAccount
 import xyz.donot.roselinx.ui.util.getPath
-import xyz.donot.roselinx.ui.util.getSerialized
 import xyz.donot.roselinx.ui.view.SingleLiveEvent
 import kotlin.properties.Delegates
 
@@ -38,9 +36,7 @@ class EditTweetViewModel(application: Application) : AndroidViewModel(applicatio
             updateStatus.inReplyToStatusId = statusId
             val filePathList = ArrayList<String>()
             mAdapter.data.forEach { filePathList.add(getPath(app, it)!!) }
-            app.startService(app.newIntent<TweetPostService>()
-                    .putExtra("StatusUpdate", updateStatus.getSerialized())
-                    .putStringArrayListExtra("FilePath", filePathList))
+            app.startService(TweetPostService.getIntent(app,filePathList,updateStatus))
             finish.call() }
     }
 

@@ -16,7 +16,7 @@ class UserListAdapter : BaseQuickAdapter<User, BaseViewHolder>(R.layout.item_use
             Picasso.with(mContext).load(item.biggerProfileImageURLHttps).into(getView<ImageView>(R.id.iv_icon))
             helper.itemView.apply {
                 tv_username.text=item.name
-                tv_screenname.text= "@" + item.screenName
+                tv_screenname.text= mContext.getString(R.string.at_screenname,item.screenName)
                 tv_description.text= item.description
             }
 

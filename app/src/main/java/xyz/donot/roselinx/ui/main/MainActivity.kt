@@ -86,10 +86,10 @@ class MainActivity : AppCompatActivity() {
             editText_status.hideSoftKeyboard()
             it?.let { status ->
                 editText_status.editableText.clear()
-                Snackbar.make(main_coordinator, "投稿しました", Snackbar.LENGTH_SHORT).setAction("取り消し", { viewmodel.deleteTweet(status.id) }).show()
+                Snackbar.make(main_coordinator, "投稿しました", Snackbar.LENGTH_SHORT).setAction(getString(R.string.dialog_cancel), { viewmodel.deleteTweet(status.id) }).show()
             }
         })
-        viewmodel.deleteSucceed.observe(this, Observer { Snackbar.make(main_coordinator, "削除しました", Snackbar.LENGTH_SHORT).show() })
+        viewmodel.deleteSucceed.observe(this, Observer { Snackbar.make(main_coordinator,getString(R.string.deleted_item), Snackbar.LENGTH_SHORT).show() })
 
         val uriString = defaultSharedPreferences.getString("BackGroundUri", "")
         if (!uriString.isEmpty()) {

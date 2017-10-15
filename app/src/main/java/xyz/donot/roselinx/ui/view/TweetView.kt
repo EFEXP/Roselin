@@ -14,8 +14,8 @@ import kotlinx.android.synthetic.main.item_classic_tweet.view.*
 import twitter4j.Status
 import twitter4j.User
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.ui.util.*
 import xyz.donot.roselinx.ui.status.TweetCardPicAdapter
+import xyz.donot.roselinx.ui.util.*
 import xyz.donot.roselinx.ui.util.extraUtils.hide
 import xyz.donot.roselinx.ui.util.extraUtils.onClick
 import xyz.donot.roselinx.ui.util.extraUtils.show
@@ -77,7 +77,7 @@ class TweetView(context: Context, attributeSet: AttributeSet? = null, defStyleAt
                     }
             }
             textview_date.text = getRelativeTime(item.createdAt)
-            textview_screenname.text = "@" + item.user.screenName
+            textview_screenname.text = context.getString(R.string.at_screenname,item.user.screenName)
             textview_via.text = getClientName(item.source)
             tv_retweet.setText(item.retweetCount.toString())
             tv_favorite.setText(item.favoriteCount.toString())

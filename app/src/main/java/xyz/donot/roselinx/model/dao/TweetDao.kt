@@ -62,8 +62,5 @@ interface TweetDao {
 
     @Query("DELETE FROM tweet WHERE tweetId=:id")
     fun deleteById(id:Long)
-
-    @Query("SELECT COUNT(*) FROM tweet WHERE tweetId=:id")
-    fun exist(id:Long):Int
 }
 
