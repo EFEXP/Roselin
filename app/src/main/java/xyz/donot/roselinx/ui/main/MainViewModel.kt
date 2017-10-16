@@ -13,7 +13,6 @@ import android.os.Build
 import android.os.Handler
 import android.support.v4.app.RemoteInput
 import android.support.v4.content.LocalBroadcastManager
-import android.util.Log
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
@@ -189,13 +188,11 @@ class SendReplyReceiver : BroadcastReceiver() {
                         inReplyToStatusId = statusId
                     })
                 }.await()
-                Log.v("test", text.toString())
                 repliedNotification(context, context.getString(R.string.notif_send_complete))
                 Handler().delayed(2000, {
                     context.getNotificationManager().cancel(REPLY_ID)
                 })
             } catch (e: Exception) {
-                Log.v("test", "No message.")
                 repliedNotification(context, context.getString(R.string.notif_update_failed))
             }
 

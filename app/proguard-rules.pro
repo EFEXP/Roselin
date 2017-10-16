@@ -6,7 +6,8 @@
      <init>(android.view.View);
 }
 -dontwarn com.bumptech.glide.**
--dontwarn xyz.donot.roselinx.view.**
+-dontwarn xyz.donot.roselinx.ui.**
+-keep class  xyz.donot.roselinx.ui.detailuser.UserActivity { *; }
 -dontwarn com.yalantis.**
 -dontwarn okio.**
 -dontwarn com.squareup.okhttp.**

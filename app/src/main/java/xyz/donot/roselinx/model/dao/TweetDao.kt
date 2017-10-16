@@ -62,5 +62,11 @@ interface TweetDao {
 
     @Query("DELETE FROM tweet WHERE tweetId=:id")
     fun deleteById(id:Long)
+
+    @Query("DELETE FROM tweet_type WHERE tweetId=:id")
+    fun deleteTypeById(id:Long)
+
+    @Query("DELETE FROM tweet_user WHERE tweetId=:id")
+    fun deleteUserById(id:Long)
 }
 

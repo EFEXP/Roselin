@@ -18,23 +18,40 @@ data class Tweet(
     override fun isTheSame(other: Distinguishable) = tweetId == (other as? Tweet)?.tweetId
 
     companion object {
-        fun save(status: Status, type: Int, userId: Long) = launch{
-            val instance = RoselinDatabase.getInstance().tweetDao()
-            instance.insert(Tweet(status, status.createdAt, status.user.id, status.id))
-            instance.insertMyUserId(TweetUser(userId, status.id))
-            instance.insertType(TweetType(type, status.id))
+        fun save(status: Status, type: Int, userId: Long) = launch {
+            val instance = RoselinDatabase.getInstance()
+            instance.runInTransaction {
+                instance.tweetDao().insert(Tweet(status, status.createdAt, status.user.id, status.id))
+                instance.tweetDao().insertMyUserId(TweetUser(userId, status.id))
+                instance.tweetDao().insertType(TweetType(type, status.id))
+            }
         }
 
         fun save(status: List<Status>, type: Int, userId: Long) = launch {
-            val instance = RoselinDatabase.getInstance().tweetDao()
-            instance.insert(status.map { Tweet(it, it.createdAt, it.user.id, it.id) })
-            instance.insertMyUserId(status.map { TweetUser(userId, it.id) })
-            instance.insertType(status.map { TweetType(type, it.id) })
+            val instance = RoselinDatabase.getInstance()
+            instance.runInTransaction {
+                instance.tweetDao().insert(status.map { Tweet(it, it.createdAt, it.user.id, it.id) })
+                instance.tweetDao().insertMyUserId(status.map { TweetUser(userId, it.id) })
+                instance.tweetDao().insertType(status.map { TweetType(type, it.id) })
+            }
         }
 
         fun update(status: Status) = launch {
             val instance = RoselinDatabase.getInstance().tweetDao()
             instance.update(Tweet(status, status.createdAt, status.user.id, status.id))
+        }
+
+        fun delete(id: Long) = launch {
+            val instance = RoselinDatabase.getInstance()
+            instance.runInTransaction {
+                instance.compileStatement("DELETE FROM tweet WHERE tweetId=$id").executeUpdateDelete()
+                instance.compileStatement("DELETE FROM tweet_type WHERE tweetId=$id").executeUpdateDelete()
+                instance.compileStatement("DELETE FROM tweet_user WHERE tweetId=$id").executeUpdateDelete()
+               // instance.tweetDao().deleteUserById(id)
+              //  instance.tweetDao().deleteTypeById(id)
+               // instance.tweetDao().deleteById(id)
+            }
+
         }
     }
 }
