@@ -12,17 +12,17 @@ import twitter4j.Query
 import twitter4j.Status
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.ui.base.ARecyclerFragment
+import xyz.donot.roselinx.ui.dialog.getTweetDialog
 import xyz.donot.roselinx.ui.status.StatusAdapter
 import xyz.donot.roselinx.ui.util.extraUtils.logd
 import xyz.donot.roselinx.ui.util.getAccount
-import xyz.donot.roselinx.ui.dialog.getTweetDialog
 
 
 class ConversationFragment : ARecyclerFragment() {
-    val status by lazy { arguments.getSerializable("status") as Status }
+    val status by lazy { arguments?.getSerializable("status") as Status }
     val adapter by lazy { StatusAdapter() }
     val account by lazy { getAccount() }
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter.addData(status)
         if (status.inReplyToStatusId > 0)
@@ -35,7 +35,7 @@ class ConversationFragment : ARecyclerFragment() {
         //クリックリスナー
         adapter.setOnItemClickListener { adapter, _, position ->
             val status = adapter.data[position] as Status
-            getTweetDialog(activity, this, account, status)?.show()
+            getTweetDialog(activity!!, this, account, status)?.show()
         }
         //クリックリスナーEnd
         adapter.emptyView = View.inflate(activity, R.layout.item_empty, null)
@@ -67,7 +67,7 @@ class ConversationFragment : ARecyclerFragment() {
         val twitter by lazy { getAccount() }
         val query = Query("to:" + status.user.screenName)
         query.count = 100
-        context.logd { query.count.toString() }
+        context!!.logd { query.count.toString() }
         launch(UI) {
             try {
                 val result = async(CommonPool) { twitter.account.search(query) }.await()

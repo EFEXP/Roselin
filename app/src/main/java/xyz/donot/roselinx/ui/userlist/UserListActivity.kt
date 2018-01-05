@@ -42,24 +42,24 @@ class UserListActivity : AppCompatActivity() {
 class FriendUserList : UserListFragment() {
 
     override fun getUserData(userId: Long, cursor: Long): PagableResponseList<User>? = viewmodel.twitter.getFriendsList(userId, cursor)
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewmodel.adapter!!.setOnItemClickListener { _, _, position ->
-            val intent = activity.intent<UserActivity>()
+            val intent = activity!!.intent<UserActivity>()
             intent.putExtra("user_id", viewmodel.adapter!!.data[position].id)
-            activity.startActivity(intent)
+            activity!!.startActivity(intent)
         }
     }
 }
 
 class FollowerUserList : UserListFragment() {
     override fun getUserData(userId: Long, cursor: Long): PagableResponseList<User>? = viewmodel.twitter.getFollowersList(userId, cursor)
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewmodel.adapter!!.setOnItemClickListener { _, _, position ->
-            val intent = activity.intent<UserActivity>()
+            val intent = activity!!.intent<UserActivity>()
             intent.putExtra("user_id", viewmodel.adapter!!.data[position].id)
-            activity.startActivity(intent)
+            activity?.startActivity(intent)
         }
     }
 }

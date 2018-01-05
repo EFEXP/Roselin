@@ -50,7 +50,7 @@ class CustomButton : ConstraintLayout {
     }
 
     fun setSrc(id: Int) {
-        buttonSrc = ContextCompat.getDrawable(context, id)
+        buttonSrc = ContextCompat.getDrawable(context, id)!!
         this.findViewById<ImageView>(R.id.bt_image).setImageResource(id)
     }
 

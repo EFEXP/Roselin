@@ -13,13 +13,13 @@ import xyz.donot.roselinx.ui.base.ARecyclerFragment
 
 
 class DraftFragment : ARecyclerFragment() {
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.apply {
             val mAdapter = TweetDraftAdapter()
             mAdapter.onItemClick = { item, _ ->
                 if (activity is EditTweetActivity) {
-                    ViewModelProviders.of(activity).get(EditTweetViewModel::class.java).draft.value = item
+                    ViewModelProviders.of(activity!!).get(EditTweetViewModel::class.java).draft.value = item
                 }
                 launch { RoselinDatabase.getInstance().tweetDraftDao().delete(item) }
                 this@DraftFragment.dismiss()

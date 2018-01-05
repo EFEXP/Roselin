@@ -22,7 +22,7 @@ import xyz.donot.roselinx.ui.status.KViewHolder
 class MuteUserFragment : ARecyclerFragment(){
     val adapter by lazy { MuteUserAdapter() }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler.adapter=adapter
         launch(UI) {
@@ -48,7 +48,7 @@ class MuteUserFragment : ARecyclerFragment(){
                 tv_username.text=user?.name
                 tv_description.text=user?.description
                 item_user_background.setOnClickListener {
-                    AlertDialog.Builder(activity)
+                    AlertDialog.Builder(activity!!)
                             .setTitle("削除しますか？")
                             .setPositiveButton("OK", {_, _ ->
                               launch {   RoselinDatabase.getInstance().muteFilterDao().delete(item) }

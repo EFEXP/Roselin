@@ -18,11 +18,11 @@ import kotlinx.android.synthetic.main.fragment_picture.view.*
 import xyz.donot.roselinx.R
 
 class PictureFragment : Fragment(),Target {
-    private val page by lazy { arguments.getInt("page") }
+    private val page by lazy { arguments!!.getInt("page") }
     lateinit var viewmodel: PictureViewModel
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_picture, container, false)
-        viewmodel = ViewModelProviders.of(activity).get(PictureViewModel::class.java)
+        viewmodel = ViewModelProviders.of(activity!!).get(PictureViewModel::class.java)
         viewmodel.urlList.observe(this, Observer {
             it?.let {
                 Picasso.with(activity).load(it[page]).into(this)

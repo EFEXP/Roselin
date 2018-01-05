@@ -28,46 +28,46 @@ import xyz.donot.roselinx.ui.util.getDragdismiss
 
 
 class RoselinFragment : Fragment() {
-    val viewmodel: MainViewModel by lazy { ViewModelProviders.of(activity).get(MainViewModel::class.java) }
+    val viewmodel: MainViewModel by lazy { ViewModelProviders.of(activity!!).get(MainViewModel::class.java) }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.content_roselin, container, false)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewmodel.user.observe(this@RoselinFragment, Observer {
             it?.let {
-                val iconIntent = activity.getDragdismiss(PictureActivity.createIntent(activity, arrayListOf(it.originalProfileImageURLHttps)))
+                val iconIntent = activity!!.getDragdismiss(PictureActivity.createIntent(activity!!, arrayListOf(it.originalProfileImageURLHttps)))
                 view.user_detail_view.apply {
                     iconClick = { startActivity(iconIntent) }
-                    listClick = { activity.start<UsersListActivity>(bundle { putLong("userId", it.id) }) }
+                    listClick = { activity!!.start<UsersListActivity>(bundle { putLong("userId", it.id) }) }
                     friendClick = {
-                        activity.start<UserListActivity>(bundle {
+                        activity!!.start<UserListActivity>(bundle {
                             putLong("userId", it.id)
                             putBoolean("isFriend", true)
                         })
                     }
                     followerClick = {
-                        activity.start<UserListActivity>(bundle {
+                        activity!!.start<UserListActivity>(bundle {
                             putLong("userId", it.id)
                             putBoolean("isFriend", false)
                         })
                     }
-                    editClick = { activity.start<EditProfileActivity>() }
+                    editClick = { activity!!.start<EditProfileActivity>() }
                     user_detail_view.setUser(it)
                     user_detail_view.setRelation(null, true)
                     user_detail_view.iconClick = { startActivity(iconIntent) }
-                    user_detail_view.listClick = { activity.start<UsersListActivity>(bundle { putLong("userId", it.id) }) }
+                    user_detail_view.listClick = { activity!!.start<UsersListActivity>(bundle { putLong("userId", it.id) }) }
                     user_detail_view.friendClick = {
-                        activity.start<UserListActivity>(bundle{
+                        activity!!.start<UserListActivity>(bundle{
                             putLong("userId", it.id)
                             putBoolean("isFriend", true)
                         })
                     }
                     user_detail_view.followerClick = {
-                        activity.start<UserListActivity>(bundle {
+                        activity!!.start<UserListActivity>(bundle {
                             putLong("userId", it.id)
                             putBoolean("isFriend", false)
                         })
                     }
-                    user_detail_view.editClick = { activity.start<EditProfileActivity>() }
+                    user_detail_view.editClick = { activity!!.start<EditProfileActivity>() }
                 }
             }
         })
@@ -80,11 +80,11 @@ class RoselinFragment : Fragment() {
             }
         })
         view.bt_profile.onClick = {
-            activity.startActivity(context.getDragdismiss(context.newIntent<UserActivity>(Bundle().apply { putLong("user_id", getAccount().id) })))
+            activity!!.startActivity(context!!.getDragdismiss(context!!.newIntent<UserActivity>(Bundle().apply { putLong("user_id", getAccount().id) })))
         }
-        view.bt_setting.onClick = { activity.start<SettingsActivity>() }
-        view.bt_account.onClick = { activity.startForResult<AccountSettingActivity>(0) }
-        view.bt_search.onClick = { activity.start<SearchSettingActivity>() }
+        view.bt_setting.onClick = { activity!!.start<SettingsActivity>() }
+        view.bt_account.onClick = { activity!!.startForResult<AccountSettingActivity>(0) }
+        view.bt_search.onClick = { activity!!.start<SearchSettingActivity>() }
         search_view.setOnQueryTextListener(
                 object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(p0: String?): Boolean {
@@ -96,7 +96,7 @@ class RoselinFragment : Fragment() {
                                 query = string
                                 resultType = Query.MIXED
                             }
-                            startActivity(SearchActivity.createIntent(activity, q, p0))
+                            startActivity(SearchActivity.createIntent(activity!!, q, p0))
                             search_view.setQuery("", false)
                             search_view.onActionViewCollapsed()
                             search_view.clearFocus()

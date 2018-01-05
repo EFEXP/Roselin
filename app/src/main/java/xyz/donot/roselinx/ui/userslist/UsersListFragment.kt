@@ -1,39 +1,24 @@
 package xyz.donot.roselinx.ui.userslist
 
 
-import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.view.View
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.gms.ads.AdRequest
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_ad.view.*
-import kotlinx.android.synthetic.main.item_list.view.*
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
-import twitter4j.TwitterException
-import twitter4j.UserList
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.ui.base.ARecyclerFragment
 import xyz.donot.roselinx.ui.main.ListTimeLine
 import xyz.donot.roselinx.ui.util.extraUtils.bundle
-import xyz.donot.roselinx.ui.util.extraUtils.mainThread
-import xyz.donot.roselinx.ui.util.getAccount
 import xyz.donot.roselinx.ui.view.DynamicViewPager
 import xyz.donot.roselinx.ui.view.MyLoadingView
 
 
 class UsersListFragment : ARecyclerFragment() {
-    private val activityViewmodel: UsersListActivityViewModel by lazy { ViewModelProviders.of(activity).get(UsersListActivityViewModel::class.java) }
+    private val activityViewmodel: UsersListActivityViewModel by lazy { ViewModelProviders.of(activity!!).get(UsersListActivityViewModel::class.java) }
     private val viewmodel: UsersListViewModel by lazy { ViewModelProviders.of(this).get(UsersListViewModel::class.java) }
 
     companion object {
@@ -49,7 +34,7 @@ class UsersListFragment : ARecyclerFragment() {
         }
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewmodel.apply {
             adapter.apply {
@@ -65,8 +50,8 @@ class UsersListFragment : ARecyclerFragment() {
                                 .build())
                     })
             }
-            userId = arguments.getLong("userId")
-            mode = arguments.getBoolean("isAddedList")
+            userId = arguments!!.getLong("userId")
+            mode = arguments!!.getBoolean("isAddedList")
             recycler.adapter = adapter
             if (savedInstanceState == null)
                 viewmodel.loadMoreData()

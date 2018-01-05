@@ -27,7 +27,7 @@ class ReplaceAutoCompleteEditText(context: Context, attrs: AttributeSet ?=null, 
 
     override fun onCreateInputConnection(outAttrs: EditorInfo): InputConnection {
         val inputConnection = super.onCreateInputConnection(outAttrs)
-        return mEmojiEditTextHelper.onCreateInputConnection(inputConnection, outAttrs)
+        return mEmojiEditTextHelper.onCreateInputConnection(inputConnection, outAttrs)!!
     }
 
 

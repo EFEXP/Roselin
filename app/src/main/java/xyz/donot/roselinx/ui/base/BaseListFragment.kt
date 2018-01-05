@@ -19,11 +19,11 @@ import xyz.donot.roselinx.ui.view.MyLoadingView
 
 abstract class BaseListFragment<T> : ARecyclerFragment() {
     protected val viewmodel: BaseListViewModel<T> by lazy { ViewModelProviders.of(this).get(BaseListViewModel::class.java) as BaseListViewModel<T> }
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewmodel.apply {
-            twitter = if (arguments != null && arguments.containsKey("twitter")) {
-                arguments.getByteArray("twitter").getDeserialized()
+            twitter = if (arguments != null && arguments!!.containsKey("twitter")) {
+                arguments!!.getByteArray("twitter").getDeserialized()
             } else getAccount().account
             adapter!!.apply {
                 setOnLoadMoreListener({ viewmodel.loadMoreData() }, recycler)

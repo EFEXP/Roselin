@@ -12,12 +12,12 @@ import java.util.*
 class DatePickFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val calendar = Calendar.getInstance()
-		val viewmodel=ViewModelProviders.of(activity).get(SearchSettingViewModel::class.java)
+		val viewmodel=ViewModelProviders.of(activity!!).get(SearchSettingViewModel::class.java)
         //val minDate = Calendar.getInstance().apply {
         //    add(Calendar.DAY_OF_MONTH, -7)
         //   }
         val listener = DatePickerDialog.OnDateSetListener { _, year_, monthOfYear, dayOfMonth ->
-                if (arguments.getBoolean("isFrom", false))
+                if (arguments!!.getBoolean("isFrom", false))
             { viewmodel.dayFrom.value= DateCompact(year_, monthOfYear + 1, dayOfMonth)
             }
             else{viewmodel.dayTo.value= DateCompact(year_, monthOfYear + 1, dayOfMonth)

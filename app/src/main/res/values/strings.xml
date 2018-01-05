@@ -59,8 +59,8 @@
   <string name="tabname_search">検索</string>
   <string name="tabname_notification">通知</string>
   //TweetView
-  <string name="at_screenname">/@%1$s</string>
-  <string name="at_screenname_blank">/@%1$s </string>
+  <string name="at_screenname">\@%1$s</string>
+  <string name="at_screenname_blank">\@%1$s </string>
 
   //AccountSetting
 

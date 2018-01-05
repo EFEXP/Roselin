@@ -28,17 +28,17 @@ import xyz.donot.roselinx.ui.util.extraUtils.twitterExceptionMessage
 import xyz.donot.roselinx.ui.util.getAccount
 class TrendFragment : ARecyclerFragment() {
    private val viewmodel: TrendViewModel by lazy { ViewModelProviders.of(this).get(TrendViewModel::class.java)  }
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
             viewmodel.apply {
                 adapter.apply {
                     emptyView = View.inflate(activity, R.layout.item_empty, null)
                     setOnItemClickListener { _, _, position ->
                         if (activity is SearchActivity) {
-                            activity.startActivity(Intent(context, SearchActivity::class.java).putExtra("query_text", viewmodel.adapter.data[position].query))
+                            activity!!.startActivity(Intent(context, SearchActivity::class.java).putExtra("query_text", viewmodel.adapter.data[position].query))
                         }
                         if (activity is EditTweetActivity) {
-                            ViewModelProviders.of(activity).get(EditTweetViewModel::class.java).hashtag.value = viewmodel.adapter.data[position].name
+                            ViewModelProviders.of(activity!!).get(EditTweetViewModel::class.java).hashtag.value = viewmodel.adapter.data[position].name
                             this@TrendFragment.dismiss()
                         }
                     }

@@ -45,19 +45,19 @@ class SearchAdapter(private val query: Query, private val queryText: String, fm:
                 return field
             }
 
-        override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
             viewmodel.adapter!!.setOnItemClickListener { _, _, position ->
-                val intent = activity.intent<UserActivity>()
+                val intent = activity!!.intent<UserActivity>()
                 intent.putExtra("user_id", viewmodel.adapter!!.getItem(position)?.id)
-                activity.startActivity(intent)
+                activity!!.startActivity(intent)
                 viewmodel.adapter!!.getItem(position)
 
             }
         }
 
         override fun getUserData(userId: Long, cursor: Long): PagableResponseList<User>? {
-            val queryText = arguments.getString("query_text")
+            val queryText = arguments!!.getString("query_text")
             val result = viewmodel.twitter.searchUsers(queryText, page)
             mainThread {
                 if (result != null) {

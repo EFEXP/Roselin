@@ -60,7 +60,7 @@ fun Context.typeToIcon(type: Int): Drawable {
         SETTING -> R.drawable.ic_settings_grey_400_36dp
         else -> throw IllegalStateException()
     }
-    val d2 = DrawableCompat.wrap(ContextCompat.getDrawable(this, d))
+    val d2 = DrawableCompat.wrap(ContextCompat.getDrawable(this, d)!!)
     DrawableCompat.setTint(d2, ContextCompat.getColor(this, android.R.color.white))
     DrawableCompat.setTintMode(d2, PorterDuff.Mode.SRC_IN)
     return d2

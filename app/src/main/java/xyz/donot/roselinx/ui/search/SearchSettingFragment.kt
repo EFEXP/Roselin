@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_search_setting.view.*
 import twitter4j.Query
 import xyz.donot.roselinx.R
-import xyz.donot.roselinx.ui.setting.TabSettingActivity
 import xyz.donot.roselinx.ui.base.DatePickFragment
+import xyz.donot.roselinx.ui.setting.TabSettingActivity
 import xyz.donot.roselinx.ui.util.extraUtils.toast
 
 class SearchSettingFragment:DialogFragment(){
@@ -20,11 +20,11 @@ class SearchSettingFragment:DialogFragment(){
             day_from.setOnClickListener {
                 DatePickFragment()
                         .apply { arguments= Bundle().apply { putBoolean("isFrom",true) } }
-                        .show(activity.supportFragmentManager,"") }
+                        .show(activity!!.supportFragmentManager,"") }
             day_to.setOnClickListener {
                 DatePickFragment()
                     .apply { arguments= Bundle().apply { putBoolean("isFrom",false) } }
-                    .show(activity.supportFragmentManager,"") }
+                    .show(activity!!.supportFragmentManager,"") }
             bt_search.setOnClickListener{
                 if (activity is TabSettingActivity){
                     var querytext=search_setting_query.text.toString()

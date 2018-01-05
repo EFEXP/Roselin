@@ -10,19 +10,19 @@ import twitter4j.Query
 import twitter4j.Status
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.ui.base.ARecyclerFragment
+import xyz.donot.roselinx.ui.dialog.getTweetDialog
 import xyz.donot.roselinx.ui.util.extraUtils.delayed
 import xyz.donot.roselinx.ui.util.getDeserialized
-import xyz.donot.roselinx.ui.dialog.getTweetDialog
 import xyz.donot.roselinx.ui.view.MyLoadingView
 
 class SearchTimeline : ARecyclerFragment() {
     val viewmodel: SearchViewModel by lazy { ViewModelProviders.of(this).get(SearchViewModel::class.java) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewmodel.query.value = arguments.getByteArray("query_bundle").getDeserialized<Query>()
+        viewmodel.query.value = arguments!!.getByteArray("query_bundle").getDeserialized<Query>()
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewmodel.apply {
             adapter.apply {
@@ -31,7 +31,7 @@ class SearchTimeline : ARecyclerFragment() {
                 emptyView = View.inflate(activity, R.layout.item_empty, null)
                 setOnItemClickListener { adapter, _, position ->
                     val status = adapter.data[position] as Status
-                    getTweetDialog(activity, this@SearchTimeline, viewmodel.mainTwitter, status)?.show()
+                    getTweetDialog(activity!!, this@SearchTimeline, viewmodel.mainTwitter, status)?.show()
 
                 }
 

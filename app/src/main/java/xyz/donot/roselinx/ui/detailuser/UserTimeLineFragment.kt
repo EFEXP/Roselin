@@ -36,9 +36,9 @@ import xyz.donot.roselinx.ui.view.UserDetailView
 
 
 class UserTimeLineFragment : ARecyclerFragment() {
-    val viewmodel: UserTimeLineViewModel by lazy { ViewModelProviders.of(activity).get(UserTimeLineViewModel::class.java) }
-    val adapter by lazy { TweetAdapter(activity) }
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    val viewmodel: UserTimeLineViewModel by lazy { ViewModelProviders.of(activity!!).get(UserTimeLineViewModel::class.java) }
+    val adapter by lazy { TweetAdapter(activity!!) }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewmodel.twitter = getAccount()
         viewmodel.dataRefreshed.observe(this@UserTimeLineFragment, Observer {
@@ -49,7 +49,7 @@ class UserTimeLineFragment : ARecyclerFragment() {
             userId?.let {
                 launch(UI) {
                     async {
-                        RoselinDatabase.getInstance().tweetDao().getAllUserDataSource(USER_TIMELINE,viewmodel.twitter.id,arguments.getLong("userId"))
+                        RoselinDatabase.getInstance().tweetDao().getAllUserDataSource(USER_TIMELINE,viewmodel.twitter.id,arguments!!.getLong("userId"))
                                 .create(0, PagedList.Config.Builder().setPageSize(50).setPrefetchDistance(50).build())
                     }.await()
                             .observe(this@UserTimeLineFragment, Observer {
@@ -73,17 +73,17 @@ class UserTimeLineFragment : ARecyclerFragment() {
                     } else {
                         status
                     }
-                    if (!activity.isFinishing) {
+                    if (!activity!!.isFinishing) {
                         val tweetItem = if (viewmodel.mainTwitter.id == status.user.id) {
                             R.array.tweet_my_menu
                         } else {
                             R.array.tweet_menu
                         }
-                        AlertDialog.Builder(context).setItems(tweetItem, { _, int ->
-                            val selectedItem = context.resources.getStringArray(tweetItem)[int]
+                        AlertDialog.Builder(context!!).setItems(tweetItem, { _, int ->
+                            val selectedItem = context!!.resources.getStringArray(tweetItem)[int]
                             when (selectedItem) {
                                 "返信" -> {
-                                    startActivity(EditTweetActivity.newIntent(activity,item.text,item.id, item.user.screenName))
+                                    startActivity(EditTweetActivity.newIntent(activity!!,item.text,item.id, item.user.screenName))
                                 }
                                 "削除" -> {
                                     launch(UI) {
@@ -97,11 +97,11 @@ class UserTimeLineFragment : ARecyclerFragment() {
 
                                 }
                                 "会話" -> {
-                                    context.startActivity(context.newIntent<TwitterDetailActivity>(Bundle().apply { putSerializable("Status", item) }))
+                                    context!!.startActivity(context!!.newIntent<TwitterDetailActivity>(Bundle().apply { putSerializable("Status", item) }))
 
                                 }
                                 "コピー" -> {
-                                    (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip = ClipData.newPlainText(ClipDescription.MIMETYPE_TEXT_URILIST, item.text)
+                                    (context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip = ClipData.newPlainText(ClipDescription.MIMETYPE_TEXT_URILIST, item.text)
                                     toast("コピーしました")
 
                                 }
@@ -109,7 +109,7 @@ class UserTimeLineFragment : ARecyclerFragment() {
                                     RetweetUserDialog.getInstance(item.id).show(childFragmentManager, "")
                                 }
                                 "共有" -> {
-                                    context.startActivity(Intent().apply {
+                                    context!!.startActivity(Intent().apply {
                                         action = Intent.ACTION_SEND
                                         type = "text/plain"
                                         putExtra(Intent.EXTRA_TEXT, "@${item.user.screenName}さんのツイート https://twitter.com/${item.user.screenName}/status/${item.id}をチェック")
@@ -119,9 +119,9 @@ class UserTimeLineFragment : ARecyclerFragment() {
                                     CustomTabsIntent.Builder()
                                             .setShowTitle(true)
                                             .addDefaultShareMenuItem()
-                                            .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                                            .setStartAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                                            .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build()
+                                            .setToolbarColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
+                                            .setStartAnimations(context!!, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                                            .setExitAnimations(context!!, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build()
                                             .launchUrl(context, Uri.parse("https://twitter.com/${item.user.screenName}/status/${item.id}"))
                                 }
                             }
@@ -137,24 +137,24 @@ class UserTimeLineFragment : ARecyclerFragment() {
 
             }
         })
-        viewmodel.mUserID.value = arguments.getLong("userId")
+        viewmodel.mUserID.value = arguments!!.getLong("userId")
         refresh.isEnabled = true
     }
 
     private fun setUpViews(user: User): View {
-        return UserDetailView(activity)
+        return UserDetailView(activity!!)
                 .apply {
-                    val iconIntent = activity.getDragdismiss(PictureActivity.createIntent(activity, arrayListOf(user.originalProfileImageURLHttps)))
+                    val iconIntent = activity!!.getDragdismiss(PictureActivity.createIntent(activity!!, arrayListOf(user.originalProfileImageURLHttps)))
                     setUser(user)
                     iconClick = { startActivity(iconIntent) }
-                    listClick = { activity.start<UsersListActivity>(bundle { putLong("userId", user.id) }) }
+                    listClick = { activity!!.start<UsersListActivity>(bundle { putLong("userId", user.id) }) }
                     friendClick = {
-                        startActivity(UserListActivity.newIntent(activity,true,user.id))
+                        startActivity(UserListActivity.newIntent(activity!!,true,user.id))
                     }
                     followerClick = {
-                       startActivity(UserListActivity.newIntent(activity,false,user.id))
+                       startActivity(UserListActivity.newIntent(activity!!,false,user.id))
                     }
-                    editClick = { activity.start<EditProfileActivity>() }
+                    editClick = { activity!!.start<EditProfileActivity>() }
 
                     followClick = {
                         launch(UI) {

@@ -29,7 +29,7 @@ import xyz.donot.roselinx.ui.util.getAccount
 
 abstract class TimeLineFragment : BaseListFragment<Status>() {
     private var doubleClick=false
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
          viewmodel.adapter= StatusAdapter()
         super.onViewCreated(view, savedInstanceState)
@@ -51,12 +51,12 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                 } else {
                     R.array.tweet_menu
                 }
-                AlertDialog.Builder(context)
+                AlertDialog.Builder(context!!)
                         .setItems(tweetItem, { _, int ->
-                            val selectedItem = context.resources.getStringArray(tweetItem)[int]
+                            val selectedItem = context!!.resources.getStringArray(tweetItem)[int]
                             when (selectedItem) {
                                 "返信" -> {
-                                    startActivity(EditTweetActivity.newIntent(activity,item.text,item.id, item.user.screenName))
+                                    startActivity(EditTweetActivity.newIntent(activity!!,item.text,item.id, item.user.screenName))
                                 }
                                 "削除" -> {
                                     launch(UI) {
@@ -70,11 +70,11 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
 
                                 }
                                 "会話" -> {
-                                    context.startActivity(context.newIntent<TwitterDetailActivity>(Bundle().apply { putSerializable("Status", item) }))
+                                    context!!.startActivity(context!!.newIntent<TwitterDetailActivity>(Bundle().apply { putSerializable("Status", item) }))
 
                                 }
                                 "コピー" -> {
-                                    (context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip = ClipData.newPlainText(ClipDescription.MIMETYPE_TEXT_URILIST, item.text)
+                                    (context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager).primaryClip = ClipData.newPlainText(ClipDescription.MIMETYPE_TEXT_URILIST, item.text)
                                     toast("コピーしました")
 
                                 }
@@ -82,7 +82,7 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                                     RetweetUserDialog.getInstance(item.id).show(childFragmentManager, "")
                                 }
                                 "共有" -> {
-                                    context.startActivity(Intent().apply {
+                                    context!!.startActivity(Intent().apply {
                                         action = Intent.ACTION_SEND
                                         type = "text/plain"
                                         putExtra(Intent.EXTRA_TEXT, "@${item.user.screenName}さんのツイート https://twitter.com/${item.user.screenName}/status/${item.id}をチェック")
@@ -92,9 +92,9 @@ abstract class TimeLineFragment : BaseListFragment<Status>() {
                                     CustomTabsIntent.Builder()
                                             .setShowTitle(true)
                                             .addDefaultShareMenuItem()
-                                            .setToolbarColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                                            .setStartAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
-                                            .setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build()
+                                            .setToolbarColor(ContextCompat.getColor(context!!, R.color.colorPrimary))
+                                            .setStartAnimations(context!!, android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                                            .setExitAnimations(context!!, android.R.anim.slide_in_left, android.R.anim.slide_out_right).build()
                                             .launchUrl(context, Uri.parse("https://twitter.com/${item.user.screenName}/status/${item.id}"))
                                 }
                             }

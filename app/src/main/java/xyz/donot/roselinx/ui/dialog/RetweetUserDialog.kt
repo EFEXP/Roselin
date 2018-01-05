@@ -18,9 +18,9 @@ import xyz.donot.roselinx.ui.util.getAccount
 
 class RetweetUserDialog : ARecyclerFragment() {
     val viewmodel: RetweetUserViewModel by lazy { ViewModelProviders.of(this).get(RetweetUserViewModel::class.java) }
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewmodel.tweetId = arguments.getLong("tweetId")
+        viewmodel.tweetId = arguments!!.getLong("tweetId")
         val adapter = TwitterUserPreAdapter()
         adapter.apply {
             onLoadMore = {

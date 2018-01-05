@@ -10,8 +10,8 @@ import xyz.donot.roselinx.ui.util.extraUtils.bundle
 
 
 class FavoriteTimeLine : TimeLineFragment() {
-    val userId by lazy { arguments.getLong("userId") }
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    val userId by lazy { arguments!!.getLong("userId") }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewmodel.pullToRefresh = {
             async(CommonPool) { it.getFavorites(userId, Paging(viewmodel.adapter!!.data[0].id)) }

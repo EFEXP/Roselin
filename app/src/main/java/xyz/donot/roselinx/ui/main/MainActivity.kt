@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         }
         tabs_main.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab) {
-                val fragment = main_viewpager.adapter.findFragmentByPosition(main_viewpager, tab.position)
+                val fragment = main_viewpager.adapter!!.findFragmentByPosition(main_viewpager, tab.position)
                 (fragment as? ARecyclerFragment)?.scrollRecycler(0)
             }
 

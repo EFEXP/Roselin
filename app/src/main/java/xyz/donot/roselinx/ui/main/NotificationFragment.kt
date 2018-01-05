@@ -24,7 +24,7 @@ import xyz.donot.roselinx.ui.util.extraUtils.start
 import xyz.donot.roselinx.ui.util.getExpandedText
 
 class NotificationFragment : ARecyclerFragment() {
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = NotificationAdapter()
         recycler.adapter = adapter
@@ -47,8 +47,8 @@ class NotificationFragment : ARecyclerFragment() {
                 val item = s.retweetedStatus ?: s
                 val user = it.sourceUser
                 holder.containerView.apply {
-                    constraint2.setOnClickListener { activity.start<TwitterDetailActivity>(bundle  { putSerializable("Status", item) }) }
-                    iv_notification_sender_icon.setOnClickListener { activity.start<UserActivity>(bundle  { putLong("user_id", user.id) }) }
+                    constraint2.setOnClickListener { activity!!.start<TwitterDetailActivity>(bundle  { putSerializable("Status", item) }) }
+                    iv_notification_sender_icon.setOnClickListener { activity!!.start<UserActivity>(bundle  { putLong("user_id", user.id) }) }
                     tv_notification_myname.text = item.user.name
                     if (it.type == NRETWEET) {
                         tv_notification_info.text = getString(R.string.notification_retweet_message,user.name)

@@ -18,7 +18,7 @@ import xyz.donot.roselinx.ui.status.KViewHolder
 
 class MuteWordFragment : ARecyclerFragment() {
     val adapter by lazy { MuteWordAdapter() }
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler.adapter = adapter
         launch(UI) {

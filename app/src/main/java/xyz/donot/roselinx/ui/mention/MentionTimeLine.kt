@@ -13,25 +13,25 @@ import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.model.entity.MENTION_TIMELINE
 import xyz.donot.roselinx.model.entity.RoselinDatabase
 import xyz.donot.roselinx.ui.base.ARecyclerFragment
+import xyz.donot.roselinx.ui.dialog.getTweetDialog
 import xyz.donot.roselinx.ui.status.TweetAdapter
 import xyz.donot.roselinx.ui.util.extraUtils.delayed
 import xyz.donot.roselinx.ui.util.getDeserialized
-import xyz.donot.roselinx.ui.dialog.getTweetDialog
 
 class MentionTimeLine : ARecyclerFragment() {
     val viewmodel: MentionViewModel by lazy { ViewModelProviders.of(this).get(MentionViewModel::class.java) }
-    val adapter by lazy { TweetAdapter(activity) }
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    val adapter by lazy { TweetAdapter(activity!!) }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewmodel.apply {
-            twitter = arguments.getByteArray("twitter").getDeserialized()
+            twitter = arguments!!.getByteArray("twitter").getDeserialized()
             adapter.apply {
                 onLoadMore = {
                     viewmodel.loadMoreData(true)
                 }
                 onItemClick = { (status), _ ->
                     adapter.onItemClick = { (status), _ ->
-                        getTweetDialog(activity, this@MentionTimeLine, viewmodel.mainTwitter, status)?.show()
+                        getTweetDialog(activity!!, this@MentionTimeLine, viewmodel.mainTwitter, status)?.show()
                     }
                 }
                 dataRefreshed.observe(this@MentionTimeLine, Observer {

@@ -71,7 +71,7 @@ class PictureActivity : DragDismissActivity() {
 
         viewmodel.mutedColor.observe(this, Observer {
             it?.let {
-                val drawable = DrawableCompat.wrap(ContextCompat.getDrawable(this, R.drawable.ic_file_download))
+                val drawable = DrawableCompat.wrap(ContextCompat.getDrawable(this, R.drawable.ic_file_download)!!)
                 DrawableCompat.setTint(drawable, it.bodyTextColor)
                 logd { it.bodyTextColor }
                 DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_IN)

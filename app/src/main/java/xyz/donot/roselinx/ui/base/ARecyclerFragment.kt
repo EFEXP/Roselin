@@ -19,9 +19,11 @@ open class ARecyclerFragment : AppCompatDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
             inflater.inflate(R.layout.content_base_fragment, container, false)
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view?.let {
+        view.let {
                 recycler = view.findViewById(R.id.recycler)
                 val dividerItemDecoration = DividerItemDecoration(recycler.context, LinearLayoutManager(activity).orientation)
                 recycler.apply {
