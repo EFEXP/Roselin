@@ -1,7 +1,7 @@
 package xyz.donot.roselinx.ui.mutesetting
 
 import android.arch.lifecycle.Observer
-import android.arch.paging.PagedList
+import android.arch.paging.LivePagedListBuilder
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.view.View
@@ -23,8 +23,7 @@ class MuteWordFragment : ARecyclerFragment() {
         recycler.adapter = adapter
         launch(UI) {
             async {
-                RoselinDatabase.getInstance().muteFilterDao().getMuteWord()
-                        .create(0, PagedList.Config.Builder().setPageSize(50).setPrefetchDistance(50).build()) }.await()
+                LivePagedListBuilder<Int,MuteFilter>( RoselinDatabase.getInstance().muteFilterDao().getMuteWord(),50).build() }.await()
                     .observe(this@MuteWordFragment, Observer {
                         it?.let {
                             adapter.setList(it)

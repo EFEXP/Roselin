@@ -1,6 +1,6 @@
 package xyz.donot.roselinx.model.dao
 
-import android.arch.paging.LivePagedListProvider
+import android.arch.paging.DataSource
 import android.arch.persistence.room.*
 import xyz.donot.roselinx.model.entity.TwitterAccount
 
@@ -10,7 +10,7 @@ interface TwitterAccountDao {
     fun count(): Int
 
     @Query("SELECT * FROM twitter_account")
-    fun allData(): LivePagedListProvider<Int, TwitterAccount>
+    fun allData(): DataSource.Factory<Int, TwitterAccount>
 
     @Query("SELECT * FROM twitter_account WHERE id =:userId LIMIT 1")
     fun findById(userId: Long): TwitterAccount

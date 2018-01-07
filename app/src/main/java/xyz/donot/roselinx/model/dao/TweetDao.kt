@@ -1,6 +1,6 @@
 package xyz.donot.roselinx.model.dao
 
-import android.arch.paging.LivePagedListProvider
+import android.arch.paging.DataSource
 import android.arch.persistence.room.*
 import xyz.donot.roselinx.model.entity.Tweet
 import xyz.donot.roselinx.model.entity.TweetType
@@ -15,7 +15,7 @@ const val SELECT_TWEET="status,date,tweet.tweetId,tweeterId"
 @Dao
 interface TweetDao {
     @Query("SELECT DISTINCT $SELECT_TWEET FROM $JOIN_TWEET WHERE $EQUALS_TYPE AND $EQUALS_ME order by date DESC")
-    fun getAllDataSource(type: Int, userId: Long): LivePagedListProvider<Int,Tweet>
+    fun getAllDataSource(type: Int, userId: Long): DataSource.Factory<Int,Tweet>
 
     @Query("SELECT DISTINCT $SELECT_TWEET FROM $JOIN_TWEET WHERE date=(SELECT MIN(date) FROM $JOIN_TWEET WHERE $EQUALS_ME AND $EQUALS_TYPE)")
     fun getOldestTweet(type: Int, userId: Long): Tweet
@@ -25,7 +25,7 @@ interface TweetDao {
 
     //User
     @Query("SELECT DISTINCT $SELECT_TWEET FROM $JOIN_TWEET WHERE $EQUALS_TYPE AND $EQUALS_ME AND $EQUALS_TWEETER order by date DESC")
-    fun getAllUserDataSource(type: Int, userId: Long,tweetedUserId:Long): LivePagedListProvider<Int,Tweet>
+    fun getAllUserDataSource(type: Int, userId: Long,tweetedUserId:Long): DataSource.Factory<Int,Tweet>
 
     @Query("SELECT DISTINCT $SELECT_TWEET FROM $JOIN_TWEET WHERE date=(SELECT MIN(date) FROM $JOIN_TWEET WHERE $EQUALS_ME AND $EQUALS_TYPE AND $EQUALS_TWEETER)")
     fun getUserOldestTweet(type: Int, userId: Long,tweetedUserId:Long): Tweet

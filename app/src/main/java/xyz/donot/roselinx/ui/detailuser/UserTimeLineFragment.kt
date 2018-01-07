@@ -2,7 +2,7 @@ package xyz.donot.roselinx.ui.detailuser
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.arch.paging.PagedList
+import android.arch.paging.LivePagedListBuilder
 import android.content.*
 import android.net.Uri
 import android.os.Bundle
@@ -19,6 +19,7 @@ import kotlinx.coroutines.experimental.launch
 import twitter4j.User
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.entity.RoselinDatabase
+import xyz.donot.roselinx.model.entity.Tweet
 import xyz.donot.roselinx.model.entity.USER_TIMELINE
 import xyz.donot.roselinx.ui.base.ARecyclerFragment
 import xyz.donot.roselinx.ui.detailtweet.TwitterDetailActivity
@@ -49,11 +50,11 @@ class UserTimeLineFragment : ARecyclerFragment() {
             userId?.let {
                 launch(UI) {
                     async {
-                        RoselinDatabase.getInstance().tweetDao().getAllUserDataSource(USER_TIMELINE,viewmodel.twitter.id,arguments!!.getLong("userId"))
-                                .create(0, PagedList.Config.Builder().setPageSize(50).setPrefetchDistance(50).build())
+                        LivePagedListBuilder<Int, Tweet>( RoselinDatabase.getInstance().tweetDao()
+                                .getAllUserDataSource(USER_TIMELINE,viewmodel.twitter.id,arguments!!.getLong("userId")),50).build()
                     }.await().observe(this@UserTimeLineFragment, Observer {
-                                it?.let {
-                                    if (it.isEmpty()) {
+                                it.let {
+                                    if (it!!.isEmpty()) {
                                         viewmodel.loadMoreData(false, userId)
                                     }
                                     adapter.setList(it)

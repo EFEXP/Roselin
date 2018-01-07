@@ -1,7 +1,7 @@
 package xyz.donot.roselinx.model.dao
 
 import android.arch.lifecycle.LiveData
-import android.arch.paging.LivePagedListProvider
+import android.arch.paging.DataSource
 import android.arch.persistence.room.*
 import xyz.donot.roselinx.model.entity.MuteFilter
 
@@ -11,10 +11,10 @@ interface MuteFilterDao {
     fun getAllData(): List<MuteFilter>
 
     @Query("SELECT * FROM mute_filter WHERE accountId!=0")
-    fun getMuteUser(): LivePagedListProvider<Int, MuteFilter>
+    fun getMuteUser(): DataSource.Factory<Int, MuteFilter>
 
     @Query("SELECT * FROM mute_filter WHERE accountId=0")
-    fun getMuteWord(): LivePagedListProvider<Int, MuteFilter>
+    fun getMuteWord():DataSource.Factory<Int, MuteFilter>
 
 
     @Query("SELECT * FROM mute_filter")

@@ -2,7 +2,7 @@ package xyz.donot.roselinx.ui.home
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.arch.paging.PagedList
+import android.arch.paging.LivePagedListBuilder
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -12,6 +12,7 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.model.entity.HOME_TIMELINE
 import xyz.donot.roselinx.model.entity.RoselinDatabase
+import xyz.donot.roselinx.model.entity.Tweet
 import xyz.donot.roselinx.ui.base.ARecyclerFragment
 import xyz.donot.roselinx.ui.dialog.getTweetDialog
 import xyz.donot.roselinx.ui.status.TweetAdapter
@@ -39,8 +40,7 @@ class HomeTimeLineFragment : ARecyclerFragment() {
             }
             launch(UI) {
                 async {
-                    RoselinDatabase.getInstance().tweetDao().getAllDataSource(HOME_TIMELINE,twitter.id)
-                            .create(0, PagedList.Config.Builder().setPageSize(50).setPrefetchDistance(50).build()) }.await()
+                    LivePagedListBuilder<Int, Tweet>( RoselinDatabase.getInstance().tweetDao().getAllDataSource(HOME_TIMELINE,twitter.id),50).build() }.await()
                         .observe(this@HomeTimeLineFragment, Observer {
                             it?.let {
                                 adapter.setList(it)

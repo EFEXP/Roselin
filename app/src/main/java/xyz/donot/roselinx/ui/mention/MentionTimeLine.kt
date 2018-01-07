@@ -2,7 +2,7 @@ package xyz.donot.roselinx.ui.mention
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.arch.paging.PagedList
+import android.arch.paging.LivePagedListBuilder
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -12,6 +12,7 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.model.entity.MENTION_TIMELINE
 import xyz.donot.roselinx.model.entity.RoselinDatabase
+import xyz.donot.roselinx.model.entity.Tweet
 import xyz.donot.roselinx.ui.base.ARecyclerFragment
 import xyz.donot.roselinx.ui.dialog.getTweetDialog
 import xyz.donot.roselinx.ui.status.TweetAdapter
@@ -53,8 +54,7 @@ class MentionTimeLine : ARecyclerFragment() {
             }
             launch(UI) {
                 async {
-                    RoselinDatabase.getInstance().tweetDao().getAllDataSource(MENTION_TIMELINE,twitter.id)
-                            .create(0, PagedList.Config.Builder().setPageSize(10).setPrefetchDistance(50).build()) }.await()
+                    LivePagedListBuilder<Int,Tweet>( RoselinDatabase.getInstance().tweetDao().getAllDataSource(MENTION_TIMELINE,twitter.id),50).build() }.await()
                         .observe(this@MentionTimeLine, Observer {
                             it?.let {
                                 if (it.isEmpty())

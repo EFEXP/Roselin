@@ -1,6 +1,6 @@
 package xyz.donot.roselinx.model.dao
 
-import android.arch.paging.LivePagedListProvider
+import android.arch.paging.DataSource
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
@@ -11,7 +11,7 @@ import xyz.donot.roselinx.model.entity.Notification
 interface NotificationDao {
 
     @Query("SELECT * FROM notification ORDER BY date DESC")
-    fun getAllData(): LivePagedListProvider<Int, Notification>
+    fun getAllData(): DataSource.Factory<Int, Notification>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNotification(notice: Notification): Long

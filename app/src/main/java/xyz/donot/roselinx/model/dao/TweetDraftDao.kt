@@ -1,7 +1,7 @@
 package xyz.donot.roselinx.model.dao
 
 import android.arch.lifecycle.LiveData
-import android.arch.paging.LivePagedListProvider
+import android.arch.paging.DataSource
 import android.arch.persistence.room.*
 import xyz.donot.roselinx.model.entity.TweetDraft
 
@@ -11,7 +11,7 @@ interface TweetDraftDao {
     fun getAll(): List<TweetDraft>
 
     @Query("SELECT * FROM tweet_draft")
-    fun getAllLiveData(): LivePagedListProvider<Int, TweetDraft>
+    fun getAllLiveData(): DataSource.Factory<Int, TweetDraft>
 
     @Query("SELECT * FROM tweet_draft WHERE accountId=:id")
     fun equalToIdDrafts(id:Long): LiveData<List<TweetDraft>>

@@ -1,7 +1,7 @@
 package xyz.donot.roselinx.ui.main
 
 import android.arch.lifecycle.Observer
-import android.arch.paging.PagedList
+import android.arch.paging.LivePagedListBuilder
 import android.os.Bundle
 import android.support.v4.content.res.ResourcesCompat
 import android.view.View
@@ -30,8 +30,7 @@ class NotificationFragment : ARecyclerFragment() {
         recycler.adapter = adapter
         launch(UI) {
             async {
-                RoselinDatabase.getInstance().notificationDao().getAllData()
-                        .create(0, PagedList.Config.Builder().setPageSize(50).setPrefetchDistance(50).build()) }.await()
+                LivePagedListBuilder<Int,Notification>( RoselinDatabase.getInstance().notificationDao().getAllData(),50).build() }.await()
                     .observe(this@NotificationFragment, Observer {
                         it?.let {
                             adapter.setList(it)

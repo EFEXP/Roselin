@@ -3,7 +3,7 @@ package xyz.donot.roselinx.ui.account
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
-import android.arch.paging.PagedList
+import android.arch.paging.LivePagedListBuilder
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -16,6 +16,7 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.entity.RoselinDatabase
+import xyz.donot.roselinx.model.entity.TwitterAccount
 import xyz.donot.roselinx.ui.oauth.OauthActivity
 import xyz.donot.roselinx.ui.userlist.TwitterAccountAdapter
 import xyz.donot.roselinx.ui.util.extraUtils.start
@@ -79,6 +80,5 @@ class AccountSettingActivity : AppCompatActivity() {
 }
 
 class AccountSettingViewModel : ViewModel() {
-    val dataSource = RoselinDatabase.getInstance().twitterAccountDao().allData()
-            .create(0, PagedList.Config.Builder().setPageSize(50).setPrefetchDistance(50).build())
+    val dataSource = LivePagedListBuilder<Int, TwitterAccount>(RoselinDatabase.getInstance().twitterAccountDao().allData(),50).build()
 }
