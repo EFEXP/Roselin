@@ -15,7 +15,7 @@ import java.io.ObjectOutputStream
 import java.util.*
 
 
-@Database(entities = arrayOf(TwitterAccount::class, UserData::class, TweetDraft::class, MuteFilter::class, Notification::class, SavedTab::class, CustomProfile::class, Tweet::class, TweetType::class, TweetUser::class), version = 1, exportSchema = false)
+@Database(entities = [(TwitterAccount::class), (UserData::class), (TweetDraft::class), (MuteFilter::class), (Notification::class), (SavedTab::class), (TypeToTweet::class),(CustomProfile::class), (Tweet::class), (TweetType::class), (TweetUser::class)], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class RoselinDatabase : RoomDatabase() {
     abstract fun twitterAccountDao(): TwitterAccountDao

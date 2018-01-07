@@ -44,10 +44,10 @@ class HomeTimeLineFragment : ARecyclerFragment() {
                         .observe(this@HomeTimeLineFragment, Observer {
                             it?.let {
                                 adapter.setList(it)
-                            }
+                            }?:viewmodel.loadMoreData(false)
                         })
             }
-            viewmodel.loadMoreData(false)
+
             recycler.adapter = adapter
             refresh.setOnRefreshListener {
                 Handler().delayed(1000, {

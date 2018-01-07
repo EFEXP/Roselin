@@ -1,7 +1,6 @@
 package xyz.donot.roselinx.model.entity
 
 import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
 import android.arch.persistence.room.PrimaryKey
 import kotlinx.coroutines.experimental.launch
 import twitter4j.Status
@@ -16,14 +15,13 @@ data class Tweet(
         @PrimaryKey(autoGenerate = false) val tweetId: Long
 ) : Distinguishable {
     override fun isTheSame(other: Distinguishable) = tweetId == (other as? Tweet)?.tweetId
-
     companion object {
         fun save(status: Status, type: Int, userId: Long) = launch {
             val instance = RoselinDatabase.getInstance()
             instance.runInTransaction {
                 instance.tweetDao().insert(Tweet(status, status.createdAt, status.user.id, status.id))
                 instance.tweetDao().insertMyUserId(TweetUser(userId, status.id))
-                instance.tweetDao().insertType(TweetType(type, status.id))
+                instance.tweetDao().insertTypeToTweet(TypeToTweet(type,status.id))
             }
         }
 
@@ -32,7 +30,7 @@ data class Tweet(
             instance.runInTransaction {
                 instance.tweetDao().insert(status.map { Tweet(it, it.createdAt, it.user.id, it.id) })
                 instance.tweetDao().insertMyUserId(status.map { TweetUser(userId, it.id) })
-                instance.tweetDao().insertType(status.map { TweetType(type, it.id) })
+                instance.tweetDao().insertTypeToTweet(status.map { TypeToTweet(type,it.id)})
             }
         }
 
@@ -41,17 +39,18 @@ data class Tweet(
             instance.update(Tweet(status, status.createdAt, status.user.id, status.id))
         }
 
-        fun delete(id: Long) = launch {
+        fun delete(id: Long,type:Int) = launch {
             val instance = RoselinDatabase.getInstance()
             instance.runInTransaction {
                 instance.compileStatement("DELETE FROM tweet WHERE tweetId=$id").executeUpdateDelete()
-                instance.compileStatement("DELETE FROM tweet_type WHERE tweetId=$id").executeUpdateDelete()
+                instance.compileStatement("DELETE FROM type_to_tweet WHERE tweetId=$id AND type=$type").executeUpdateDelete()
                 instance.compileStatement("DELETE FROM tweet_user WHERE tweetId=$id").executeUpdateDelete()
-               // instance.tweetDao().deleteUserById(id)
-              //  instance.tweetDao().deleteTypeById(id)
-               // instance.tweetDao().deleteById(id)
             }
+        }
 
+        fun initType() = launch {
+            val instance = RoselinDatabase.getInstance()
+            instance.tweetDao().insertType(arrayListOf(TweetType(HOME_TIMELINE), TweetType(MENTION_TIMELINE), TweetType(USER_TIMELINE)))
         }
     }
 }
@@ -60,26 +59,14 @@ const val HOME_TIMELINE: Int = 1000
 const val MENTION_TIMELINE: Int = 2000
 const val USER_TIMELINE: Int = 3000
 
-@Entity(tableName = "tweet_type",
-        foreignKeys = arrayOf(ForeignKey(entity = Tweet::class,
-                parentColumns = arrayOf("tweetId"),
-                childColumns = arrayOf("tweetId"),
-                onUpdate = ForeignKey.NO_ACTION,
-                onDelete = ForeignKey.NO_ACTION)))
-data class TweetType(val type: Int,
-                     val tweetId: Long) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
-}
+//1000 親カラム
+@Entity(tableName = "tweet_type")
+data class TweetType(@PrimaryKey val typeId:Int)
 
-//自分のIDを入れること
-@Entity(tableName = "tweet_user", foreignKeys = arrayOf(ForeignKey(entity = Tweet::class,
-        parentColumns = arrayOf("tweetId"),
-        childColumns = arrayOf("tweetId"),
-        onUpdate = ForeignKey.NO_ACTION,
-        onDelete = ForeignKey.NO_ACTION)))
-data class TweetUser(val userId: Long,
-                     val tweetId: Long) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
-}
+//1000|462813636289
+@Entity(tableName = "type_to_tweet",primaryKeys = ["typeId", "tweetId"] )
+data class TypeToTweet(val typeId:Int, val tweetId: Long)
+
+//自分の選択アカウントのタイムラインを識別 43462746282|423678235628
+@Entity(tableName = "tweet_user",primaryKeys = ["userId", "tweetId"] )
+data class TweetUser(val userId: Long, val tweetId: Long)

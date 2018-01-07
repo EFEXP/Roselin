@@ -5,9 +5,17 @@ import android.arch.persistence.room.*
 import xyz.donot.roselinx.model.entity.Tweet
 import xyz.donot.roselinx.model.entity.TweetType
 import xyz.donot.roselinx.model.entity.TweetUser
+import xyz.donot.roselinx.model.entity.TypeToTweet
 
-const val JOIN_TWEET = "tweet JOIN tweet_type JOIN tweet_user ON tweet.tweetId=tweet_type.tweetId AND tweet.tweetId=tweet_user.tweetId"
-const val EQUALS_TYPE = "type=:type"
+const val JOIN_TWEET = "tweet " +
+        "JOIN type_to_tweet " +
+        "ON tweet.tweetId=type_to_tweet.tweetId " +
+        "JOIN tweet_user " +
+        "ON tweet.tweetId=tweet_user.tweetId "+
+        "JOIN tweet_type " +
+        "ON type_to_tweet.typeId=tweet_type.typeId"
+
+const val EQUALS_TYPE = "type_to_tweet.typeId=:type"
 const val EQUALS_ME = "userId=:userId"
 const val EQUALS_TWEETER = "tweeterId=:tweetedUserId"
 const val SELECT_TWEET="status,date,tweet.tweetId,tweeterId"
@@ -33,9 +41,6 @@ interface TweetDao {
     @Query("SELECT DISTINCT $SELECT_TWEET FROM $JOIN_TWEET WHERE date=(SELECT MAX(date) FROM $JOIN_TWEET WHERE $EQUALS_ME AND $EQUALS_TYPE AND $EQUALS_TWEETER)")
     fun getUserNewestTweet(type: Int, userId: Long,tweetedUserId:Long): Tweet
 
-  //  @Insert(onConflict = OnConflictStrategy.REPLACE)
- //   fun insert(tweet: Tweet) ("INSERT INTO tweet(status,date,tweeterId,tweetId) VALUES (:tweet.status,:tweet.date,:tweet.tweeterId,:tweet.tweetId) ON DUPLICATE KEY UPDATE tweetId=:tweet.tweetId")
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
      fun insert(tweet: Tweet)
 
@@ -45,14 +50,17 @@ interface TweetDao {
     @Insert(onConflict = OnConflictStrategy.FAIL)
     fun insertType(tweetType:List<TweetType>)
 
-    @Insert(onConflict = OnConflictStrategy.FAIL)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMyUserId(tweetUser:List<TweetUser>)
 
-    @Insert(onConflict = OnConflictStrategy.FAIL)
-    fun insertType(tweetType:TweetType)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertTypeToTweet(typeToTweet:List<TypeToTweet>)
 
-    @Insert(onConflict = OnConflictStrategy.FAIL)
+    @Insert
     fun insertMyUserId(tweetUser:TweetUser)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertTypeToTweet(typeToTweet: TypeToTweet)
 
     @Update
     fun update(tweet: Tweet)
@@ -62,9 +70,6 @@ interface TweetDao {
 
     @Query("DELETE FROM tweet WHERE tweetId=:id")
     fun deleteById(id:Long)
-
-    @Query("DELETE FROM tweet_type WHERE tweetId=:id")
-    fun deleteTypeById(id:Long)
 
     @Query("DELETE FROM tweet_user WHERE tweetId=:id")
     fun deleteUserById(id:Long)

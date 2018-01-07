@@ -25,6 +25,7 @@ import kotlinx.coroutines.experimental.launch
 import xyz.donot.roselinx.R
 import xyz.donot.roselinx.model.entity.RoselinDatabase
 import xyz.donot.roselinx.model.entity.SavedTab
+import xyz.donot.roselinx.model.entity.Tweet
 import xyz.donot.roselinx.ui.base.ARecyclerFragment
 import xyz.donot.roselinx.ui.editteweet.EditTweetActivity
 import xyz.donot.roselinx.ui.oauth.OauthActivity
@@ -39,6 +40,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         if (!haveToken()) {
             startActivity(intent<OauthActivity>())
+            Tweet.initType()
+
             this.finish()
         } else {
             setUp(savedInstanceState)
