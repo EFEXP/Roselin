@@ -38,12 +38,13 @@ class VideoActivity : DragDismissActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         videoView.apply {
-            setUp(url, JZVideoPlayerStandard.SCREEN_LAYOUT_NORMAL, "Video")
+            setUp(url, JZVideoPlayerStandard.SCREEN_WINDOW_NORMAL, "Video")
             Picasso.with(this@VideoActivity)
                     .load(thumbUrl)
                     .into(thumbImageView)
+
+
         }
-        videoView.loop=true
     }
 
     private fun saveVideo() {

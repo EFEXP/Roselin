@@ -16,7 +16,7 @@ class TwitterUserAdapter: CalculableAdapter<UserData>(R.layout.item_user){
         holder.containerView.apply {
             Picasso.with(context).load(item.biggerProfileImageURLHttps).into(iv_icon)
             tv_username.text=item.name
-            tv_screenname.text= "@" + item.screenName
+            tv_screenname.text=context.getString(R.string.at_screenname,item.screenName)
             tv_description.text= item.description
 
         }
@@ -30,7 +30,7 @@ class TwitterAccountAdapter:CalculableAdapter<TwitterAccount>(R.layout.item_user
         holder.containerView.apply {
             Picasso.with(context).load(item.biggerProfileImageURLHttps).into(iv_icon)
             tv_username.text=item.name
-            tv_screenname.text= "@" + item.screenName
+            tv_screenname.text= context.getString(R.string.at_screenname,item.screenName)
             tv_description.text= item.description
 
         }
@@ -47,7 +47,7 @@ class TwitterUserPreAdapter: CalculableRecyclerAdapter<UserData>(R.layout.item_u
         holder.containerView.apply {
             Picasso.with(context).load(item.biggerProfileImageURLHttps).into(iv_icon)
             tv_username.text=item.name
-            tv_screenname.text= "@" + item.screenName
+            tv_screenname.text=context.getString(R.string.at_screenname,item.screenName)
             tv_description.text= item.description
 
         }

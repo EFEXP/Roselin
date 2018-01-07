@@ -51,8 +51,7 @@ class UserTimeLineFragment : ARecyclerFragment() {
                     async {
                         RoselinDatabase.getInstance().tweetDao().getAllUserDataSource(USER_TIMELINE,viewmodel.twitter.id,arguments!!.getLong("userId"))
                                 .create(0, PagedList.Config.Builder().setPageSize(50).setPrefetchDistance(50).build())
-                    }.await()
-                            .observe(this@UserTimeLineFragment, Observer {
+                    }.await().observe(this@UserTimeLineFragment, Observer {
                                 it?.let {
                                     if (it.isEmpty()) {
                                         viewmodel.loadMoreData(false, userId)
@@ -64,7 +63,8 @@ class UserTimeLineFragment : ARecyclerFragment() {
 
                 viewmodel.mUser.observe(this@UserTimeLineFragment, Observer {
                     it?.let {
-                        //        adapter.setHeaderView(setUpViews(it))
+                        u->
+                       // Handler().post {    adapter.setHeaderView(setUpViews(u))}
                     }
                 })
                 adapter.onItemClick = { (status), _ ->

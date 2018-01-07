@@ -84,7 +84,7 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxjava:2.1.8"
     implementation 'com.android.support.constraint:constraint-layout:1.1.0-beta4'
     implementation 'com.klinkerapps:link_builder:1.6.1'
-    implementation 'cn.jzvd:jiaozivideoplayer:6.0.0'
+    implementation 'cn.jzvd:jiaozivideoplayer:6.2.3'
     implementation 'com.dinuscxj:recyclerrefreshlayout:2.0.5'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.34'

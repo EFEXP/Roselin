@@ -41,7 +41,8 @@ abstract class CalculableAdapter<T:Distinguishable>(val layout:Int):PagedListAda
         logd{"${position+1} == $itemCount"}
         if (position+1==itemCount&&itemCount>5) { onLoadMore()}
         holder.itemView.setOnClickListener { onItemClick(item, position) }
-        holder.itemView.setOnLongClickListener { onItemLongClick(item, position)
+        holder.itemView.setOnLongClickListener {
+            onItemLongClick(item, position)
             true }
     }
 

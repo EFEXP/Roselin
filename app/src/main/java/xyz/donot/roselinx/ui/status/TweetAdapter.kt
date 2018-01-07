@@ -25,6 +25,8 @@ import xyz.donot.roselinx.ui.video.VideoActivity
 class KViewHolder(override val containerView: View) : RecyclerView.ViewHolder(containerView), LayoutContainer
 
 class TweetAdapter(private val mContext: Context) : CalculableAdapter<Tweet>(R.layout.item_tweet_view) {
+
+
     //  private lateinit var kichitsui :List<Long>
     private lateinit var customname: List<CustomProfile>
     private lateinit var customnameId: List<Long>
@@ -112,7 +114,5 @@ class TweetAdapter(private val mContext: Context) : CalculableAdapter<Tweet>(R.l
             }
 
         }
-
-
     }
 }
