@@ -70,9 +70,7 @@
     <service
       android:exported="false"
       android:name=".service.TweetPostService"/>
-    <service
-      android:exported="false"
-      android:name=".service.SearchStreamService"/>
+
 
     <activity
       android:name=".ui.search.SearchActivity"

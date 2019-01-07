@@ -29,7 +29,6 @@ import xyz.donot.roselinx.model.entity.SavedTab
 import xyz.donot.roselinx.receiver.ConnectionReceiver
 import xyz.donot.roselinx.receiver.MusicReceiver
 import xyz.donot.roselinx.service.REPLY_ID
-import xyz.donot.roselinx.service.SearchStreamService
 import xyz.donot.roselinx.service.StreamingService
 import xyz.donot.roselinx.ui.util.extraUtils.*
 import xyz.donot.roselinx.ui.util.getAccount
@@ -152,7 +151,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
         app.unregisterReceiver(receiver)
         app.unregisterReceiver(sendReplyReceiver)
-        app.stopService(app.newIntent<SearchStreamService>())
         app.stopService(app.newIntent<StreamingService>())
 
     }
